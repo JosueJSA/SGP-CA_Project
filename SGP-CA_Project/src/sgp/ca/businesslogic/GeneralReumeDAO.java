@@ -28,19 +28,20 @@ public class GeneralReumeDAO implements IGeneralResumeDAO{
             );
             sentenceQuery.setString(1, bodyAcademyKey);
             ResultSet queryResult = sentenceQuery.executeQuery();
-            queryResult.next();
-            generalResume = new GeneralResume(
-                queryResult.getString("bodyAcademyKey"), 
-                queryResult.getString("nameBA"),
-                queryResult.getString("areaAscription"),
-                queryResult.getString("ascriptionUnit"),
-                queryResult.getString("consolidationDegree"),
-                queryResult.getString("vision"),
-                queryResult.getString("mission"),
-                queryResult.getString("educationalProgram"),
-                queryResult.getString("generalTarjet"),
-                queryResult.getDate("registrationDate")
-            );
+            if(queryResult.next()){
+                generalResume = new GeneralResume(
+                    queryResult.getString("bodyAcademyKey"), 
+                    queryResult.getString("nameBA"),
+                    queryResult.getString("areaAscription"),
+                    queryResult.getString("ascriptionUnit"),
+                    queryResult.getString("consolidationDegree"),
+                    queryResult.getString("vision"),
+                    queryResult.getString("mission"),
+                    queryResult.getString("educationalProgram"),
+                    queryResult.getString("generalTarjet"),
+                    queryResult.getDate("registrationDate")
+                );
+            }
         }catch(SQLException sqlException){
             Logger.getLogger(GeneralResume.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{

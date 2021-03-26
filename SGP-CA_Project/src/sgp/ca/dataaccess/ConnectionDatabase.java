@@ -1,8 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/**
+* @author Josué Alarcón  
+* Last modification date format: 26-03-2021
+*/
+
 package sgp.ca.dataaccess;
 
 import java.sql.Connection;
@@ -10,13 +10,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-/**
- *
- * @author Josue Alarcon
- */
+
+
 public class ConnectionDatabase {
     
-    private final String url = "jdbc:mysql://185.31.40.56:3306/josuesa_sgp-ca";
+    private final String URL = "jdbc:mysql://185.31.40.56:3306/josuesa_sgp-ca";
+    private final String USER = "josuesa_admin";
+    private final String PASSWORD = "sgp-caEJJ21teamA_full4k1080p";
     private Connection connectionDatabase;
     
     public Connection getConnectionDatabase(){
@@ -26,9 +26,9 @@ public class ConnectionDatabase {
     
     public void establishConnection(){
         try{
-            connectionDatabase = DriverManager.getConnection(url, "josuesa_admin", "sgp-caEJJ21teamA_full4k1080p");
+            connectionDatabase = DriverManager.getConnection(URL, USER, PASSWORD);
         }catch(SQLException sqlException){
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, sqlException);
+            Logger.getLogger(ConnectionDatabase.class.getName()).log(Level.SEVERE, null, sqlException);
         }
     }
     
@@ -39,7 +39,7 @@ public class ConnectionDatabase {
                     connectionDatabase.close();
                 }
             }catch(SQLException sqlException){
-                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, sqlException);
+                Logger.getLogger(ConnectionDatabase.class.getName()).log(Level.SEVERE, null, sqlException);
             }
         }
     }    

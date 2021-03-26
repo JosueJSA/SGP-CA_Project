@@ -27,22 +27,23 @@ public class IntegrantDAO implements IIntegrantDAO{
             );
             sentenceQuery.setString(1, emailUV);
             ResultSet queryResult = sentenceQuery.executeQuery();
-            queryResult.next();
-            integrant = new Integrant(
-                queryResult.getString("rfc"), 
-                queryResult.getString("fullName"),
-                queryResult.getString("emailUV"),
-                queryResult.getString("additionalEmail"),
-                queryResult.getString("curp"),
-                queryResult.getString("nacionality"),
-                queryResult.getInt("satffNumber"),
-                queryResult.getInt("cellPhone"),
-                queryResult.getDate("dateOfAdmission").toString(),
-                queryResult.getString("appointment"),
-                queryResult.getString("participationType"),
-                queryResult.getInt("homePhone"),
-                queryResult.getInt("workPhone")
-            );
+            if(queryResult.next()){
+                integrant = new Integrant(
+                    queryResult.getString("rfc"), 
+                    queryResult.getString("fullName"),
+                    queryResult.getString("emailUV"),
+                    queryResult.getString("additionalEmail"),
+                    queryResult.getString("curp"),
+                    queryResult.getString("nacionality"),
+                    queryResult.getInt("satffNumber"),
+                    queryResult.getInt("cellPhone"),
+                    queryResult.getDate("dateOfAdmission").toString(),
+                    queryResult.getString("appointment"),
+                    queryResult.getString("participationType"),
+                    queryResult.getInt("homePhone"),
+                    queryResult.getInt("workPhone")
+                );
+            }
         }catch(SQLException sqlException){
             Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
