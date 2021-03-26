@@ -16,8 +16,6 @@ import org.junit.Assert;
  * @author Josue Alarcon
  */
 public class DataAccessTest {
-    
-    
     @Test
     void DataBaseConnectionTest() throws SQLException{
         Connection currentConection = new ConnectionDatabase().getConnectionDatabase();
