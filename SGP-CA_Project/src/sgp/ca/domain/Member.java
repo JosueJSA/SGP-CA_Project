@@ -1,26 +1,34 @@
 /**
 * @author Josué Alarcón  
-* Last modification date format: 26-03-2021
+* Last modification date format: 05-04-2021
 */
 
 package sgp.ca.domain;
 
 public abstract class Member {
     
-    private String rfc, fullName, emailUV, aditionalEmail, curp, nationality, dateOfAdmission;
-    private int staffNumber, cellphone;
+    private String rfc;
+    private String fullName;
+    private String emailUV;
+    private String curp;
+    private String nationality;
+    private String dateOfAdmission;
+    private String educationalProgram;
+    private String cellphone;
+    private int staffNumber;
 
-    public Member(String rfc, String fullName, String emailUV, String aditionalEmail, 
-    String curp, String nationality, int staffNumber, int cellphone, String dateOfAdmission){
+    public Member(String rfc, String fullName, String emailUV, 
+    String curp, String nationality, String dateOfAdmission, 
+    String educationalProgram, int staffNumber, String cellphone){
         this.rfc = rfc;
         this.fullName = fullName;
         this.emailUV = emailUV;
-        this.aditionalEmail = aditionalEmail;
         this.curp = curp;
         this.nationality = nationality;
+        this.dateOfAdmission = dateOfAdmission;
+        this.educationalProgram = educationalProgram;
         this.staffNumber = staffNumber;
         this.cellphone = cellphone;
-        this.dateOfAdmission = dateOfAdmission;
     }
     
     public Member(){
@@ -51,14 +59,6 @@ public abstract class Member {
         this.emailUV = emailUV;
     }
 
-    public String getAditionalEmail(){
-        return aditionalEmail;
-    }
-
-    public void setAditionalEmail(String aditionalEmail){
-        this.aditionalEmail = aditionalEmail;
-    }
-
     public String getCurp(){
         return curp;
     }
@@ -75,6 +75,14 @@ public abstract class Member {
         this.nationality = nationality;
     }
 
+    public String getEducationalProgram(){
+        return educationalProgram;
+    }
+
+    public void setEducationalProgram(String educationalProgram){
+        this.educationalProgram = educationalProgram;
+    }
+
     public int getStaffNumber(){
         return staffNumber;
     }
@@ -83,11 +91,11 @@ public abstract class Member {
         this.staffNumber = staffNumber;
     }
 
-    public int getCellphone(){
+    public String getCellphone(){
         return cellphone;
     }
 
-    public void setCellphone(int cellphone){
+    public void setCellphone(String cellphone){
         this.cellphone = cellphone;
     }
 

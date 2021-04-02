@@ -1,6 +1,6 @@
 /**
 * @author Josué Alarcón  
-* Last modification date format: 26-03-2021
+* Last modification date format: 06-04-2021
 */
 
 package sgp.ca.domain;
@@ -14,6 +14,10 @@ public class Lgac {
     public Lgac(String identifierLgac, String description) {
         this.identifierLgac = identifierLgac;
         this.description = description;
+    }
+    
+    public Lgac(){
+        
     }
 
     public String getIdentifierLgac() {

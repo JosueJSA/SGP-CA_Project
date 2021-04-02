@@ -1,28 +1,37 @@
 /**
 * @author Josué Alarcón  
-* Last modification date format: 26-03-2021
+* Last modification date format: 06-04-2021
 */
 
 package sgp.ca.domain;
 
-import java.util.Date;
 
 public class Action{
     
     private int actionKey;
-    private Date startDate, endDate, estimatedEndDate;
-    private String statusAction, descriptionAction, responsibleAction, resource;
+    private String startDate;
+    private String endDate;
+    private String estimatedEndDate;
+    private String descriptionAction;
+    private String responsibleAction;
+    private String resource;
+    private boolean statusAction;
 
-    public Action(int actionKey, Date startDate, Date endDate, Date estimatedEndDate, 
-    String statusAction, String descriptionAction, String responsibleAction, String resource){
+    public Action(int actionKey, String startDate, String endDate, 
+    String estimatedEndDate, String descriptionAction, 
+    String responsibleAction, String resource, boolean statusAction){
         this.actionKey = actionKey;
         this.startDate = startDate;
         this.endDate = endDate;
         this.estimatedEndDate = estimatedEndDate;
-        this.statusAction = statusAction;
         this.descriptionAction = descriptionAction;
         this.responsibleAction = responsibleAction;
         this.resource = resource;
+        this.statusAction = statusAction;
+    }
+    
+    public Action(){
+        
     }
 
     public int getActionKey(){
@@ -33,35 +42,35 @@ public class Action{
         this.actionKey = actionKey;
     }
 
-    public Date getStartDate(){
+    public String getStartDate(){
         return startDate;
     }
 
-    public void setStartDate(Date startDate){
+    public void setStartDate(String startDate){
         this.startDate = startDate;
     }
 
-    public Date getEndDate(){
+    public String getEndDate(){
         return endDate;
     }
 
-    public void setEndDate(Date endDate){
+    public void setEndDate(String endDate){
         this.endDate = endDate;
     }
 
-    public Date getEstimatedEndDate(){
+    public String getEstimatedEndDate(){
         return estimatedEndDate;
     }
 
-    public void setEstimatedEndDate(Date estimatedEndDate){
+    public void setEstimatedEndDate(String estimatedEndDate){
         this.estimatedEndDate = estimatedEndDate;
     }
 
-    public String getStatusAction(){
+    public boolean isStatusAction(){
         return statusAction;
     }
 
-    public void setStatusAction(String statusAction){
+    public void setStatusAction(boolean statusAction){
         this.statusAction = statusAction;
     }
 

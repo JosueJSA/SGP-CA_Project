@@ -1,29 +1,60 @@
 /**
 * @author Josué Alarcón  
-* Last modification date format: 26-03-2021
+* Last modification date format: 06-04-2021
 */
 
 package sgp.ca.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Integrant extends Member{
     
-    private String appointmentMember, participationType;
-    private int homePhone, workPhone;
+    private String appointmentMember;
+    private String participationType;
+    private String aditionalMail;
+    private String homePhone;
+    private String workPhone;
+    private List<Schooling> schooling;
 
-    public Integrant(String rfc, String fullName, String emailUV, String aditionalEmail, 
-    String curp, String nationality, int staffNumber, int cellphone, String dateOfAdmission, 
-    String appointmentMember, String participationType, int homePhone, int workPhone){
-        super(rfc, fullName, emailUV, aditionalEmail, curp, nationality, staffNumber, cellphone, dateOfAdmission);
+    public Integrant(String rfc,String fullName, String emailUV, String curp, 
+    String nationality, String dateOfAdmission, String educationalProgram, 
+    int staffNumber, String cellphone, String appointmentMember, 
+    String participationType, String aditionalMail, String homePhone, String workPhone){
+        super(
+            rfc, fullName, emailUV, curp, nationality, dateOfAdmission, 
+            educationalProgram, staffNumber, cellphone
+        );
         this.appointmentMember = appointmentMember;
         this.participationType = participationType;
+        this.aditionalMail = aditionalMail;
         this.homePhone = homePhone;
         this.workPhone = workPhone;
+        this.schooling = new ArrayList<>();
+    }
+
+    public Integrant(){
+        this.schooling = new ArrayList<>();
+    }
+
+    public List<Schooling> getSchooling() {
+        return schooling;
+    }
+
+    
+    public void addSchooling(Schooling newSchooling){
+        this.schooling.add(newSchooling);
     }
     
-    public Integrant(){
-        
+    public void removeSchooling(Schooling schooling){
+        this.schooling.remove(schooling);
     }
+
+    public void setSchooling(List<Schooling> schooling) {
+        this.schooling = schooling;
+    }  
+    
 
     public String getAppointmentMember(){
         return appointmentMember;
@@ -41,21 +72,28 @@ public class Integrant extends Member{
         this.participationType = participationType;
     }
 
-    public int getHomePhone(){
+    public String getAditionalMail(){
+        return aditionalMail;
+    }
+
+    public void setAditionalMail(String aditionalMail){
+        this.aditionalMail = aditionalMail;
+    }
+
+    public String getHomePhone(){
         return homePhone;
     }
 
-    public void setHomePhone(int homePhone){
+    public void setHomePhone(String homePhone){
         this.homePhone = homePhone;
     }
 
-    public int getWorkPhone(){
+    public String getWorkPhone(){
         return workPhone;
     }
 
-    public void setWorkPhone(int workPhone){
+    public void setWorkPhone(String workPhone){
         this.workPhone = workPhone;
     }
-    
     
 }

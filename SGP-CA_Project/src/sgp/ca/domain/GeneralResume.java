@@ -1,26 +1,34 @@
 /**
 * @author Josué Alarcón  
-* Last modification date format: 26-03-2021
+* Last modification date format: 6-04-2021
 */
 
 package sgp.ca.domain;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
 public class GeneralResume{
     
-    private String bodyAcademyKey, bodyAcademyName, ascriptionArea, ascriptionUnit, 
-                   consolidationDegree, vision, mission, educationalProgram, generalTarjet;
-    private Date registrationDate;
-    private List<Member> members = new ArrayList<>();
-    private List<Lgac> listLgac = new ArrayList<>();
+    private String bodyAcademyKey;
+    private String bodyAcademyName; 
+    private String ascriptionArea;
+    private String ascriptionUnit;
+    private String consolidationDegree;
+    private String vision;
+    private String mission;
+    private String generalTarjet;
+    private String registrationDate;
+    private String lastEvaluation;
+    private List<Member> members;
+    private List<Lgac> listLgac;
+    private List<WorkPlan> workplans;
 
-    public GeneralResume(String bodyAcademyKey, String bodyAcademyName, String ascriptionArea, 
-    String ascriptionUnit, String consolidationDegree, String vision, String mission,
-    String educationalProgram, String generalTarjet, Date registrationDate){
+    public GeneralResume(String bodyAcademyKey, String bodyAcademyName, 
+    String ascriptionArea, String ascriptionUnit, String consolidationDegree, 
+    String vision, String mission, String generalTarjet, 
+    String registrationDate, String lastEvaluation) {
         this.bodyAcademyKey = bodyAcademyKey;
         this.bodyAcademyName = bodyAcademyName;
         this.ascriptionArea = ascriptionArea;
@@ -28,13 +36,20 @@ public class GeneralResume{
         this.consolidationDegree = consolidationDegree;
         this.vision = vision;
         this.mission = mission;
-        this.educationalProgram = educationalProgram;
         this.generalTarjet = generalTarjet;
         this.registrationDate = registrationDate;
+        this.lastEvaluation = lastEvaluation;
+        members = new ArrayList<>();
+        listLgac = new ArrayList<>();
+        workplans = new ArrayList<>();
     }
+
+    
     
     public GeneralResume(){
-        
+        members = new ArrayList<>();
+        listLgac = new ArrayList<>();
+        workplans = new ArrayList<>();
     }
     
     public void addMember(Member newMember){
@@ -60,6 +75,15 @@ public class GeneralResume{
     public void setBodyAcademyKey(String bodyAcademyKey){
         this.bodyAcademyKey = bodyAcademyKey;
     }
+
+    public String getLastEvaluation(){
+        return lastEvaluation;
+    }
+
+    public void setLastEvaluation(String lastEvaluation){
+        this.lastEvaluation = lastEvaluation;
+    }
+   
 
     public String getBodyAcademyName(){
         return bodyAcademyName;
@@ -109,14 +133,6 @@ public class GeneralResume{
         this.mission = mission;
     }
 
-    public String getEducationalProgram(){
-        return educationalProgram;
-    }
-
-    public void setEducationalProgram(String educationalProgram){
-        this.educationalProgram = educationalProgram;
-    }
-
     public String getGeneralTarjet(){
         return generalTarjet;
     }
@@ -125,19 +141,12 @@ public class GeneralResume{
         this.generalTarjet = generalTarjet;
     }
 
-    public Date getRegistrationDate(){
+    public String getRegistrationDate(){
         return registrationDate;
     }
 
-    public void setRegistrationDate(Date registrationDate){
+    public void setRegistrationDate(String registrationDate){
         this.registrationDate = registrationDate;
     }
     
-    @Override
-    public String toString(){
-        String txt = "Key: " + bodyAcademyKey + "\nName: " + bodyAcademyName + "\nArea: " + ascriptionArea
-        + "\nUnidad: " + ascriptionUnit + "\nGrado consolidacion: " + consolidationDegree + "\nVision: " + vision + "\nmision: " + mission
-        + "\nprograma educativo: " + educationalProgram + "\nobjetivo general: " + generalTarjet + "\nFecha: " + registrationDate;   
-        return txt;
-    }
 }

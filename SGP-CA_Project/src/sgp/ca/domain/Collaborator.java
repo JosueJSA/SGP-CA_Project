@@ -1,6 +1,6 @@
 /**
 * @author Josué Alarcón  
-* Last modification date format: 26-03-2021
+* Last modification date format: 05-04-2021
 */
 
 package sgp.ca.domain;
@@ -8,15 +8,25 @@ package sgp.ca.domain;
 
 public class Collaborator extends Member{
     
-    private String studyArea, nameBACollaborator, highestDegreeStudies;
+    private String studyArea;
+    private String nameBACollaborator;
+    private String highestDegreeStudies;
 
-    public Collaborator(String studyArea, String nameBACollaborator, String highestDegreeStudies, 
-    String rfc, String fullName, String emailUV, String aditionalEmail, 
-    String curp, String nationality, int staffNumber, int cellphone, String dateOfAdmission){
-        super(rfc, fullName, emailUV, aditionalEmail, curp, nationality, staffNumber, cellphone, dateOfAdmission);
+    public Collaborator(String rfc, String fullName, String emailUV, 
+    String curp, String nationality, String dateOfAdmission, 
+    String educationalProgram, int staffNumber, String cellphone, String studyArea, 
+    String nameBACollaborator, String highestDegreeStudies){
+        super(
+            rfc, fullName, emailUV, curp, nationality, dateOfAdmission, 
+            educationalProgram, staffNumber, cellphone
+        );
         this.studyArea = studyArea;
         this.nameBACollaborator = nameBACollaborator;
         this.highestDegreeStudies = highestDegreeStudies;
+    }
+    
+    public Collaborator(){
+        
     }
 
     public String getStudyArea(){

@@ -1,29 +1,35 @@
 /**
 * @author Josué Alarcón  
-* Last modification date format: 26-03-2021
+* Last modification date format: 06-04-2021
 */
 
 package sgp.ca.domain;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
 public class WorkPlan {
     
-    private int workplanKey, durationInYears;
+    private int workplanKey;
+    private int durationInYears;
     private String generalTarget;
-    private Date startDatePlan, endDatePlan;
+    private String startDatePlan;
+    private String endDatePlan;
     private List<Goal> goals;
 
-    public WorkPlan(int workplanKey, int durationInYears, String generalTarget, Date startDatePlan, Date endDatePlan){
+    public WorkPlan(int workplanKey, int durationInYears, String generalTarget, 
+    String startDatePlan, String endDatePlan){
         this.workplanKey = workplanKey;
         this.durationInYears = durationInYears;
         this.generalTarget = generalTarget;
         this.startDatePlan = startDatePlan;
         this.endDatePlan = endDatePlan;
-        goals = new ArrayList<>();
+        this.goals = new ArrayList<>();
+    }
+
+    public WorkPlan(){
+        this.goals = new ArrayList<>();
     }
     
     public void addGoal(Goal newGoal){
@@ -58,20 +64,20 @@ public class WorkPlan {
         this.generalTarget = generalTarget;
     }
 
-    public Date getStartDatePlan(){
+    public String getStartDatePlan(){
         return startDatePlan;
     }
 
-    public void setStartDatePlan(Date startDatePlan){
+    public void setStartDatePlan(String startDatePlan){
         this.startDatePlan = startDatePlan;
     }
 
-    public Date getEndDatePlan(){
+    public String getEndDatePlan(){
         return endDatePlan;
     }
 
-    public void setEndDatePlan(Date endDatePlan){
+    public void setEndDatePlan(String endDatePlan){
         this.endDatePlan = endDatePlan;
-    }    
+    }
     
 }

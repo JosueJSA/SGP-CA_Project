@@ -5,27 +5,33 @@
 
 package sgp.ca.domain;
 
-import java.util.Date;
-
 
 public class Schooling{
     
-    private String studyName, studiesInstitution, levelOfStudy,
-            studiesSatate, studiesDiscipline, studyArea;
-    private int idProfessionalStudies;
-    private Date dateOfObteiningStudies;
+    private String studyName;
+    private String studiesInstitution;
+    private String levelOfStudy;
+    private String studiesSatate;
+    private String studiesDiscipline;
+    private String studyArea;
+    private String dateOfObteiningStudies;
+    private String idProfessionalStudies;
 
     public Schooling(String studyName, String studiesInstitution, 
     String levelOfStudy, String studiesSatate, String studiesDiscipline, 
-    String studyArea, int idProfessionalStudies, Date dateOfObteiningStudies){
+    String studyArea, String dateOfObteiningStudies, String idProfessionalStudies){
         this.studyName = studyName;
         this.studiesInstitution = studiesInstitution;
         this.levelOfStudy = levelOfStudy;
         this.studiesSatate = studiesSatate;
         this.studiesDiscipline = studiesDiscipline;
         this.studyArea = studyArea;
-        this.idProfessionalStudies = idProfessionalStudies;
         this.dateOfObteiningStudies = dateOfObteiningStudies;
+        this.idProfessionalStudies = idProfessionalStudies;
+    }
+    
+    public Schooling(){
+        
     }
 
     public String getStudyName(){
@@ -76,19 +82,19 @@ public class Schooling{
         this.studyArea = studyArea;
     }
 
-    public int getIdProfessionalStudies(){
+    public String getIdProfessionalStudies(){
         return idProfessionalStudies;
     }
 
-    public void setIdProfessionalStudies(int idProfessionalStudies){
+    public void setIdProfessionalStudies(String idProfessionalStudies){
         this.idProfessionalStudies = idProfessionalStudies;
     }
 
-    public Date getDateOfObteiningStudies(){
+    public String getDateOfObteiningStudies(){
         return dateOfObteiningStudies;
     }
 
-    public void setDateOfObteiningStudies(Date dateOfObteiningStudies){
+    public void setDateOfObteiningStudies(String dateOfObteiningStudies){
         this.dateOfObteiningStudies = dateOfObteiningStudies;
-    }   
+    }  
 }

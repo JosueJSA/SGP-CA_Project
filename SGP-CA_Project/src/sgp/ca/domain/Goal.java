@@ -1,29 +1,35 @@
 /**
 * @author Josué Alarcón  
-* Last modification date format: 26-03-2021
+* Last modification date format: 06-04-2021
 */
 
 package sgp.ca.domain;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
 public class Goal{
     
     private int goalIdentifier;
-    private Date startDate, endDate;
-    private String statusGoal, description;
+    private String startDate;
+    private String endDate;
+    private boolean statusGoal;
+    private String description;
     private List<Action> actions;
 
-    public Goal(int goalIdentifier, Date startDate, Date endDate, String statusGoal, String description){
+    public Goal(int goalIdentifier, String startDate, String endDate, 
+    boolean statusGoal, String description){
         this.goalIdentifier = goalIdentifier;
         this.startDate = startDate;
         this.endDate = endDate;
         this.statusGoal = statusGoal;
         this.description = description;
-        actions = new ArrayList<>();
+        this.actions = new ArrayList<>();
+    }
+    
+    public Goal(){
+        this.actions = new ArrayList<>();
     }
     
     public void addAction(Action newAction){
@@ -42,27 +48,27 @@ public class Goal{
         this.goalIdentifier = goalIdentifier;
     }
 
-    public Date getStartDate(){
+    public String getStartDate(){
         return startDate;
     }
 
-    public void setStartDate(Date startDate){
+    public void setStartDate(String startDate){
         this.startDate = startDate;
     }
 
-    public Date getEndDate(){
+    public String getEndDate(){
         return endDate;
     }
 
-    public void setEndDate(Date endDate){
+    public void setEndDate(String endDate){
         this.endDate = endDate;
     }
 
-    public String getStatusGoal(){
+    public boolean isStatusGoal(){
         return statusGoal;
     }
 
-    public void setStatusGoal(String statusGoal){
+    public void setStatusGoal(boolean statusGoal){
         this.statusGoal = statusGoal;
     }
 
