@@ -1,6 +1,6 @@
 /**
 * @author Josué Alarcón  
-* Last modification date format: 06-04-2021
+* Last modification date format: 
 */
 
 package sgp.ca.businesslogic;
@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.domain.GeneralResume;
 import sgp.ca.domain.Integrant;
@@ -20,7 +19,7 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
     @Override
-    public GeneralResume getGeneralResume(String bodyAcademyKey) {
+    public GeneralResume getGeneralResumeByKey(String bodyAcademyKey) {
         GeneralResume generalResume = new GeneralResume();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
@@ -66,6 +65,33 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
             sentenceQuery.setString(8, newGeneralResume.getVision());
             sentenceQuery.setString(9, newGeneralResume.getMission());
             sentenceQuery.setString(10, newGeneralResume.getGeneralTarjet());
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+        }
+    }
+
+    @Override
+    public void updateGeneralResume(GeneralResume generalResume, String oldBodyAcademyKey){
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "UPDATE GeneralResume SET bodyAcademyKey = ?, nameBA = ?, areaAscription = ?, ascriptionUnit = ?,"
+                + " consolidationDegree = ?, registrationDate = ?, lastEvaluationDate = ?, vision = ?, mission = ?, "
+                + "generalTarjet = ? WHERE bodyAcademyKey = ?;"
+            );
+            sentenceQuery.setString(1, generalResume.getBodyAcademyKey());
+            sentenceQuery.setString(2, generalResume.getBodyAcademyName());
+            sentenceQuery.setString(3, generalResume.getAscriptionArea());
+            sentenceQuery.setString(4, generalResume.getAscriptionUnit());
+            sentenceQuery.setString(5, generalResume.getConsolidationDegree());
+            sentenceQuery.setString(6, generalResume.getRegistrationDate());
+            sentenceQuery.setString(7, generalResume.getLastEvaluation());
+            sentenceQuery.setString(8, generalResume.getVision());
+            sentenceQuery.setString(9, generalResume.getMission());
+            sentenceQuery.setString(10, generalResume.getGeneralTarjet());
+            sentenceQuery.setString(11, oldBodyAcademyKey);
             sentenceQuery.executeUpdate();
         }catch(SQLException sqlException){
             Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);

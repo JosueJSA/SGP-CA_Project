@@ -9,7 +9,8 @@ import sgp.ca.domain.GeneralResume;
 
 public interface IGeneralResumeDAO {
     
-    public GeneralResume getGeneralResume(String bodyAcademyKey);
+    public GeneralResume getGeneralResumeByKey(String bodyAcademyKey);
     public void addGeneralResume(GeneralResume newGeneralResume);
+    public void updateGeneralResume(GeneralResume generalResume, String oldBodyAcademyKey);
     
 }

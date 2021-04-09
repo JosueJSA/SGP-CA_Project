@@ -15,7 +15,7 @@ public class GeneralResumeTest {
     @Test
     public void testGetGeneralResumeByKeyNotNull(){
         GeneralResumeDAO generalResumeDAO = new GeneralResumeDAO();
-        GeneralResume generalResume = generalResumeDAO.getGeneralResume("UV-CA-127");
+        GeneralResume generalResume = generalResumeDAO.getGeneralResumeByKey("UV-CA-127");
         String bodyKeyExpected = "Ingenieria y Tecnología de Software";
         String bodyKeyRetrived = generalResume.getBodyAcademyName();
         Assert.assertEquals("Get exist body academy from database", bodyKeyExpected, bodyKeyRetrived);
@@ -24,7 +24,7 @@ public class GeneralResumeTest {
     @Test
     public void testGetGeneralResumeNotRegistered(){
         GeneralResumeDAO generalResumeDAO = new GeneralResumeDAO();
-        GeneralResume generalResume = generalResumeDAO.getGeneralResume("UV-CA-3005247");
+        GeneralResume generalResume = generalResumeDAO.getGeneralResumeByKey("UV-CA-3005247");
         String bodyKeyRetrived = generalResume.getBodyAcademyName();
         Assert.assertNull(bodyKeyRetrived);
     }
