@@ -10,7 +10,9 @@ import sgp.ca.domain.WorkPlan;
 
 public interface IWorkPlanDAO {
     
-    public WorkPlan getWorkPlan(String enDatePlan);
+    public WorkPlan getWorkPlan(String endDatePlan);
     public void addWorkPlan(WorkPlan newWorkPlan);
+    public void updateWorkPlan(WorkPlan worPlan, WorkPlan oldWorkPlan);
+    public void deleteWorkPlan(WorkPlan workPlan);
     
 }

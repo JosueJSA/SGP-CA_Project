@@ -17,19 +17,37 @@ public class WorkPlan {
     private String startDatePlan;
     private String endDatePlan;
     private List<Goal> goals;
+    private String bodyAcademyKey;
 
     public WorkPlan(int workplanKey, int durationInYears, String generalTarget, 
-    String startDatePlan, String endDatePlan){
+    String startDatePlan, String endDatePlan,String bodyAcademyKey){
         this.workplanKey = workplanKey;
         this.durationInYears = durationInYears;
         this.generalTarget = generalTarget;
         this.startDatePlan = startDatePlan;
         this.endDatePlan = endDatePlan;
         this.goals = new ArrayList<>();
+        this.bodyAcademyKey = bodyAcademyKey;
     }
 
     public WorkPlan(){
         this.goals = new ArrayList<>();
+    }
+
+    public List<Goal> getGoals() {
+        return goals;
+    }
+
+    public void setGoals(List<Goal> goals) {
+        this.goals = goals;
+    }
+
+    public String getBodyAcademyKey() {
+        return bodyAcademyKey;
+    }
+
+    public void setBodyAcademyKey(String bodyAcademyKey) {
+        this.bodyAcademyKey = bodyAcademyKey;
     }
     
     public void addGoal(Goal newGoal){

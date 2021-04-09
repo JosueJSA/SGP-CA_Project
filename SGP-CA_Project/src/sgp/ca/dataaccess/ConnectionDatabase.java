@@ -24,6 +24,17 @@ public class ConnectionDatabase {
         return connectionDatabase;
     }
     
+    public Connection getConnectionDatabaseNotAutoCommit(){
+        establishConnection();
+        try {
+            connectionDatabase.setAutoCommit(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(ConnectionDatabase.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            return connectionDatabase;
+        }
+    }
+    
     public void establishConnection(){
         try{
             connectionDatabase = DriverManager.getConnection(URL, USER, PASSWORD);

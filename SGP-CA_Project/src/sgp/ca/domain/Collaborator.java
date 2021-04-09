@@ -14,11 +14,11 @@ public class Collaborator extends Member{
 
     public Collaborator(String rfc, String fullName, String emailUV, 
     String curp, String nationality, String dateOfAdmission, 
-    String educationalProgram, int staffNumber, String cellphone, String studyArea, 
+    String educationalProgram, int staffNumber, String cellphone, String bodyAcademyKey, String studyArea, 
     String nameBACollaborator, String highestDegreeStudies){
         super(
             rfc, fullName, emailUV, curp, nationality, dateOfAdmission, 
-            educationalProgram, staffNumber, cellphone
+            educationalProgram, staffNumber, cellphone, bodyAcademyKey
         );
         this.studyArea = studyArea;
         this.nameBACollaborator = nameBACollaborator;

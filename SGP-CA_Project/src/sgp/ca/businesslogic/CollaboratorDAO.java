@@ -30,22 +30,21 @@ public class CollaboratorDAO implements ICollaboratorDAO{
             );
             sentenceQuery.setString(1, uvMail);
             ResultSet queryResult = sentenceQuery.executeQuery();
-            if(queryResult.next()){
-                collaborator = new Collaborator(
-                    queryResult.getString("rfc"), 
-                    queryResult.getString("fullName"),
-                    queryResult.getString("emailUV"),
-                    queryResult.getString("curp"),
-                    queryResult.getString("nacionality"),
-                    queryResult.getDate("dateOfAdmission").toString(),
-                    queryResult.getString("educationalProgram"),
-                    queryResult.getInt("satffNumber"),
-                    queryResult.getString("cellPhone"),
-                    queryResult.getString("studyArea"),
-                    queryResult.getString("nameBACollaborator"),
-                    queryResult.getString("highestDegreeStudies")
-                );
-            }
+            if(queryResult.next()){collaborator = new Collaborator(
+                queryResult.getString("rfc"), 
+                queryResult.getString("fullName"),
+                queryResult.getString("emailUV"),
+                queryResult.getString("curp"),
+                queryResult.getString("nacionality"),
+                queryResult.getDate("dateOfAdmission").toString(),
+                queryResult.getString("educationalProgram"),
+                queryResult.getInt("satffNumber"),
+                queryResult.getString("cellPhone"),
+                queryResult.getString("bodyAcademyKey"),
+                queryResult.getString("studyArea"),
+                queryResult.getString("nameBACollaborator"),
+                queryResult.getString("highestDegreeStudies")
+            );}
         }catch(SQLException sqlException){
             Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
@@ -55,13 +54,13 @@ public class CollaboratorDAO implements ICollaboratorDAO{
     }
 
     @Override
-    public void addCollaborator(Collaborator newCollaborator, String bodyAcademyKey) {
+    public void addCollaborator(Collaborator newCollaborator){
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
                 "INSERT INTO Collaborator VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
             );
             sentenceQuery.setString(1, newCollaborator.getRfc());
-            sentenceQuery.setString(2, bodyAcademyKey);
+            sentenceQuery.setString(2, newCollaborator.getBodyAcademyKey());
             sentenceQuery.setString(3, newCollaborator.getFullName());
             sentenceQuery.setString(4, newCollaborator.getDateOfAdmission());
             sentenceQuery.setString(5, newCollaborator.getEmailUV());
@@ -73,6 +72,36 @@ public class CollaboratorDAO implements ICollaboratorDAO{
             sentenceQuery.setString(11, newCollaborator.getStudyArea());
             sentenceQuery.setString(12, newCollaborator.getNameBACollaborator());
             sentenceQuery.setString(13, newCollaborator.getHighestDegreeStudies());
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+        }
+    }
+
+    @Override
+    public void updateCollaborator(Collaborator collaborator, String oldRFC) {
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "UPDATE Collaborator SET rfc = ?, bodyAcademyKey = ?, fullName = ?, dateOfAdmission = ?, emailUV = ?, "
+                + "curp = ?, nacionality = ?, educationalProgram = ?, cellPhone = ?, satffNumber = ?,"
+                + " studyArea = ?, nameBACollaborator = ?, highestDegreeStudies = ? WHERE rfc = ?;"
+            );
+            sentenceQuery.setString(1, collaborator.getRfc());
+            sentenceQuery.setString(2, collaborator.getBodyAcademyKey());
+            sentenceQuery.setString(3, collaborator.getFullName());
+            sentenceQuery.setString(4, collaborator.getDateOfAdmission());
+            sentenceQuery.setString(5, collaborator.getEmailUV());
+            sentenceQuery.setString(6, collaborator.getCurp());
+            sentenceQuery.setString(7, collaborator.getNationality());
+            sentenceQuery.setString(8, collaborator.getEducationalProgram());
+            sentenceQuery.setString(9, collaborator.getCellphone());
+            sentenceQuery.setInt(10, collaborator.getStaffNumber());
+            sentenceQuery.setString(11, collaborator.getStudyArea());
+            sentenceQuery.setString(12, collaborator.getNameBACollaborator());
+            sentenceQuery.setString(13, collaborator.getHighestDegreeStudies());
+            sentenceQuery.setString(14, oldRFC);
             sentenceQuery.executeUpdate();
         }catch(SQLException sqlException){
             Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);

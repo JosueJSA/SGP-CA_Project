@@ -11,6 +11,7 @@ import sgp.ca.domain.Collaborator;
 public interface ICollaboratorDAO {
     
     public Collaborator getCollaboratorByUVmail(String uvMail);
-    public void addCollaborator(Collaborator newCollaborator, String bodyAcademyKey);
+    public void addCollaborator(Collaborator newCollaborator);
+    public void updateCollaborator(Collaborator collaborator, String oldRFC);
     
 }

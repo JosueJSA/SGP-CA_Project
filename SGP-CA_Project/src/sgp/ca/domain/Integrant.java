@@ -20,11 +20,11 @@ public class Integrant extends Member{
 
     public Integrant(String rfc,String fullName, String emailUV, String curp, 
     String nationality, String dateOfAdmission, String educationalProgram, 
-    int staffNumber, String cellphone, String appointmentMember, 
+    int staffNumber, String cellphone, String bodyAcademyKey, String appointmentMember, 
     String participationType, String aditionalMail, String homePhone, String workPhone){
         super(
             rfc, fullName, emailUV, curp, nationality, dateOfAdmission, 
-            educationalProgram, staffNumber, cellphone
+            educationalProgram, staffNumber, cellphone, bodyAcademyKey
         );
         this.appointmentMember = appointmentMember;
         this.participationType = participationType;

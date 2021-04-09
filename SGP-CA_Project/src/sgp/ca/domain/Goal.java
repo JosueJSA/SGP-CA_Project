@@ -31,6 +31,14 @@ public class Goal{
     public Goal(){
         this.actions = new ArrayList<>();
     }
+
+    public List<Action> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<Action> actions) {
+        this.actions = actions;
+    }
     
     public void addAction(Action newAction){
         actions.add(newAction);
