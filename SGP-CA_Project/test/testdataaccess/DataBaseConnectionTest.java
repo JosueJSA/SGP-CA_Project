@@ -1,8 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/**
+* @author 
+* Last modification date format: 
+*/
+
 package testdataaccess;
 
 import java.sql.SQLException;
@@ -11,13 +11,12 @@ import java.sql.Connection;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import org.junit.Test;
 import org.junit.Assert;
-/**
- *
- * @author Josue Alarcon
- */
-public class DataAccessTest {
+
+
+public class DataBaseConnectionTest {
+    
     @Test
-    void DataBaseConnectionTest() throws SQLException{
+    public void testDataBaseConnection() throws SQLException{
         Connection currentConection = new ConnectionDatabase().getConnectionDatabase();
         Assert.assertNotNull(currentConection);
     }
