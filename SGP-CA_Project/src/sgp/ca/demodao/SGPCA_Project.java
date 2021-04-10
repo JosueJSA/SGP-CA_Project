@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sgp.ca.dataaccess.FtpClient;
 
 public class SGPCA_Project extends Application {
     
@@ -25,6 +26,14 @@ public class SGPCA_Project extends Application {
 
     public static void main(String[] args){
         launch(args);        
+        
+        FtpClient connection = new FtpClient();
+        String file = connection.saveFileIntoFilesSystem();
+        System.out.println("Terminé de guardar");
+        connection.downloadFileFromFilesSystemByName(file);
+        System.out.println("Terminé recuperar");
+        connection.deleteFileFromFilesSystemByName(file);
+        System.out.println("Terminé de eliminar");
     }
     
 }
