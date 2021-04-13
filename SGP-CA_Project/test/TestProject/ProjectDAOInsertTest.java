@@ -1,8 +1,6 @@
 
 package TestProject;
 
-
-import domain.Project;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import sgp.ca.businessLogic.ProjectDAO;
 import sgp.ca.dataaccess.ConnectionDatabase;
+import sgp.ca.domain.Project;
 
 
 public class ProjectDAOInsertTest {

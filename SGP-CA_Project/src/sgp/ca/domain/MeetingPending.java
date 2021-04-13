@@ -1,5 +1,5 @@
 
-package domain;
+package sgp.ca.domain;
 
 
 public class MeetingPending {

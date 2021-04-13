@@ -5,8 +5,8 @@
 
 package sgp.ca.businessLogic;
 
-import domain.Project;
 import java.util.List;
+import sgp.ca.domain.Project;
 
 public interface IProjectDAO{
     public List<Project> getProjectList();

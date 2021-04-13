@@ -6,12 +6,13 @@
 package sgp.ca.businessLogic;
 
 
-import domain.Agreement;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
+import sgp.ca.domain.Agreement;
 
 public class AgreementDAO implements IAgreementDAO{
     private final ConnectionDatabase query = new ConnectionDatabase();

@@ -3,7 +3,7 @@
 * Last modification date format: 25-03-2021
 */
 
-package domain;
+package sgp.ca.domain;
 
 
 public class Project {

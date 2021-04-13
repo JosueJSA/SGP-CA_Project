@@ -2,7 +2,7 @@
 * @author Johann 
 * Last modification date format: 26-03-2021
 */
-package domain;
+package sgp.ca.domain;
 
 public class ReceptionWork extends Evidence{
     

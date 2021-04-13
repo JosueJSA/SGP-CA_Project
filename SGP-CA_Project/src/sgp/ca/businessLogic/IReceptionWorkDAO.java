@@ -5,8 +5,8 @@
 
 package sgp.ca.businessLogic;
 
-import domain.ReceptionWork;
 import java.util.List;
+import sgp.ca.domain.ReceptionWork;
 
 public interface IReceptionWorkDAO {
     public void addReceptionWork(ReceptionWork newReceptionWork);

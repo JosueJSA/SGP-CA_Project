@@ -5,7 +5,7 @@
 
 package sgp.ca.businessLogic;
 
-import domain.MeetingPending;
+import sgp.ca.domain.MeetingPending;
 
 public interface IMeetingPendingDAO {
     

@@ -3,9 +3,8 @@
 * Last modification date format: 25-03-2021
 */
 
-package domain;
+package sgp.ca.domain;
 
-import java.util.Date;
 
 public class Meeting {
     private String  meetingDate;

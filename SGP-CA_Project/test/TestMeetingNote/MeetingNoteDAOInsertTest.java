@@ -1,7 +1,6 @@
 
 package TestMeetingNote;
 
-import domain.MeetingNote;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import sgp.ca.businessLogic.MeetingNoteDAO;
 import sgp.ca.dataaccess.ConnectionDatabase;
+import sgp.ca.domain.MeetingNote;
 
 public class MeetingNoteDAOInsertTest {
     

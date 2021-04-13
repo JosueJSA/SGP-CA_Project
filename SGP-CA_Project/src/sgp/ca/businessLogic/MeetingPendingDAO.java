@@ -5,10 +5,11 @@
 
 package sgp.ca.businessLogic;
 
-import domain.MeetingPending;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import sgp.ca.dataaccess.ConnectionDatabase;
+import sgp.ca.domain.MeetingPending;
 
 public class MeetingPendingDAO implements IMeetingPendingDAO{
 

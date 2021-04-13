@@ -5,7 +5,8 @@
 
 package sgp.ca.businessLogic;
 
-import domain.Agreement;
+import sgp.ca.domain.Agreement;
+
 
 public interface IAgreementDAO {
     public void addAgreement(Agreement newAgreement);

@@ -5,10 +5,11 @@
 
 package sgp.ca.businessLogic;
 
-import domain.MeetingNote;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import sgp.ca.dataaccess.ConnectionDatabase;
+import sgp.ca.domain.MeetingNote;
 
 public class MeetingNoteDAO implements IMeetingNoteDAO{
     private final ConnectionDatabase query = new ConnectionDatabase();

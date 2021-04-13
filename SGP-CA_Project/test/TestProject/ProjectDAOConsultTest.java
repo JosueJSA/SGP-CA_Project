@@ -2,7 +2,6 @@
 package TestProject;
 
 
-import domain.Project;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +11,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import sgp.ca.businessLogic.ProjectDAO;
+import sgp.ca.domain.Project;
 
 public class ProjectDAOConsultTest {
     @Test

@@ -5,7 +5,8 @@
 
 package sgp.ca.businessLogic;
 
-import domain.MeetingNote;
+import sgp.ca.domain.MeetingNote;
+
 
 public interface IMeetingNoteDAO {
     

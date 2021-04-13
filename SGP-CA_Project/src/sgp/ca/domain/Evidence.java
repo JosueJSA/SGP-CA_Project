@@ -3,7 +3,7 @@
  * @author estef
  */
 
-package domain;
+package sgp.ca.domain;
 
 public abstract class Evidence {
     private String urlFile;
