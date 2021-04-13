@@ -15,13 +15,12 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.net.ftp.FTPClient;
-import sgp.ca.demodao.DialogBox;
+
 
 
 public class FtpClient{
     
     private FTPClient client = new FTPClient();
-    private DialogBox dialogBox = new DialogBox();
     
     private final String HOSTNAME = "ftp-josuesa.alwaysdata.net";
     private final String USERNAME = "josuesa_admin";
@@ -52,10 +51,8 @@ public class FtpClient{
         }
     }
     
-    public String saveFileIntoFilesSystem(){
+    public String saveFileIntoFilesSystem(String fileSelectedPath, String destinationFileName){
         this.stablishConnection();
-        String fileSelectedPath = dialogBox.getFileSelectedPath();
-        String destinationFileName = dialogBox.getFileNameSelected();
         BufferedInputStream fileSelected = null;
         try{
             fileSelected = new BufferedInputStream(new FileInputStream(fileSelectedPath));
@@ -69,9 +66,8 @@ public class FtpClient{
         }
     }
     
-    public void downloadFileFromFilesSystemByName(String fileName){
+    public void downloadFileFromFilesSystemByName(String fileName, String directorySelectedPath){
         this.stablishConnection();
-        String directorySelectedPath = dialogBox.getDirectorySelectedPath();
         try{
             File localfile = new File(directorySelectedPath + ((char)92) + fileName);
             OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(localfile));
