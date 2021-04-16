@@ -5,8 +5,6 @@
  */
 package sgp.ca.domain;
 
-import java.util.Date;
-
 /**
  *
  * @author estef
@@ -16,7 +14,7 @@ public class Book extends Evidence {
     private int editionsNumber;
     private double isbn;
 
-    public Book(String publisher, int editionsNumber, double isbn, String urlFile, String projectName, String evidenceTitle, String country, Date publicationDate, boolean impactAB) {
+    public Book(String publisher, int editionsNumber, double isbn, String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactAB) {
         super(urlFile, projectName, evidenceTitle, country, publicationDate, impactAB);
         this.publisher = publisher;
         this.editionsNumber = editionsNumber;

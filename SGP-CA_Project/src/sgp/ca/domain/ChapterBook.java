@@ -5,8 +5,6 @@
  */
 package sgp.ca.domain;
 
-import java.util.Date;
-
 /**
  *
  * @author estef
@@ -14,7 +12,7 @@ import java.util.Date;
 public class ChapterBook extends Evidence {
     private String bookName, pagesNumber;
 
-    public ChapterBook(String bookName, String pagesNumber, String urlFile, String projectName, String evidenceTitle, String country, Date publicationDate, boolean impactAB) {
+    public ChapterBook(String bookName, String pagesNumber, String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactAB) {
         super(urlFile, projectName, evidenceTitle, country, publicationDate, impactAB);
         this.bookName = bookName;
         this.pagesNumber = pagesNumber;

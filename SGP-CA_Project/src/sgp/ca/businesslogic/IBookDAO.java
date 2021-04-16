@@ -14,7 +14,8 @@ import sgp.ca.domain.Book;
  */
 public interface IBookDAO {
     public List<Book> returnBooks();
-    public Book looforBookbyURL(String url);
-    public boolean addBook(Book book);
+    public Book getBookbyURL(String urlFile);
+    public void addBook(Book book);
+    public void updateBook(Book book, String urlFile);
     public boolean deleteBookbyURL(String url);
 }

@@ -15,7 +15,7 @@ public class Article extends Evidence{
     private double isnn;
     ArticleMagazine magazineName;
 
-    public Article(double isnn, ArticleMagazine magazineName, String urlFile, String projectName, String evidenceTitle, String country, Date publicationDate, boolean impactAB) {
+    public Article(double isnn, ArticleMagazine magazineName, String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactAB) {
         super(urlFile, projectName, evidenceTitle, country, publicationDate, impactAB);
         this.isnn = isnn;
         this.magazineName = magazineName;

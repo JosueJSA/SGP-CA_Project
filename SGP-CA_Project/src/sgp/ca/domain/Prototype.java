@@ -5,8 +5,6 @@
  */
 package sgp.ca.domain;
 
-import java.util.Date;
-
 /**
  *
  * @author estef
@@ -14,7 +12,7 @@ import java.util.Date;
 public class Prototype extends Evidence{
     private String features;
 
-    public Prototype(String features, String urlFile, String projectName, String evidenceTitle, String country, Date publicationDate, boolean impactAB) {
+    public Prototype(String features, String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactAB) {
         super(urlFile, projectName, evidenceTitle, country, publicationDate, impactAB);
         this.features = features;
     }

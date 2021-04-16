@@ -11,11 +11,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sgp.ca.dataaccess.FtpClient;
 
 
 /**
  *
- * @author Josue Alarcon
+ * @author 
  */
 public class SGPCA_Project extends Application {
     
@@ -34,7 +35,15 @@ public class SGPCA_Project extends Application {
      */
     public static void main(String[] args) {
         launch(args);      
+        DialogBox testBox = new DialogBox();
         
+        FtpClient connection = new FtpClient();
+        String file = connection.saveFileIntoFilesSystem(testBox.getFileSelectedPath(), testBox.getFileNameSelected());
+        System.out.println("Terminé de guardar");
+        connection.downloadFileFromFilesSystemByName(testBox.getFileNameSelected(), testBox.getDirectorySelectedPath());
+        System.out.println("Terminé recuperar");
+        connection.deleteFileFromFilesSystemByName(file);
+        System.out.println("Terminé de eliminar");
     }
     
 }

@@ -5,8 +5,6 @@
  */
 package sgp.ca.domain;
 
-import java.util.Date;
-
 /**
  *
  * @author estef

@@ -5,18 +5,15 @@
  */
 package sgp.ca.domain;
 
-import java.util.Date;
-
 /**
  *
  * @author estef
  */
 public abstract class Evidence {
-    private String urlFile, projectName, evidenceTitle, country;
-    private Date publicationDate;
-    private boolean impactAB;
+    private String urlFile, projectName, evidenceTitle, country, publicationDate, impactAB;
 
-    public Evidence(String urlFile, String projectName, String evidenceTitle, String country, Date publicationDate, boolean impactAB) {
+
+    public Evidence(String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactAB) {
         this.urlFile = urlFile;
         this.projectName = projectName;
         this.evidenceTitle = evidenceTitle;
@@ -26,7 +23,7 @@ public abstract class Evidence {
     }
     
     public Evidence() {
-    
+        
     }
 
     public String getUrlFile() {
@@ -45,11 +42,11 @@ public abstract class Evidence {
         return country;
     }
 
-    public Date getPublicationDate() {
+    public String getPublicationDate() {
         return publicationDate;
     }
 
-    public boolean isImpactAB() {
+    public String getImpactAB() {
         return impactAB;
     }
 
@@ -69,11 +66,11 @@ public abstract class Evidence {
         this.country = country;
     }
 
-    public void setPublicationDate(Date publicationDate) {
+    public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
     }
 
-    public void setImpactAB(boolean impactAB) {
+    public void setImpactAB(String impactAB) {
         this.impactAB = impactAB;
     }
     

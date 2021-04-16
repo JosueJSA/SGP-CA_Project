@@ -44,7 +44,7 @@ public class BookDAO implements IBookDAO {
                 Book newBook = new Book();
                 newBook.setUrlFile(results.getString("urlFile"));
                 newBook.setEvidenceTitle(results.getNString("evidenceTitle"));
-                newBook.setPublicationDate(results.getDate("publicationDate"));
+                newBook.setPublicationDate(results.getString("publicationDate"));
                 newBook.setCountry(results.getNString("country"));
                 newBook.setPublisher(results.getNString("publisher"));
                 newBook.setEditionsNumber(results.getInt("editionsNumber"));
@@ -61,7 +61,7 @@ public class BookDAO implements IBookDAO {
     }
 
     @Override
-    public Book looforBookbyURL(String url) {
+    public Book getBookbyURL(String url) {
         Book book = null;
         try(Connection connection = conexion.getConnectionDatabase()){
             String query = "Select * from Book where urlFile=? ";
@@ -73,7 +73,7 @@ public class BookDAO implements IBookDAO {
                 book = new Book();
                 book.setUrlFile(results.getString("urlFile"));
                 book.setEvidenceTitle(results.getNString("evidenceTitle"));
-                book.setPublicationDate(results.getDate("publicationDate"));
+                book.setPublicationDate(results.getString("publicationDate"));
                 book.setCountry(results.getNString("county"));
                 book.setPublisher(results.getNString("publisher"));
                 book.setEditionsNumber(results.getInt("editiosNumber"));
@@ -87,13 +87,54 @@ public class BookDAO implements IBookDAO {
     }
 
     @Override
-    public boolean addBook(Book book) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addBook(Book book) {
+        try{
+            PreparedStatement sentence = conexion.getConnectionDatabase().prepareStatement(
+                    "INSERT INTO Book VALUES (?,?,?,?,?,?,?,?);"
+            );
+            sentence.setString(1, book.getUrlFile());
+            sentence.setString(2, book.getImpactAB());
+            sentence.setString(3, book.getEvidenceTitle());
+            sentence.setString(4, book.getPublicationDate());
+            sentence.setString(5, book.getCountry());
+            sentence.setString(6, book.getPublisher());
+            sentence.setInt(7, book.getEditionsNumber());
+            sentence.setDouble(8, book.getIsbn());
+            sentence.executeUpdate();
+        }catch(SQLException sqlException){
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            conexion.closeConnection();
+        }
     }
 
     @Override
     public boolean deleteBookbyURL(String url) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateBook(Book book, String urlFile) {
+        try{
+            PreparedStatement sentence = conexion.getConnectionDatabase().prepareStatement(
+                    "UPDATE Book SET urlFile = ?, impactBA = ?, evidenceTitle = ?," 
+                    + "publicationDate = ?, country = ?, publisher = ?, editionsNumber = ?, isbn = ?;"
+            );
+            sentence.setString(1, book.getUrlFile());
+            sentence.setString(2, book.getImpactAB());
+            sentence.setString(3, book.getEvidenceTitle());
+            sentence.setString(4, book.getPublicationDate());
+            sentence.setString(5, book.getCountry());
+            sentence.setString(6, book.getPublisher());
+            sentence.setInt(7, book.getEditionsNumber());
+            sentence.setDouble(8, book.getIsbn());
+            sentence.setString(9, urlFile);
+            sentence.executeUpdate();
+        }catch(SQLException sqlException){
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            conexion.closeConnection();
+        }
     }
     
 }
