@@ -3,7 +3,7 @@
 * Last modification date format: 
 */
 
-package businesslogic;
+package businesslogic.testgeneralresumedao;
 
 import org.junit.Test;
 import org.junit.Assert;

@@ -97,4 +97,14 @@ public class Goal{
     public void setDescription(String description){
         this.description = description;
     }
+    
+    @Override
+    public boolean equals(Object obj){
+        boolean isEqual = false;
+        Goal goal = (Goal)obj;
+        if((this.description.equalsIgnoreCase(goal.getDescription())) && (this.actions.size() == goal.getActions().size())){
+            isEqual = true;
+        }
+        return isEqual;
+    }
 }

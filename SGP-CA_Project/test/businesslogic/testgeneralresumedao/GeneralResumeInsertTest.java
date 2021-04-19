@@ -3,7 +3,7 @@
 * Last modification date format: 
 */
 
-package businesslogic;
+package businesslogic.testgeneralresumedao;
 
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import org.junit.Assert;

@@ -5,6 +5,8 @@
 
 package sgp.ca.domain;
 
+import java.util.Objects;
+
 
 public class Lgac {
     
@@ -17,7 +19,6 @@ public class Lgac {
     }
     
     public Lgac(){
-        
     }
 
     public String getIdentifierLgac() {
@@ -42,6 +43,15 @@ public class Lgac {
 
     public void setBodyAcademyRelated(GeneralResume bodyAcademyRelated) {
         this.bodyAcademyRelated = bodyAcademyRelated;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean isEqual = false;
+        if(this.description.equals(((Lgac)obj).getDescription())){
+            isEqual = true;
+        }
+        return isEqual;
     }
     
     

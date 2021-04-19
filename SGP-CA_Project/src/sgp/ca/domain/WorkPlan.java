@@ -107,5 +107,30 @@ public class WorkPlan {
     public void setEndDatePlan(String endDatePlan){
         this.endDatePlan = endDatePlan;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = Integer.parseInt(this.endDatePlan.substring(0, 4));
+        hash += this.bodyAcademyKey.hashCode();
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean sameWorkPlans = true;
+        WorkPlan workPlan = (WorkPlan)obj;
+        if((this.hashCode() != workPlan.hashCode()) || (this.goals.size() != workPlan.getGoals().size())){
+            sameWorkPlans = false;
+        }else{
+            for(Goal goal: this.goals){
+                if(goal.getActions().size() != workPlan.getGoalByKey(goal.getGoalIdentifier()).getActions().size()){
+                    sameWorkPlans = false;
+                }
+            }
+        }
+        return sameWorkPlans;
+    }
+    
+    
     
 }

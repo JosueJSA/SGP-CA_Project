@@ -110,4 +110,19 @@ public class CollaboratorDAO implements ICollaboratorDAO{
         }
     }
     
+    @Override
+    public void deleteCollaboratorByEmailUV(String emailUV){
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "DELETE FROM Collaborator where emailUV = ?;"
+            );
+            sentenceQuery.setString(1,emailUV);
+            sentenceQuery.executeUpdate();
+        }catch(SQLException ex){
+            Logger.getLogger(CollaboratorDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            CONNECTION.closeConnection();
+        }
+    }
+    
 }

@@ -5,6 +5,7 @@
 
 package sgp.ca.businesslogic;
 
+import java.sql.Connection;
 import sgp.ca.domain.WorkPlan;
 
 
@@ -14,5 +15,6 @@ public interface IWorkPlanDAO {
     public void addWorkPlan(WorkPlan newWorkPlan);
     public void updateWorkPlan(WorkPlan worPlan, WorkPlan oldWorkPlan);
     public void deleteWorkPlan(WorkPlan workPlan);
+    public void deleteGoals(Connection connection, WorkPlan workPlan);
     
 }

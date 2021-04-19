@@ -3,7 +3,7 @@
 * Last modification date format: 05-04-2021
 */
 
-package businesslogic;
+package businesslogic.testcollaboratordao;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,31 +13,35 @@ import sgp.ca.domain.Collaborator;
 
 public class CollaboratorInsertTest {
     
+    private final CollaboratorDAO COLLABORATOR_DAO = new CollaboratorDAO();
+    private final CollaboratorInitializer INITIALIZER = new CollaboratorInitializer();
+    
     @Test
     public void correctCollaboratorInsertion(){
-        CollaboratorDAO colaboradorDAO = new CollaboratorDAO();
         Collaborator collaborador = new Collaborator(
-            "GCVGR8906245M7", "Gerardo Contreras Vega", "contreras@uv.mx", 
+            "AVFR8906245M7", "María de los Ángeles Arenas Valdes", "arenas@uv.mx", 
             "SAGA890624HVZNRN09", "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 
             41306, "2281394721", "UV-CA-127", "Ingeniería y Tecnologías de software", 
-            "Informática", "Maestría"
-        );
-        colaboradorDAO.addCollaborator(collaborador);
-        Collaborator collaboratorRetrieved = colaboradorDAO.getCollaboratorByUVmail("contreras@uv.mx");
-        Assert.assertEquals("Collaborator registered", collaborador.getRfc(), collaboratorRetrieved.getRfc());
+            "Informática", "Maestrpia"
+        ); 
+        COLLABORATOR_DAO.addCollaborator(collaborador);
+        Collaborator collaboratorRetrieved = COLLABORATOR_DAO.getCollaboratorByUVmail("arenas@uv.mx");
+        INITIALIZER.cleanCollaboratorCaseTest();
+        Assert.assertEquals(collaborador, collaboratorRetrieved);
     }
     
     @Test
     public void incorrectDuplicatedCollaboratorInsertion(){
-        CollaboratorDAO colaboradorDAO = new CollaboratorDAO();
+        INITIALIZER.prepareRequestTestCase();
         Collaborator collaborador = new Collaborator(
             "AVFR8906245M7", "Adam López Martínez", "adam@uv.mx", 
             "SAGA890624HVZNRN09", "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 
             41306, "2281394721", "UV-CA-127", "Ingeniería y Tecnologías de software", 
             "Informática", "Maestría"
         );
-        colaboradorDAO.addCollaborator(collaborador);
-        Collaborator collaboratorRetrieved = colaboradorDAO.getCollaboratorByUVmail("adam@uv.mx");
+        COLLABORATOR_DAO.addCollaborator(collaborador);
+        Collaborator collaboratorRetrieved = COLLABORATOR_DAO.getCollaboratorByUVmail("adam@uv.mx");
+        INITIALIZER.cleanCollaboratorCaseTest();
         Assert.assertNull(collaboratorRetrieved.getRfc());
     }
     

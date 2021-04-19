@@ -37,6 +37,7 @@ public class WorkPlanDAO implements IWorkPlanDAO{
                 queryResult.getDate("endDate").toString(),
                 queryResult.getString("bodyAcademyKey")
             );}
+            workPlan.setGoals(goalDAO.getGoalListByWorkPlan(workPlan.getWorkplanKey()));
         }catch(SQLException sqlException){
             Logger.getLogger(WorkPlan.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
@@ -129,6 +130,7 @@ public class WorkPlanDAO implements IWorkPlanDAO{
         }    
     }
     
+    @Override
     public void deleteGoals(Connection connection, WorkPlan workPlan){
         try{
             goalDAO.deleteActions(connection, workPlan.getGoals());

@@ -3,7 +3,7 @@
 * Last modification date format: 
 */
 
-package businesslogic;
+package businesslogic.testintegrantdao;
 
 import org.junit.Test;
 import org.junit.Assert;
@@ -12,8 +12,11 @@ import sgp.ca.domain.Integrant;
 
 public class IntegrantRquestTest {
     
+    private final IntegrantInitializer INITIALIZER = new IntegrantInitializer();
+    
     @Test
     public void testGetExistIntegrantByUVmail(){
+        INITIALIZER.prepareRequestTestCase();
         IntegrantDAO integrantDao = new IntegrantDAO();
         Integrant integrant = integrantDao.getIntegrantByUVmail("angelsanchez@uv.mx");
         String rfcExpected = "SAGA8906245M7";
@@ -31,10 +34,11 @@ public class IntegrantRquestTest {
     
     @Test 
     public void testGetExistIntegrantStudies(){
+        INITIALIZER.prepareRequestTestCase();
         IntegrantDAO integrantDao = new IntegrantDAO();
         Integrant integrant = integrantDao.getIntegrantByUVmail("angelsanchez@uv.mx");
-        int StudiesNumberExpected = 0;
-        Assert.assertNotEquals("Get integrant studies, at least 1", StudiesNumberExpected, integrant.getSchooling().size());
+        int StudiesNumberExpected = 2;
+        Assert.assertEquals("Get integrant studies, at least 1", StudiesNumberExpected, integrant.getSchooling().size());
     }
     
 }

@@ -3,7 +3,7 @@
 * Last modification date format: 06-04-2021
 */
 
-package businesslogic;
+package businesslogic.testworkplandao;
 
 
 import java.sql.Connection;

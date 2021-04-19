@@ -98,5 +98,13 @@ public class Action{
         this.resource = resource;
     }
     
+    @Override
+    public boolean equals(Object obj){
+        boolean isEqual = false;
+        if(this.descriptionAction.equalsIgnoreCase(((Action)obj).getDescriptionAction())){
+            isEqual = true;
+        }
+        return isEqual;
+    }
     
 }

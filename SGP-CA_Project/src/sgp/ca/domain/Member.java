@@ -5,6 +5,8 @@
 
 package sgp.ca.domain;
 
+import java.util.Objects;
+
 public abstract class Member {
     
     private String rfc;
@@ -116,4 +118,21 @@ public abstract class Member {
     public void setDateOfAdmission(String dateOfAdmission){
         this.dateOfAdmission = dateOfAdmission;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 61 * hash + Objects.hashCode(this.rfc);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean isEqual = false;
+        if(this.rfc.equals(((Member)obj).getRfc())){
+            isEqual = true;
+        }
+        return isEqual;
+    }
+    
 }

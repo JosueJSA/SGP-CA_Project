@@ -5,6 +5,8 @@
 
 package sgp.ca.domain;
 
+import java.util.Objects;
+
 
 public class Schooling{
     
@@ -96,5 +98,16 @@ public class Schooling{
 
     public void setDateOfObteiningStudies(String dateOfObteiningStudies){
         this.dateOfObteiningStudies = dateOfObteiningStudies;
-    }  
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean isEqual = false;
+        if(this.idProfessionalStudies.equals(((Schooling)obj).getIdProfessionalStudies())){
+            isEqual = true;
+        }
+        return isEqual;
+    }
+    
+    
 }

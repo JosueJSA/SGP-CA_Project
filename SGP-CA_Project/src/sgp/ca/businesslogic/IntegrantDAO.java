@@ -35,6 +35,7 @@ import sgp.ca.domain.Schooling;
                     queryResult.getString("rfc"), 
                     queryResult.getString("fullName"),
                     queryResult.getString("emailUV"),
+                    queryResult.getString("password"),
                     queryResult.getString("curp"),
                     queryResult.getString("nacionality"),
                     queryResult.getDate("dateOfAdmission").toString(),
@@ -63,23 +64,24 @@ import sgp.ca.domain.Schooling;
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "INSERT INTO Integrant VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+                "INSERT INTO Integrant VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
             );
             sentenceQuery.setString(1, newIntegrant.getRfc());
             sentenceQuery.setString(2, newIntegrant.getBodyAcademyKey());
             sentenceQuery.setString(3, newIntegrant.getFullName());
             sentenceQuery.setString(4, newIntegrant.getDateOfAdmission());
             sentenceQuery.setString(5, newIntegrant.getEmailUV());
-            sentenceQuery.setString(6, newIntegrant.getAditionalMail());
-            sentenceQuery.setString(7, newIntegrant.getCurp());
-            sentenceQuery.setString(8, newIntegrant.getNationality());
-            sentenceQuery.setString(9, newIntegrant.getEducationalProgram());
-            sentenceQuery.setString(10, newIntegrant.getCellphone());
-            sentenceQuery.setInt(11, newIntegrant.getStaffNumber());
-            sentenceQuery.setString(12, newIntegrant.getHomePhone());
-            sentenceQuery.setString(13, newIntegrant.getWorkPhone());
-            sentenceQuery.setString(14, newIntegrant.getAppointmentMember());
-            sentenceQuery.setString(15, newIntegrant.getParticipationType());
+            sentenceQuery.setString(6, newIntegrant.getPassword());
+            sentenceQuery.setString(7, newIntegrant.getAditionalMail());
+            sentenceQuery.setString(8, newIntegrant.getCurp());
+            sentenceQuery.setString(9, newIntegrant.getNationality());
+            sentenceQuery.setString(10, newIntegrant.getEducationalProgram());
+            sentenceQuery.setString(11, newIntegrant.getCellphone());
+            sentenceQuery.setInt(12, newIntegrant.getStaffNumber());
+            sentenceQuery.setString(13, newIntegrant.getHomePhone());
+            sentenceQuery.setString(14, newIntegrant.getWorkPhone());
+            sentenceQuery.setString(15, newIntegrant.getAppointmentMember());
+            sentenceQuery.setString(16, newIntegrant.getParticipationType());
             sentenceQuery.executeUpdate();
             this.addIntegrantStudies(connection, newIntegrant);
             connection.commit();
@@ -102,7 +104,7 @@ import sgp.ca.domain.Schooling;
         try{
             this.deleteIntegrantStudies(connection, oldRFC);
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "UPDATE Integrant SET rfc = ?, bodyAcademyKey = ?, fullName = ?, dateOfAdmission = ?, emailUV = ?, "
+                "UPDATE Integrant SET rfc = ?, bodyAcademyKey = ?, fullName = ?, dateOfAdmission = ?, emailUV = ?, password = ?, "
                 + "additionalEmail = ?, curp = ?, nacionality = ?, educationalProgram = ?, cellPhone = ?, satffNumber = ?,"
                 + " homePhone = ?, workPhone = ?, appointment = ?, participationType = ? WHERE rfc = ?;"
             );
@@ -111,17 +113,18 @@ import sgp.ca.domain.Schooling;
             sentenceQuery.setString(3, integrant.getFullName());
             sentenceQuery.setString(4, integrant.getDateOfAdmission());
             sentenceQuery.setString(5, integrant.getEmailUV());
-            sentenceQuery.setString(6, integrant.getAditionalMail());
-            sentenceQuery.setString(7, integrant.getCurp());
-            sentenceQuery.setString(8, integrant.getNationality());
-            sentenceQuery.setString(9, integrant.getEducationalProgram());
-            sentenceQuery.setString(10, integrant.getCellphone());
-            sentenceQuery.setInt(11, integrant.getStaffNumber());
-            sentenceQuery.setString(12, integrant.getHomePhone());
-            sentenceQuery.setString(13, integrant.getWorkPhone());
-            sentenceQuery.setString(14, integrant.getAppointmentMember());
-            sentenceQuery.setString(15, integrant.getParticipationType());
-            sentenceQuery.setString(16, oldRFC);
+            sentenceQuery.setString(6, integrant.getPassword());
+            sentenceQuery.setString(7, integrant.getAditionalMail());
+            sentenceQuery.setString(8, integrant.getCurp());
+            sentenceQuery.setString(9, integrant.getNationality());
+            sentenceQuery.setString(10, integrant.getEducationalProgram());
+            sentenceQuery.setString(11, integrant.getCellphone());
+            sentenceQuery.setInt(12, integrant.getStaffNumber());
+            sentenceQuery.setString(13, integrant.getHomePhone());
+            sentenceQuery.setString(14, integrant.getWorkPhone());
+            sentenceQuery.setString(15, integrant.getAppointmentMember());
+            sentenceQuery.setString(16, integrant.getParticipationType());
+            sentenceQuery.setString(17, oldRFC);
             sentenceQuery.executeUpdate();
             this.addIntegrantStudies(connection, integrant);
             connection.commit();
@@ -166,6 +169,7 @@ import sgp.ca.domain.Schooling;
         }
     }
     
+    @Override
     public void addIntegrantStudies(Connection connection, Integrant integrant){
         integrant.getSchooling().forEach( schooling -> {
             try{
@@ -193,6 +197,7 @@ import sgp.ca.domain.Schooling;
         });
     }
     
+    @Override
     public void deleteIntegrantStudies(Connection connection, String rfc){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(

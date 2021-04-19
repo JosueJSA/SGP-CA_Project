@@ -52,4 +52,13 @@ public class Collaborator extends Member{
     public void setHighestDegreeStudies(String highestDegreeStudies){
         this.highestDegreeStudies = highestDegreeStudies;
     }
+    
+    @Override
+    public boolean equals(Object obj){
+        boolean isEqual = false;
+        if(super.getRfc().equals(((Collaborator)obj).getRfc())){
+            isEqual = true;
+        }
+        return isEqual;
+    }
 }

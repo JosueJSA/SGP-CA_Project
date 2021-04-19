@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package businesslogic;
+package businesslogic.testcollaboratordao;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,12 +16,16 @@ import sgp.ca.domain.Collaborator;
  */
 public class CollaboratorRequestTest {
     
+    private final CollaboratorInitializer INITIALIZER = new CollaboratorInitializer();
+    
     @Test
     public void testGetExistCollaboratorByUVmail(){
+        INITIALIZER.prepareRequestTestCase();
         CollaboratorDAO integrantDao = new CollaboratorDAO();
         Collaborator integrant = integrantDao.getCollaboratorByUVmail("arenas@uv.mx");
         String rfcExcpected = "AVFR8906245M7";
         String rfcRetrived = integrant.getRfc();
+        INITIALIZER.cleanCollaboratorCaseTest();
         Assert.assertEquals("Get exist collaborator from database", rfcExcpected, rfcRetrived);
     }
     
