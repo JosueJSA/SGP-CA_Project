@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author estef
+ * Last modification date format: 19-04-2021
  */
+
 package sgp.ca.domain;
 
-/**
- *
- * @author estef
- */
 public class Book extends Evidence {
     private String publisher;
     private int editionsNumber;
@@ -22,6 +18,9 @@ public class Book extends Evidence {
     }
     
     public Book(){
+        this.publisher = "";
+        this.editionsNumber = 0;
+        this.isbn = 0;
     }
 
     public String getPublisher() {

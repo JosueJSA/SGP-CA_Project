@@ -1,21 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author estef
+ * Last modification date format: 19-04-2021
  */
+
 package sgp.ca.domain;
 
-/**
- *
- * @author estef
- */
 public class ChapterBook extends Evidence {
-    private String bookName, pagesNumber;
+    private String bookName;
+    private String pageNumberRange;
 
-    public ChapterBook(String bookName, String pagesNumber, String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactAB) {
+    public ChapterBook(String bookName, String pageNumberRange, String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactAB) {
         super(urlFile, projectName, evidenceTitle, country, publicationDate, impactAB);
         this.bookName = bookName;
-        this.pagesNumber = pagesNumber;
+        this.pageNumberRange = pageNumberRange;
+    }
+    
+    public ChapterBook(){
+        this.bookName = "";
+        this.pageNumberRange = "";
     }
 
     public String getBookName() {
@@ -23,15 +25,15 @@ public class ChapterBook extends Evidence {
     }
 
     public String getPagesNumber() {
-        return pagesNumber;
+        return pageNumberRange;
     }
 
     public void setBookName(String bookName) {
         this.bookName = bookName;
     }
 
-    public void setPagesNumber(String pagesNumber) {
-        this.pagesNumber = pagesNumber;
+    public void setPagesNumber(String pageNumberRange) {
+        this.pageNumberRange = pageNumberRange;
     }
     
     

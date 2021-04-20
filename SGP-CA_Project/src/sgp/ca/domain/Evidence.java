@@ -1,16 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package sgp.ca.domain;
 
 /**
- *
  * @author estef
+ * Last modification date format: 19-04-2021
  */
+
+package sgp.ca.domain;
+
 public abstract class Evidence {
-    private String urlFile, projectName, evidenceTitle, country, publicationDate, impactAB;
+    private String urlFile;
+    private String projectName; 
+    private String evidenceTitle;
+    private String country; 
+    private String publicationDate;
+    private String impactAB;
 
 
     public Evidence(String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactAB) {
@@ -23,6 +25,12 @@ public abstract class Evidence {
     }
     
     public Evidence() {
+        this.urlFile = "";
+        this.projectName = "";
+        this.evidenceTitle = "";
+        this.country = "";
+        this.publicationDate = "";
+        this.impactAB = "";
         
     }
 

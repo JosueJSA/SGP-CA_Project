@@ -1,12 +1,13 @@
+/**
+ * @author estef
+ * Last modification date format: 19-04-2021
+ */
 
 package sgp.ca.domain;
 
-/**
- *
- * @author estef
- */
 public class Student {
-    private String nameStudent, studyDegree;
+    private String nameStudent;
+    private String studyDegree;
 
     public Student(String nameStudent, String studyDegree) {
         this.nameStudent = nameStudent;

@@ -1,21 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author estef
+ * Last modification date format: 19-04-2021
  */
+
 package sgp.ca.domain;
 
-/**
- *
- * @author estef
- */
 public class ArticleMagazine {
-    private String magazineName, index, magazinePublisher;
+    private String magazineName;
+    private String index;
+    private String magazinePublisher;
 
     public ArticleMagazine(String magazineName, String index, String magazinePublisher) {
         this.magazineName = magazineName;
         this.index = index;
         this.magazinePublisher = magazinePublisher;
+    }
+    
+    public ArticleMagazine(){
+        this.magazineName = "";
+        this.index = "";
+        this.magazinePublisher = "";
     }
 
     public String getMagazineName() {

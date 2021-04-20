@@ -1,21 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @author estef
+ * Last modification date format: 19-04-2021
  */
+
 package sgp.ca.businesslogic;
 
 import java.util.List;
 import sgp.ca.domain.Book;
 
-/**
- *
- * @author estef
- */
 public interface IBookDAO {
     public List<Book> returnBooks();
     public Book getBookbyURL(String urlFile);
-    public void addBook(Book book);
-    public void updateBook(Book book, String urlFile);
-    public boolean deleteBookbyURL(String url);
+    public void addBook(Book newBook);
+    public void updateBook(Book book, String oldUrlFile);
+    public boolean deleteBookbyURL(String urlFile);
 }
