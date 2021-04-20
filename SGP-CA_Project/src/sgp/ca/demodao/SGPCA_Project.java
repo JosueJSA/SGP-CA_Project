@@ -10,10 +10,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sgp.ca.businesslogic.WorkPlanDAO;
 
 public class SGPCA_Project extends Application {
-    static WorkPlanDAO WORKPLAN_DAO = new WorkPlanDAO();
+    
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -23,12 +22,11 @@ public class SGPCA_Project extends Application {
         
         stage.setScene(scene);
         stage.show();
+        
     }
 
     public static void main(String[] args){
-        launch(args);
-        System.out.println();
-        
-    
+        launch(args);    
     }
+    
 }

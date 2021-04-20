@@ -6,7 +6,9 @@
 package sgp.ca.demodao;
 
 import java.io.File;
-import javax.swing.JFileChooser;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 
 public class DialogBox{
@@ -14,6 +16,14 @@ public class DialogBox{
     private String fileSelectedPath = "";
     private String directorySelectedPath = "";
     private String fileNameSelected = "";
+    private Stage stage;
+
+    public DialogBox(Stage stage){
+        this.stage = stage;
+    }
+    
+    public DialogBox(){
+    }
 
     public String getFileSelectedPath(){
         this.openDialogFileSelector();
@@ -43,22 +53,21 @@ public class DialogBox{
     }
     
     public void openDialogFileSelector(){
-        JFileChooser chooser = new JFileChooser(); 
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); 
-        int returnVal = chooser.showOpenDialog(chooser); 
-        if(returnVal == JFileChooser.APPROVE_OPTION) { 
-            this.fileSelectedPath = chooser.getSelectedFile().getAbsolutePath(); 
-            this.fileNameSelected = chooser.getName(new File(fileSelectedPath));
-        }
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Select the file to save");
+        System.out.println("HolaFile");
+        File selectedFile = chooser.showOpenDialog(stage);
+        System.out.println("HolaFile");
+        this.fileSelectedPath = selectedFile.getAbsolutePath();
+        this.fileNameSelected = selectedFile.getName();
     }
     
      public void openDialogDirectorySelector(){
-        JFileChooser chooser = new JFileChooser(); 
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
-        int returnVal = chooser.showOpenDialog(chooser); 
-        if(returnVal == JFileChooser.APPROVE_OPTION) { 
-            this.directorySelectedPath = chooser.getSelectedFile().getAbsolutePath();
-        }
+         System.out.println("HolaDirectory");
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("Select a destiny directory");;
+        File selectedDirectory = chooser.showDialog(stage);
+        this.directorySelectedPath = selectedDirectory.getAbsolutePath();
     }
     
 }
