@@ -31,15 +31,16 @@ public class GoalDAO implements IGoalDAO{
         workPlan.getGoals().forEach( goal -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
-                    "INSERT INTO Goal VALUES (?, ?, ?, ?, ?, ?);"
+                    "INSERT INTO Goal (workplanKey, startDate, endDate, statusGoal, descriptionGoal) VALUES (?, ?, ?, ?, ?);",
+                    PreparedStatement.RETURN_GENERATED_KEYS
                 );
-                sentenceQuery.setInt(1, goal.getGoalIdentifier());
-                sentenceQuery.setInt(2, workPlan.getWorkplanKey());
-                sentenceQuery.setString(3, goal.getStartDate());
-                sentenceQuery.setString(4, goal.getEndDate());
-                sentenceQuery.setBoolean(5, goal.isStatusGoal());
-                sentenceQuery.setString(6, goal.getDescription());
+                sentenceQuery.setInt(1, workPlan.getWorkplanKey());
+                sentenceQuery.setString(2, goal.getStartDate());
+                sentenceQuery.setString(3, goal.getEndDate());
+                sentenceQuery.setBoolean(4, goal.isStatusGoal());
+                sentenceQuery.setString(5, goal.getDescription());
                 sentenceQuery.executeUpdate();
+                this.updateGoalWithKeyGenerated(sentenceQuery, goal);
                 this.addActions(connection, goal);
             }catch(SQLException sqlException){
                 try{
@@ -155,5 +156,15 @@ public class GoalDAO implements IGoalDAO{
         }
     }
 
+    public void updateGoalWithKeyGenerated(PreparedStatement statement, Goal goal){
+        try{
+            ResultSet result = statement.getGeneratedKeys();
+            if(result.next()){
+                goal.setGoalIdentifier(result.getInt(1));
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(GoalDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
 }

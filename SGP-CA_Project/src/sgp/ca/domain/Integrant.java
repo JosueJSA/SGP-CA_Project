@@ -19,12 +19,12 @@ public class Integrant extends Member{
     private List<Schooling> schooling;
     String password = null;
 
-    public Integrant(String rfc,String fullName, String emailUV, String password,
+    public Integrant(String rfc,String fullName, String emailUV, String participationStatus, String password,
     String curp, String nationality, String dateOfAdmission, String educationalProgram, 
     int staffNumber, String cellphone, String bodyAcademyKey, String appointmentMember, 
     String participationType, String aditionalMail, String homePhone, String workPhone){
         super(
-            rfc, fullName, emailUV, curp, nationality, dateOfAdmission, 
+            rfc, fullName, emailUV, participationStatus, curp, nationality, dateOfAdmission, 
             educationalProgram, staffNumber, cellphone, bodyAcademyKey
         );
         this.appointmentMember = appointmentMember;

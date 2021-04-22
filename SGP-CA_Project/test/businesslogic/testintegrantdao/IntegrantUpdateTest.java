@@ -15,14 +15,14 @@ import sgp.ca.domain.Schooling;
 public class IntegrantUpdateTest{
     
     private final IntegrantInitializer INITIALIZER = new IntegrantInitializer();
+    private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
     
     @Test
     public void testCorrecIntegrantUpdateWithAddSchooling(){
         INITIALIZER.prepareUpdateTestCase();
-        IntegrantDAO integrantDAO = new IntegrantDAO();
-        Integrant oldIntegrant =  integrantDAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        Integrant oldIntegrant =  INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
         Integrant newIntegrant = new Integrant(
-            "SAA8906245M8", "Angel Juan Sánchez García", "angelsanchez@uv.mx", "angel", "SAGA890624HVZNRN09", 
+            "SAA8906245M8", "Angel Juan Sánchez García", "angelsanchez@uv.mx", "angel", "Activo", "SAGA890624HVZNRN09", 
             "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 41306, "2281394721",
             "UV-CA-127", "PTC", "Integrante", "angelsg89@hotmail.com", "2288146210", "141912288421700"
         );     
@@ -42,19 +42,19 @@ public class IntegrantUpdateTest{
             "Doctorado", "Veracruz", "Ingeniería de software", "Ingeniería", "2003-06-08", "02450244"
         ));
         
-        integrantDAO.updateIntegrant(newIntegrant, oldIntegrant.getRfc());
-        Integrant newIntegrantRetrieved = integrantDAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        INTEGRANT_DAO.updateIntegrant(newIntegrant, oldIntegrant.getRfc());
+        Integrant newIntegrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        INITIALIZER.cleanIntegrantTest(newIntegrantRetrieved.getRfc());
         Assert.assertNotEquals(oldIntegrant, newIntegrantRetrieved);
     }
     
     @Test
     public void testIncorrectIntegrantDataUpdateNotAdded(){
         INITIALIZER.prepareUpdateTestCase();
-        IntegrantDAO integrantDAO = new IntegrantDAO();
-        Integrant oldIntegrant =  integrantDAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        Integrant oldIntegrant =  INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
         
         Integrant newIntegrant = new Integrant(
-            "AAS285R5EF", "Angel Juan Sánchez García", "angelsanchez@uv.mx", "angel", "SAGA890624HVZNRN09", 
+            "AAS285R5EF", "Angel Juan Sánchez García", "angelsanchez@uv.mx", "angel", "Activo", "SAGA890624HVZNRN09", 
             "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 41306, "2281394721",
             "UV-CA-127", "PTC", "Integrante", "angelsg89@hotmail.com", "2288146210", "141912288421700"
         );     
@@ -64,27 +64,50 @@ public class IntegrantUpdateTest{
             "Licenciatura", "Veracruz", "Computación", "Ingeniería", "20000-06-08", "08759567"                                      /*Date format incorrect -> Insertion Error*/
         ));
         
-        integrantDAO.updateIntegrant(newIntegrant, oldIntegrant.getRfc());
-        Integrant newIntegrantRetrieved = integrantDAO.getIntegrantByUVmail("angelsanchez@uv.mx");
-        
+        INTEGRANT_DAO.updateIntegrant(newIntegrant, oldIntegrant.getRfc());
+        Integrant newIntegrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        INITIALIZER.cleanIntegrantTest("SAGA8906245M7");
         Assert.assertEquals(oldIntegrant, newIntegrantRetrieved);
     }
     
     @Test
     public void testCorrecIntegrantUpdateWithoutSchooling(){
         INITIALIZER.prepareUpdateTestCase();
-        IntegrantDAO integrantDAO = new IntegrantDAO();
-        Integrant oldIntegrant =  integrantDAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        Integrant oldIntegrant =  INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
         
         Integrant newIntegrant = new Integrant(
-            "JAJCUYEDF2", "Angel Juan Sánchez García", "angelsanchez@uv.mx", "angel", "SAGA890624HVZNRN09", 
+            "JAJCUYEDF2", "Angel Juan Sánchez García", "angelsanchez@uv.mx", "angel", "Activo", "SAGA890624HVZNRN09", 
             "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 41306, "2281394721",
             "UV-CA-127", "PTC", "Integrante", "angelsg89@hotmail.com", "2288146210", "141912288421700"
         );     
         
-        integrantDAO.updateIntegrant(newIntegrant, oldIntegrant.getRfc());
-        Integrant newIntegrantRetrieved = integrantDAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        INTEGRANT_DAO.updateIntegrant(newIntegrant, oldIntegrant.getRfc());
+        Integrant newIntegrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        INITIALIZER.cleanIntegrantTest(newIntegrantRetrieved.getRfc());
         Assert.assertNotEquals(oldIntegrant, newIntegrantRetrieved);
+    }
+    
+    @Test
+    public void correctUnsubscribeCollaborator(){
+        INITIALIZER.prepareRequestTestCase();
+        Integrant oldIntegrant = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        INTEGRANT_DAO.unsubscribeIntegrantByEmailUV(oldIntegrant.getEmailUV());
+        Integrant integrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        INITIALIZER.cleanIntegrantTest(integrantRetrieved.getRfc());
+        Assert.assertNotEquals(oldIntegrant.getParticipationStatus(), integrantRetrieved.getParticipationStatus());
+    }
+    
+    @Test
+    public void correctSubscribeCollaborator(){
+        INITIALIZER.prepareRequestTestCase();
+        Integrant oldIntegrant = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        INTEGRANT_DAO.unsubscribeIntegrantByEmailUV(oldIntegrant.getEmailUV());
+        oldIntegrant = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        INTEGRANT_DAO.subscribeIntegrantByEmailUV(oldIntegrant.getEmailUV());
+        Integrant integrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        INITIALIZER.cleanIntegrantTest(integrantRetrieved.getRfc());
+        String stateExpected = "Activo";
+        Assert.assertEquals(stateExpected, integrantRetrieved.getParticipationStatus());
     }
     
 }

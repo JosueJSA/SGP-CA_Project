@@ -13,6 +13,7 @@ public interface ICollaboratorDAO {
     public Collaborator getCollaboratorByUVmail(String uvMail);
     public void addCollaborator(Collaborator newCollaborator);
     public void updateCollaborator(Collaborator collaborator, String oldRFC);
-    public void deleteCollaboratorByEmailUV(String emailUV);
+    public void unsubscribeCollaboratorByEmailUV(String emailUV);
+    public void subscribeCollaboratorByEmailUV(String emailUV);
     
 }

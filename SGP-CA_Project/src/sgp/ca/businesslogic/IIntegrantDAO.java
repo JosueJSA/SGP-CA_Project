@@ -15,5 +15,7 @@ public interface IIntegrantDAO{
     public void updateIntegrant(Integrant integrant, String oldMailUv);
     public void addIntegrantStudies(Connection connection, Integrant integrant);
     public void deleteIntegrantStudies(Connection connection, String rfc);
+    public void unsubscribeIntegrantByEmailUV(String emailUV);
+    public void subscribeIntegrantByEmailUV(String emailUV);
     
 }

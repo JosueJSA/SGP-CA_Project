@@ -122,8 +122,8 @@ public class WorkPlan {
         if((this.hashCode() != workPlan.hashCode()) || (this.goals.size() != workPlan.getGoals().size())){
             sameWorkPlans = false;
         }else{
-            for(Goal goal: this.goals){
-                if(goal.getActions().size() != workPlan.getGoalByKey(goal.getGoalIdentifier()).getActions().size()){
+            for(int i = 0; i < this.goals.size(); i++){
+                if(this.goals.get(i).getActions().size() != workPlan.getGoals().get(i).getActions().size()){
                     sameWorkPlans = false;
                 }
             }

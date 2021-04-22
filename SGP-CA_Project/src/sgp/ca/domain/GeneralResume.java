@@ -149,4 +149,14 @@ public class GeneralResume{
         this.registrationDate = registrationDate;
     }
     
+    @Override
+    public boolean equals(Object obj){
+        GeneralResume generalResume = ((GeneralResume)obj);
+        boolean isEqual = false;
+        if(generalResume.getBodyAcademyKey().equalsIgnoreCase(this.bodyAcademyKey)){
+            isEqual = true;
+        }
+        return isEqual;
+    }
+    
 }

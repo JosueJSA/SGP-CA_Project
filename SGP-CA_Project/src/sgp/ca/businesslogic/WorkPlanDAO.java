@@ -21,13 +21,14 @@ public class WorkPlanDAO implements IWorkPlanDAO{
     private GoalDAO goalDAO = new GoalDAO();
     
     @Override
-    public WorkPlan getWorkPlan(String endDatePlan){
+    public WorkPlan getWorkPlan(String endDatePlan, String bodyAcademyKey){
         WorkPlan workPlan = new WorkPlan();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM WorkPlan WHERE endDate = ?;"
+                "SELECT * FROM WorkPlan WHERE endDate = ? AND bodyAcademyKey = ?;"
             );
             sentenceQuery.setString(1, endDatePlan);
+            sentenceQuery.setString(2, bodyAcademyKey);
             ResultSet queryResult = sentenceQuery.executeQuery();
             if(queryResult.next()){workPlan = new WorkPlan(
                 queryResult.getInt("workplanKey"),
@@ -51,15 +52,16 @@ public class WorkPlanDAO implements IWorkPlanDAO{
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "INSERT INTO WorkPlan VALUES(?, ?, ?, ?, ?, ?);"
+                "INSERT INTO WorkPlan (bodyAcademyKey, startDate, endDate, generalTarjet, durationInYears) VALUES(?, ?, ?, ?, ?);",
+                PreparedStatement.RETURN_GENERATED_KEYS
             );
-            sentenceQuery.setInt(1, newWorkPlan.getWorkplanKey());
-            sentenceQuery.setString(2, newWorkPlan.getBodyAcademyKey());
-            sentenceQuery.setString(3, newWorkPlan.getStartDatePlan());
-            sentenceQuery.setString(4, newWorkPlan.getEndDatePlan());
-            sentenceQuery.setString(5, newWorkPlan.getGeneralTarget());
-            sentenceQuery.setInt(6, newWorkPlan.getDurationInYears());
+            sentenceQuery.setString(1, newWorkPlan.getBodyAcademyKey());
+            sentenceQuery.setString(2, newWorkPlan.getStartDatePlan());
+            sentenceQuery.setString(3, newWorkPlan.getEndDatePlan());
+            sentenceQuery.setString(4, newWorkPlan.getGeneralTarget());
+            sentenceQuery.setInt(5, newWorkPlan.getDurationInYears());
             sentenceQuery.executeUpdate();
+            this.updateWorkPlanWithKeyGenerated(sentenceQuery, newWorkPlan);
             goalDAO.addGoals(connection, newWorkPlan);
             connection.commit();
             connection.setAutoCommit(true);
@@ -81,16 +83,16 @@ public class WorkPlanDAO implements IWorkPlanDAO{
         try{
             this.deleteGoals(connection, oldWorkPlan);
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "UPDATE WorkPlan SET workplanKey = ?, bodyAcademyKey = ?, startDate = ?, endDate = ?, generalTarjet = ?, durationInYears = ? WHERE workplanKey = ?;"
+                "UPDATE WorkPlan SET bodyAcademyKey = ?, startDate = ?, endDate = ?, generalTarjet = ?, durationInYears = ? WHERE workplanKey = ?;"
             );
-            sentenceQuery.setInt(1, workPlan.getWorkplanKey());
-            sentenceQuery.setString(2, workPlan.getBodyAcademyKey());
-            sentenceQuery.setString(3, workPlan.getStartDatePlan());
-            sentenceQuery.setString(4, workPlan.getEndDatePlan());
-            sentenceQuery.setString(5, workPlan.getGeneralTarget());
-            sentenceQuery.setInt(6, workPlan.getDurationInYears());
-            sentenceQuery.setInt(7, oldWorkPlan.getWorkplanKey());
+            sentenceQuery.setString(1, workPlan.getBodyAcademyKey());
+            sentenceQuery.setString(2, workPlan.getStartDatePlan());
+            sentenceQuery.setString(3, workPlan.getEndDatePlan());
+            sentenceQuery.setString(4, workPlan.getGeneralTarget());
+            sentenceQuery.setInt(5, workPlan.getDurationInYears());
+            sentenceQuery.setInt(6, oldWorkPlan.getWorkplanKey());
             sentenceQuery.executeUpdate();
+            workPlan.setWorkplanKey(oldWorkPlan.getWorkplanKey());
             goalDAO.addGoals(connection, workPlan);
             connection.commit();
             connection.setAutoCommit(true);
@@ -107,7 +109,7 @@ public class WorkPlanDAO implements IWorkPlanDAO{
     }
 
     @Override
-    public void deleteWorkPlan(WorkPlan workPlan){
+    public void deleteWorkPlan(WorkPlan workPlan, String bodyAcademyKey){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
             this.deleteGoals(connection, workPlan);
@@ -146,6 +148,17 @@ public class WorkPlanDAO implements IWorkPlanDAO{
             }catch(SQLException ex){
                 Logger.getLogger(WorkPlanDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+    
+    public void updateWorkPlanWithKeyGenerated(PreparedStatement statement, WorkPlan workPlan){
+        try{
+            ResultSet result = statement.getGeneratedKeys();
+            if(result.next()){
+                workPlan.setWorkplanKey(result.getInt(1));
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(WorkPlanDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

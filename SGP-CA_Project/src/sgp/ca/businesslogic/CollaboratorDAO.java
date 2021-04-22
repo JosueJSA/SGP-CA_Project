@@ -34,6 +34,7 @@ public class CollaboratorDAO implements ICollaboratorDAO{
                 queryResult.getString("rfc"), 
                 queryResult.getString("fullName"),
                 queryResult.getString("emailUV"),
+                queryResult.getString("participationStatus"),
                 queryResult.getString("curp"),
                 queryResult.getString("nacionality"),
                 queryResult.getDate("dateOfAdmission").toString(),
@@ -57,21 +58,22 @@ public class CollaboratorDAO implements ICollaboratorDAO{
     public void addCollaborator(Collaborator newCollaborator){
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "INSERT INTO Collaborator VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+                "INSERT INTO Collaborator VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
             );
             sentenceQuery.setString(1, newCollaborator.getRfc());
             sentenceQuery.setString(2, newCollaborator.getBodyAcademyKey());
             sentenceQuery.setString(3, newCollaborator.getFullName());
             sentenceQuery.setString(4, newCollaborator.getDateOfAdmission());
             sentenceQuery.setString(5, newCollaborator.getEmailUV());
-            sentenceQuery.setString(6, newCollaborator.getCurp());
-            sentenceQuery.setString(7, newCollaborator.getNationality());
-            sentenceQuery.setString(8, newCollaborator.getEducationalProgram());
-            sentenceQuery.setString(9, newCollaborator.getCellphone());
-            sentenceQuery.setInt(10, newCollaborator.getStaffNumber());
-            sentenceQuery.setString(11, newCollaborator.getStudyArea());
-            sentenceQuery.setString(12, newCollaborator.getNameBACollaborator());
-            sentenceQuery.setString(13, newCollaborator.getHighestDegreeStudies());
+            sentenceQuery.setString(6, newCollaborator.getParticipationStatus());
+            sentenceQuery.setString(7, newCollaborator.getCurp());
+            sentenceQuery.setString(8, newCollaborator.getNationality());
+            sentenceQuery.setString(9, newCollaborator.getEducationalProgram());
+            sentenceQuery.setString(10, newCollaborator.getCellphone());
+            sentenceQuery.setInt(11, newCollaborator.getStaffNumber());
+            sentenceQuery.setString(12, newCollaborator.getStudyArea());
+            sentenceQuery.setString(13, newCollaborator.getNameBACollaborator());
+            sentenceQuery.setString(14, newCollaborator.getHighestDegreeStudies());
             sentenceQuery.executeUpdate();
         }catch(SQLException sqlException){
             Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
@@ -85,7 +87,7 @@ public class CollaboratorDAO implements ICollaboratorDAO{
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
                 "UPDATE Collaborator SET rfc = ?, bodyAcademyKey = ?, fullName = ?, dateOfAdmission = ?, emailUV = ?, "
-                + "curp = ?, nacionality = ?, educationalProgram = ?, cellPhone = ?, satffNumber = ?,"
+                + "participationStatus = ?, curp = ?, nacionality = ?, educationalProgram = ?, cellPhone = ?, satffNumber = ?,"
                 + " studyArea = ?, nameBACollaborator = ?, highestDegreeStudies = ? WHERE rfc = ?;"
             );
             sentenceQuery.setString(1, collaborator.getRfc());
@@ -93,15 +95,16 @@ public class CollaboratorDAO implements ICollaboratorDAO{
             sentenceQuery.setString(3, collaborator.getFullName());
             sentenceQuery.setString(4, collaborator.getDateOfAdmission());
             sentenceQuery.setString(5, collaborator.getEmailUV());
-            sentenceQuery.setString(6, collaborator.getCurp());
-            sentenceQuery.setString(7, collaborator.getNationality());
-            sentenceQuery.setString(8, collaborator.getEducationalProgram());
-            sentenceQuery.setString(9, collaborator.getCellphone());
-            sentenceQuery.setInt(10, collaborator.getStaffNumber());
-            sentenceQuery.setString(11, collaborator.getStudyArea());
-            sentenceQuery.setString(12, collaborator.getNameBACollaborator());
-            sentenceQuery.setString(13, collaborator.getHighestDegreeStudies());
-            sentenceQuery.setString(14, oldRFC);
+            sentenceQuery.setString(6, collaborator.getParticipationStatus());
+            sentenceQuery.setString(7, collaborator.getCurp());
+            sentenceQuery.setString(8, collaborator.getNationality());
+            sentenceQuery.setString(9, collaborator.getEducationalProgram());
+            sentenceQuery.setString(10, collaborator.getCellphone());
+            sentenceQuery.setInt(11, collaborator.getStaffNumber());
+            sentenceQuery.setString(12, collaborator.getStudyArea());
+            sentenceQuery.setString(13, collaborator.getNameBACollaborator());
+            sentenceQuery.setString(14, collaborator.getHighestDegreeStudies());
+            sentenceQuery.setString(15, oldRFC);
             sentenceQuery.executeUpdate();
         }catch(SQLException sqlException){
             Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
@@ -111,12 +114,29 @@ public class CollaboratorDAO implements ICollaboratorDAO{
     }
     
     @Override
-    public void deleteCollaboratorByEmailUV(String emailUV){
+    public void unsubscribeCollaboratorByEmailUV(String emailUV){
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "DELETE FROM Collaborator where emailUV = ?;"
+                "UPDATE Collaborator SET participationStatus = ? WHERE emailUV = ?;"
             );
-            sentenceQuery.setString(1,emailUV);
+            sentenceQuery.setString(1, "Dado de baja");
+            sentenceQuery.setString(2,emailUV);
+            sentenceQuery.executeUpdate();
+        }catch(SQLException ex){
+            Logger.getLogger(CollaboratorDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            CONNECTION.closeConnection();
+        }
+    }
+    
+    @Override
+    public void subscribeCollaboratorByEmailUV(String emailUV){
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "UPDATE Collaborator SET participationStatus = ? WHERE emailUV = ?;"
+            );
+            sentenceQuery.setString(1, "Activo");
+            sentenceQuery.setString(2,emailUV);
             sentenceQuery.executeUpdate();
         }catch(SQLException ex){
             Logger.getLogger(CollaboratorDAO.class.getName()).log(Level.SEVERE, null, ex);

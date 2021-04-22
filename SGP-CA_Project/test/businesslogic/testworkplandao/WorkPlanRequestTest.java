@@ -19,7 +19,7 @@ public class WorkPlanRequestTest{
     @Test
     public void testGetExistWorkPlanByEndDate(){
         INITIALIZER.prepareRequestWorkPlanTestCase();
-        WorkPlan workPlanRetrieved = WORKPLAN_DAO.getWorkPlan("2021-12-12");
+        WorkPlan workPlanRetrieved = WORKPLAN_DAO.getWorkPlan("2021-12-12", "UV-CA-127");
         String generalTarjetExpected = "Mantener el grado en consolidación del cuerpo académico";
         INITIALIZER.cleanWorkPlanTestCaseData();
         Assert.assertEquals(generalTarjetExpected, workPlanRetrieved.getGeneralTarget());
@@ -27,7 +27,7 @@ public class WorkPlanRequestTest{
     
     @Test
     public void testGetNotExistWorkPlanByEndDate(){
-        WorkPlan workPlanRetrieved = WORKPLAN_DAO.getWorkPlan("20214-12-12");
+        WorkPlan workPlanRetrieved = WORKPLAN_DAO.getWorkPlan("20214-12-12", "UV-CA-127");
         Assert.assertNull(workPlanRetrieved.getGeneralTarget());
     }
     

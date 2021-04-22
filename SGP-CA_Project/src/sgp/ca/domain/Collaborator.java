@@ -12,12 +12,12 @@ public class Collaborator extends Member{
     private String nameBACollaborator;
     private String highestDegreeStudies;
 
-    public Collaborator(String rfc, String fullName, String emailUV, 
+    public Collaborator(String rfc, String fullName, String emailUV, String participationStatus, 
     String curp, String nationality, String dateOfAdmission, 
     String educationalProgram, int staffNumber, String cellphone, String bodyAcademyKey, String studyArea, 
     String nameBACollaborator, String highestDegreeStudies){
         super(
-            rfc, fullName, emailUV, curp, nationality, dateOfAdmission, 
+            rfc, fullName, emailUV, participationStatus, curp, nationality, dateOfAdmission, 
             educationalProgram, staffNumber, cellphone, bodyAcademyKey
         );
         this.studyArea = studyArea;

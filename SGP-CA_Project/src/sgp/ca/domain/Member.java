@@ -17,10 +17,11 @@ public abstract class Member {
     private String dateOfAdmission;
     private String educationalProgram;
     private String cellphone;
+    private String participationStatus;
     private int staffNumber;
     private String bodyAcademyKey;
 
-    public Member(String rfc, String fullName, String emailUV, 
+    public Member(String rfc, String fullName, String emailUV, String participationStatus,
     String curp, String nationality, String dateOfAdmission, 
     String educationalProgram, int staffNumber, String cellphone, String bodyAcademyKey){
         this.rfc = rfc;
@@ -33,10 +34,19 @@ public abstract class Member {
         this.staffNumber = staffNumber;
         this.cellphone = cellphone;
         this.bodyAcademyKey = bodyAcademyKey;
+        this.participationStatus = participationStatus;
     }
     
     public Member(){
         
+    }
+
+    public String getParticipationStatus() {
+        return participationStatus;
+    }
+
+    public void setParticipationStatus(String participationStatus) {
+        this.participationStatus = participationStatus;
     }
 
     public String getBodyAcademyKey() {
