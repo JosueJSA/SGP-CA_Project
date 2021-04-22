@@ -1,10 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package sgp.ca.demodao;
+/**
+* @author 
+* Last modification date format: 
+*/
 
+package sgp.ca.demodao;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,11 +13,9 @@ import javafx.stage.Stage;
 import sgp.ca.dataaccess.FtpClient;
 
 
-/**
- *
- * @author 
- */
 public class SGPCA_Project extends Application {
+    
+    
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -28,22 +25,11 @@ public class SGPCA_Project extends Application {
         
         stage.setScene(scene);
         stage.show();
+        
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);      
-        DialogBox testBox = new DialogBox();
-        
-        FtpClient connection = new FtpClient();
-        String file = connection.saveFileIntoFilesSystem(testBox.getFileSelectedPath(), testBox.getFileNameSelected());
-        System.out.println("Terminé de guardar");
-        connection.downloadFileFromFilesSystemByName(testBox.getFileNameSelected(), testBox.getDirectorySelectedPath());
-        System.out.println("Terminé recuperar");
-        connection.deleteFileFromFilesSystemByName(file);
-        System.out.println("Terminé de eliminar");
+    public static void main(String[] args){
+        launch(args);
     }
     
 }
