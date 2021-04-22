@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import sgp.ca.dataaccess.FtpClient;
 import javafx.stage.Stage;
@@ -25,6 +26,8 @@ public class FXMLDocumentController implements Initializable {
     private Label label;
     
     private DialogBox testBox;
+    @FXML
+    private Button button;
     
     @FXML
     private void handleButtonAction(ActionEvent event) {
