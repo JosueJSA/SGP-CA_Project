@@ -1,5 +1,5 @@
 
-package TestMeetingPending;
+package businesslogic.testMeetingPendingdao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

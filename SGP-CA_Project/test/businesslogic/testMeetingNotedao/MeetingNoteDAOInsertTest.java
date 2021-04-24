@@ -1,5 +1,5 @@
 
-package TestMeetingNote;
+package businesslogic.testMeetingNotedao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

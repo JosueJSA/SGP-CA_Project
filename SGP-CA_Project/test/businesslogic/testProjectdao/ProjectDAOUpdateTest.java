@@ -1,5 +1,5 @@
 
-package TestProject;
+package businesslogic.testProjectdao;
 
 import org.junit.Assert;
 import org.junit.Test;

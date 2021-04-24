@@ -1,5 +1,5 @@
 
-package TestReceptionWork;
+package businesslogic.testReceptionWork;
 
 import org.junit.Assert;
 import org.junit.Test;

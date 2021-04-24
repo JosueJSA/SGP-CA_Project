@@ -1,5 +1,5 @@
 
-package TestProject;
+package businesslogic.testProjectdao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

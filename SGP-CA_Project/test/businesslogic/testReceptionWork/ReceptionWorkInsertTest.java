@@ -1,5 +1,5 @@
 
-package TestReceptionWork;
+package businesslogic.testReceptionWork;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
