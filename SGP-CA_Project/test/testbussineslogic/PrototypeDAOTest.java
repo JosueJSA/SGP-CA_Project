@@ -8,9 +8,7 @@ package testbussineslogic;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import sgp.ca.businesslogic.PrototypeDAO;
 import sgp.ca.dataaccess.ConnectionDatabase;
@@ -33,15 +31,6 @@ public class PrototypeDAOTest {
         rowsNumber = queryResult.getRow();
         int expectedNumberRows = 1;
         Assert.assertEquals(expectedNumberRows, rowsNumber);
-    }
-    
-    @Test
-    public void returnPrototypesListTest() throws SQLException{
-        PrototypeDAO prototypeDao = new PrototypeDAO();
-        List<Prototype> prototypeList = prototypeDao.returnPrototype();
-        int expectedResult = 1;
-        int obtainingResult = prototypeList.size();
-        assertEquals("Try to get all the prototypes", expectedResult, obtainingResult);
     }
     
     @Test

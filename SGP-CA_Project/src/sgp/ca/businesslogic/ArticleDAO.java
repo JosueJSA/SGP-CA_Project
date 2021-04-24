@@ -1,6 +1,6 @@
 /**
  * @author estef
- * Last modification date format: 19-04-2021
+ * Last modification date format: 23-04-2021
  */
 
 package sgp.ca.businesslogic;
@@ -9,9 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
@@ -19,36 +16,7 @@ import sgp.ca.domain.Article;
 
 public class ArticleDAO implements IArticleDAO{
     private final ConnectionDatabase connectionDataBase = new ConnectionDatabase();
-    private Connection connection;
-    private Statement consult;
     private ResultSet results;
-
-    @Override
-    public List<Article> returnArticle() {
-        List<Article>articleList = new ArrayList<>();
-        try{
-            connection = connectionDataBase.getConnectionDatabase();
-            consult = connection.createStatement();
-            results = consult.executeQuery("Select * from Article");
-            while(results.next()){
-                Article article = new Article();
-                article.setUrlFile(results.getString("urlFile"));
-                article.setProjectName(results.getNString("projectName"));
-                article.setImpactAB(results.getNString("impactBA"));
-                article.setEvidenceTitle(results.getNString("evidenceTitle"));
-                article.setPublicationDate(results.getString("publicationDate"));
-                article.setCountry(results.getNString("country"));
-                article.setMagazineName(results.getNString("magazineName"));
-                article.setIsnn(results.getDouble("isnn"));
-                articleList.add(article);
-            }
-        }catch(SQLException ex){
-            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            connectionDataBase.closeConnection();
-        }
-        return articleList;
-    }
 
     @Override
     public Article getArticlebyURL(String urlFile) {

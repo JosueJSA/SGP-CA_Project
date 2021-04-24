@@ -1,6 +1,6 @@
 /**
  * @author estef
- * Last modification date format: 20-04-2021
+ * Last modification date format: 23-04-2021
  */
 
 package sgp.ca.businesslogic;
@@ -9,9 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
@@ -19,32 +16,7 @@ import sgp.ca.domain.ArticleMagazine;
 
 public class ArticleMagazineDAO implements IArticleMagazineDAO{
     private final ConnectionDatabase connectionDataBase = new ConnectionDatabase();
-    private Connection connection;
-    private Statement consult;
     private ResultSet results;
-
-    @Override
-    public List<ArticleMagazine> returnArticleMagazines() {
-        List<ArticleMagazine>articleMagazineList = new ArrayList<>();
-        try{
-            connection = connectionDataBase.getConnectionDatabase();
-            consult = connection.createStatement();
-            results = consult.executeQuery("Select * from ArticleMagazine");
-            while(results.next()){
-                ArticleMagazine articleMagazine = new ArticleMagazine();
-                articleMagazine.setMagazineName(results.getNString("magazineName"));
-                articleMagazine.setIndex(results.getNString("index"));
-                articleMagazine.setMagazinePublisher(results.getNString("magazinePublisher"));
-                articleMagazineList.add(articleMagazine);
-            }
-        
-        }catch(SQLException ex){
-            Logger.getLogger(ArticleMagazineDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            connectionDataBase.closeConnection();
-        }
-        return articleMagazineList;
-    }
 
     @Override
     public ArticleMagazine getArticleMagazinebyMagazineName(String magazineName) {

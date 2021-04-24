@@ -1,6 +1,6 @@
 /**
  * @author estef
- * Last modification date format: 19-04-2021
+ * Last modification date format: 23-04-2021
  */
 
 package sgp.ca.businesslogic;
@@ -10,8 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
@@ -19,37 +17,7 @@ import sgp.ca.domain.ChapterBook;
 
 public class ChapterBookDAO implements IChapterBookDAO{
     private final ConnectionDatabase connectionDataBase = new ConnectionDatabase();
-    private Connection connection;
-    private Statement consult;
     private ResultSet results;
-
-    @Override
-    public List<ChapterBook> returnChapterBooks() {
-        List<ChapterBook>chapterBookList = new ArrayList<>();
-        try{
-            connection = connectionDataBase.getConnectionDatabase();
-            consult = connection.createStatement();
-            results = consult.executeQuery("Select * from ChapterBook");
-            while(results.next()){
-                ChapterBook chapterBook = new ChapterBook();
-                chapterBook.setUrlFile(results.getString("urlFile"));
-                chapterBook.setProjectName(results.getNString("projectName"));
-                chapterBook.setImpactAB(results.getNString("impactBA"));
-                chapterBook.setEvidenceTitle(results.getNString("evidenceTitle"));
-                chapterBook.setPublicationDate(results.getString("publicationDate"));
-                chapterBook.setCountry(results.getNString("country"));
-                chapterBook.setBookName(results.getNString("bookName"));
-                chapterBook.setPagesNumber(results.getNString("pages-number"));
-                chapterBookList.add(chapterBook);
-            }
-        
-        }catch(SQLException ex){
-            Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            connectionDataBase.closeConnection();
-        }
-        return chapterBookList;
-    }
 
     @Override
     public ChapterBook getChapterBookbyURL(String urlFile) {

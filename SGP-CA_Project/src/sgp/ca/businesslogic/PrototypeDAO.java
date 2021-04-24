@@ -1,6 +1,6 @@
 /**
  * @author estef
- * Last modification date format: 19-04-2021
+ * Last modification date format: 23-04-2021
  */
 
 package sgp.ca.businesslogic;
@@ -9,9 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
@@ -19,36 +16,7 @@ import sgp.ca.domain.Prototype;
 
 public class PrototypeDAO implements IPrototypeDAO {
     private final ConnectionDatabase connectionDataBase = new ConnectionDatabase();
-    private Connection connection;
-    private Statement consult;
     private ResultSet results;
-
-    @Override
-    public List<Prototype> returnPrototype() {
-        List<Prototype>prototypeList = new ArrayList<>();
-        try{
-            connection = connectionDataBase.getConnectionDatabase();
-            consult = connection.createStatement();
-            results = consult.executeQuery("Select * from Prototype");
-            while(results.next()){
-                Prototype prototype = new Prototype();
-                prototype.setUrlFile(results.getString("urlFile"));
-                prototype.setProjectName(results.getNString("projectName"));
-                prototype.setImpactAB(results.getNString("impactBA"));
-                prototype.setEvidenceTitle(results.getNString("evidenceTitle"));
-                prototype.setPublicationDate(results.getString("publicationDate"));
-                prototype.setCountry(results.getNString("country"));
-                prototype.setFeatures(results.getNString("feautures"));
-                prototypeList.add(prototype);
-            }
-        
-        }catch(SQLException ex){
-            Logger.getLogger(PrototypeDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            connectionDataBase.closeConnection();
-        }
-        return prototypeList;
-    }
 
     @Override
     public Prototype getPrototypebyURL(String urlFile) {

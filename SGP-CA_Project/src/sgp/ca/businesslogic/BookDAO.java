@@ -1,6 +1,6 @@
 /**
  * @author estef
- * Last modification date format: 19-04-2021
+ * Last modification date format: 23-04-2021
  */
 
 package sgp.ca.businesslogic;
@@ -9,9 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
@@ -19,38 +16,7 @@ import sgp.ca.domain.Book;
 
 public class BookDAO implements IBookDAO {
     private final ConnectionDatabase connectionDataBase = new ConnectionDatabase();
-    private Connection connection;
-    private Statement consult;
     private ResultSet results;
-    
-    @Override
-    public List<Book> returnBooks() {
-        List<Book>bookList = new ArrayList<>();
-        try{
-            connection = connectionDataBase.getConnectionDatabase();
-            consult = connection.createStatement();
-            results = consult.executeQuery("Select * from Book");
-            while(results.next()){
-                Book book = new Book();
-                book.setUrlFile(results.getString("urlFile"));
-                book.setProjectName(results.getNString("projectName"));
-                book.setImpactAB(results.getNString("impactBA"));
-                book.setEvidenceTitle(results.getNString("evidenceTitle"));
-                book.setPublicationDate(results.getString("publicationDate"));
-                book.setCountry(results.getNString("country"));
-                book.setPublisher(results.getNString("publisher"));
-                book.setEditionsNumber(results.getInt("editionsNumber"));
-                book.setIsbn(results.getDouble("isbn"));
-                bookList.add(book);
-            }
-        
-        }catch(SQLException ex){
-            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            connectionDataBase.closeConnection();
-        }
-        return bookList;
-    }
 
     @Override
     public Book getBookbyURL(String url) {

@@ -8,9 +8,7 @@ package testbussineslogic;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import sgp.ca.businesslogic.ChapterBookDAO;
 import sgp.ca.dataaccess.ConnectionDatabase;
@@ -33,15 +31,6 @@ public class ChapterBookDAOTest {
         rowsNumber = queryResult.getRow();
         int expectedNumberRows = 1;
         Assert.assertEquals(expectedNumberRows, rowsNumber);
-    }
-    
-    @Test
-    public void returnChapterBooksListTest() throws SQLException{
-        ChapterBookDAO chapterBookDao = new ChapterBookDAO();
-        List<ChapterBook> chapterBookList = chapterBookDao.returnChapterBooks();
-        int expectedResult = 1;
-        int obtainingResult = chapterBookList.size();
-        assertEquals("Try to get all the chapterbooks", expectedResult, obtainingResult);
     }
     
     @Test
