@@ -10,7 +10,10 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import sgp.ca.dataaccess.FtpClient;
+import javafx.stage.Stage;
 
 /**
  *
@@ -21,10 +24,18 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Label label;
     
+    private DialogBox testBox;
+    
     @FXML
     private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
+        testBox = new DialogBox( ((Stage)((Node)event.getSource()).getScene().getWindow()) );
+        FtpClient connection = new FtpClient();
+        String file = connection.saveFileIntoFilesSystem(testBox.getFileSelectedPath(), testBox.getFileNameSelected());
+        System.out.println("Terminé de guardar");
+        connection.downloadFileFromFilesSystemByName(testBox.getFileNameSelected(), testBox.getDirectorySelectedPath());
+        System.out.println("Terminé recuperar");
+        connection.deleteFileFromFilesSystemByName(file);
+        System.out.println("Terminé de eliminar");
     }
     
     @Override
