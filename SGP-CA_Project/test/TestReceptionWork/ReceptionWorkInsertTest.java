@@ -18,14 +18,14 @@ public class ReceptionWorkInsertTest {
     @Test
     public void addReceptionWorkTest() throws SQLException{
         System.out.println("addReceptionWork");
-        ReceptionWork receptionWork = new ReceptionWork("http...prueba.com","Crecimiento de lenguajes de programación", "true", "Analisis de metodologias", "2021-05-07", "México", "Comprobar la forma de reacción de cada una de ellas...", "Activo", 1, 4, "Tesina");
+        ReceptionWork receptionWork = new ReceptionWork("pruebacom", "Crecimiento", "true", "Analisis de metodologias", "2021-05-07", "México", "Comprobar la forma de reacción de cada una de ellas...", "Activo", 1, 4, "Tesina");
         ReceptionWorkDAO instanceProject = new ReceptionWorkDAO();
         instanceProject.addReceptionWork(receptionWork); 
         Statement instructionQuery = query.getConnectionDatabase().createStatement();;
         ResultSet queryResult = instructionQuery.executeQuery("Select urlFile FROM ReceptionWork");
         queryResult.last();
         cantidadRows = queryResult.getRow();  
-        Assert.assertEquals(2, cantidadRows);
+        Assert.assertEquals(1, cantidadRows);
     }
    
 }

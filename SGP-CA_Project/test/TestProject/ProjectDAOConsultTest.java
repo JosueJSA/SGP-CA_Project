@@ -83,5 +83,25 @@ public class ProjectDAOConsultTest {
         Assert.assertTrue(!listProjectsbyDate.isEmpty());
     }
     
+    @Test
+    public void  getProjectbyNameTest() throws SQLException{
+        Project project = new Project();
+        System.out.println(" getProjectbyName");
+        ProjectDAO instanceProjectbyName = new ProjectDAO(); 
+        project = instanceProjectbyName.getProjectbyName("Crecimiento de lenguajes de programación");
+        Assert.assertNotNull(project);
+    }
     
+    @Test
+    public void getProjectbyNameEquals(){
+        Project projectbyName = new Project();
+        boolean flag = false;
+        System.out.println("getProjectbyNameEquals");
+        ProjectDAO instanceProjectbyName = new ProjectDAO(); 
+        projectbyName = instanceProjectbyName.getProjectbyName("Crecimiento de lenguajes de programación");
+            if ("Crecimiento de lenguajes de programación".equals(projectbyName.getProjectName())){
+                flag = true;
+            }
+        Assert.assertTrue(flag);
+    }
 }

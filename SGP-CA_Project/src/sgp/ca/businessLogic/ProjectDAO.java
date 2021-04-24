@@ -115,4 +115,57 @@ public class ProjectDAO implements IProjectDAO{
         }
     }
     
+    @Override
+    public Project getProjectbyName(String projectName) {
+        Project project = new Project();
+        try{
+            PreparedStatement instructionQuery = query.getConnectionDatabase().prepareStatement("SELECT *"
+                    + " FROM Project WHERE projectName = ? ;");
+            instructionQuery.setString(1, projectName);
+            ResultSet queryResult = instructionQuery.executeQuery();
+            if(queryResult.next()){
+                project = new Project(
+                    queryResult.getString("projectName"),
+                    queryResult.getString("bodyAcademyKey"),
+                    queryResult.getInt("durationProjectInMonths"),
+                    queryResult.getString("status"),
+                    queryResult.getString("startDate"),
+                    queryResult.getString("endDate"),
+                    queryResult.getString("estimatedEndDate"),
+                    queryResult.getString("description")
+                );
+            }
+        }catch(SQLException sqlException){
+            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            query.closeConnection();
+            return project;
+        }
+    }
+    
+    @Override
+    public boolean updateProject(Project project, String oldProjectName){
+        try{
+            PreparedStatement sentenceQuery = query.getConnectionDatabase().prepareStatement(
+                "UPDATE Project SET projectaName = ?, bodyAcademyKey = ?, durationProjectInMonths = ?, status = ?,"
+                + " startDate = ?, endDate = ?, estimatedEndDate = ?, description= ? WHERE projectaName = ?;"
+            );
+            sentenceQuery.setString(1, project.getProjectName());
+            sentenceQuery.setString(2, project.getBodyAcademyKey());
+            sentenceQuery.setInt(3, project.getDurationProjectInMonths());
+            sentenceQuery.setString(4, project.getStatus());
+            sentenceQuery.setString(5, project.getStartDate());
+            sentenceQuery.setString(6, project.getEndDate());
+            sentenceQuery.setString(7, project.getEstimatedEndDate());
+            sentenceQuery.setString(8, project.getDescription());
+            sentenceQuery.setString(9, oldProjectName);
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            Logger.getLogger(Project.class.getName()).log(Level.SEVERE, null, sqlException);
+            return false;
+        }finally{
+            query.closeConnection();
+            return true;
+        }
+    }
 }

@@ -43,6 +43,9 @@ public class Project {
         this.startDate = startDate;
     }
 
+    public Project() {
+    }
+
     public String getProjectName() {
         return projectName;
     }

@@ -11,15 +11,19 @@ public abstract class Evidence {
     private String evidenceTitle;
     private String country;
     private String publicationDate;
-    private String impactAB;
+    private String impactBA;
 
-    public Evidence(String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactAB) {
+    public Evidence(String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactBA) {
         this.urlFile = urlFile;
         this.projectName = projectName;
         this.evidenceTitle = evidenceTitle;
         this.country = country;
         this.publicationDate = publicationDate;
-        this.impactAB = impactAB;
+        this.impactBA = impactBA;
+    }
+    
+    public Evidence(){
+        
     }
 
     public String getUrlFile() {
@@ -42,8 +46,8 @@ public abstract class Evidence {
         return publicationDate;
     }
 
-    public String isImpactAB() {
-        return impactAB;
+    public String isImpactBA() {
+        return impactBA;
     }
 
     public void setUrlFile(String urlFile) {
@@ -66,8 +70,8 @@ public abstract class Evidence {
         this.publicationDate = publicationDate;
     }
 
-    public void setImpactAB(String impactAB) {
-        this.impactAB = impactAB;
+    public void setImpactBA(String impactBA) {
+        this.impactBA = impactBA;
     }
        
 }

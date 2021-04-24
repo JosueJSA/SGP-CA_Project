@@ -10,7 +10,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sgp.ca.businessLogic.ReceptionWorkDAO;
 import sgp.ca.dataaccess.FtpClient;
+import sgp.ca.domain.ReceptionWork;
 
 public class SGPCA_Project extends Application {
     
