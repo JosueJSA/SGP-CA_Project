@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import org.junit.Assert;
 import org.junit.Test;
-import sgp.ca.businessLogic.ProjectDAO;
+import sgp.ca.businesslogic.ProjectDAO;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.domain.Project;
 
@@ -19,7 +19,7 @@ public class ProjectDAOInsertTest {
     @Test
     public void addProjectTest() throws SQLException{
         System.out.println("addProject");
-        Project project = new Project("Crecimiento","UV-CA-127", 6, "Activo", "2021-04-11", "0000-00-00", "2021-10-09", "Enfocado en predecir lo que sucedera en los años siguientes");
+        Project project = new Project("Ayuda","UV-CA-127", 6, "Activo", "2021-04-11", "0000-00-00", "2021-10-09", "Enfocado en predecir lo que sucedera en los años siguientes");
         ProjectDAO instanceProject = new ProjectDAO();
         instanceProject.addProject(project); 
         Statement instructionQuery = query.getConnectionDatabase().createStatement();;

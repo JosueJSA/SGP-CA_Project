@@ -3,7 +3,7 @@ package TestReceptionWork;
 
 import org.junit.Assert;
 import org.junit.Test;
-import sgp.ca.businessLogic.ReceptionWorkDAO;
+import sgp.ca.businesslogic.ReceptionWorkDAO;
 import sgp.ca.domain.ReceptionWork;
 
 public class ReceptionWorkUpdateTest {

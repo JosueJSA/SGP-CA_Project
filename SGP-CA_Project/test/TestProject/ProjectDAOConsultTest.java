@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import sgp.ca.businessLogic.ProjectDAO;
+import sgp.ca.businesslogic.ProjectDAO;
 import sgp.ca.domain.Project;
 
 public class ProjectDAOConsultTest {

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import org.junit.Assert;
 import org.junit.Test;
-import sgp.ca.businessLogic.ReceptionWorkDAO;
+import sgp.ca.businesslogic.ReceptionWorkDAO;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.domain.ReceptionWork;
 

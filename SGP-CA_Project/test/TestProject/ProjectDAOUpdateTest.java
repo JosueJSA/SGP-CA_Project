@@ -3,7 +3,7 @@ package TestProject;
 
 import org.junit.Assert;
 import org.junit.Test;
-import sgp.ca.businessLogic.ProjectDAO;
+import sgp.ca.businesslogic.ProjectDAO;
 import sgp.ca.domain.Project;
 
 public class ProjectDAOUpdateTest {

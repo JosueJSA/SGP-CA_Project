@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import org.junit.Assert;
 import org.junit.Test;
-import sgp.ca.businessLogic.AgreementDAO;
+import sgp.ca.businesslogic.AgreementDAO;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.domain.Agreement;
 
