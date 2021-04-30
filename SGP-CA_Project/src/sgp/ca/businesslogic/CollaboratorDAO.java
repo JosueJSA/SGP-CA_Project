@@ -20,6 +20,7 @@ import sgp.ca.domain.Collaborator;
 public class CollaboratorDAO implements ICollaboratorDAO{
     
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
+    
 
     @Override
     public Collaborator getCollaboratorByUVmail(String uvMail) {
@@ -30,6 +31,18 @@ public class CollaboratorDAO implements ICollaboratorDAO{
             );
             sentenceQuery.setString(1, uvMail);
             ResultSet queryResult = sentenceQuery.executeQuery();
+            collaborator = this.getOutCollaboratorDataFromResultQuery(queryResult);
+        }catch(SQLException sqlException){
+            Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return collaborator;
+        }
+    }
+    
+    public Collaborator getOutCollaboratorDataFromResultQuery(ResultSet queryResult){
+        Collaborator collaborator = new Collaborator();
+         try{
             if(queryResult.next()){collaborator = new Collaborator(
                 queryResult.getString("rfc"), 
                 queryResult.getString("fullName"),
@@ -49,9 +62,8 @@ public class CollaboratorDAO implements ICollaboratorDAO{
         }catch(SQLException sqlException){
             Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
-            CONNECTION.closeConnection();
-            return collaborator;
-        }
+             return collaborator;
+         }
     }
 
     @Override

@@ -20,7 +20,7 @@ import sgp.ca.domain.Schooling;
  public class IntegrantDAO implements IIntegrantDAO{
 
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
-    
+       
     @Override
     public Integrant getIntegrantByUVmail(String emailUV){
         Integrant integrant = new Integrant();
@@ -30,28 +30,7 @@ import sgp.ca.domain.Schooling;
             );
             sentenceQuery.setString(1, emailUV);
             ResultSet queryResult = sentenceQuery.executeQuery();
-            if(queryResult.next()){
-                integrant = new Integrant(
-                    queryResult.getString("rfc"), 
-                    queryResult.getString("fullName"),
-                    queryResult.getString("emailUV"),
-                    queryResult.getString("participationStatus"),
-                    queryResult.getString("password"),
-                    queryResult.getString("curp"),
-                    queryResult.getString("nacionality"),
-                    queryResult.getDate("dateOfAdmission").toString(),
-                    queryResult.getString("educationalProgram"),
-                    queryResult.getInt("satffNumber"),
-                    queryResult.getString("cellPhone"),
-                    queryResult.getString("bodyAcademyKey"),
-                    queryResult.getString("appointment"),
-                    queryResult.getString("participationType"),
-                    queryResult.getString("additionalEmail"),
-                    queryResult.getString("homePhone"),
-                    queryResult.getString("workPhone")
-                );
-            }
-            integrant.setSchooling(this.getIntegrantStudies(integrant.getRfc()));
+            integrant = this.getOutIntegrantDataFromResultQuery(queryResult);
         }catch(SQLException sqlException){
             Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
@@ -247,6 +226,39 @@ import sgp.ca.domain.Schooling;
             Logger.getLogger(CollaboratorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             CONNECTION.closeConnection();
+        }
+    }
+    
+    public Integrant getOutIntegrantDataFromResultQuery(ResultSet resultQuery){
+        Integrant integrant = new Integrant();
+        try{
+            if(resultQuery.next()){
+                integrant = new Integrant(
+                    resultQuery.getString("rfc"), 
+                    resultQuery.getString("fullName"),
+                    resultQuery.getString("emailUV"),
+                    resultQuery.getString("participationStatus"),
+                    resultQuery.getString("password"),
+                    resultQuery.getString("curp"),
+                    resultQuery.getString("nacionality"),
+                    resultQuery.getDate("dateOfAdmission").toString(),
+                    resultQuery.getString("educationalProgram"),
+                    resultQuery.getInt("satffNumber"),
+                    resultQuery.getString("cellPhone"),
+                    resultQuery.getString("bodyAcademyKey"),
+                    resultQuery.getString("appointment"),
+                    resultQuery.getString("participationType"),
+                    resultQuery.getString("additionalEmail"),
+                    resultQuery.getString("homePhone"),
+                    resultQuery.getString("workPhone")
+                );
+            }
+            integrant.setSchooling(this.getIntegrantStudies(integrant.getRfc()));
+        }catch(SQLException sqlException){
+            Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return integrant;
         }
     }
     

@@ -7,32 +7,68 @@ package sgp.ca.domain;
 
 public class Article extends Evidence{
     private double isnn;
-    String magazineName;
+    private String magazineName;
+    private int index;
+    private String magazineEditorial;
+    private Magazine magazine;
 
-    public Article(double isnn, String magazineName, String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactAB) {
-        super(urlFile, projectName, evidenceTitle, country, publicationDate, impactAB);
-        this.isnn = isnn;
-        this.magazineName = magazineName;
+    public Article(double isnn, String urlFile, String projectName, 
+    String evidenceTitle, String country, String publicationDate, 
+    boolean impactAB, String registrationDate, String registrationResponsible, 
+    String studyDegree, String bodyAcademyKey){
+        super(
+            urlFile, projectName, evidenceTitle, country, 
+            publicationDate, impactAB, registrationDate, 
+            registrationResponsible, studyDegree, bodyAcademyKey
+        );
+        this.isnn = isnn; 
+        magazine = new Magazine();
     }
-    
+
     public Article(){
-        this.isnn = 0;
-        this.magazineName = "";
+        magazine = new Magazine();
     }
 
     public double getIsnn() {
         return isnn;
     }
 
-    public String getMagazineName() {
-        return magazineName;
-    }
-
     public void setIsnn(double isnn) {
         this.isnn = isnn;
+    }
+
+    public String getMagazineName() {
+        return magazineName;
     }
 
     public void setMagazineName(String magazineName) {
         this.magazineName = magazineName;
     }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public String getMagazineEditorial() {
+        return magazineEditorial;
+    }
+
+    public void setMagazineEditorial(String magazineEditorial) {
+        this.magazineEditorial = magazineEditorial;
+    }
+
+    public Magazine getMagazine() {
+        return magazine;
+    }
+
+    public void setMagazine(Magazine magazine) {
+        this.magazine = magazine;
+    }
+    
+    
+    
 }

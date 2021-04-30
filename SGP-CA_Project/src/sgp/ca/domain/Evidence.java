@@ -6,83 +6,152 @@
 
 package sgp.ca.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Evidence {
     private String urlFile;
-    private String projectName; 
     private String evidenceTitle;
     private String country; 
     private String publicationDate;
-    private String impactAB;
+    private boolean impactAB;
+    private String registrationDate;
+    private String registrationResponsible;
+    private String studyDegree;
+    private String projectName;
+    private String bodyAcademyKey;
+    private List<String> students;
+    private List<Integrant> integrants;
+    private List<Collaborator> collaborators;
 
 
-    public Evidence(String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactAB) {
+    public Evidence(String urlFile, String projectName, String evidenceTitle, 
+    String country, String publicationDate, boolean impactAB, String registrationDate,
+    String registrationResponsible, String studyDegree, String bodyAcademyKey){
         this.urlFile = urlFile;
         this.projectName = projectName;
         this.evidenceTitle = evidenceTitle;
         this.country = country;
         this.publicationDate = publicationDate;
         this.impactAB = impactAB;
+        this.registrationDate = registrationDate;
+        this.registrationResponsible = registrationResponsible;
+        this.studyDegree = studyDegree;
+        this.bodyAcademyKey = bodyAcademyKey;
+        this.students = new ArrayList<>();
+        this.integrants = new ArrayList<>();
+        this.collaborators = new ArrayList<>();
     }
     
-    public Evidence() {
-        this.urlFile = "";
-        this.projectName = "";
-        this.evidenceTitle = "";
-        this.country = "";
-        this.publicationDate = "";
-        this.impactAB = "";
-        
+    public Evidence(){
+        this.students = new ArrayList<>();
+        this.integrants = new ArrayList<>();
+        this.collaborators = new ArrayList<>();
     }
 
     public String getUrlFile() {
         return urlFile;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public void setUrlFile(String urlFile) {
+        this.urlFile = urlFile;
     }
 
     public String getEvidenceTitle() {
         return evidenceTitle;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public String getPublicationDate() {
-        return publicationDate;
-    }
-
-    public String getImpactAB() {
-        return impactAB;
-    }
-
-    public void setUrlFile(String urlFile) {
-        this.urlFile = urlFile;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
     public void setEvidenceTitle(String evidenceTitle) {
         this.evidenceTitle = evidenceTitle;
+    }
+
+    public String getCountry() {
+        return country;
     }
 
     public void setCountry(String country) {
         this.country = country;
     }
 
+    public String getPublicationDate() {
+        return publicationDate;
+    }
+
     public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
     }
 
-    public void setImpactAB(String impactAB) {
+    public boolean getImpactAB() {
+        return impactAB;
+    }
+
+    public void setImpactAB(boolean impactAB) {
         this.impactAB = impactAB;
     }
-    
-    
+
+    public String getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(String registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public String getRegistrationResponsible() {
+        return registrationResponsible;
+    }
+
+    public void setRegistrationResponsible(String registrationResponsible) {
+        this.registrationResponsible = registrationResponsible;
+    }
+
+    public String getStudyDegree() {
+        return studyDegree;
+    }
+
+    public void setStudyDegree(String studyDegree) {
+        this.studyDegree = studyDegree;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getBodyAcademyKey() {
+        return bodyAcademyKey;
+    }
+
+    public void setBodyAcademyKey(String bodyAcademyKey) {
+        this.bodyAcademyKey = bodyAcademyKey;
+    }
+
+    public List<String> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<String> students) {
+        this.students = students;
+    }
+
+    public List<Integrant> getIntegrants() {
+        return integrants;
+    }
+
+    public void setIntegrants(List<Integrant> integrants) {
+        this.integrants = integrants;
+    }
+
+    public List<Collaborator> getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(List<Collaborator> collaborators) {
+        this.collaborators = collaborators;
+    }
 
 }
 
