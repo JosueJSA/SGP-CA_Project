@@ -76,7 +76,6 @@ public class ProjectDAOConsultTest {
     @Test
     public void getProjectListbyDateEmpty(){
         List<Project> listProjectsbyDate = new ArrayList<>();
-        boolean flag = true;
         System.out.println("getProjectListbyNameEquals");
         ProjectDAO instanceProjectListbyDate= new ProjectDAO(); 
         listProjectsbyDate = instanceProjectListbyDate.getProjectListbyDate("2021-04-07", "2021-04-28");

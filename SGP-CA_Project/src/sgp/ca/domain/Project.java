@@ -5,6 +5,9 @@
 
 package sgp.ca.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Project {
 
@@ -16,6 +19,8 @@ public class Project {
     private String estimatedEndDate;
     private String description;
     private int durationProjectInMonths;
+    private List<Lgac> lgac;
+    
     
 
     public Project(String projectName, String bodyAcademyKey, int durationProjectInMonths, String status, String startDate, String endDate, String estimatedEndDate, String description) {
@@ -27,6 +32,7 @@ public class Project {
         this.endDate = endDate;
         this.estimatedEndDate = estimatedEndDate;
         this.description = description;
+        this.lgac = new ArrayList<>();
     }
     
    
@@ -34,6 +40,7 @@ public class Project {
         this.projectName = projectName;
         this.status = status;
         this.durationProjectInMonths = durationProjectInMonths;
+        this.lgac = new ArrayList<>();
     }
 
     public Project(String projectName, String status, int durationProjectInMonths, String startDate) {
@@ -41,9 +48,11 @@ public class Project {
         this.status = status;
         this.durationProjectInMonths = durationProjectInMonths;
         this.startDate = startDate;
+        this.lgac = new ArrayList<>();
     }
 
     public Project() {
+        this.lgac = new ArrayList<>();
     }
 
     public String getProjectName() {
@@ -110,4 +119,17 @@ public class Project {
         this.status = status;
     }
 
+    public Lgac getLgacByIdentifier(String identifier){
+        Lgac lgacReturn = null;
+        for(Lgac lgac : this.lgac){
+            if(lgac.getIdentifierLgac() == identifier){
+                lgacReturn = lgac;
+            }
+        }
+        return lgacReturn;
+    }
+    
+    public List<Lgac> getLgacs() {
+        return lgac;
+    }
 }

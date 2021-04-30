@@ -4,6 +4,9 @@
 */
 package sgp.ca.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ReceptionWork extends Evidence{
     
     private String description;
@@ -11,6 +14,9 @@ public class ReceptionWork extends Evidence{
     private String modality;
     private int actualDurationInMonths;
     private int estimatedDurationInMonths;
+    private List<Integrant> integrant;
+    private List<Collaborator> collaborator;
+    private List<Lgac> lgac;
     
 
     public ReceptionWork(String urlFile, String projectName, String impactBA, String evidenceTitle, String publicationDate, 
@@ -22,14 +28,15 @@ public class ReceptionWork extends Evidence{
         this.actualDurationInMonths = actualDurationInMonths;
         this.estimatedDurationInMonths = estimatedDurationInMonths;
         this.modality = modality;
+        this.integrant = new ArrayList<>();
+        this.collaborator = new ArrayList<>();
+        this.lgac = new ArrayList<>();
     }
-
-//    public ReceptionWork(String urlFile, String projectName, String impactAB, String evidenceTitle, String publicationDate , String country) {
-//        super(urlFile, projectName, evidenceTitle, country, publicationDate, impactAB);
-//    }
     
     public ReceptionWork(){
-        
+        this.integrant = new ArrayList<>();
+        this.collaborator = new ArrayList<>();
+        this.lgac = new ArrayList<>();
     }
 
     public String getDescription() {
@@ -72,4 +79,45 @@ public class ReceptionWork extends Evidence{
         this.estimatedDurationInMonths = estimatedDurationInMonths;
     }
 
+    public Integrant getIntegrantByRFC(String rfc){
+        Integrant integrantReturn = null;
+        for(Integrant integrant : this.integrant){
+            if(integrant.getRfc() == rfc){
+                integrantReturn = integrant;
+            }
+        }
+        return integrantReturn;
+    }
+    
+    public List<Integrant> getIntegrants() {
+        return integrant;
+    }
+    
+    public Collaborator getCollaboratorByRFC(String rfc){
+        Collaborator collaboratorReturn = null;
+        for(Collaborator collaborator : this.collaborator){
+            if(collaborator.getRfc() == rfc){
+                collaboratorReturn = collaborator;
+            }
+        }
+        return collaboratorReturn;
+    }
+    
+    public List<Collaborator> getCollaborators() {
+        return collaborator;
+    }
+    
+    public Lgac getLgacByIdentifier(String identifier){
+        Lgac lgacReturn = null;
+        for(Lgac lgac : this.lgac){
+            if(lgac.getIdentifierLgac() == identifier){
+                lgacReturn = lgac;
+            }
+        }
+        return lgacReturn;
+    }
+    
+    public List<Lgac> getLgacs() {
+        return lgac;
+    }
 }

@@ -12,6 +12,8 @@ public class Meeting {
     private String meetingProject;
     private String meetingTime;
     private int meetingAgendaKey;
+    private String meetingNote;
+    private String meetingPending;
 
     public Meeting(String meetingDate, String meetingRegistrationDate, String meetingProject, String meetingTime, int meetingAgendaKey) {
         this.meetingDate = meetingDate;
@@ -19,6 +21,8 @@ public class Meeting {
         this.meetingProject = meetingProject;
         this.meetingTime = meetingTime;
         this.meetingAgendaKey = meetingAgendaKey;
+        this.meetingNote = null;
+        this.meetingPending = null;
     }
 
     public String getMeetingDate() {
@@ -60,4 +64,21 @@ public class Meeting {
     public void setMeetingAgendaKey(int meetingAgendaKey) {
         this.meetingAgendaKey = meetingAgendaKey;
     }
+
+    public String getMeetingNote() {
+        return meetingNote;
+    }
+
+    public void setMeetingNote(String meetingNote) {
+        this.meetingNote = meetingNote;
+    }
+
+    public String getMeetingPending() {
+        return meetingPending;
+    }
+
+    public void setMeetingPending(String meetingPending) {
+        this.meetingPending = meetingPending;
+    }
+    
 }
