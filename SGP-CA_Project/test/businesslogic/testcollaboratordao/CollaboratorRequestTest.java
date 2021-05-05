@@ -22,11 +22,12 @@ public class CollaboratorRequestTest {
     public void testGetExistCollaboratorByUVmail(){
         INITIALIZER.prepareRequestTestCase();
         CollaboratorDAO integrantDao = new CollaboratorDAO();
-        Collaborator integrant = integrantDao.getCollaboratorByUVmail("arenas@uv.mx");
-        String rfcExcpected = "AVFR8906245M7";
-        String rfcRetrived = integrant.getRfc();
-        INITIALIZER.cleanCollaboratorTest(rfcRetrived);
-        Assert.assertEquals("Get exist collaborator from database", rfcExcpected, rfcRetrived);
+        Collaborator integrant = integrantDao.getCollaboratorByUVmail("prueba@uv.mx");
+        System.out.println(integrant.getRfc());
+        String rfcExcpected = "COLABORADORTEST";
+        String rfcRetrived = integrant.getRfc(); 
+        INITIALIZER.cleanCollaboratorTest(rfcRetrived); 
+        Assert.assertEquals(rfcExcpected, rfcRetrived);
     }
     
     @Test

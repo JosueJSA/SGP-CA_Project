@@ -9,10 +9,12 @@ import java.util.List;
 import sgp.ca.domain.Article;
 
 public interface IArticleDAO {
+    
     public List<Article> getArticleByIntegrantRFC(String rfc, String limitDate);
     public List<Article> getArticleByTitle(String title, String limitDate);
     public List<Article> getArticlesByStudent(String studentName, String limitDate);
     public void addArticle(Article newArticle);
     public void updateArticle(Article article, String oldUrlFile);
-    public void deleteArticle(String urlFileArticle);
+    public void deleteArticlebyURL(String urlFileArticle);
+    
 }

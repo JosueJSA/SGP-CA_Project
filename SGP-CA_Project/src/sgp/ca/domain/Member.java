@@ -7,7 +7,7 @@ package sgp.ca.domain;
 
 import java.util.Objects;
 
-public abstract class Member {
+abstract class Member {
     
     private String rfc;
     private String fullName;

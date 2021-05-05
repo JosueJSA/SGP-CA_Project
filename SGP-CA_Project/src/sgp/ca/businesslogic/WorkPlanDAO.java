@@ -18,7 +18,7 @@ import sgp.ca.domain.WorkPlan;
 public class WorkPlanDAO implements IWorkPlanDAO{
 
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
-    private GoalDAO goalDAO = new GoalDAO();
+    private final GoalDAO GOAL_DAO = new GoalDAO();
     
     @Override
     public WorkPlan getWorkPlan(String endDatePlan, String bodyAcademyKey){
@@ -38,7 +38,7 @@ public class WorkPlanDAO implements IWorkPlanDAO{
                 queryResult.getDate("endDate").toString(),
                 queryResult.getString("bodyAcademyKey")
             );}
-            workPlan.setGoals(goalDAO.getGoalListByWorkPlan(workPlan.getWorkplanKey()));
+            workPlan.setGoals(GOAL_DAO.getGoalListByWorkPlan(workPlan.getWorkplanKey()));
         }catch(SQLException sqlException){
             Logger.getLogger(WorkPlan.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
@@ -62,7 +62,7 @@ public class WorkPlanDAO implements IWorkPlanDAO{
             sentenceQuery.setInt(5, newWorkPlan.getDurationInYears());
             sentenceQuery.executeUpdate();
             this.updateWorkPlanWithKeyGenerated(sentenceQuery, newWorkPlan);
-            goalDAO.addGoals(connection, newWorkPlan);
+            GOAL_DAO.addGoals(connection, newWorkPlan);
             connection.commit();
             connection.setAutoCommit(true);
         }catch(SQLException sqlException){
@@ -93,7 +93,7 @@ public class WorkPlanDAO implements IWorkPlanDAO{
             sentenceQuery.setInt(6, oldWorkPlan.getWorkplanKey());
             sentenceQuery.executeUpdate();
             workPlan.setWorkplanKey(oldWorkPlan.getWorkplanKey());
-            goalDAO.addGoals(connection, workPlan);
+            GOAL_DAO.addGoals(connection, workPlan);
             connection.commit();
             connection.setAutoCommit(true);
         }catch(SQLException sqlException){
@@ -133,9 +133,9 @@ public class WorkPlanDAO implements IWorkPlanDAO{
     }
     
     @Override
-    public void deleteGoals(Connection connection, WorkPlan workPlan){
+    public void deleteGoals(Connection connection, WorkPlan workPlan) {
         try{
-            goalDAO.deleteActions(connection, workPlan.getGoals());
+            GOAL_DAO.deleteActions(connection, workPlan.getGoals());
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM Goal WHERE workplanKey = ?;"
             );

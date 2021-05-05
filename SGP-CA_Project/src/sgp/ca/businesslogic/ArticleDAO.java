@@ -20,7 +20,7 @@ import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Magazine;
 
 public class ArticleDAO implements IArticleDAO{
-    private final ConnectionDatabase connectionDataBase = new ConnectionDatabase();
+    
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     private final MagazineDAO MAGAZINE_DAO = new MagazineDAO();
     
@@ -197,7 +197,7 @@ public class ArticleDAO implements IArticleDAO{
     }
 
     @Override
-    public void deleteArticle(String urlFileArticle){
+    public void deleteArticlebyURL(String urlFileArticle){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
             this.deleteStudensFromURLFileArticle(connection, urlFileArticle);
@@ -417,7 +417,7 @@ public class ArticleDAO implements IArticleDAO{
         }catch(SQLException ex){
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            connectionDataBase.closeConnection();
+            CONNECTION.closeConnection();
             return integrants;
         }
     }
@@ -438,7 +438,7 @@ public class ArticleDAO implements IArticleDAO{
         }catch(SQLException ex){
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            connectionDataBase.closeConnection();
+            CONNECTION.closeConnection();
             return collaborators;
         }
     }
@@ -457,7 +457,7 @@ public class ArticleDAO implements IArticleDAO{
         }catch(SQLException ex){
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            connectionDataBase.closeConnection();
+            CONNECTION.closeConnection();
             return students;
         }
     }
@@ -476,7 +476,7 @@ public class ArticleDAO implements IArticleDAO{
         }catch(SQLException ex){
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            connectionDataBase.closeConnection();
+            CONNECTION.closeConnection();
             return magazine;
         }
     }

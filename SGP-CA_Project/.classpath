@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="sgp/ca/domain/|sgp/ca/businesslogic/" kind="src" path="src"/>
+	<classpathentry kind="src" path="src/sgp/ca/businesslogic"/>
+	<classpathentry kind="src" path="src/sgp/ca/domain"/>
+	<classpathentry excluding="testbussineslogic/" kind="src" path="test"/>
+	<classpathentry kind="src" path="test/testbussineslogic"/>
+	<classpathentry kind="lib" path="aditionallibraries/commons-net-3.8.0.jar"/>
+	<classpathentry kind="lib" path="dist/lib/commons-net-3.8.0.jar"/>
+	<classpathentry kind="lib" path="dist/lib/mysql-connector-java-5.1.23-bin.jar"/>
+	<classpathentry kind="lib" path="dist/lib/postgresql-9.4.1209.jar"/>
+	<classpathentry kind="lib" path="dist/run1486981183/lib/commons-net-3.8.0.jar"/>
+	<classpathentry kind="lib" path="dist/run1486981183/lib/mysql-connector-java-5.1.23-bin.jar"/>
+	<classpathentry kind="lib" path="dist/run1486981183/lib/postgresql-9.4.1209.jar"/>
+	<classpathentry kind="lib" path="dist/run1486981183/SGP-CA_Project.jar"/>
+	<classpathentry kind="lib" path="dist/SGP-CA_Project.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
