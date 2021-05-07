@@ -12,5 +12,5 @@ import sgp.ca.domain.Topic;
 
 public interface ITopicDAO {
     public void addTopic(Connection connection, MeetingAgenda meetingAgenda);
-    public List<Topic> getTopicByAgendaMeeting(int meetingAgendaKey);
+    public List<Topic> getTopicsByAgendaMeeting(int meetingAgendaKey);
 }

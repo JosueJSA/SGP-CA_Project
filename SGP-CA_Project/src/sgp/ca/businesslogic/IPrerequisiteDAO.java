@@ -1,6 +1,6 @@
 /**
- *
  * @author estef
+ * Last modification date format: 06-05-2021
  */
 
 package sgp.ca.businesslogic;

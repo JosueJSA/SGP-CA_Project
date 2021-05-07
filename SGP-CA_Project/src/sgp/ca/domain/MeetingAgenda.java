@@ -1,6 +1,6 @@
 /**
- * Last modification date format: 23-04-2021
  * @author estef
+ * Last modification date format: 06-05-2021
  */
 
 package sgp.ca.domain;
@@ -16,20 +16,19 @@ public class MeetingAgenda {
     private List<Topic> topics;
     private List<Prerequisite> prerequisites;
 
-    public MeetingAgenda(int meetingAgendaKey, String totalTime, 
-    String estimatedTotalTime) {
+    public MeetingAgenda(int meetingAgendaKey, String totalTime, String estimatedTotalTime) {
         this.meetingAgendaKey = meetingAgendaKey;
         this.totalTime = totalTime;
         this.estimatedTotalTime = estimatedTotalTime;
-        this.topics = new ArrayList();
+        this.topics = new ArrayList<>();
         this.totaltopics = topics.size();
-        this.prerequisites = new ArrayList();
+        this.prerequisites = new ArrayList<>();
     }
 
     public MeetingAgenda() {
-        this.topics = new ArrayList();
+        this.topics = new ArrayList<>();
         this.totaltopics = topics.size();
-        this.prerequisites = new ArrayList();
+        this.prerequisites = new ArrayList<>();
     }
 
     public int getMeetingAgendaKey() {
@@ -43,6 +42,16 @@ public class MeetingAgenda {
     public String getEstimatedTotalTime() {
         return estimatedTotalTime;
     }
+    
+    public Topic getTopicByNumber(int numberTopic){
+        Topic topicReturn = new Topic();
+        for(Topic topic : this.topics){
+            if(topic.getNumberTopic() == numberTopic){
+                topicReturn = topic;
+            }
+        }
+        return topicReturn;
+    }
 
     public int getTotaltopics() {
         return totaltopics;
@@ -50,6 +59,16 @@ public class MeetingAgenda {
 
     public List<Topic> getTopics() {
         return topics;
+    }
+    
+    public Prerequisite getPrerequisiteByKey(int prerequisiteKey){
+        Prerequisite prerequisiteReturn = new Prerequisite();
+        for(Prerequisite prerequisite : this.prerequisites){
+            if(prerequisite.getPrerequisiteKey() == prerequisiteKey){
+                prerequisiteReturn = prerequisite;
+            }
+        }
+        return prerequisiteReturn;
     }
 
     public List<Prerequisite> getPrerequisites() {
