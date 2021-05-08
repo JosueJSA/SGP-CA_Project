@@ -221,4 +221,38 @@ public class MeetingDAO implements IMeetingDAO{
             CONNECTION.closeConnection();
         }
     }
+    
+    @Override
+    public void addMeetingNote(String newMeetingNote, Meeting meeting) {
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "UPDATE Meeting SET meetingNote= ? WHERE meetingDate = ?, meetingTime = ? ;"
+            );
+            sentenceQuery.setString(1, newMeetingNote);
+            sentenceQuery.setString(2, meeting.getMeetingDate());
+            sentenceQuery.setString(3, meeting.getMeetingTime());
+            sentenceQuery.executeUpdate();
+        }catch(SQLException ex){
+            Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            CONNECTION.closeConnection();
+        }
+    }
+    
+    @Override
+    public void addMeetingPending(String newMeetingPending, Meeting meeting) {
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "UPDATE Meeting SET meetingNote= ? WHERE meetingDate = ?, meetingTime = ? ;"
+            );
+            sentenceQuery.setString(1, newMeetingPending);
+            sentenceQuery.setString(2, meeting.getMeetingDate());
+            sentenceQuery.setString(3, meeting.getMeetingTime());
+            sentenceQuery.executeUpdate();
+        }catch(SQLException ex){
+            Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            CONNECTION.closeConnection();
+        }
+    }
 }

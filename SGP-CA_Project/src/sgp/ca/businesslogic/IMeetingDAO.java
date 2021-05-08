@@ -18,4 +18,6 @@ public interface IMeetingDAO {
     public void updateMeeting(Meeting meeting, Meeting oldMeeting);
     public void deleteMeeting(Meeting meeting);
     public void deleteAgreement(Connection connection, Meeting meeting);
+    public void addMeetingNote(String newMeetingNote, Meeting meeting);
+    public void addMeetingPending(String newMeetingPending, Meeting meeting);
 }
