@@ -1,6 +1,6 @@
 /**
 * @author Johann 
-* Last modification date format: 31-03-2021
+* Last modification date format: 07-05-2021
 */
 
 package sgp.ca.domain;
@@ -8,19 +8,22 @@ package sgp.ca.domain;
 public class Comment {
     
     private int commentKey;
-    private String meetingDate;
-    private String meetingTime; //Tipo Time en BD
     private String commentDescription;
+    private String commentator;
     private String commentTime; //Otro Time en BD
     private String commentDate;
 
-    public Comment(int commentKey, String meetingDate, String meetingTime, String commentDescription, String commentTime, String commentDate) {
+    public Comment(int commentKey, String commentDescription, String commentator, 
+    String commentTime, String commentDate) {
         this.commentKey = commentKey;
-        this.meetingDate = meetingDate;
-        this.meetingTime = meetingTime;
         this.commentDescription = commentDescription;
+        this.commentator = commentator;
         this.commentTime = commentTime;
         this.commentDate = commentDate;
+    }
+
+    public Comment() {
+        
     }
 
     public int getCommentKey() {
@@ -31,28 +34,20 @@ public class Comment {
         this.commentKey = commentKey;
     }
 
-    public String getMeetingDate() {
-        return meetingDate;
-    }
-
-    public void setMeetingDate(String meetingDate) {
-        this.meetingDate = meetingDate;
-    }
-
-    public String getMeetingTime() {
-        return meetingTime;
-    }
-
-    public void setMeetingTime(String meetingTime) {
-        this.meetingTime = meetingTime;
-    }
-
     public String getCommentDescription() {
         return commentDescription;
     }
 
     public void setCommentDescription(String commentDescription) {
         this.commentDescription = commentDescription;
+    }
+
+    public String getCommentator() {
+        return commentator;
+    }
+
+    public void setCommentatorRFC(String commentatorRFC) {
+        this.commentator = commentatorRFC;
     }
 
     public String getCommentTime() {

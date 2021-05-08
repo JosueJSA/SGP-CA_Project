@@ -1,37 +1,119 @@
 /**
  * @author estef
- * Last modification date format: 29-04-2021
+ * Last modification date format: 06-05-2021
  */
 
 package sgp.ca.businesslogic;
 
 import java.sql.Connection;
-import java.util.List;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.domain.Meeting;
 import sgp.ca.domain.MeetingAgenda;
-import sgp.ca.domain.Prerequisite;
-import sgp.ca.domain.Topic;
 
 public class MeetingAgendaDAO implements IMeetingAgendaDAO{
+    private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
+    private TopicDAO topicDAO = new TopicDAO();
+    private PrerequisiteDAO prerequisiteDAO = new PrerequisiteDAO();
 
     @Override
     public void addMeetingAgenda(Connection connection, Meeting meeting) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "INSERT INTO MeetingAgenda (meetingDate, meetingTime, totalTime, "
+                + "estimatedTotalTime, numberTopics) VALUES (?, ?, ?, ?, ?)",
+                PreparedStatement.RETURN_GENERATED_KEYS
+            );
+            sentenceQuery.setString(1, meeting.getMeetingDate());
+            sentenceQuery.setString(2, meeting.getMeetingTime());
+            sentenceQuery.setString(3, meeting.getMeetingAgenda().getTotalTime());
+            sentenceQuery.setString(4, meeting.getMeetingAgenda().getEstimatedTotalTime());
+            sentenceQuery.setInt(5, meeting.getMeetingAgenda().getTotaltopics());
+            this.updateMeetingAgendaWithKeyGenerated(sentenceQuery, meeting.getMeetingAgenda());
+            topicDAO.addTopic(connection, meeting.getMeetingAgenda());
+            prerequisiteDAO.addPrerequisite(connection, meeting.getMeetingAgenda());
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                Logger.getLogger(MeetingAgenda.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(MeetingAgendaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
     public MeetingAgenda getMeetingAgendaByMeeting(String meetingDate, String meetingTime) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        MeetingAgenda newMeetingAgenda = new MeetingAgenda();
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT * FROM MeetingAgenda WHERE meetingDate = ? AND meetingTime = ?;"
+            );
+            sentenceQuery.setString(1, meetingDate);
+            sentenceQuery.setString(2, meetingTime);
+            ResultSet queryResult = sentenceQuery.executeQuery();
+            newMeetingAgenda.setMeetingAgendaKey(queryResult.getInt("meetingAgendaKey"));
+            newMeetingAgenda.setTotalTime(queryResult.getTime("totalTime").toString());
+            newMeetingAgenda.setEstimatedTotalTime(queryResult.getTime("estimatedTotalTime").toString());
+            newMeetingAgenda.setTotaltopics(queryResult.getInt("numberTopics"));
+            newMeetingAgenda.setTopics(topicDAO.getTopicsByAgendaMeeting(newMeetingAgenda.getMeetingAgendaKey()));
+            newMeetingAgenda.setPrerequisites(prerequisiteDAO.getPrerequisiteByAgendaMeeting(newMeetingAgenda.getMeetingAgendaKey()));
+        }catch(SQLException sqlException){
+            Logger.getLogger(MeetingAgenda.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            return newMeetingAgenda;
+        }
     }
 
     @Override
     public void deleteTopic(Connection connection, MeetingAgenda meetingAgenda) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM Topic WHERE meetingAgendaKey = ?;"
+            );
+            sentenceQuery.setInt(1, meetingAgenda.getMeetingAgendaKey());
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                Logger.getLogger(MeetingAgendaDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(MeetingAgendaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
     public void deletePrerequisite(Connection connection, MeetingAgenda meetingAgenda) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM Prerequisite WHERE meetingAgendaKey = ?;"
+            );
+            sentenceQuery.setInt(1, meetingAgenda.getMeetingAgendaKey());
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                Logger.getLogger(MeetingAgendaDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(MeetingAgendaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    private void updateMeetingAgendaWithKeyGenerated(PreparedStatement statement, MeetingAgenda meetingAgenda){
+        try{
+            ResultSet result = statement.getGeneratedKeys();
+            if(result.next()){
+                meetingAgenda.setMeetingAgendaKey(result.getInt(1));
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(MeetingAgendaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

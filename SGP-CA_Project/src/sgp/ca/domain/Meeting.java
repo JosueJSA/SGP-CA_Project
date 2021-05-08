@@ -1,6 +1,6 @@
 /**
 * @author Johann 
-* Last modification date format: 25-03-2021
+* Last modification date format: 06-05-2021
 */
 
 package sgp.ca.domain;
@@ -16,27 +16,33 @@ public class Meeting {
     private String meetingRegistrationDate;
     private String statusMeeting;
     private String meetingNote;
-    private String neetingPending;
+    private String meetingPending;
     private MeetingAgenda meetingAgenda;
     private List<Agreement> agreements;
+    private List <Comment> comments;
+    private List <AssistantRol> assistantsRol;
 
     public Meeting(String meetingDate, String meetingTime, String meetingProject, 
     String meetingRegistrationDate, String statusMeeting, String meetingNote, 
-    String neetingPending) {
+    String meetingPending) {
         this.meetingDate = meetingDate;
         this.meetingTime = meetingTime;
         this.meetingProject = meetingProject;
         this.meetingRegistrationDate = meetingRegistrationDate;
         this.statusMeeting = statusMeeting;
         this.meetingNote = meetingNote;
-        this.neetingPending = neetingPending;
+        this.meetingPending = meetingPending;
         this.meetingAgenda = new MeetingAgenda();
-        this.agreements = new ArrayList();
+        this.agreements = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.assistantsRol = new ArrayList<>();
     }
 
     public Meeting() {
         this.meetingAgenda = new MeetingAgenda();
-        this.agreements = new ArrayList();
+        this.agreements = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.assistantsRol = new ArrayList<>();
     }
 
     public String getMeetingDate() {
@@ -63,16 +69,54 @@ public class Meeting {
         return meetingNote;
     }
 
-    public String getNeetingPending() {
-        return neetingPending;
+    public String getMeetingPending() {
+        return meetingPending;
     }
 
     public MeetingAgenda getMeetingAgenda() {
         return meetingAgenda;
     }
+    
+    public Agreement getAgreementByNumber(int agreementNumber){
+        Agreement agreementReturn = new Agreement();
+        for(Agreement agreement : this.agreements){
+            if(agreement.getAgreementNumber() == agreementNumber){
+                agreementReturn = agreement;
+            }
+        }
+        return agreementReturn;
+    }
 
     public List<Agreement> getAgreements() {
         return agreements;
+    }
+    
+    public Comment getCommentByKey(int commentKey){
+        Comment commentReturn = new Comment();
+        for(Comment comment : this.comments){
+            if(comment.getCommentKey() == commentKey){
+                commentReturn = comment;
+            }
+        }
+        return commentReturn;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+    
+    public AssistantRol getAssistantRolByAssistantRolKey(int assistantRolKey){
+        AssistantRol assistantRolReturn = new AssistantRol();
+        for(AssistantRol assistantRol : this.assistantsRol){
+            if(assistantRol.getAssistantRolKey() == assistantRolKey){
+                assistantRolReturn = assistantRol;
+            }
+        }
+        return assistantRolReturn;
+    }
+
+    public List<AssistantRol> getAssistantsRol() {
+        return assistantsRol;
     }
 
     public void setMeetingDate(String meetingDate) {
@@ -99,8 +143,8 @@ public class Meeting {
         this.meetingNote = meetingNote;
     }
 
-    public void setNeetingPending(String neetingPending) {
-        this.neetingPending = neetingPending;
+    public void setMeetingPending(String meetingPending) {
+        this.meetingPending = meetingPending;
     }
 
     public void setMeetingAgenda(MeetingAgenda meetingAgenda) {
@@ -117,5 +161,38 @@ public class Meeting {
     
     public void removeAgreement(Agreement agreement){
         agreements.remove(agreement);
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+    
+    public void addComment(Comment comment){
+        comments.add(comment);
+    }
+    
+    public void removeComment(Comment comment){
+        comments.remove(comment);
+    }
+
+    public void setAssistantsRole(List<AssistantRol> assistantsRol) {
+        this.assistantsRol = assistantsRol;
+    }
+    
+    public void addAssistantRol(AssistantRol assistantRol){
+        assistantsRol.add(assistantRol);
+    }
+    
+    public void removeAssistantRol(AssistantRol assistantRol){
+        assistantsRol.remove(assistantRol);
+    }
+    
+    public boolean equals(Object obj){
+        boolean sameMeetings = true;
+        Meeting meeting = (Meeting)obj;
+        if((this.hashCode() != meeting.hashCode()) || (this.agreements.size() != meeting.getAgreements().size())){
+            sameMeetings = false;
+        }
+        return sameMeetings;
     }
 }

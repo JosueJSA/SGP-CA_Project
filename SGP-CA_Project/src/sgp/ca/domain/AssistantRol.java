@@ -6,15 +6,16 @@
 package sgp.ca.domain;
 
 public class AssistantRol {
-    private Integrant assistantMeeting;
-    private Meeting meeting;
+    private int assistantRolKey;
+    private String assistantRfc;
     private String roleAssistant;
     private int assistantNumber;
-    private int initialsAssistant;
+    private String initialsAssistant;
 
-    public AssistantRol(Integrant assistantMeeting, Meeting meeting, String roleAssistant, int assistantNumber, int initialsAssistant) {
-        this.assistantMeeting = assistantMeeting;
-        this.meeting = meeting;
+    public AssistantRol(int assistantRolKey, String assistantRfc, 
+    String roleAssistant, int assistantNumber, String initialsAssistant) {
+        this.assistantRolKey = assistantRolKey;
+        this.assistantRfc = assistantRfc;
         this.roleAssistant = roleAssistant;
         this.assistantNumber = assistantNumber;
         this.initialsAssistant = initialsAssistant;
@@ -24,12 +25,12 @@ public class AssistantRol {
         
     }
 
-    public Integrant getAssistantMeeting() {
-        return assistantMeeting;
+    public int getAssistantRolKey() {
+        return assistantRolKey;
     }
 
-    public Meeting getMeeting() {
-        return meeting;
+    public String getAssistantRfc() {
+        return assistantRfc;
     }
 
     public String getRoleAssistant() {
@@ -40,16 +41,16 @@ public class AssistantRol {
         return assistantNumber;
     }
 
-    public int getInitialsAssistant() {
+    public String getInitialsAssistant() {
         return initialsAssistant;
     }
 
-    public void setAssistantMeeting(Integrant assistantMeeting) {
-        this.assistantMeeting = assistantMeeting;
+    public void setAssistantRolKey(int assistantRolKey) {
+        this.assistantRolKey = assistantRolKey;
     }
 
-    public void setMeeting(Meeting meeting) {
-        this.meeting = meeting;
+    public void setAssistantRfc(String assistantRfc) {
+        this.assistantRfc = assistantRfc;
     }
 
     public void setRoleAssistant(String roleAssistant) {
@@ -60,7 +61,7 @@ public class AssistantRol {
         this.assistantNumber = assistantNumber;
     }
 
-    public void setInitialsAssistant(int initialsAssistant) {
+    public void setInitialsAssistant(String initialsAssistant) {
         this.initialsAssistant = initialsAssistant;
     }
 }

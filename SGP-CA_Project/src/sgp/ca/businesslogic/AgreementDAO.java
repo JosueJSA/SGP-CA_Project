@@ -27,8 +27,7 @@ public class AgreementDAO implements IAgreementDAO{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
                     "INSERT INTO Agreement (meetingDate, meetingTime, "
                    + "descriptionAgreement, responsibleAgreement, deliveryDate) "
-                   + "VALUES(?,?,?,?,?);",
-                   PreparedStatement.RETURN_GENERATED_KEYS
+                   + "VALUES(?,?,?,?,?);"
                 );
                 sentenceQuery.setString(1, meeting.getMeetingDate());
                 sentenceQuery.setString(2, meeting.getMeetingTime());
@@ -36,7 +35,6 @@ public class AgreementDAO implements IAgreementDAO{
                 sentenceQuery.setString(4, agreement.getResponsibleAgreement());
                 sentenceQuery.setString(5, agreement.getDeliveryDate());
                 sentenceQuery.executeUpdate();
-                this.updateAgreementNumberGenerated(sentenceQuery, agreement);
             }catch(SQLException sqlException){
                 try{
                     connection.rollback();
@@ -61,8 +59,6 @@ public class AgreementDAO implements IAgreementDAO{
             while(queryResult.next()){
                 Agreement agreement = new Agreement(
                     queryResult.getInt("agreementNumber"),
-                    queryResult.getDate("meetingDate").toString(),
-                    queryResult.getTime("meetingTime").toString(),
                     queryResult.getString("descriptionAgreement"),
                     queryResult.getString("responsibleAgreement"),
                     queryResult.getDate("deliveryDate").toString()
@@ -73,17 +69,6 @@ public class AgreementDAO implements IAgreementDAO{
             Logger.getLogger(AgreementDAO.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             return agreementsList;
-        }
-    }
-    
-    public void updateAgreementNumberGenerated(PreparedStatement statement, Agreement agreement){
-        try{
-            ResultSet result = statement.getGeneratedKeys();
-            if(result.next()){
-                agreement.setAgreementNumber(result.getInt(1));
-            }
-        }catch(SQLException sqlException){
-            Logger.getLogger(AgreementDAO.class.getName()).log(Level.SEVERE, null, sqlException);
         }
     }
 }

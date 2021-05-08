@@ -1,6 +1,6 @@
 /**
  * @author estef
- * Last modification date format: 29-04-2021
+ * Last modification date format: 06-05-2021
  */
 
 package sgp.ca.businesslogic;
@@ -20,6 +20,8 @@ public class MeetingDAO implements IMeetingDAO{
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     private MeetingAgendaDAO meetingAgendaDAO = new MeetingAgendaDAO();
     private AgreementDAO agreementDAO = new AgreementDAO();
+    private CommentDAO commentDAO = new CommentDAO();
+    private AssistantRolDAO assisntantRolDAO = new AssistantRolDAO();
 
     @Override
     public List<Meeting> getAllMeetings() {
@@ -70,8 +72,10 @@ public class MeetingDAO implements IMeetingDAO{
                 queryResult.getString("meetingNote"),
                 queryResult.getString("meetingPending")
             );}
-            meeting.setMeetingAgenda(meetingAgendaDAO.getMeetingAgendaByMeeting(meeting.getMeetingDate(), meeting.getMeetingTime()));
-            meeting.setAgreements(agreementDAO.getAgreementListByMeeting(meeting.getMeetingDate(), meeting.getMeetingTime()));
+            meeting.setMeetingAgenda(meetingAgendaDAO.getMeetingAgendaByMeeting(meetingDate, meetingTime));
+            meeting.setAgreements(agreementDAO.getAgreementListByMeeting(meetingDate, meetingTime));
+            meeting.setComments(commentDAO.getCommentsByMeeting(meetingDate, meetingTime));
+            meeting.setAssistantsRole(assisntantRolDAO.getAssistantsRolByMeeting(meetingDate, meetingTime));
         }catch(SQLException sqlException){
             Logger.getLogger(Meeting.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
@@ -111,21 +115,25 @@ public class MeetingDAO implements IMeetingDAO{
 
     @Override
     public void addMeeting(Meeting newMeeting) {
-        Connection connection = CONNECTION.getConnectionDatabase();
+        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "INSERT INTO Meeting (meetingDate, meetingTime, meetingAgendaKey, meetingProject, meetingRegistrationDate, statusMeeting, meetingNote, meetingPending) VALUES(?,?,?,?,?,?,?,?);"
+                "INSERT INTO Meeting (meetingDate, meetingTime, meetingProject, "
+                + "meetingRegistrationDate, statusMeeting, meetingNote, "
+                + "meetingPending) VALUES(?,?,?,?,?,?,?);"
             );
             sentenceQuery.setString(1, newMeeting.getMeetingDate());
             sentenceQuery.setString(2, newMeeting.getMeetingTime());
-            sentenceQuery.setInt(3, newMeeting.getMeetingAgenda().getMeetingAgendaKey());
-            sentenceQuery.setString(4, newMeeting.getMeetingProject());
-            sentenceQuery.setString(5, newMeeting.getMeetingRegistrationDate());
-            sentenceQuery.setString(6, newMeeting.getStatusMeeting());
-            sentenceQuery.setString(7, newMeeting.getMeetingNote());
-            sentenceQuery.setString(8, newMeeting.getNeetingPending());
+            sentenceQuery.setString(3, newMeeting.getMeetingProject());
+            sentenceQuery.setString(4, newMeeting.getMeetingRegistrationDate());
+            sentenceQuery.setString(5, newMeeting.getStatusMeeting());
+            sentenceQuery.setString(6, newMeeting.getMeetingNote());
+            sentenceQuery.setString(7, newMeeting.getMeetingPending());
             sentenceQuery.executeUpdate();
             meetingAgendaDAO.addMeetingAgenda(connection, newMeeting);
+            agreementDAO.addAgreements(connection, newMeeting);
+            commentDAO.addComment(connection, newMeeting);
+            assisntantRolDAO.addAssistantRol(connection, newMeeting);
             connection.commit();
             connection.setAutoCommit(true);
         }catch(SQLException sqlException){
@@ -144,24 +152,28 @@ public class MeetingDAO implements IMeetingDAO{
     public void updateMeeting(Meeting meeting, Meeting oldMeeting) {
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
+            this.deleteMeetingAgenda(connection, oldMeeting);
             this.deleteAgreement(connection, oldMeeting);
+            this.deleteComment(connection, oldMeeting);
+            this.deleteAssistantRol(connection, oldMeeting);
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "UPDATE Meeting SET meetingDate = ?, meetingTime = ?, meetingAgendaKey = ?, "
-                + "meetingProject = ?, meetingRegistrationDate = ?, statusMeeting = ?, "
-                + "meetingNote = ?, meetingPending = ? WHERE meetingDate = ? AND meetingTime = ?;"
+                "UPDATE Meeting SET meetingDate = ?, meetingTime = ?, meetingProject = ?, "
+                + "meetingRegistrationDate = ?, statusMeeting = ?, meetingNote = ?, "
+                + "meetingPending = ? WHERE meetingDate = ? AND meetingTime = ?;"
             );
             sentenceQuery.setString(1, meeting.getMeetingDate());
             sentenceQuery.setString(2, meeting.getMeetingTime());
-            sentenceQuery.setInt(3, meeting.getMeetingAgenda().getMeetingAgendaKey());
-            sentenceQuery.setString(4, meeting.getMeetingProject());
-            sentenceQuery.setString(5, meeting.getMeetingRegistrationDate());
-            sentenceQuery.setString(6, meeting.getStatusMeeting());
-            sentenceQuery.setString(7, meeting.getMeetingNote());
-            sentenceQuery.setString(8, meeting.getNeetingPending());
-            sentenceQuery.setString(9, oldMeeting.getMeetingDate());
-            sentenceQuery.setString(10, oldMeeting.getMeetingTime());
+            sentenceQuery.setString(3, meeting.getMeetingProject());
+            sentenceQuery.setString(4, meeting.getMeetingRegistrationDate());
+            sentenceQuery.setString(5, meeting.getStatusMeeting());
+            sentenceQuery.setString(6, meeting.getMeetingNote());
+            sentenceQuery.setString(7, meeting.getMeetingPending());
+            sentenceQuery.setString(8, oldMeeting.getMeetingDate());
+            sentenceQuery.setString(9, oldMeeting.getMeetingTime());
             sentenceQuery.executeUpdate();
+            meetingAgendaDAO.addMeetingAgenda(connection, meeting);
             agreementDAO.addAgreements(connection, meeting);
+            commentDAO.addComment(connection, meeting);
             connection.commit();
             connection.setAutoCommit(true);
         }catch(SQLException sqlException){
@@ -180,7 +192,10 @@ public class MeetingDAO implements IMeetingDAO{
     public void deleteMeeting(Meeting meeting) {
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
+            this.deleteMeetingAgenda(connection, meeting);
             this.deleteAgreement(connection, meeting);
+            this.deleteComment(connection, meeting);
+            this.deleteAssistantRol(connection, meeting);
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM Meeting WHERE meetingDate = ? AND meetingTime = ?;"
             );
@@ -200,6 +215,27 @@ public class MeetingDAO implements IMeetingDAO{
             CONNECTION.closeConnection();
         }
     }
+    
+    @Override
+    public void deleteMeetingAgenda(Connection connection, Meeting meeting) {
+        try{
+            meetingAgendaDAO.deleteTopic(connection, meeting.getMeetingAgenda());
+            meetingAgendaDAO.deletePrerequisite(connection, meeting.getMeetingAgenda());
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM MeetingAgenda WHERE meetingDate = ? AND meetingTime = ?;"
+            );
+            sentenceQuery.setString(1, meeting.getMeetingDate());
+            sentenceQuery.setString(2, meeting.getMeetingTime());
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 
     @Override
     public void deleteAgreement(Connection connection, Meeting meeting) {
@@ -217,8 +253,44 @@ public class MeetingDAO implements IMeetingDAO{
             }catch(SQLException ex){
                 Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }finally{
-            CONNECTION.closeConnection();
+        }
+    }
+
+    @Override
+    public void deleteComment(Connection connection, Meeting meeting) {
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM Comment WHERE meetingDate = ? AND meetingTime = ?;"
+            );
+            sentenceQuery.setString(1, meeting.getMeetingDate());
+            sentenceQuery.setString(2, meeting.getMeetingTime());
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                Logger.getLogger(Meeting.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    @Override
+    public void deleteAssistantRol(Connection connection, Meeting meeting) {
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM IntegrantMeeting WHERE meetingDate = ? AND meetingTime = ?;"
+            );
+            sentenceQuery.setString(1, meeting.getMeetingDate());
+            sentenceQuery.setString(2, meeting.getMeetingTime());
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                Logger.getLogger(Meeting.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     

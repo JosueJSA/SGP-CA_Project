@@ -7,14 +7,12 @@ package sgp.ca.domain;
 
 public class Prerequisite {
     private int prerequisiteKey;
-    private MeetingAgenda meetingAgenda;
-    private Integrant responsiblePrerequisite;
+    private String responsiblePrerequisite;
     private String descrptionPrerequisite;
 
-    public Prerequisite(int prerequisiteKey, MeetingAgenda meetingAgenda, 
-    Integrant responsiblePrerequisite, String descrptionPrerequisite) {
+    public Prerequisite(int prerequisiteKey, String responsiblePrerequisite, 
+    String descrptionPrerequisite) {
         this.prerequisiteKey = prerequisiteKey;
-        this.meetingAgenda = meetingAgenda;
         this.responsiblePrerequisite = responsiblePrerequisite;
         this.descrptionPrerequisite = descrptionPrerequisite;
     }
@@ -27,11 +25,7 @@ public class Prerequisite {
         return prerequisiteKey;
     }
 
-    public MeetingAgenda getMeetingAgenda() {
-        return meetingAgenda;
-    }
-
-    public Integrant getResponsiblePrerequisite() {
+    public String getResponsiblePrerequisite() {
         return responsiblePrerequisite;
     }
 
@@ -43,11 +37,7 @@ public class Prerequisite {
         this.prerequisiteKey = prerequisiteKey;
     }
 
-    public void setMeetingAgenda(MeetingAgenda meetingAgenda) {
-        this.meetingAgenda = meetingAgenda;
-    }
-
-    public void setResponsiblePrerequisite(Integrant responsiblePrerequisite) {
+    public void setResponsiblePrerequisite(String responsiblePrerequisite) {
         this.responsiblePrerequisite = responsiblePrerequisite;
     }
 
