@@ -112,8 +112,8 @@ CREATE TABLE `Project` (
 CREATE TABLE `Book` (
 	`urlFile`  varchar(100) NOT NULL,
 	`projectName` varchar(80) DEFAULT NULL,
-    `impactBA` boolean DEFAULT NULL,
-    `evidenceType` varchar(50) DEFAULT NULL,
+    `impactAB` boolean DEFAULT NULL,
+    `bodyAcademyKey` varchar(15) DEFAULT NULL,
 	`evidenceTitle` varchar(80) DEFAULT NULL,
     `registrationResponsible` varchar(100) NOT NULL,
     `registrationDate` date NOT NULL,
@@ -123,7 +123,6 @@ CREATE TABLE `Book` (
     `publisher` varchar(30) DEFAULT NULL,
     `editionsNumber` int(2) DEFAULT NULL,
     `isbn` int(13) DEFAULT NULL,
-    `urlFileChapterBook`  varchar(100) DEFAULT NULL,
     PRIMARY KEY (`urlFile`),
 	KEY `fk_book_1` (`projectName`),
     CONSTRAINT `fk_book_1` FOREIGN KEY (`projectName`) REFERENCES `Project` (`projectName`)
@@ -163,12 +162,10 @@ CREATE TABLE `CollaborateBook` (
 
 CREATE TABLE `ChapterBook` (
 	`urlFile` varchar(100) NOT NULL,
-    `evidenceTitle` varchar(80) DEFAULT NULL,
-    `publicationDate` date DEFAULT NULL,
-    `bookName` varchar(80) DEFAULT NULL,
+    `chapterBookTitle` varchar(80) DEFAULT NULL,
+    `registrationDate` date DEFAULT NULL,
+    `registrationResponsible` varchar(80) DEFAULT NULL,
     `pages-number` varchar(10) DEFAULT NULL,
-    `impactBA` TINYINT(1) DEFAULT FALSE,
-    `studyDegree` varchar(30) DEFAULT NULL,
     `urlFileBook`  varchar(100) DEFAULT NULL,
 	PRIMARY KEY (`urlFile`),
     KEY `fk_chapterBook_1` (`urlFileBook`),
@@ -382,50 +379,49 @@ CREATE TABLE `CollaborateReceptionWork` (
 );
 
 CREATE TABLE `Meeting` (
+	`meetingKey` int auto_increment,
 	`meetingDate` date NOT NULL,
 	`meetingTime` time NOT NULL,
     `meetingProject` varchar(80) DEFAULT NULL,
     `meetingRegistrationDate` date DEFAULT NULL,
     `statusMeeting` varchar(15) DEFAULT NULL,
+    `placeMeeting` varchar(50) DEFAULT NULL,
+    `issueMeeting` varchar(200) DEFAULT NULL,
     `meetingNote` varchar(3000) DEFAULT NULL,
     `meetingPending` varchar(3000) DEFAULT NULL,
-    PRIMARY KEY (`meetingDate`, `meetingTime`)
+    PRIMARY KEY (`meetingKey`)
 );
 
 CREATE TABLE `MeetingAgenda` (
-	`meetingAgendaKey` int(6) NOT NULL,
-    `meetingDate` date DEFAULT NULL,
-	`meetingTime` time DEFAULT NULL,
+	`meetingAgendaKey` int auto_increment,
+    `meetingKey` int DEFAULT NULL,
     `totalTime` time DEFAULT NULL,
     `estimatedTotalTime` time DEFAULT NULL,
     `numberTopics` int(2) DEFAULT NULL,
     PRIMARY KEY (`meetingAgendaKey`),
-    KEY `fk_meetingAgenda_1` (`meetingDate`, `meetingTime`),
-    CONSTRAINT `fk_meetingAgenda_1` FOREIGN KEY (`meetingDate`, `meetingTime`) REFERENCES `Meeting` (`meetingDate`, `meetingTime`)
+    KEY `fk_meetingAgenda_1` (`meetingKey`),
+    CONSTRAINT `fk_meetingAgenda_1` FOREIGN KEY (`meetingKey`) REFERENCES `Meeting` (`meetingKey`)
     ON UPDATE CASCADE
 );
 
 CREATE TABLE `IntegrantMeeting` (
-	`integrantMeetingKey` int(5) NOT NULL,
-	`rfc` varchar(13) DEFAULT NULL,
-    `meetingDate` date NOT NULL,
-    `meetingTime` time NOT NULL,
+	`integrantMeetingKey` int auto_increment,
+	`assistantName` varchar(60) DEFAULT NULL,
+    `meetingKey` int DEFAULT NULL,
     `role` varchar(15) DEFAULT NULL,
     `assistantNumber` int(2) DEFAULT NULL,
-    `initials` varchar(5) DEFAULT NULL,
+    `initials` varchar(8) DEFAULT NULL,
     PRIMARY KEY (`integrantMeetingKey`),
-    KEY `fk_integrantmeeting_1` (`rfc`),
-    CONSTRAINT `fk_integrantmeeting_1` FOREIGN KEY (`rfc`) REFERENCES `Integrant` (`rfc`),
-    KEY `fk_integrantmeeting_2` (`meetingDate`, `meetingTime`),
-    CONSTRAINT `fk_integrantmeeting_2` FOREIGN KEY (`meetingDate`, `meetingTime`) REFERENCES `Meeting` (`meetingDate`, `meetingTime`)
+    KEY `fk_integrantmeeting_2` (`meetingKey`),
+    CONSTRAINT `fk_integrantmeeting_2` FOREIGN KEY (`meetingKey`) REFERENCES `Meeting` (`meetingKey`)
     ON UPDATE CASCADE
 );
 
 CREATE TABLE `Prerequisite` (
-	`prerequisiteKey` int (4) NOT NULL,
-    `meetingAgendaKey` int(5) DEFAULT NULL,
+	`prerequisiteKey` int auto_increment,
+    `meetingAgendaKey` int DEFAULT NULL,
     `responsiblePrerequisite` varchar(50) DEFAULT NULL,
-    `descriptionPrerequisite` varchar(100) DEFAULT NULL,
+    `descriptionPrerequisite` varchar(200) DEFAULT NULL,
     PRIMARY KEY (`prerequisiteKey`),
     KEY `fk_prerequisite_1` (`meetingAgendaKey`),
     CONSTRAINT `fk_prerequisite_1` FOREIGN KEY (`meetingAgendaKey`) REFERENCES `MeetingAgenda` (`meetingAgendaKey`)
@@ -433,13 +429,13 @@ CREATE TABLE `Prerequisite` (
 );
 
 CREATE TABLE `Topic` (
-	`numberTopic` int(4) NOT NULL,
-    `meetingAgendaKey` int(5) DEFAULT NULL,
+	`numberTopic` int auto_increment,
+    `meetingAgendaKey` int DEFAULT NULL,
     `startTime` time DEFAULT NULL,
     `endTime` time DEFAULT NULL,
     `plannedTime` time DEFAULT NULL,
     `realTime` time DEFAULT NUll,
-    `descriptionTopic` varchar(100) DEFAULT NULL,
+    `descriptionTopic` varchar(200) DEFAULT NULL,
     `discissionLeader` varchar(50) DEFAULT NULL,
     `statusTopic` varchar(20) DEFAULT NULL,
     PRIMARY KEY (`numberTopic`),
@@ -449,30 +445,28 @@ CREATE TABLE `Topic` (
 );
 
 CREATE TABLE `Agreement` (
-	`agreementNumber` int (4) NOT NULL,
-    `meetingDate` date DEFAULT NULL,
-    `meetingTime` time DEFAULT NULL,
-    `descriptionAgreement` varchar(100) DEFAULT NULL,
+	`agreementNumber` int auto_increment,
+    `meetingKey` int DEFAULT NULL,
+    `descriptionAgreement` varchar(200) DEFAULT NULL,
     `responsibleAgreement` varchar(80) DEFAULT NULL,
     `deliveryDate` date DEFAULT NULL,
     PRIMARY KEY (`agreementNumber`),
-    KEY `fk_agreement_1` (`meetingDate`, `meetingTime`),
-    CONSTRAINT `fk_agreement_1` FOREIGN KEY (`meetingDate`, `meetingTime`) REFERENCES `Meeting` (`meetingDate`, `meetingTime`)
+    KEY `fk_agreement_1` (`meetingKey`),
+    CONSTRAINT `fk_agreement_1` FOREIGN KEY (`meetingKey`) REFERENCES `Meeting` (`meetingKey`)
     ON UPDATE CASCADE
 );
 
 
 CREATE TABLE `Comment` (
-	`commentKey` int(5) NOT NULL,  
-    `meetingDate` date DEFAULT NULL,
-    `meetingTime` time DEFAULT NULL,
-    `commentDescription` varchar(100) DEFAULT NULL,
+	`commentKey` int auto_increment,  
+    `meetingKey` int DEFAULT NULL,
+    `commentDescription` varchar(300) DEFAULT NULL,
     `commentator` varchar(80) DEFAULT NULL,
     `commentTime` time DEFAULT NULL,
     `commentDate` date DEFAULT NULL,
     PRIMARY KEY (`commentKey`),
-    KEY `fk_comment_1` (`meetingDate`, `meetingTime`),
-    CONSTRAINT `fk_comment_1` FOREIGN KEY (`meetingDate`, `meetingTime`) REFERENCES `Meeting` (`meetingDate`, `meetingTime`)
+    KEY `fk_comment_1` (`meetingKey`),
+    CONSTRAINT `fk_comment_1` FOREIGN KEY (`meetingKey`) REFERENCES `Meeting` (`meetingKey`)
     ON UPDATE CASCADE
 );
 
