@@ -29,7 +29,7 @@ public class ArticleInsertionTest {
         Article article = new Article(
             1324, "articuloParaTest.pdf", "ProyectoPrueba", 
             "articuloTest", "Mexico", "2020-11-12", true, "2020-12-24",
-            "Angel Juan", "Licenciatura", "UV-CA-127"
+            "Angel Juan", "Licenciatura", "Artículo"
         );
         Magazine magazine = new Magazine("RevistaParaTest",1, "Casillas", "Canada");
         if(MAGAZINE_DAO.getMagazineByName("RevistaParaTest").getEditorialCountry() == null){
@@ -44,6 +44,18 @@ public class ArticleInsertionTest {
         ARTICLE_DAO.deleteEvidenceByUrl("articuloParaTest.pdf");
         INITIALIZER.cleanEvidencesForTest();
         Assert.assertEquals("articuloTest", retrievedArticle.getEvidenceTitle());
+    }
+    
+    @Test
+    public void testIncorrectArticleInsertionDuplicatedKey(){
+        Article article = new Article(
+            1324, "articuloParaTest.pdf", "ProyectoPrueba", 
+            "articuloTest", "Mexico", "2020-11-12", true, "202020-12-24",
+            "Angel Juan", "Licenciatura", "Artículo"
+        );
+        ARTICLE_DAO.addNewEvidence(article);
+        Article retirevedArticle = (Article) ARTICLE_DAO.getEvidenceByUrl("articuloParaTest.pdf");
+        Assert.assertNull(retirevedArticle.getEvidenceTitle());
     }
     
 }

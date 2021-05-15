@@ -31,7 +31,7 @@ public class ArticleDAO extends EvidenceDAO {
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
             PreparedStatement senenceQuery = connection.prepareStatement(
-                "SELECT * from article WHERE urlFile = ?;"
+                "SELECT * from Article WHERE urlFile = ?;"
             );
             senenceQuery.setString(1, urlEvidenceFile);
             ResultSet resultQuery = senenceQuery.executeQuery();
@@ -162,7 +162,7 @@ public class ArticleDAO extends EvidenceDAO {
         }
     }
     
-    public void deleteStudensFromURLFileArticle(Connection connection, String urlFileArticle){
+    private void deleteStudensFromURLFileArticle(Connection connection, String urlFileArticle){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM ArticleStudent WHERE urlFile = ?;"
@@ -180,7 +180,7 @@ public class ArticleDAO extends EvidenceDAO {
         }
     }
     
-    public void deleteIntegrantsFromURLFileArticle(Connection connection, String urlFileArticle){
+    private void deleteIntegrantsFromURLFileArticle(Connection connection, String urlFileArticle){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM IntegrantArticle WHERE urlFile = ?;"
@@ -198,7 +198,7 @@ public class ArticleDAO extends EvidenceDAO {
         }
     }
     
-    public void deleteCollaboratorsFromURLFileArticle(Connection connection, String urlFileArticle){
+    private void deleteCollaboratorsFromURLFileArticle(Connection connection, String urlFileArticle){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM CollaborateArticle WHERE urlFile = ?;"
@@ -216,7 +216,7 @@ public class ArticleDAO extends EvidenceDAO {
         }
     }
     
-    public void deleteMagazineFromURLFileArticle(Connection connection, String urlFile){
+    private void deleteMagazineFromURLFileArticle(Connection connection, String urlFile){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM ArticleMagazine WHERE urlFile = ?;"
@@ -234,7 +234,7 @@ public class ArticleDAO extends EvidenceDAO {
         }
     }
     
-    public void insertIntoArticleMagazine(Connection connection, Article article){
+    private void insertIntoArticleMagazine(Connection connection, Article article){
         try{
             PreparedStatement sentence = connection.prepareStatement(
                 "INSERT INTO ArticleMagazine VALUES(?,?);"
@@ -253,7 +253,7 @@ public class ArticleDAO extends EvidenceDAO {
         }
     }
     
-    public void insertIntoStudentArticle(Connection connection, Article article){
+    private void insertIntoStudentArticle(Connection connection, Article article){
         article.getStudents().forEach( student -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -274,7 +274,7 @@ public class ArticleDAO extends EvidenceDAO {
         });
     }
     
-    public void insertIntoIntegrantArticle(Connection connection, Article article){
+    private void insertIntoIntegrantArticle(Connection connection, Article article){
         article.getIntegrants().forEach( integrant -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -295,7 +295,7 @@ public class ArticleDAO extends EvidenceDAO {
         });
     }
     
-    public void insertIntoCollaboratorArticle(Connection connection, Article article){
+    private void insertIntoCollaboratorArticle(Connection connection, Article article){
         article.getCollaborators().forEach( collaborator -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -316,7 +316,7 @@ public class ArticleDAO extends EvidenceDAO {
         });
     }
     
-    public Article getOutArticleDataFromQuery(ResultSet resultArticleQuery){
+    private Article getOutArticleDataFromQuery(ResultSet resultArticleQuery){
         Article article = new Article();
         try{
             article = new Article(
@@ -339,7 +339,7 @@ public class ArticleDAO extends EvidenceDAO {
         }
     }
     
-    public List<Integrant> getIntegrantArticleParticipation(Connection connection, String urlFileArticle){
+    private List<Integrant> getIntegrantArticleParticipation(Connection connection, String urlFileArticle){
         List<Integrant> integrants = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -360,7 +360,7 @@ public class ArticleDAO extends EvidenceDAO {
         }
     }
     
-    public List<Collaborator> getCollaboratorArticleParticipation(Connection connection, String urlFileArticle){
+    private List<Collaborator> getCollaboratorArticleParticipation(Connection connection, String urlFileArticle){
         List<Collaborator> collaborators = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -381,7 +381,7 @@ public class ArticleDAO extends EvidenceDAO {
         }
     }
     
-    public List<String> getStudentsArticleParticipation(Connection connection, String urlFileArticle){
+    private List<String> getStudentsArticleParticipation(Connection connection, String urlFileArticle){
         List<String> students = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -400,7 +400,7 @@ public class ArticleDAO extends EvidenceDAO {
         }
     }
     
-    public Magazine getMagazineArticleParticipation(Connection connection, String urlFileArticle){
+    private Magazine getMagazineArticleParticipation(Connection connection, String urlFileArticle){
         Magazine magazine = new Magazine();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(

@@ -30,7 +30,7 @@ public abstract class EvidenceDAO {
         List<Map> evidences = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM evidences WHERE impactBA=TRUE GROUP BY urlFile ORDER BY registrationDate DESC;"
+                "SELECT * FROM Evidences WHERE impactBA=TRUE GROUP BY urlFile ORDER BY registrationDate DESC;"
             );
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
@@ -55,7 +55,7 @@ public abstract class EvidenceDAO {
         List<Map> evidences = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM evidences WHERE emailUV = ? ORDER BY registrationDate DESC;"
+                "SELECT * FROM Evidences WHERE emailUV = ? ORDER BY registrationDate DESC;"
             );
             sentenceQuery.setString(1, mailUv);
             ResultSet resultQuery = sentenceQuery.executeQuery();
@@ -81,7 +81,7 @@ public abstract class EvidenceDAO {
         List<Map> evidences = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM evidences WHERE cast(registrationDate as date) < CAST( ? as DATE) GROUP BY urlFile ORDER BY registrationDate DESC;"
+                "SELECT * FROM Evidences WHERE cast(registrationDate as date) < CAST( ? as DATE) GROUP BY urlFile ORDER BY registrationDate DESC;"
             );
             sentenceQuery.setString(1, date);
             ResultSet resultQuery = sentenceQuery.executeQuery();
@@ -107,7 +107,7 @@ public abstract class EvidenceDAO {
         List<Map> evidences = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT DISTINCT * FROM (SELECT * FROM evidences GROUP BY urlFile) ev, students  WHERE ev.urlFile = students.urlFile AND students.student = ?;"
+                "SELECT DISTINCT * FROM (SELECT * FROM Evidences GROUP BY urlFile) ev, Students  WHERE ev.urlFile = Students.urlFile AND Students.student = ?;"
             );
             sentenceQuery.setString(1, student);
             ResultSet resultQuery = sentenceQuery.executeQuery();

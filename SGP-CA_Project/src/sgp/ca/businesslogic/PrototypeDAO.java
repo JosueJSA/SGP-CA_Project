@@ -29,7 +29,7 @@ public class PrototypeDAO extends EvidenceDAO{
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
             PreparedStatement senenceQuery = connection.prepareStatement(
-                "SELECT * FROM prototype WHERE urlFile = ?;"
+                "SELECT * FROM Prototype WHERE urlFile = ?;"
             );
             senenceQuery.setString(1, urlEvidenceFile);
             ResultSet resultQuery = senenceQuery.executeQuery();

@@ -46,7 +46,7 @@ public class EvidenceInitializer {
             Prototype prototypo = new Prototype(
                 "prototipoPrueba.pdf", "ProyectoPrueba", 
                 "prorotipo2", "Mexico", "2020-04-12", true, "2010-01-10",
-                "Jorge Octavio Ocharan", "Licenciatura", "UV-CA-127", "Ninguna Característica"
+                "Jorge Octavio Ocharan", "Licenciatura", "Prototipo", "Ninguna Característica"
             );
             prototypo.getIntegrants().add(INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx"));
             prototypo.getCollaborators().add(COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx"));
@@ -62,7 +62,7 @@ public class EvidenceInitializer {
             Article article = new Article(
                 1324, "articuloParaTest.pdf", "ProyectoPrueba", 
                 "articuloTest", "Mexico", "2020-11-12", true, "2020-12-24",
-                "Angel Juan", "Licenciatura", "UV-CA-127"
+                "Angel Juan", "Licenciatura", "Articulo"
             );
             Magazine magazine = new Magazine("RevistaParaTest",1, "Casillas", "Canada");
             if(MAGAZINE_DAO.getMagazineByName("RevistaParaTest").getEditorialCountry() == null){

@@ -25,7 +25,7 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
         List<String> generalResumeKeys = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT bodyAcademyKey FROM generalresume;"
+                "SELECT bodyAcademyKey FROM GeneralResume;"
             );
             ResultSet queryResult = sentenceQuery.executeQuery();
             while(queryResult.next()){
