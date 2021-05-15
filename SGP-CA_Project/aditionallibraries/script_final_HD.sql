@@ -113,7 +113,7 @@ CREATE TABLE `Book` (
 	`urlFile`  varchar(100) NOT NULL,
 	`projectName` varchar(80) DEFAULT NULL,
     `impactBA` boolean DEFAULT NULL,
-    `bodyAcademyKey` varchar(15) DEFAULT NULL,
+    `evidenceType` varchar(50) DEFAULT NULL,
 	`evidenceTitle` varchar(80) DEFAULT NULL,
     `registrationResponsible` varchar(100) NOT NULL,
     `registrationDate` date NOT NULL,
@@ -132,7 +132,7 @@ CREATE TABLE `Book` (
 
 CREATE TABLE `BookStudent` (
 	`urlFile`  varchar(100) NOT NULL,
-    `student`  varchar(50) DEFAULT NULL,
+    `student`  varchar(50) NOT NULL,
     PRIMARY KEY (`urlFile`, `student`),
     KEY `fk_bookStudent_1` (`urlFile`),
     CONSTRAINT `fk_bookStudent_1` FOREIGN KEY (`urlFile`) REFERENCES `Book` (`urlFile`)
@@ -140,7 +140,7 @@ CREATE TABLE `BookStudent` (
 );
 
 CREATE TABLE `IntegrantBook` (
-	`rfc` varchar(13) DEFAULT NULL,
+	`rfc` varchar(20) NOT NULL,
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     KEY `fk_integrantBook_1` (`rfc`),
@@ -151,7 +151,7 @@ CREATE TABLE `IntegrantBook` (
 );
 
 CREATE TABLE `CollaborateBook` (
-	`rfc` varchar(13) DEFAULT NULL,
+	`rfc` varchar(20) NOT NULL,
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     KEY `fk_collaborateBook_1` (`rfc`),
@@ -186,7 +186,7 @@ CREATE TABLE `ChapterbookStudent` (
 );
 
 CREATE TABLE `IntegrantChapterbook` (
-	`rfc` varchar(13) DEFAULT NULL,
+	`rfc` varchar(20) NOT NULL,
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     KEY `fk_integrantChapterBook_1` (`rfc`),
@@ -197,7 +197,7 @@ CREATE TABLE `IntegrantChapterbook` (
 );
 
 CREATE TABLE `CollaborateChapterbook` (
-	`rfc` varchar(13) DEFAULT NULL,
+	`rfc` varchar(20) NOT NULL,
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     KEY `fk_collaborateChapterBook_1` (`rfc`),
@@ -211,7 +211,7 @@ CREATE TABLE `Prototype` (
 	`urlFile`  varchar(100) NOT NULL,
 	`projectName` varchar(80) DEFAULT NULL,
     `impactBA` boolean DEFAULT NULL,
-    `bodyAcademyKey` varchar(15) DEFAULT NULL,
+    `evidenceType` varchar(50) DEFAULT NULL,
 	`evidenceTitle` varchar(80) DEFAULT NULL,
     `registrationResponsible` varchar(100) NOT NULL,
     `registrationDate` date NOT NULL,
@@ -234,7 +234,7 @@ CREATE TABLE `PrototypeStudent` (
 
 
 CREATE TABLE `IntegrantPrototype` (
-	`rfc` varchar(13) DEFAULT NULL,
+	`rfc` varchar(20) NOT NULL,
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
 	CONSTRAINT `fk_prototypeInte_1` FOREIGN KEY (`urlFile`) REFERENCES `Prototype` (`urlFile`)
@@ -245,7 +245,7 @@ CREATE TABLE `IntegrantPrototype` (
 
 
 CREATE TABLE `CollaboratePrototype` (
-	`rfc` varchar(13) DEFAULT NULL,
+	`rfc` varchar(20) NOT NULL,
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     CONSTRAINT `fk_prototypeColl_1` FOREIGN KEY (`urlFile`) REFERENCES `Prototype` (`urlFile`)
@@ -260,13 +260,14 @@ CREATE TABLE `Magazine` (
     `magazineCountry` varchar (100) DEFAULT NULL,
     `index` int DEFAULT NULL,
     PRIMARY KEY (`magazineName`)
+
 );
 
 CREATE TABLE `Article` (
 	`urlFile`  varchar(100) NOT NULL,
 	`projectName` varchar(80) DEFAULT NULL,
     `impactBA` boolean DEFAULT NULL,
-    `bodyAcademyKey` varchar(15) DEFAULT NULL,
+    `evidenceType` varchar(50) DEFAULT NULL,
 	`evidenceTitle` varchar(80) DEFAULT NULL,
     `registrationResponsible` varchar(100) NOT NULL,
     `registrationDate` date NOT NULL,
@@ -299,7 +300,7 @@ CREATE TABLE `ArticleStudent` (
 );
 
 CREATE TABLE `IntegrantArticle` (
-	`rfc` varchar(13) DEFAULT NULL,
+	`rfc` varchar(20) NOT NULL,
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     CONSTRAINT `fk_article_6` FOREIGN KEY (`urlFile`) REFERENCES `Article` (`urlFile`)
@@ -310,7 +311,7 @@ CREATE TABLE `IntegrantArticle` (
 
 
 CREATE TABLE `CollaborateArticle` (
-	`rfc` varchar(13) DEFAULT NULL,
+	`rfc` varchar(20) NOT NULL,
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     CONSTRAINT `fk_article_5` FOREIGN KEY (`urlFile`) REFERENCES `Article` (`urlFile`)
@@ -323,7 +324,7 @@ CREATE TABLE `ReceptionWork` (
 	`urlFile`  varchar(100) NOT NULL,
 	`projectName` varchar(80) DEFAULT NULL,
     `impactBA` boolean DEFAULT NULL,
-    `bodyAcademyKey` varchar(15) DEFAULT NULL,
+    `evidenceType` varchar(50) DEFAULT NULL,
 	`evidenceTitle` varchar(80) DEFAULT NULL,
     `registrationResponsible` varchar(100) NOT NULL,
     `registrationDate` date NOT NULL,
@@ -351,7 +352,7 @@ CREATE TABLE `ReceptionWorkRequirement` (
 
 CREATE TABLE `ReceptionWorkStudent` (
 	`urlFile`  varchar(100) NOT NULL,
-    `student`  varchar(50) DEFAULT NULL,
+    `student`  varchar(50) NOT NULL,
     PRIMARY KEY (`urlFile`, `student`),
     KEY `fk_receptioWorkStudent_1` (`urlFile`),
     CONSTRAINT `fk_receptioWorkStudent_1` FOREIGN KEY (`urlFile`) REFERENCES `ReceptionWork` (`urlFile`)
@@ -359,7 +360,7 @@ CREATE TABLE `ReceptionWorkStudent` (
 );
 
 CREATE TABLE `IntegrantReceptionWork` (
-	`rfc` varchar(13) DEFAULT NULL,
+	`rfc` varchar(20) NOT NULL,
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     KEY `fk_integrantReceptionWork_1` (`rfc`),
@@ -370,7 +371,7 @@ CREATE TABLE `IntegrantReceptionWork` (
 );
 
 CREATE TABLE `CollaborateReceptionWork` (
-	`rfc` varchar(13) DEFAULT NULL,
+	`rfc` varchar(20) NOT NULL,
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     KEY `fk_collaborateReceptionWork_1` (`rfc`),
@@ -516,4 +517,13 @@ CREATE TABLE `Action` (
     CONSTRAINT `fk_action_1` FOREIGN KEY (`goalIdentifier`) REFERENCES `Goal` (`goalIdentifier`)
     ON UPDATE CASCADE
 );
+
+CREATE VIEW `Evidences` AS 
+SELECT prototype.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, integrant.emailUV FROM prototype, integrantprototype, integrant WHERE prototype.urlFile = integrantprototype.urlFile AND integrantprototype.rfc = integrant.rfc
+UNION ALL SELECT article.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, integrant.emailUV FROM article, integrantarticle, integrant WHERE article.urlFile = integrantarticle.urlFile AND integrantarticle.rfc = integrant.rfc
+UNION ALL SELECT book.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, integrant.emailUV FROM book, integrantbook, integrant WHERE book.urlFile = integrantbook.urlFile AND integrantbook.rfc = integrant.rfc
+UNION ALL SELECT receptionwork.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, integrant.emailUV FROM receptionwork, integrantreceptionwork, integrant WHERE receptionwork.urlFile = integrantreceptionwork.urlFile AND integrantreceptionwork.rfc = integrant.rfc;
+
+CREATE VIEW `Students` AS
+SELECT * FROM articlestudent UNION ALL SELECT * FROM prototypestudent UNION ALL SELECT * FROM bookstudent UNION ALL SELECT * FROM receptionworkstudent;
 

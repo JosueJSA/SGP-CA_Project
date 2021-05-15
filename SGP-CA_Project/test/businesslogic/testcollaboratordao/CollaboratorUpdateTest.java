@@ -19,7 +19,7 @@ public class CollaboratorUpdateTest{
     @Test
     public void correctUpdatedCollaborator(){
         INITIALIZER.prepareRequestTestCase();
-        Collaborator oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("arenas@uv.mx");
+        Collaborator oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx");
         Collaborator newCollaborador = new Collaborator(
             "GRTCEVSFTJRB", "María de los Ángeles Arenas Valdes", "arenas@uv.mx", "Activo",
             "SAGA890624HVZNRN09", "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 
@@ -48,9 +48,9 @@ public class CollaboratorUpdateTest{
     @Test
     public void correctUnsubscribeCollaborator(){
         INITIALIZER.prepareRequestTestCase();
-        Collaborator oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("arenas@uv.mx");
+        Collaborator oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx");
         COLLABORATOR_DAO.unsubscribeCollaboratorByEmailUV(oldCollaborator.getEmailUV());
-        Collaborator collaboratorRetrieved = COLLABORATOR_DAO.getCollaboratorByUVmail("arenas@uv.mx");
+        Collaborator collaboratorRetrieved = COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx");
         INITIALIZER.cleanCollaboratorTest(collaboratorRetrieved.getRfc());
         Assert.assertNotEquals(oldCollaborator.getParticipationStatus(), collaboratorRetrieved.getParticipationStatus());
     }
@@ -58,11 +58,11 @@ public class CollaboratorUpdateTest{
     @Test
     public void correctSubscribeCollaborator(){
         INITIALIZER.prepareRequestTestCase();
-        Collaborator oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("arenas@uv.mx");
+        Collaborator oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx");
         COLLABORATOR_DAO.unsubscribeCollaboratorByEmailUV(oldCollaborator.getEmailUV());
-        oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("arenas@uv.mx");
+        oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx");
         COLLABORATOR_DAO.subscribeCollaboratorByEmailUV(oldCollaborator.getEmailUV());
-        Collaborator collaboratorRetrieved = COLLABORATOR_DAO.getCollaboratorByUVmail("arenas@uv.mx");
+        Collaborator collaboratorRetrieved = COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx");
         INITIALIZER.cleanCollaboratorTest(collaboratorRetrieved.getRfc());
         String stateExpected = "Activo";
         Assert.assertEquals(stateExpected, collaboratorRetrieved.getParticipationStatus());

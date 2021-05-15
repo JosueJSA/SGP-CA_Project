@@ -20,7 +20,7 @@ public class IntegrantUpdateTest{
     @Test
     public void testCorrecIntegrantUpdateWithAddSchooling(){
         INITIALIZER.prepareUpdateTestCase();
-        Integrant oldIntegrant =  INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        Integrant oldIntegrant =  INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx");
         Integrant newIntegrant = new Integrant(
             "SAA8906245M8", "Angel Juan Sánchez García", "angelsanchez@uv.mx", "angel", "Activo", "SAGA890624HVZNRN09", 
             "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 41306, "2281394721",
@@ -51,10 +51,10 @@ public class IntegrantUpdateTest{
     @Test
     public void testIncorrectIntegrantDataUpdateNotAdded(){
         INITIALIZER.prepareUpdateTestCase();
-        Integrant oldIntegrant =  INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        Integrant oldIntegrant =  INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx");
         
         Integrant newIntegrant = new Integrant(
-            "AAS285R5EF", "Angel Juan Sánchez García", "angelsanchez@uv.mx", "angel", "Activo", "SAGA890624HVZNRN09", 
+            "AAS285R5EF", "Angel Juan Sánchez García", "integrantTest@uv.mx", "angel", "Activo", "SAGA890624HVZNRN09", 
             "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 41306, "2281394721",
             "UV-CA-127", "PTC", "Integrante", "angelsg89@hotmail.com", "2288146210", "141912288421700"
         );     
@@ -65,15 +65,15 @@ public class IntegrantUpdateTest{
         ));
         
         INTEGRANT_DAO.updateIntegrant(newIntegrant, oldIntegrant.getRfc());
-        Integrant newIntegrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
-        INITIALIZER.cleanIntegrantTest("SAGA8906245M7");
+        Integrant newIntegrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx");
+        INITIALIZER.cleanIntegrantTest("INTEGRANTETEST");
         Assert.assertEquals(oldIntegrant, newIntegrantRetrieved);
     }
     
     @Test
     public void testCorrecIntegrantUpdateWithoutSchooling(){
         INITIALIZER.prepareUpdateTestCase();
-        Integrant oldIntegrant =  INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        Integrant oldIntegrant =  INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx");
         
         Integrant newIntegrant = new Integrant(
             "JAJCUYEDF2", "Angel Juan Sánchez García", "angelsanchez@uv.mx", "angel", "Activo", "SAGA890624HVZNRN09", 

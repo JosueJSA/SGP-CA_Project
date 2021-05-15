@@ -5,9 +5,11 @@
  */
 package sgp.ca.demodao;
 
+import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 /**
  *
@@ -53,6 +55,15 @@ public class AlertGenerator{
         alert.setTitle("Info");
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    
+    public static Optional<ButtonType> showConfirmacionAlert(ActionEvent event, String message){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText(null);
+        alert.setTitle("Confirmación");
+        alert.setContentText(message);
+        Optional<ButtonType> action = alert.showAndWait();
+        return action;
     }
     
 }

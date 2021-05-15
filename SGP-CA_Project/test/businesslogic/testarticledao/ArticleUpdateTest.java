@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package businesslogic.testprototypedao;
+package businesslogic.testarticledao;
 
 /**
  *
- * @author Josue Alarcon
+ * @author josue
  */
-public class PrototypeDeleteTest {
+public class ArticleUpdateTest {
     
 }

@@ -44,7 +44,7 @@ public class IntegrantInsertTest{
     public void incorrectDuplicatedSchoolingIntegrantInsertion(){
         INITIALIZER.prepareRequestTestCase();
         Integrant integrant = new Integrant(
-            "KCV8903456J", "Karen Verdín Cortés", "karen@uv.mx", "karen", "Activo", "KDV890624HVZNRN09", "Mexicana", 
+            "COLABORADORTEST", "Karen Verdín Cortés", "karen@uv.mx", "karen", "Activo", "KDV890624HVZNRN09", "Mexicana", 
             "2012-08-12", "Licenciatura en Ingeniería de Software", 41306, "2281394721", "UV-CA-127",
             "PTC", "Integrante", "karen@hotmail.com", "2288146210", "141912288421700"
         );     
@@ -56,7 +56,7 @@ public class IntegrantInsertTest{
         
         INTEGRANT_DAO.addIntegrant(integrant);
         Integrant integrantRetireved = INTEGRANT_DAO.getIntegrantByUVmail("karen@uv.mx");
-        INITIALIZER.cleanIntegrantTest("SAGA8906245M7");
+        INITIALIZER.cleanIntegrantTest("INTEGRANTETEST");
         Assert.assertNull(integrantRetireved.getBodyAcademyKey());
     }
     

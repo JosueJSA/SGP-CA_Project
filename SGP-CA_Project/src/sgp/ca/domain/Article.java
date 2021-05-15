@@ -15,11 +15,11 @@ public class Article extends Evidence{
     public Article(double isnn, String urlFile, String projectName, 
     String evidenceTitle, String country, String publicationDate, 
     boolean impactAB, String registrationDate, String registrationResponsible, 
-    String studyDegree, String bodyAcademyKey){
+    String studyDegree, String evidenceType){
         super(
             urlFile, projectName, evidenceTitle, country, 
             publicationDate, impactAB, registrationDate, 
-            registrationResponsible, studyDegree, bodyAcademyKey
+            registrationResponsible, studyDegree, evidenceType
         );
         this.isnn = isnn; 
         magazine = new Magazine();
@@ -63,12 +63,10 @@ public class Article extends Evidence{
 
     public Magazine getMagazine() {
         return magazine;
-    }
-
-    public void setMagazine(Magazine magazine) {
+    }  
+    
+    public void setMagazine(Magazine magazine){
         this.magazine = magazine;
     }
-    
-    
     
 }

@@ -22,9 +22,9 @@ public class IntegrantInitializer {
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
     public void prepareRequestTestCase(){
-        if(INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx").getRfc() == null){
+        if(INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx").getRfc() == null){
             Integrant integrant = new Integrant(
-                "SAGA8906245M7", "Angel Juan Sánchez García", "angelsanchez@uv.mx",
+                "INTEGRANTETEST", "Angel Juan Sánchez García", "integrantTest@uv.mx",
                 "password", "Activo", "SAGA890624HVZNRN09", "Mexicano", "2012-08-12", 
                 "Licenciatura en Ingeniería de Software", 41306, "2281394721",
                 "UV-CA-127", "PTC", "Integrante", "angelsg89@hotmail.com", "2288146210", 
@@ -48,14 +48,19 @@ public class IntegrantInitializer {
     
     public void prepareUpdateTestCase(){
         this.prepareRequestTestCase();
-        Integrant integrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        Integrant integrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx");
         integrantRetrieved.setRfc("SAGA8906245M7");
-        INTEGRANT_DAO.updateIntegrant(integrantRetrieved, INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx").getRfc());
+        INTEGRANT_DAO.updateIntegrant(integrantRetrieved, INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx").getRfc());
     }
     
     public void cleanIntegrantTest(String rfcIntegrant){
         Connection connection = CONNECTION.getConnectionDatabase();
         try{
+            PreparedStatement sentenceQuerySchooling = connection.prepareStatement(
+                "DELETE FROM Schooling WHERE rfc = ?;"
+            );
+            sentenceQuerySchooling.setString(1, rfcIntegrant);
+            sentenceQuerySchooling.executeUpdate();
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM Integrant WHERE rfc = ?;"
             );

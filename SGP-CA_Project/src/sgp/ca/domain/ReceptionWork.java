@@ -17,14 +17,14 @@ public class ReceptionWork extends Evidence{
     private List<String> requirements;
     private List<Lgac> lgac;
     
-    public ReceptionWork(String urlFile, String projectName, boolean impactAB, String bodyAcademyKey, String evidenceTitle, 
+    public ReceptionWork(String urlFile, String projectName, boolean impactAB, String evidenceType, String evidenceTitle, 
             String registrationResponsible, String registrationDate, String studyDegree,  String publicationDate, 
             String country, String description, String status, int actualDurationInMonths, 
             int estimatedDurationInMonths, String modality) {
         super(
             urlFile, projectName, evidenceTitle, country, 
             publicationDate, impactAB, registrationDate, 
-            registrationResponsible, studyDegree, bodyAcademyKey
+            registrationResponsible, studyDegree, evidenceType
         );
         this.description = description;
         this.status = status;

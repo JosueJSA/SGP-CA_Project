@@ -15,122 +15,62 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.domain.Collaborator;
+import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Prototype;
 
-public class PrototypeDAO implements IPrototypeDAO {
+public class PrototypeDAO extends EvidenceDAO{
     
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
     @Override
-    public List<Prototype> getPrototypesByIntegrantRFC(String rfc, String limitDate) {
-        List<Prototype> prototypes = new ArrayList<>();
+    public Evidence getEvidenceByUrl(String urlEvidenceFile) {
+        Evidence prototype = new Prototype();
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
-            PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT * FROM Prototype a, IntegrantPrototype i WHERE  a.urlFile = i.urlFile AND i.rfc = ? "
-                + "AND cast(registrationDate as date) < cast( ? as date) order by registrationDate DESC LIMIT 10;"
+            PreparedStatement senenceQuery = connection.prepareStatement(
+                "SELECT * FROM prototype WHERE urlFile = ?;"
             );
-            sentenceQuery.setString(1, rfc);
-            sentenceQuery.setString(2, limitDate);
-            ResultSet resultQuery = sentenceQuery.executeQuery();
-            while(resultQuery.next()){
-                Prototype prototype = this.getOutPrototypeDataFromQuery(resultQuery);
-                prototype.setIntegrants(this.getIntegrantsPrototypeParticipation(connection, prototype.getUrlFile()));
-                prototype.setCollaborators(this.getCollaboratorsPrototypeParticipation(connection, prototype.getUrlFile()));
-                prototype.setStudents(this.getStudentNamesPrototypeParticipation(connection, prototype.getUrlFile()));
-                prototypes.add(prototype);
+            senenceQuery.setString(1, urlEvidenceFile);
+            ResultSet resultQuery = senenceQuery.executeQuery();
+            if(resultQuery.next()){
+                prototype = this.getOutPrototypeDataFromQuery(resultQuery);
+                prototype.setIntegrants(this.getIntegrantsPrototypeParticipation(connection, urlEvidenceFile));
+                prototype.setCollaborators(this.getCollaboratorsPrototypeParticipation(connection, urlEvidenceFile));
+                prototype.setStudents(this.getStudentNamesPrototypeParticipation(connection, urlEvidenceFile));
             }
             connection.commit();
             connection.setAutoCommit(true);
         }catch(SQLException ex){
-            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrototypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             CONNECTION.closeConnection();
-            return prototypes;
+            return prototype;
         }
     }
-
+    
     @Override
-    public List<Prototype> getPrototypesByTitle(String title, String limitDate) {
-        List<Prototype> prototypes = new ArrayList<>();
-        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
-        try{
-            PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT * FROM Prototype WHERE evidenceTitle = ? "
-                + "AND cast(registrationDate as date) < cast( ? as date) order by registrationDate DESC LIMIT 10;"
-            );
-            sentenceQuery.setString(1, title);
-            sentenceQuery.setString(2, limitDate);
-            ResultSet resultQuery = sentenceQuery.executeQuery();
-            while(resultQuery.next()){
-                Prototype prototype = this.getOutPrototypeDataFromQuery(resultQuery);
-                prototype.setIntegrants(this.getIntegrantsPrototypeParticipation(connection, prototype.getUrlFile()));
-                prototype.setCollaborators(this.getCollaboratorsPrototypeParticipation(connection, prototype.getUrlFile()));
-                prototype.setStudents(this.getStudentNamesPrototypeParticipation(connection, prototype.getUrlFile()));
-                prototypes.add(prototype);
-            }
-            connection.commit();
-            connection.setAutoCommit(true);
-        }catch(SQLException ex){
-            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            CONNECTION.closeConnection();
-            return prototypes;
-        }
-    }
-
-    @Override
-    public List<Prototype> getPrototypesByStudent(String studentName, String limitDate) {
-        List<Prototype> prototypes = new ArrayList<>();
-        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
-        try{
-            PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT * FROM Prototype a, PrototypeStudent ast WHERE  a.urlFile = ast.urlFile AND ast.student = ? "
-                + "AND cast(registrationDate as date) < cast( ? as date) order by registrationDate DESC LIMIT 10;"
-            );
-            sentenceQuery.setString(1, studentName);
-            sentenceQuery.setString(2, limitDate);
-            ResultSet resultQuery = sentenceQuery.executeQuery();
-            while(resultQuery.next()){
-                Prototype prototype = this.getOutPrototypeDataFromQuery(resultQuery);
-                prototype.setIntegrants(this.getIntegrantsPrototypeParticipation(connection, prototype.getUrlFile()));
-                prototype.setCollaborators(this.getCollaboratorsPrototypeParticipation(connection, prototype.getUrlFile()));
-                prototype.setStudents(this.getStudentNamesPrototypeParticipation(connection, prototype.getUrlFile()));
-                prototypes.add(prototype);
-            }
-            connection.commit();
-            connection.setAutoCommit(true);
-        }catch(SQLException ex){
-            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            CONNECTION.closeConnection();
-            return prototypes;
-        }
-    }
-
-    @Override
-    public void addPrototype(Prototype newPrototype){
+    public void addNewEvidence(Evidence evidence){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
             PreparedStatement sentence = connection.prepareStatement(
                 "INSERT INTO Prototype VALUES (?,?,?,?,?,?,?,?,?,?,?);"
             );
-            sentence.setString(1, newPrototype.getUrlFile());
-            sentence.setString(2, newPrototype.getProjectName());
-            sentence.setBoolean(3, newPrototype.getImpactAB());
-            sentence.setString(4, newPrototype.getBodyAcademyKey());
-            sentence.setString(5, newPrototype.getEvidenceTitle());
-            sentence.setString(6, newPrototype.getRegistrationResponsible());
-            sentence.setString(7, newPrototype.getRegistrationDate());
-            sentence.setString(8, newPrototype.getStudyDegree());
-            sentence.setString(9, newPrototype.getPublicationDate());
-            sentence.setString(10, newPrototype.getCountry());
-            sentence.setString(11, newPrototype.getFeatures());
+            sentence.setString(1, evidence.getUrlFile());
+            sentence.setString(2, evidence.getProjectName());
+            sentence.setBoolean(3, evidence.getImpactAB());
+            sentence.setString(4, "Prototipo");
+            sentence.setString(5, evidence.getEvidenceTitle());
+            sentence.setString(6, evidence.getRegistrationResponsible());
+            sentence.setString(7, evidence.getRegistrationDate());
+            sentence.setString(8, evidence.getStudyDegree());
+            sentence.setString(9, evidence.getPublicationDate());
+            sentence.setString(10, evidence.getCountry());
+            sentence.setString(11, ((Prototype)evidence).getFeatures());
             sentence.executeUpdate();
-            this.insertIntoStudentPrototype(connection, newPrototype);
-            this.insertIntoIntegrantPrototype(connection, newPrototype);
-            this.insertIntoCollaboratorPrototype(connection, newPrototype);
+            this.insertIntoStudentPrototype(connection, (Prototype)evidence);
+            this.insertIntoIntegrantPrototype(connection, (Prototype)evidence);
+            this.insertIntoCollaboratorPrototype(connection, (Prototype)evidence);
             connection.commit();
             connection.setAutoCommit(true);
         }catch(SQLException sqlException){
@@ -146,34 +86,34 @@ public class PrototypeDAO implements IPrototypeDAO {
     }
 
     @Override
-    public void updatePrototype(Prototype prototype, String oldUrlFile){
+    public void updateEvidence(Evidence evidence, String oldUrlFile){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
             this.deleteStudensFromURLFilePrototype(connection, oldUrlFile);
             this.deleteIntegrantsFromURLFilePrototype(connection, oldUrlFile);
             this.deleteCollaboratorsFromURLFilePrototype(connection, oldUrlFile);
             PreparedStatement sentence = connection.prepareStatement(
-                "UPDATE Prototype SET urlFile = ?, projectName = ?, impactBA = ?, bodyAcademyKey = ?,"
+                "UPDATE Prototype SET urlFile = ?, projectName = ?, impactBA = ?, evidenceType = ?,"
                 + " evidenceTitle = ?, registrationResponsible = ?, registrationDate = ?, "
                 + "studyDegree = ?, publicationDate = ?, country = ?, feautures = ?"
                 + " WHERE urlFile = ?;"
             );
-            sentence.setString(1, prototype.getUrlFile());
-            sentence.setString(2, prototype.getProjectName());
-            sentence.setBoolean(3, prototype.getImpactAB());
-            sentence.setString(4, prototype.getBodyAcademyKey());
-            sentence.setString(5, prototype.getEvidenceTitle());
-            sentence.setString(6, prototype.getRegistrationResponsible());
-            sentence.setString(7, prototype.getRegistrationDate());
-            sentence.setString(8, prototype.getStudyDegree());
-            sentence.setString(9, prototype.getPublicationDate());
-            sentence.setString(10, prototype.getCountry());
-            sentence.setString(11, prototype.getFeatures());
+            sentence.setString(1, evidence.getUrlFile());
+            sentence.setString(2, evidence.getProjectName());
+            sentence.setBoolean(3, evidence.getImpactAB());
+            sentence.setString(4, "Prototipo");
+            sentence.setString(5, evidence.getEvidenceTitle());
+            sentence.setString(6, evidence.getRegistrationResponsible());
+            sentence.setString(7, evidence.getRegistrationDate());
+            sentence.setString(8, evidence.getStudyDegree());
+            sentence.setString(9, evidence.getPublicationDate());
+            sentence.setString(10, evidence.getCountry());
+            sentence.setString(11, ((Prototype)evidence).getFeatures());
             sentence.setString(12, oldUrlFile);
             sentence.executeUpdate();
-            this.insertIntoStudentPrototype(connection, prototype);
-            this.insertIntoIntegrantPrototype(connection, prototype);
-            this.insertIntoCollaboratorPrototype(connection, prototype);
+            this.insertIntoStudentPrototype(connection, (Prototype)evidence);
+            this.insertIntoIntegrantPrototype(connection, (Prototype)evidence);
+            this.insertIntoCollaboratorPrototype(connection, (Prototype)evidence);
             connection.commit();
             connection.setAutoCommit(true);
         }catch(SQLException sqlException){
@@ -189,16 +129,16 @@ public class PrototypeDAO implements IPrototypeDAO {
     }
 
     @Override
-    public void deletePrototypebyURL(String urlFile){
+    public void deleteEvidenceByUrl(String urlEvidenceFile){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
-            this.deleteStudensFromURLFilePrototype(connection, urlFile);
-            this.deleteIntegrantsFromURLFilePrototype(connection, urlFile);
-            this.deleteCollaboratorsFromURLFilePrototype(connection, urlFile);
+            this.deleteStudensFromURLFilePrototype(connection, urlEvidenceFile);
+            this.deleteIntegrantsFromURLFilePrototype(connection, urlEvidenceFile);
+            this.deleteCollaboratorsFromURLFilePrototype(connection, urlEvidenceFile);
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM Prototype WHERE urlFile = ?;"
             );
-            sentenceQuery.setString(1, urlFile);
+            sentenceQuery.setString(1, urlEvidenceFile);
             sentenceQuery.executeUpdate();
             connection.commit();
             connection.setAutoCommit(true);
@@ -215,7 +155,7 @@ public class PrototypeDAO implements IPrototypeDAO {
         }
     }
     
-    public void deleteStudensFromURLFilePrototype(Connection connection, String urlFilePrototype){
+    private void deleteStudensFromURLFilePrototype(Connection connection, String urlFilePrototype){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM PrototypeStudent WHERE urlFile = ?;"
@@ -233,7 +173,7 @@ public class PrototypeDAO implements IPrototypeDAO {
         }
     }
     
-    public void deleteIntegrantsFromURLFilePrototype(Connection connection, String urlFilePrototype){
+    private void deleteIntegrantsFromURLFilePrototype(Connection connection, String urlFilePrototype){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM IntegrantPrototype WHERE urlFile = ?;"
@@ -251,7 +191,7 @@ public class PrototypeDAO implements IPrototypeDAO {
         }
     }
     
-    public void deleteCollaboratorsFromURLFilePrototype(Connection connection, String urlFilePrototype){
+    private void deleteCollaboratorsFromURLFilePrototype(Connection connection, String urlFilePrototype){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM CollaboratePrototype WHERE urlFile = ?;"
@@ -269,7 +209,7 @@ public class PrototypeDAO implements IPrototypeDAO {
         }
     }
     
-    public void insertIntoStudentPrototype(Connection connection, Prototype prototype){
+    private void insertIntoStudentPrototype(Connection connection, Prototype prototype){
         prototype.getStudents().forEach( student -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -290,7 +230,7 @@ public class PrototypeDAO implements IPrototypeDAO {
         });
     }
     
-    public void insertIntoIntegrantPrototype(Connection connection, Prototype prototype){
+    private void insertIntoIntegrantPrototype(Connection connection, Prototype prototype){
         prototype.getIntegrants().forEach( integrant -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -311,7 +251,7 @@ public class PrototypeDAO implements IPrototypeDAO {
         });
     }
     
-    public void insertIntoCollaboratorPrototype(Connection connection, Prototype prototype){
+    private void insertIntoCollaboratorPrototype(Connection connection, Prototype prototype){
         prototype.getCollaborators().forEach( collaborator -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -332,7 +272,7 @@ public class PrototypeDAO implements IPrototypeDAO {
         });
     }
     
-    public Prototype getOutPrototypeDataFromQuery(ResultSet resultPrototypeQuery){
+    private Prototype getOutPrototypeDataFromQuery(ResultSet resultPrototypeQuery){
         Prototype prototype = new Prototype();
         try{
             prototype = new Prototype(
@@ -345,7 +285,7 @@ public class PrototypeDAO implements IPrototypeDAO {
                 resultPrototypeQuery.getString("registrationDate"),
                 resultPrototypeQuery.getString("registrationResponsible"),
                 resultPrototypeQuery.getString("studyDegree"),
-                resultPrototypeQuery.getString("bodyAcademyKey"),
+                resultPrototypeQuery.getString("evidenceType"),
                 resultPrototypeQuery.getString("feautures")
             );
         }catch(SQLException ex){
@@ -355,7 +295,7 @@ public class PrototypeDAO implements IPrototypeDAO {
         }
     }
     
-    public List<Integrant> getIntegrantsPrototypeParticipation(Connection connection, String urlFilePrototype){
+    private List<Integrant> getIntegrantsPrototypeParticipation(Connection connection, String urlFilePrototype){
         List<Integrant> integrants = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -375,7 +315,7 @@ public class PrototypeDAO implements IPrototypeDAO {
         }
     }
     
-    public List<Collaborator> getCollaboratorsPrototypeParticipation(Connection connection, String urlFilePrototype){
+    private List<Collaborator> getCollaboratorsPrototypeParticipation(Connection connection, String urlFilePrototype){
         List<Collaborator> collaborators = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -395,7 +335,7 @@ public class PrototypeDAO implements IPrototypeDAO {
         }
     }
     
-    public List<String> getStudentNamesPrototypeParticipation(Connection connection, String urlFilePrototype){
+    private List<String> getStudentNamesPrototypeParticipation(Connection connection, String urlFilePrototype){
         List<String> students = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(

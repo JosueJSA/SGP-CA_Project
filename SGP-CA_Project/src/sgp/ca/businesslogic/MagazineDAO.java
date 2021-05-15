@@ -41,7 +41,18 @@ public class MagazineDAO implements IMagazineDAO{
 
     @Override
     public void deleteMagazineByName(String nameMagazine) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Magazine magazine = new Magazine();
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "DELETE FROM Magazine WHERE magazineName = ?;"
+            );
+            sentenceQuery.setString(1, nameMagazine);
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            Logger.getLogger(Magazine.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+        }
     }
 
     @Override

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -12,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="893.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="893.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.LoginController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="893.0" style="-fx-background-color: black;" BorderPane.alignment="TOP_RIGHT">
          <children>
@@ -51,7 +57,7 @@
                            <font>
                               <Font size="15.0" />
                            </font></Label>
-                          <TextField prefHeight="32.0" prefWidth="387.0" VBox.vgrow="ALWAYS" />
+                          <TextField fx:id="fieldEmailUv" prefHeight="32.0" prefWidth="387.0" VBox.vgrow="ALWAYS" />
                           <Label maxWidth="1.7976931348623157E308" text="Contraseña">
                            <font>
                               <Font size="15.0" />
@@ -59,7 +65,7 @@
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin></Label>
-                          <PasswordField prefHeight="32.0" prefWidth="387.0" VBox.vgrow="ALWAYS" />
+                          <PasswordField fx:id="fieldPasswordMailUv" prefHeight="32.0" prefWidth="387.0" VBox.vgrow="ALWAYS" />
                           <Label maxWidth="1.7976931348623157E308" text="Clave de Cuerpo Académico perteneciente">
                            <font>
                               <Font size="15.0" />
@@ -67,8 +73,8 @@
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin></Label>
-                          <TextField prefHeight="34.0" prefWidth="387.0" VBox.vgrow="ALWAYS" />
-                          <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" prefWidth="387.0" text="INGRESAR" VBox.vgrow="ALWAYS">
+                          <TextField fx:id="fieldBodyAcademyKey" prefHeight="34.0" prefWidth="387.0" VBox.vgrow="ALWAYS" />
+                          <Button fx:id="btnSignIn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#signIn" prefHeight="35.0" prefWidth="387.0" text="INGRESAR" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin></Button>
@@ -80,8 +86,8 @@
                <bottom>
                   <HBox alignment="CENTER_RIGHT" prefHeight="32.0" prefWidth="447.0" spacing="15.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label text="Registrar Cuerpo Académico" textFill="#2b00a1" />
-                        <Label text="Registrarme" textFill="#5300ee">
+                        <Label fx:id="btnSignUpNewBdyAcademy" onMouseClicked="#signUpNewBdyAcademy" text="Registrar Cuerpo Académico" textFill="#2b00a1" />
+                        <Label fx:id="btnSignUpNewUser" onMouseClicked="#signUpNewUser" text="Registrarme" textFill="#5300ee">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>

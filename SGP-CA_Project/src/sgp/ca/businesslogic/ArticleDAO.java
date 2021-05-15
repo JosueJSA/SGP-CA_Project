@@ -16,127 +16,65 @@ import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.domain.Article;
 import sgp.ca.domain.Collaborator;
+import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Magazine;
 
-public class ArticleDAO implements IArticleDAO{
+public class ArticleDAO extends EvidenceDAO {
     
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     private final MagazineDAO MAGAZINE_DAO = new MagazineDAO();
     
     @Override
-    public List<Article> getArticleByIntegrantRFC(String rfc, String limitDate) {
-        List<Article> articles = new ArrayList<>();
+    public Evidence getEvidenceByUrl(String urlEvidenceFile) {
+        Article article = new Article();
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
-            PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT * FROM Article a, IntegrantArticle i WHERE  a.urlFile = i.urlFile AND i.rfc = ? "
-                + "AND cast(registrationDate as date) < cast( ? as date) order by registrationDate DESC LIMIT 10;"
+            PreparedStatement senenceQuery = connection.prepareStatement(
+                "SELECT * from article WHERE urlFile = ?;"
             );
-            sentenceQuery.setString(1, rfc);
-            sentenceQuery.setString(2, limitDate);
-            ResultSet resultQuery = sentenceQuery.executeQuery();
-            while(resultQuery.next()){
-                Article article = this.getOutArticleDataFromQuery(resultQuery);
-                article.setIntegrants(this.getIntegrantArticleParticipation(connection, article.getUrlFile()));
-                article.setCollaborators(this.getCollaboratorArticleParticipation(connection, article.getUrlFile()));
-                article.setStudents(this.getStudentsArticleParticipation(connection, article.getUrlFile()));
+            senenceQuery.setString(1, urlEvidenceFile);
+            ResultSet resultQuery = senenceQuery.executeQuery();
+            if(resultQuery.next()){
+                article = this.getOutArticleDataFromQuery(resultQuery);
                 article.setMagazine(this.getMagazineArticleParticipation(connection, article.getUrlFile()));
-                articles.add(article);
+                article.setIntegrants(this.getIntegrantArticleParticipation(connection, urlEvidenceFile));
+                article.setCollaborators(this.getCollaboratorArticleParticipation(connection, urlEvidenceFile));
+                article.setStudents(this.getStudentsArticleParticipation(connection, urlEvidenceFile));
             }
             connection.commit();
             connection.setAutoCommit(true);
         }catch(SQLException ex){
-            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PrototypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             CONNECTION.closeConnection();
-            return articles;
+            return article;
         }
     }
 
     @Override
-    public List<Article> getArticleByTitle(String title, String limitDate) {
-        List<Article> articles = new ArrayList<>();
-        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
-        try{
-            PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT * FROM Article WHERE evidenceTitle = ? "
-                + "AND cast(registrationDate as date) < cast( ? as date) order by registrationDate DESC LIMIT 10;"
-            );
-            sentenceQuery.setString(1, title);
-            sentenceQuery.setString(2, limitDate);
-            ResultSet resultQuery = sentenceQuery.executeQuery();
-            while(resultQuery.next()){
-                Article article = this.getOutArticleDataFromQuery(resultQuery);
-                article.setIntegrants(this.getIntegrantArticleParticipation(connection, article.getUrlFile()));
-                article.setCollaborators(this.getCollaboratorArticleParticipation(connection, article.getUrlFile()));
-                article.setStudents(this.getStudentsArticleParticipation(connection, article.getUrlFile()));
-                article.setMagazine(this.getMagazineArticleParticipation(connection, article.getUrlFile()));
-                articles.add(article);
-            }
-            connection.commit();
-            connection.setAutoCommit(true);
-        }catch(SQLException ex){
-            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            CONNECTION.closeConnection();
-            return articles;
-        }
-    }
-
-    @Override
-    public List<Article> getArticlesByStudent(String studentName, String limitDate){
-        List<Article> articles = new ArrayList<>();
-        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
-        try{
-            PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT * FROM Article a, ArticleStudent ast WHERE  a.urlFile = ast.urlFile AND ast.student = ? "
-                + "AND cast(registrationDate as date) < cast( ? as date) order by registrationDate DESC LIMIT 10;"
-            );
-            sentenceQuery.setString(1, studentName);
-            sentenceQuery.setString(2, limitDate);
-            ResultSet resultQuery = sentenceQuery.executeQuery();
-            while(resultQuery.next()){
-                Article article = this.getOutArticleDataFromQuery(resultQuery);
-                article.setIntegrants(this.getIntegrantArticleParticipation(connection, article.getUrlFile()));
-                article.setCollaborators(this.getCollaboratorArticleParticipation(connection, article.getUrlFile()));
-                article.setStudents(this.getStudentsArticleParticipation(connection, article.getUrlFile()));
-                article.setMagazine(this.getMagazineArticleParticipation(connection, article.getUrlFile()));
-                articles.add(article);
-            }
-            connection.commit();
-            connection.setAutoCommit(true);
-        }catch(SQLException ex){
-            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            CONNECTION.closeConnection();
-            return articles;
-        }
-    }
-
-    @Override
-    public void addArticle(Article newArticle){
+    public void addNewEvidence(Evidence evidence){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
             PreparedStatement sentence = connection.prepareStatement(
                 "INSERT INTO Article VALUES (?,?,?,?,?,?,?,?,?,?,?);"
             );
-            sentence.setString(1, newArticle.getUrlFile());
-            sentence.setString(2, newArticle.getProjectName());
-            sentence.setBoolean(3, newArticle.getImpactAB());
-            sentence.setString(4, newArticle.getBodyAcademyKey());
-            sentence.setString(5, newArticle.getEvidenceTitle());
-            sentence.setString(6, newArticle.getRegistrationResponsible());
-            sentence.setString(7, newArticle.getRegistrationDate());
-            sentence.setString(8, newArticle.getStudyDegree());
-            sentence.setString(9, newArticle.getPublicationDate());
-            sentence.setString(10, newArticle.getCountry());
-            sentence.setDouble(11, newArticle.getIsnn());
+            sentence.setString(1, evidence.getUrlFile());
+            sentence.setString(2, evidence.getProjectName());
+            sentence.setBoolean(3, evidence.getImpactAB());
+            sentence.setString(4, "Artículo");
+            sentence.setString(5, evidence.getEvidenceTitle());
+            sentence.setString(6, evidence.getRegistrationResponsible());
+            sentence.setString(7, evidence.getRegistrationDate());
+            sentence.setString(8, evidence.getStudyDegree());
+            sentence.setString(9, evidence.getPublicationDate());
+            sentence.setString(10, evidence.getCountry());
+            sentence.setDouble(11, ((Article)evidence).getIsnn());
             sentence.executeUpdate();
-            this.insertIntoArticleMagazine(connection, newArticle);
-            this.insertIntoStudentArticle(connection, newArticle);
-            this.insertIntoIntegrantArticle(connection, newArticle);
-            this.insertIntoCollaboratorArticle(connection, newArticle);
+            this.insertIntoArticleMagazine(connection, (Article)evidence);
+            this.insertIntoStudentArticle(connection, (Article)evidence);
+            this.insertIntoIntegrantArticle(connection, (Article)evidence);
+            this.insertIntoCollaboratorArticle(connection, (Article)evidence);
             connection.commit();
             connection.setAutoCommit(true);
         }catch(SQLException sqlException){
@@ -152,7 +90,7 @@ public class ArticleDAO implements IArticleDAO{
     }
 
     @Override
-    public void updateArticle(Article article, String oldUrlFile) {
+    public void updateEvidence(Evidence evidence, String oldUrlFile) {
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
             this.deleteCollaboratorsFromURLFileArticle(connection, oldUrlFile);
@@ -160,28 +98,28 @@ public class ArticleDAO implements IArticleDAO{
             this.deleteMagazineFromURLFileArticle(connection, oldUrlFile);
             this.deleteStudensFromURLFileArticle(connection, oldUrlFile);
             PreparedStatement sentence = connection.prepareStatement(
-                "UPDATE Article SET urlFile = ?, projectName = ?, impactBA = ?, bodyAcademyKey = ?,"
+                "UPDATE Article SET urlFile = ?, projectName = ?, impactBA = ?, evidenceType = ?,"
                 + " evidenceTitle = ?, registrationResponsible = ?, registrationDate = ?, "
                 + "studyDegree = ?, publicationDate = ?, country = ?, isnn = ?"
                 + " WHERE urlFile = ?;"
             );
-            sentence.setString(1, article.getUrlFile());
-            sentence.setString(2, article.getProjectName());
-            sentence.setBoolean(3, article.getImpactAB());
-            sentence.setString(4, article.getBodyAcademyKey());
-            sentence.setString(5, article.getEvidenceTitle());
-            sentence.setString(6, article.getRegistrationResponsible());
-            sentence.setString(7, article.getRegistrationDate());
-            sentence.setString(8, article.getStudyDegree());
-            sentence.setString(9, article.getPublicationDate());
-            sentence.setString(10, article.getCountry());
-            sentence.setDouble(11, article.getIsnn());
+            sentence.setString(1, evidence.getUrlFile());
+            sentence.setString(2, evidence.getProjectName());
+            sentence.setBoolean(3, evidence.getImpactAB());
+            sentence.setString(4, "Artículo");
+            sentence.setString(5, evidence.getEvidenceTitle());
+            sentence.setString(6, evidence.getRegistrationResponsible());
+            sentence.setString(7, evidence.getRegistrationDate());
+            sentence.setString(8, evidence.getStudyDegree());
+            sentence.setString(9, evidence.getPublicationDate());
+            sentence.setString(10, evidence.getCountry());
+            sentence.setDouble(11, ((Article)evidence).getIsnn());
             sentence.setString(12, oldUrlFile);
             sentence.executeUpdate();
-            this.insertIntoArticleMagazine(connection, article);
-            this.insertIntoCollaboratorArticle(connection, article);
-            this.insertIntoIntegrantArticle(connection, article);
-            this.insertIntoStudentArticle(connection, article);
+            this.insertIntoArticleMagazine(connection, (Article)evidence);
+            this.insertIntoCollaboratorArticle(connection, (Article)evidence);
+            this.insertIntoIntegrantArticle(connection, (Article)evidence);
+            this.insertIntoStudentArticle(connection, (Article)evidence);
             connection.commit();
             connection.setAutoCommit(true);
         }catch(SQLException sqlException){
@@ -197,17 +135,17 @@ public class ArticleDAO implements IArticleDAO{
     }
 
     @Override
-    public void deleteArticlebyURL(String urlFileArticle){
+    public void deleteEvidenceByUrl(String urlEvidenceFile){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
-            this.deleteStudensFromURLFileArticle(connection, urlFileArticle);
-            this.deleteIntegrantsFromURLFileArticle(connection, urlFileArticle);
-            this.deleteCollaboratorsFromURLFileArticle(connection, urlFileArticle);
-            this.deleteMagazineFromURLFileArticle(connection, urlFileArticle);
+            this.deleteStudensFromURLFileArticle(connection, urlEvidenceFile);
+            this.deleteIntegrantsFromURLFileArticle(connection, urlEvidenceFile);
+            this.deleteCollaboratorsFromURLFileArticle(connection, urlEvidenceFile);
+            this.deleteMagazineFromURLFileArticle(connection, urlEvidenceFile);
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM Article WHERE urlFile = ?;"
             );
-            sentenceQuery.setString(1, urlFileArticle);
+            sentenceQuery.setString(1, urlEvidenceFile);
             sentenceQuery.executeUpdate();
             connection.commit();
             connection.setAutoCommit(true);
@@ -392,7 +330,7 @@ public class ArticleDAO implements IArticleDAO{
                 resultArticleQuery.getString("registrationDate"),
                 resultArticleQuery.getString("registrationResponsible"),
                 resultArticleQuery.getString("studyDegree"),
-                resultArticleQuery.getString("bodyAcademyKey")
+                resultArticleQuery.getString("evidenceType")
             );
         }catch(SQLException ex){
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -480,4 +418,5 @@ public class ArticleDAO implements IArticleDAO{
             return magazine;
         }
     }
+    
 }

@@ -12,17 +12,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import sgp.ca.businesslogic.GeneralResumeDAO;
-import sgp.ca.domain.GeneralResume;
 
 /**
  * FXML Controller class
  *
- * @author Josue Alarcon
+ * @author josue
  */
 public class GeneralResumeController implements Initializable {
-    
-    private final GeneralResumeDAO GENERAL_RESUME_DAO = new GeneralResumeDAO();
 
     @FXML
     private TextField bodyAcademyNameField;
@@ -48,15 +44,7 @@ public class GeneralResumeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        GeneralResume general = GENERAL_RESUME_DAO.getGeneralResumeByKey("UV-CA-127");
-        bodyAcademyNameField.setText(general.getBodyAcademyName());
-        bdyAcademyKeyField.setText(general.getBodyAcademyKey());
-        areaAscriptionFiel.setText(general.getAscriptionArea());
-        ascriptionUnitField.setText(general.getAscriptionUnit());
-        consolidationDegreeField.setText(general.getConsolidationDegree());
-        generalTarjetField.setText(general.getGeneralTarjet());
-        missionField.setText(general.getMission());
-        visionField.setText(general.getVision());
+        // TODO
     }    
     
 }

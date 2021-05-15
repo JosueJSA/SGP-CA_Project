@@ -23,10 +23,9 @@ public class CollaboratorRequestTest {
         INITIALIZER.prepareRequestTestCase();
         CollaboratorDAO integrantDao = new CollaboratorDAO();
         Collaborator integrant = integrantDao.getCollaboratorByUVmail("prueba@uv.mx");
-        System.out.println(integrant.getRfc());
         String rfcExcpected = "COLABORADORTEST";
         String rfcRetrived = integrant.getRfc(); 
-        INITIALIZER.cleanCollaboratorTest(rfcRetrived); 
+        INITIALIZER.cleanCollaboratorTest("COLABORADORTEST"); 
         Assert.assertEquals(rfcExcpected, rfcRetrived);
     }
     

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="516.0" prefWidth="974.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MemberController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="482.0" prefWidth="974.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MemberController">
    <bottom>
       <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="974.0" spacing="10.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
          <children>
@@ -75,53 +75,36 @@
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label text="RFC: " />
-                  <Label text="Nombre completo:" GridPane.rowIndex="2" />
-                  <Label text="CURP:" GridPane.rowIndex="6" />
-                  <Label text="Nacionalidad:" GridPane.rowIndex="8" />
+                  <Label text="Nombre completo:" GridPane.rowIndex="1" />
+                  <Label text="CURP:" GridPane.rowIndex="3" />
+                  <Label text="Nacionalidad:" GridPane.rowIndex="4" />
                   <Label text="Fecha de admisión:" GridPane.columnIndex="2" />
-                  <Label text="Programa educativo:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <Label text="Estado:" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-                  <Label text="Numero de personal:" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-                  <Label text="Número celular:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                  <Label text="Correo institucional:" GridPane.rowIndex="4" />
-                  <Label text="Cuerpo académico:" GridPane.rowIndex="10" />
-                  <TextField fx:id="memberRFCField" accessibleHelp="13 Caracteres (Solo letras)" accessibleText="Ejemplo: GHWERDFT4YHF3" promptText="Ejemplo: GHWERDFT4YHF3" GridPane.columnIndex="1" />
-                  <TextField fx:id="memberFullNameField" accessibleHelp="Nombre(s) + Apellido paterno + apellido materno (Solo letras)" accessibleText="Ejemplo: Josué Sanagabriel Alarcón" promptText="Ejemplo: Josué Sanagabriel Alarcón" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="memberEmailUVField" accessibleHelp="Terminación: @uv.mx (Caracteres alfanumpericos)" accessibleText="Ejemplo: josue@estudiantes.uv.mx" promptText="Ejemplo: josue@estudiantes.uv.mx" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <TextField fx:id="memberCurpField" accessibleHelp="18 Carteres alfanumpericos (NO címbolos)" promptText="Ejemplo: 3FU5YS67YDGLO8SUR" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                  <TextField fx:id="memberNationalityField" accessibleHelp="Solo letras" accessibleText="Ejemplo: Mexicano (a)" promptText="Ejemplo: Mexicano (a)" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                  <TextField fx:id="memberBodyAcademyNameField" accessibleHelp="Solo letras" accessibleText="Ejemplo: Ingeniería de software" promptText="Ejemplo: Ingeniería de software" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                  <TextField fx:id="memberEducationalProgramField" accessibleHelp="Solo letras" promptText="Ejemplo: Ingenieria de software" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <TextField fx:id="memberCellNumberField" accessibleHelp="10 dígitos (Solo números enteros)" promptText="Ejemplo: 22-82-90-98-34" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                  <TextField fx:id="memberStateField" accessibleHelp="Solo letras" promptText="Ejemplo: Veracruz" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-                  <TextField fx:id="memberStaffNumberField" accessibleHelp="5 números enteros" promptText="Ejemplo: 23643" GridPane.columnIndex="3" GridPane.rowIndex="8" />
-                  <DatePicker fx:id="memberRegistrationDateField" maxWidth="1.7976931348623157E308" promptText="Ejmplo: 2020/12/12" GridPane.columnIndex="3" />
-                  <Label fx:id="lblMemberRfcHelp" maxWidth="1.7976931348623157E308" textFill="#fc0000" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-                  <Label fx:id="lblMemberDateHelp" maxWidth="1.7976931348623157E308" textFill="RED" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <Label fx:id="lblMemberFullNameHelp" maxWidth="1.7976931348623157E308" textFill="RED" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-                  <Label fx:id="lblMemberEducationalProgramHelp" maxWidth="1.7976931348623157E308" textFill="RED" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-                  <Label fx:id="lblMemberEmailUvHelp" maxWidth="1.7976931348623157E308" textFill="RED" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
-                  <Label fx:id="lblMemberCellNumberHelp" maxWidth="1.7976931348623157E308" textFill="RED" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
-                  <Label fx:id="lblMemberCurpHelp" maxWidth="1.7976931348623157E308" textFill="RED" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" />
-                  <Label fx:id="lblMemberStateHelp" maxWidth="1.7976931348623157E308" textFill="RED" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="7" />
-                  <Label fx:id="lblMemberNationalityHelp" maxWidth="1.7976931348623157E308" textFill="RED" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="9" />
-                  <Label fx:id="lblMemberStaffNumberHelp" maxWidth="1.7976931348623157E308" textFill="RED" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="9" />
-                  <Label fx:id="lblMemberBosyAcademyNameHelp" maxWidth="1.7976931348623157E308" textFill="RED" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="11" />
+                  <Label text="Programa educativo:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Label text="Estado:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Label text="Numero de personal:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <Label text="Número celular:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Label text="Correo institucional:" GridPane.rowIndex="2" />
+                  <Label text="Cuerpo académico:" GridPane.rowIndex="5" />
+                  <TextField fx:id="memberRFCField" accessibleHelp="RFC" accessibleText="Ejemplo: GHWERDFT4YHF3" promptText="Ejemplo: GHWERDFT4YHF3" GridPane.columnIndex="1" />
+                  <TextField fx:id="memberFullNameField" accessibleHelp="Nombre(s) + Apellido paterno + apellido materno (Solo letras)" accessibleText="Ejemplo: Josué Sanagabriel Alarcón" promptText="Ejemplo: Josué Sanagabriel Alarcón" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="memberEmailUVField" accessibleHelp="Terminación: @uv.mx (Caracteres alfanumpericos)" accessibleText="Ejemplo: josue@estudiantes.uv.mx" promptText="Ejemplo: josue@estudiantes.uv.mx" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="memberCurpField" accessibleHelp="18 Carteres alfanumpericos (NO címbolos)" promptText="Ejemplo: 3FU5YS67YDGLO8SUR" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="memberNationalityField" accessibleHelp="Solo letras" accessibleText="Ejemplo: Mexicano (a)" promptText="Ejemplo: Mexicano (a)" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="memberBodyAcademyNameField" accessibleHelp="Solo letras" accessibleText="Ejemplo: Ingeniería de software" promptText="Ejemplo: Ingeniería de software" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="memberEducationalProgramField" accessibleHelp="Solo letras" promptText="Ejemplo: Ingenieria de software" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="memberCellNumberField" accessibleHelp="10 dígitos (Solo números enteros)" promptText="Ejemplo: 22-82-90-98-34" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <TextField fx:id="memberStateField" accessibleHelp="Solo letras" promptText="Ejemplo: Veracruz" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <TextField fx:id="memberStaffNumberField" accessibleHelp="5 números enteros" promptText="Ejemplo: 23643" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <DatePicker fx:id="memberRegistrationDateField" editable="false" maxWidth="1.7976931348623157E308" promptText="Ejmplo: 2020/12/12" GridPane.columnIndex="3" />
                </children>
             </GridPane>
          </children>

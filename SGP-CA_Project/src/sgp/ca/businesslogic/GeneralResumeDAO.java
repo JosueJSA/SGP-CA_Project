@@ -8,6 +8,8 @@ package sgp.ca.businesslogic;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
@@ -17,6 +19,25 @@ import sgp.ca.domain.Integrant;
 public class GeneralResumeDAO implements IGeneralResumeDAO{
 
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
+    
+    @Override
+    public List<String> getGeneralResumeKeys(){
+        List<String> generalResumeKeys = new ArrayList<>();
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT bodyAcademyKey FROM generalresume;"
+            );
+            ResultSet queryResult = sentenceQuery.executeQuery();
+            while(queryResult.next()){
+                generalResumeKeys.add(queryResult.getString("bodyAcademyKey"));
+            }
+        }catch(SQLException sqlException){
+            Logger.getLogger(GeneralResumeDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return generalResumeKeys;
+        }
+    }
     
     @Override
     public GeneralResume getGeneralResumeByKey(String bodyAcademyKey) {

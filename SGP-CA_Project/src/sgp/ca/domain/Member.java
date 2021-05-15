@@ -144,5 +144,5 @@ abstract class Member {
         }
         return isEqual;
     }
-    
+        
 }

@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 
 public class ConnectionDatabase {
     
-    private final String URL = "jdbc:mysql://185.31.40.56:3306/josuesa_sgp-ca";
-    private final String USER = "josuesa_admin";
-    private final String PASSWORD = "sgp-caEJJ21teamA_full4k1080p";
+    private final String URL = "jdbc:mysql://localhost:59824/josuesa_sgp_ca";
+    private final String USER = "root";
+    private final String PASSWORD = "";
     private Connection connectionDatabase;
     
     public Connection getConnectionDatabase(){

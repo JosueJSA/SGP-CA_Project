@@ -19,7 +19,7 @@ public abstract class Evidence {
     private String registrationResponsible;
     private String studyDegree;
     private String projectName;
-    private String bodyAcademyKey;
+    private String evidenceType;
     private List<String> students;
     private List<Integrant> integrants;
     private List<Collaborator> collaborators;
@@ -27,7 +27,7 @@ public abstract class Evidence {
 
     public Evidence(String urlFile, String projectName, String evidenceTitle, 
     String country, String publicationDate, boolean impactAB, String registrationDate,
-    String registrationResponsible, String studyDegree, String bodyAcademyKey){
+    String registrationResponsible, String studyDegree, String evidenceType){
         this.urlFile = urlFile;
         this.projectName = projectName;
         this.evidenceTitle = evidenceTitle;
@@ -37,7 +37,7 @@ public abstract class Evidence {
         this.registrationDate = registrationDate;
         this.registrationResponsible = registrationResponsible;
         this.studyDegree = studyDegree;
-        this.bodyAcademyKey = bodyAcademyKey;
+        this.evidenceType = evidenceType;
         this.students = new ArrayList<>();
         this.integrants = new ArrayList<>();
         this.collaborators = new ArrayList<>();
@@ -121,12 +121,12 @@ public abstract class Evidence {
         this.projectName = projectName;
     }
 
-    public String getBodyAcademyKey() {
-        return bodyAcademyKey;
+    public String getEvidenceType() {
+        return evidenceType;
     }
 
-    public void setBodyAcademyKey(String bodyAcademyKey) {
-        this.bodyAcademyKey = bodyAcademyKey;
+    public void setEvidenceType(String evidenceType) {
+        this.evidenceType = evidenceType;
     }
 
     public List<String> getStudents() {
