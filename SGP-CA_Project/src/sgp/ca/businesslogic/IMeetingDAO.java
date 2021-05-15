@@ -12,7 +12,7 @@ import sgp.ca.domain.Meeting;
 public interface IMeetingDAO {
     
     public List<Meeting> getAllMeetings();
-    public Meeting getMeeting(String meetingDate, String meetingTime);
+    public Meeting getMeeting(int meetingKey);
     public List<Meeting> getMeetingsbyDate(String meetingDate);
     public void addMeeting(Meeting newMeeting);
     public void updateMeeting(Meeting meeting, Meeting oldMeeting);

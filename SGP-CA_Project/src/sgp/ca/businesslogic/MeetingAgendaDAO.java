@@ -24,15 +24,15 @@ public class MeetingAgendaDAO implements IMeetingAgendaDAO{
     public void addMeetingAgenda(Connection connection, Meeting meeting) {
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "INSERT INTO MeetingAgenda (meetingDate, meetingTime, totalTime, "
-                + "estimatedTotalTime, numberTopics) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO MeetingAgenda (meetingKey, totalTime, "
+                + "estimatedTotalTime, numberTopics) VALUES (?, ?, ?, ?)",
                 PreparedStatement.RETURN_GENERATED_KEYS
             );
-            sentenceQuery.setString(1, meeting.getMeetingDate());
-            sentenceQuery.setString(2, meeting.getMeetingTime());
-            sentenceQuery.setString(3, meeting.getMeetingAgenda().getTotalTime());
-            sentenceQuery.setString(4, meeting.getMeetingAgenda().getEstimatedTotalTime());
-            sentenceQuery.setInt(5, meeting.getMeetingAgenda().getTotaltopics());
+            sentenceQuery.setInt(1, meeting.getMeetingKey());
+            sentenceQuery.setString(2, meeting.getMeetingAgenda().getTotalTime());
+            sentenceQuery.setString(3, meeting.getMeetingAgenda().getEstimatedTotalTime());
+            sentenceQuery.setInt(4, meeting.getMeetingAgenda().getTotaltopics());
+            sentenceQuery.executeUpdate();
             this.updateMeetingAgendaWithKeyGenerated(sentenceQuery, meeting.getMeetingAgenda());
             topicDAO.addTopic(connection, meeting.getMeetingAgenda());
             prerequisiteDAO.addPrerequisite(connection, meeting.getMeetingAgenda());
@@ -47,19 +47,20 @@ public class MeetingAgendaDAO implements IMeetingAgendaDAO{
     }
 
     @Override
-    public MeetingAgenda getMeetingAgendaByMeeting(String meetingDate, String meetingTime) {
+    public MeetingAgenda getMeetingAgendaByMeeting(int meetingKey) {
         MeetingAgenda newMeetingAgenda = new MeetingAgenda();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM MeetingAgenda WHERE meetingDate = ? AND meetingTime = ?;"
+                "SELECT * FROM MeetingAgenda WHERE meetingKey = ?;"
             );
-            sentenceQuery.setString(1, meetingDate);
-            sentenceQuery.setString(2, meetingTime);
+            sentenceQuery.setInt(1, meetingKey);
             ResultSet queryResult = sentenceQuery.executeQuery();
-            newMeetingAgenda.setMeetingAgendaKey(queryResult.getInt("meetingAgendaKey"));
-            newMeetingAgenda.setTotalTime(queryResult.getTime("totalTime").toString());
-            newMeetingAgenda.setEstimatedTotalTime(queryResult.getTime("estimatedTotalTime").toString());
-            newMeetingAgenda.setTotaltopics(queryResult.getInt("numberTopics"));
+            if(queryResult.next()){newMeetingAgenda = new MeetingAgenda(
+                queryResult.getInt("meetingAgendaKey"),
+                queryResult.getTime("totalTime").toString(),
+                queryResult.getTime("estimatedTotalTime").toString(),
+                queryResult.getInt("numberTopics")
+            );}
             newMeetingAgenda.setTopics(topicDAO.getTopicsByAgendaMeeting(newMeetingAgenda.getMeetingAgendaKey()));
             newMeetingAgenda.setPrerequisites(prerequisiteDAO.getPrerequisiteByAgendaMeeting(newMeetingAgenda.getMeetingAgendaKey()));
         }catch(SQLException sqlException){

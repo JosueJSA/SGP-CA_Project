@@ -12,5 +12,5 @@ import sgp.ca.domain.Meeting;
 
 public interface IAssistantRolDAO {
     public void addAssistantRol(Connection connection, Meeting meeting);
-    public List<AssistantRol> getAssistantsRolByMeeting(String meetingDate, String meetingTime);
+    public List<AssistantRol> getAssistantsRolByMeeting(int meetingKey);
 }

@@ -12,5 +12,5 @@ import sgp.ca.domain.Meeting;
 
 public interface ICommentDAO {
     public void addComment(Connection connection, Meeting meeting);
-    public List<Comment> getCommentsByMeeting(String meetingDate, String meetingTime);
+    public List<Comment> getCommentsByMeeting(int meetingKey);
 }

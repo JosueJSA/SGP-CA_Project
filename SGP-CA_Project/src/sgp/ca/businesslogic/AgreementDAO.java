@@ -25,15 +25,14 @@ public class AgreementDAO implements IAgreementDAO{
         meeting.getAgreements().forEach( agreement -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
-                    "INSERT INTO Agreement (meetingDate, meetingTime, "
-                   + "descriptionAgreement, responsibleAgreement, deliveryDate) "
-                   + "VALUES(?,?,?,?,?);"
+                    "INSERT INTO Agreement (meetingKey, descriptionAgreement, "
+                    + "responsibleAgreement, deliveryDate) "
+                    + "VALUES(?,?,?,?);"
                 );
-                sentenceQuery.setString(1, meeting.getMeetingDate());
-                sentenceQuery.setString(2, meeting.getMeetingTime());
-                sentenceQuery.setString(3, agreement.getDescriptionAgreement());
-                sentenceQuery.setString(4, agreement.getResponsibleAgreement());
-                sentenceQuery.setString(5, agreement.getDeliveryDate());
+                sentenceQuery.setInt(1, meeting.getMeetingKey());
+                sentenceQuery.setString(2, agreement.getDescriptionAgreement());
+                sentenceQuery.setString(3, agreement.getResponsibleAgreement());
+                sentenceQuery.setString(4, agreement.getDeliveryDate());
                 sentenceQuery.executeUpdate();
             }catch(SQLException sqlException){
                 try{
@@ -47,14 +46,13 @@ public class AgreementDAO implements IAgreementDAO{
     }
 
     @Override
-    public List<Agreement> getAgreementListByMeeting(String meetingDate, String meetingTime) {
+    public List<Agreement> getAgreementListByMeeting(int meetingKey) {
         List<Agreement> agreementsList = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Agreement WHERE meetingDate = ? AND meetingTime = ?;"
+                "SELECT * FROM Agreement WHERE meetingKey = ?;"
             );
-            sentenceQuery.setString(1, meetingDate);
-            sentenceQuery.setString(2, meetingTime);
+            sentenceQuery.setInt(1, meetingKey);
             ResultSet queryResult = sentenceQuery.executeQuery();
             while(queryResult.next()){
                 Agreement agreement = new Agreement(

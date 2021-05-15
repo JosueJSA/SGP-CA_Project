@@ -25,15 +25,14 @@ public class AssistantRolDAO implements IAssistantRolDAO{
         meeting.getAssistantsRol().forEach( assistantRol -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
-                    "INSERT INTO IntegrantMeeting (rfc, meetingDate, meetingTime, "
-                    + "role, assistantNumber, initials) VALUES (?, ?, ? , ? , ?, ?)"
+                    "INSERT INTO IntegrantMeeting (assistantName, meetingKey, "
+                    + "role, assistantNumber, initials) VALUES (?, ?, ? , ? , ?)"
                 );
                 sentenceQuery.setString(1, assistantRol.getAssistantRfc());
-                sentenceQuery.setString(2, meeting.getMeetingDate());
-                sentenceQuery.setString(3, meeting.getMeetingTime());
-                sentenceQuery.setString(4, assistantRol.getRoleAssistant());
-                sentenceQuery.setInt(5, assistantRol.getAssistantNumber());
-                sentenceQuery.setString(6, assistantRol.getInitialsAssistant());
+                sentenceQuery.setInt(2, meeting.getMeetingKey());
+                sentenceQuery.setString(3, assistantRol.getRoleAssistant());
+                sentenceQuery.setInt(4, assistantRol.getAssistantNumber());
+                sentenceQuery.setString(5, assistantRol.getInitialsAssistant());
                 sentenceQuery.executeUpdate();
             }catch(SQLException sqlException){
                 try{
@@ -47,19 +46,18 @@ public class AssistantRolDAO implements IAssistantRolDAO{
     }
 
     @Override
-    public List<AssistantRol> getAssistantsRolByMeeting(String meetingDate, String meetingTime) {
+    public List<AssistantRol> getAssistantsRolByMeeting(int meetingKey) {
         List<AssistantRol> assistantRolList = new ArrayList();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                    "SELECT * FROM IntegrantMeeting WHERE meetingDate = ? AND meetingTime = ?;"
+                    "SELECT * FROM IntegrantMeeting WHERE meetingKey = ?;"
             );
-            sentenceQuery.setString(1, meetingDate);
-            sentenceQuery.setString(2, meetingTime);
+            sentenceQuery.setInt(1, meetingKey);
             ResultSet queryResult = sentenceQuery.executeQuery();
             while(queryResult.next()){
                 AssistantRol newAssistantRol = new AssistantRol(
                      queryResult.getInt("integrantMeetingKey"),
-                     queryResult.getString("rfc"),
+                     queryResult.getString("assistantName"),
                      queryResult.getString("role"),
                      queryResult.getInt("assistantNumber"),
                      queryResult.getString("initials")

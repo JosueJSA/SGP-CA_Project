@@ -12,7 +12,7 @@ import sgp.ca.domain.MeetingAgenda;
 public interface IMeetingAgendaDAO {
     
     public void addMeetingAgenda(Connection connection, Meeting meeting);
-    public MeetingAgenda getMeetingAgendaByMeeting(String meetingDate, String meetingTime);
+    public MeetingAgenda getMeetingAgendaByMeeting(int meetingKey);
     public void deleteTopic(Connection connection, MeetingAgenda meetingAgenda);
     public void deletePrerequisite(Connection connection, MeetingAgenda meetingAgenda);
 }

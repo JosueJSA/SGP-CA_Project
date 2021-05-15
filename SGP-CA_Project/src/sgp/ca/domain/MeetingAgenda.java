@@ -16,10 +16,11 @@ public class MeetingAgenda {
     private List<Topic> topics;
     private List<Prerequisite> prerequisites;
 
-    public MeetingAgenda(int meetingAgendaKey, String totalTime, String estimatedTotalTime) {
+    public MeetingAgenda(int meetingAgendaKey, String totalTime, String estimatedTotalTime, int totaltopics) {
         this.meetingAgendaKey = meetingAgendaKey;
         this.totalTime = totalTime;
         this.estimatedTotalTime = estimatedTotalTime;
+        this.totaltopics = totaltopics;
         this.topics = new ArrayList<>();
         this.totaltopics = topics.size();
         this.prerequisites = new ArrayList<>();

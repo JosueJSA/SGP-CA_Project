@@ -20,6 +20,26 @@ import sgp.ca.domain.Schooling;
  public class IntegrantDAO implements IIntegrantDAO{
 
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
+    
+    public List<String> getAllIntegrantsName() {
+        List<String> integrantsNameList = new ArrayList();
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT * FROM Integrant;"
+            );
+            
+            ResultSet queryResult = sentenceQuery.executeQuery();
+            while(queryResult.next()){
+                String integrantName = queryResult.getString("fullName");
+                integrantsNameList.add(integrantName);
+            }
+        }catch(SQLException sqlException){
+            Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return integrantsNameList;
+        }
+    }
        
     @Override
     public Integrant getIntegrantByUVmail(String emailUV){

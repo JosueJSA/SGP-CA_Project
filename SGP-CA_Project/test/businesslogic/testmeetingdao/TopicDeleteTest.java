@@ -23,11 +23,11 @@ public class TopicDeleteTest {
         try{
             Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
             MeetingAgendaDAO meetingAgendaDAO = new MeetingAgendaDAO();
-            MeetingAgenda meetingAgendaRetrieved = meetingAgendaDAO.getMeetingAgendaByMeeting("2021-05-02", "17:00:00");
+            MeetingAgenda meetingAgendaRetrieved = meetingAgendaDAO.getMeetingAgendaByMeeting(46);
             meetingAgendaDAO.deleteTopic(connection, meetingAgendaRetrieved);
             connection.commit();
             connection.setAutoCommit(true);
-            meetingAgendaRetrieved = meetingAgendaDAO.getMeetingAgendaByMeeting("2021-05-02", "17:00:00");
+            meetingAgendaRetrieved = meetingAgendaDAO.getMeetingAgendaByMeeting(46);
             int expectedTopicsNum = 0;
             int retrievedTopicsNum = meetingAgendaRetrieved.getTopics().size();
             Assert.assertEquals(expectedTopicsNum, retrievedTopicsNum);

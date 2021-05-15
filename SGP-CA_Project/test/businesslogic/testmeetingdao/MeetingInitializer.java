@@ -18,8 +18,8 @@ public class MeetingInitializer {
     private final MeetingDAO MEETING_DAO = new MeetingDAO();
     private Meeting meeting;
     public void createObjectForTest(){
-        meeting = new Meeting("2021-05-02", "17:00:00", "Plan de Estudios de ISOF", "2021-04-30", "Realizada", "1. Se necesita un plan de trabajo", "1. Realizar plan de trabajo");
-        meeting.setMeetingAgenda(new MeetingAgenda (0,"02:04:00", "02:00:00"));
+        meeting = new Meeting(0, "2021-05-02", "17:00:00", "Plan de Estudios de ISOF", "2021-04-30", "Realizada", "Teams", "Actualizar plan de estudios", "1. Se necesita un plan de trabajo", "1. Realizar plan de trabajo");
+        meeting.setMeetingAgenda(new MeetingAgenda (0,"02:04:00", "02:00:00", 2));
         meeting.getMeetingAgenda().addTopic(new Topic(0, "17:00:00", "18:04:00", "01:00:00","01:04:00","Plan de estudios ISOF", "Dra. María Karen Cortés Verdín", "Concluido"));
         meeting.getMeetingAgenda().addTopic(new Topic(0, "18:04:00", "19:04:00", "01:00:00", "01:00:00", "Eventos del Semestres Enero-Julio 2021", "Mtro. Juan Carlos Perez Arriaga", "Concluido"));
         meeting.getMeetingAgenda().addPrerequisite(new Prerequisite(0, "Mtro. Juan Carlos Pérez Arriaga", "Lista de eventos en los que está invitada la FEI"));
@@ -32,7 +32,7 @@ public class MeetingInitializer {
     }
     
     public void preparedRequestMeetingTestCase(){
-        if(MEETING_DAO.getMeeting("2021-05-02", "17:00:00").getMeetingProject() == null){
+        if(MEETING_DAO.getMeeting(1).getMeetingProject() == null){
             this.createObjectForTest();
             MEETING_DAO.addMeeting(meeting);
         }
@@ -40,7 +40,7 @@ public class MeetingInitializer {
     
     public void cleanMeetingTestCaseData(){
         this.createObjectForTest();
-        meeting = MEETING_DAO.getMeeting("2021-05-02", "17:00:00");
+        meeting = MEETING_DAO.getMeeting(1);
         MEETING_DAO.deleteMeeting(meeting);
     }
 }

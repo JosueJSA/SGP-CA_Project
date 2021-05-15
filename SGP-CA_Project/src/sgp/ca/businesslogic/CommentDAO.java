@@ -25,16 +25,15 @@ public class CommentDAO implements ICommentDAO {
         meeting.getComments().forEach(comment ->{
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
-                        "INSERT INTO Comment (meetingDate, meetingTime, "
-                        + "commentDescription, commentator, commentTime, commentDate) "
-                        + "VALUES (?, ?, ?, ?, ?, ?);"
+                        "INSERT INTO Comment (meetingKey, commentDescription, "
+                        + "commentator, commentTime, commentDate) "
+                        + "VALUES (?, ?, ?, ?, ?);"
                 );
-                sentenceQuery.setString(1, meeting.getMeetingDate());
-                sentenceQuery.setString(2, meeting.getMeetingTime());
-                sentenceQuery.setString(3, comment.getCommentDescription());
-                sentenceQuery.setString(4, comment.getCommentator());
-                sentenceQuery.setString(5, comment.getCommentTime());
-                sentenceQuery.setString(6, comment.getCommentDate());
+                sentenceQuery.setInt(1, meeting.getMeetingKey());
+                sentenceQuery.setString(2, comment.getCommentDescription());
+                sentenceQuery.setString(3, comment.getCommentator());
+                sentenceQuery.setString(4, comment.getCommentTime());
+                sentenceQuery.setString(5, comment.getCommentDate());
                 sentenceQuery.executeUpdate();
             }catch(SQLException sqlException){
                 try{
@@ -48,22 +47,24 @@ public class CommentDAO implements ICommentDAO {
     }
 
     @Override
-    public List<Comment> getCommentsByMeeting(String meetingDate, String meetingTime) {
+    public List<Comment> getCommentsByMeeting(int meetingKey) {
         List<Comment> commentList = new ArrayList();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Comment WHERE meetingDate = ? AND meetingTime = ?;"
+                "SELECT * FROM Comment WHERE meetingKey = ?;"
             );
-            sentenceQuery.setString(1, meetingDate);
-            sentenceQuery.setString(2, meetingTime);
+            sentenceQuery.setInt(1, meetingKey);
             ResultSet queryResult = sentenceQuery.executeQuery();
-            while(queryResult.next()){commentList.add(new Comment(
-                queryResult.getInt("commentKey"),
-                queryResult.getString("commentDescription"),
-                queryResult.getString("commentator"),
-                queryResult.getTime("commentTime").toString(),
-                queryResult.getDate("commentDate").toString()
-            ));}
+            while(queryResult.next()){
+                Comment newComment = new Comment(
+                    queryResult.getInt("commentKey"),
+                    queryResult.getString("commentDescription"),
+                    queryResult.getString("commentator"),
+                    queryResult.getTime("commentTime").toString(),
+                    queryResult.getDate("commentDate").toString()
+                );
+                commentList.add(newComment);
+            }
         }catch(SQLException sqlException){
             Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{

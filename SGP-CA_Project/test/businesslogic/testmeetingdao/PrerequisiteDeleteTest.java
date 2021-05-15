@@ -23,11 +23,11 @@ public class PrerequisiteDeleteTest {
         try{
             Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
             MeetingAgendaDAO meetingAgendaDAO = new MeetingAgendaDAO();
-            MeetingAgenda meetingAgendaRetrieved = meetingAgendaDAO.getMeetingAgendaByMeeting("2021-05-02", "17:00:00");
+            MeetingAgenda meetingAgendaRetrieved = meetingAgendaDAO.getMeetingAgendaByMeeting(47);
             meetingAgendaDAO.deletePrerequisite(connection, meetingAgendaRetrieved);
             connection.commit();
             connection.setAutoCommit(true);
-            meetingAgendaRetrieved = meetingAgendaDAO.getMeetingAgendaByMeeting("2021-05-02", "17:00:00");
+            meetingAgendaRetrieved = meetingAgendaDAO.getMeetingAgendaByMeeting(47);
             int expectedPrerequisitesNum = 0;
             int retrievedPrerequisitesNum = meetingAgendaRetrieved.getPrerequisites().size();
             Assert.assertEquals(expectedPrerequisitesNum, retrievedPrerequisitesNum);

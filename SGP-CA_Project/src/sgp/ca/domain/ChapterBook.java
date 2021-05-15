@@ -1,40 +1,102 @@
-///**
-// * @author estef
-// * Last modification date format: 19-04-2021
-// */
-//
-//package sgp.ca.domain;
-//
-//public class ChapterBook extends Evidence {
-//    private String bookName;
-//    private String pageNumberRange;
-//
-//    public ChapterBook(String bookName, String pageNumberRange, String urlFile, String projectName, String evidenceTitle, String country, String publicationDate, String impactAB) {
-//        super(urlFile, projectName, evidenceTitle, country, publicationDate, impactAB);
-//        this.bookName = bookName;
-//        this.pageNumberRange = pageNumberRange;
-//    }
-//    
-//    public ChapterBook(){
-//        this.bookName = "";
-//        this.pageNumberRange = "";
-//    }
-//
-//    public String getBookName() {
-//        return bookName;
-//    }
-//
-//    public String getPagesNumber() {
-//        return pageNumberRange;
-//    }
-//
-//    public void setBookName(String bookName) {
-//        this.bookName = bookName;
-//    }
-//
-//    public void setPagesNumber(String pageNumberRange) {
-//        this.pageNumberRange = pageNumberRange;
-//    }
-//    
-//    
-//}
+/**
+ * @author estef
+ * Last modification date format: 07-05-2021
+ */
+
+package sgp.ca.domain;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ChapterBook {
+    private String urlFile;
+    private String chapterBookTitle;
+    private String registrationDate;
+    private String registrationResponsible;
+    private String pageNumberRange;
+    private List<String> students;
+    private List<Integrant> integrants;
+    private List<Collaborator> collaborators;
+
+    public ChapterBook(String urlFile, String chapterBookTitle, String registrationDate, 
+    String registrationResponsible, String pageNumberRange) {
+        this.urlFile = urlFile;
+        this.chapterBookTitle = chapterBookTitle;
+        this.registrationDate = registrationDate;
+        this.registrationResponsible = registrationResponsible;
+        this.pageNumberRange = pageNumberRange;
+        this.students = new ArrayList<>();
+        this.integrants = new ArrayList<>();
+        this.collaborators = new ArrayList<>();
+    }
+
+    public ChapterBook() {
+        this.students = new ArrayList<>();
+        this.integrants = new ArrayList<>();
+        this.collaborators = new ArrayList<>();
+    }
+
+    public String getUrlFile() {
+        return urlFile;
+    }
+
+    public String getChapterBookTitle() {
+        return chapterBookTitle;
+    }
+
+    public String getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public String getRegistrationResponsible() {
+        return registrationResponsible;
+    }
+
+    public String getPageNumberRange() {
+        return pageNumberRange;
+    }
+
+    public List<String> getStudents() {
+        return students;
+    }
+
+    public List<Integrant> getIntegrants() {
+        return integrants;
+    }
+
+    public List<Collaborator> getCollaborators() {
+        return collaborators;
+    }
+
+    public void setUrlFile(String urlFile) {
+        this.urlFile = urlFile;
+    }
+
+    public void setChapterBookTitle(String chapterBookTitle) {
+        this.chapterBookTitle = chapterBookTitle;
+    }
+
+    public void setRegistrationDate(String registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public void setRegistrationResponsible(String registrationResponsible) {
+        this.registrationResponsible = registrationResponsible;
+    }
+
+    public void setPageNumberRange(String pageNumberRange) {
+        this.pageNumberRange = pageNumberRange;
+    }
+
+    public void setStudents(List<String> students) {
+        this.students = students;
+    }
+
+    public void setIntegrants(List<Integrant> integrants) {
+        this.integrants = integrants;
+    }
+
+    public void setCollaborators(List<Collaborator> collaborators) {
+        this.collaborators = collaborators;
+    }
+}

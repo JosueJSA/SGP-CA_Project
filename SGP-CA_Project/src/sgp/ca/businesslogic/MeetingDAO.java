@@ -34,11 +34,14 @@ public class MeetingDAO implements IMeetingDAO{
             ResultSet queryResult = sentenceQuery.executeQuery();
             while(queryResult.next()){
                 Meeting meeting = new Meeting (
+                queryResult.getInt("meetingKey"),
                 queryResult.getDate("meetingDate").toString(),
                 queryResult.getTime("meetingTime").toString(),
                 queryResult.getString("meetingProject"),
                 queryResult.getDate("meetingRegistrationDate").toString(),
                 queryResult.getString("statusMeeting"),
+                queryResult.getString("placeMeeting"),
+                queryResult.getString("issueMeeting"),
                 queryResult.getString("meetingNote"),
                 queryResult.getString("meetingPending")
                 );
@@ -53,7 +56,40 @@ public class MeetingDAO implements IMeetingDAO{
     }
 
     @Override
-    public Meeting getMeeting(String meetingDate, String meetingTime) {
+    public Meeting getMeeting(int meetingKey) {
+        Meeting meeting = new Meeting();
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT * FROM Meeting WHERE meetingKey = ?;"
+            );
+            
+            sentenceQuery.setInt(1, meetingKey);
+            ResultSet queryResult = sentenceQuery.executeQuery();
+            if(queryResult.next()){meeting = new Meeting (
+                queryResult.getInt("meetingKey"),
+                queryResult.getDate("meetingDate").toString(),
+                queryResult.getTime("meetingTime").toString(),
+                queryResult.getString("meetingProject"),
+                queryResult.getDate("meetingRegistrationDate").toString(),
+                queryResult.getString("statusMeeting"),
+                queryResult.getString("placeMeeting"),
+                queryResult.getString("issueMeeting"),
+                queryResult.getString("meetingNote"),
+                queryResult.getString("meetingPending")
+            );}
+            meeting.setMeetingAgenda(meetingAgendaDAO.getMeetingAgendaByMeeting(meetingKey));
+            meeting.setAgreements(agreementDAO.getAgreementListByMeeting(meetingKey));
+            meeting.setComments(commentDAO.getCommentsByMeeting(meetingKey));
+            meeting.setAssistantsRol(assisntantRolDAO.getAssistantsRolByMeeting(meetingKey));
+        }catch(SQLException sqlException){
+            Logger.getLogger(Meeting.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return meeting;
+        }
+    }
+    
+    public Meeting getMeetingbyDateAndTime(String meetingDate, String meetingTime) {
         Meeting meeting = new Meeting();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
@@ -64,18 +100,21 @@ public class MeetingDAO implements IMeetingDAO{
             sentenceQuery.setString(2, meetingTime);
             ResultSet queryResult = sentenceQuery.executeQuery();
             if(queryResult.next()){meeting = new Meeting (
+                queryResult.getInt("meetingKey"),
                 queryResult.getDate("meetingDate").toString(),
                 queryResult.getTime("meetingTime").toString(),
                 queryResult.getString("meetingProject"),
                 queryResult.getDate("meetingRegistrationDate").toString(),
                 queryResult.getString("statusMeeting"),
+                queryResult.getString("placeMeeting"),
+                queryResult.getString("issueMeeting"),
                 queryResult.getString("meetingNote"),
                 queryResult.getString("meetingPending")
             );}
-            meeting.setMeetingAgenda(meetingAgendaDAO.getMeetingAgendaByMeeting(meetingDate, meetingTime));
-            meeting.setAgreements(agreementDAO.getAgreementListByMeeting(meetingDate, meetingTime));
-            meeting.setComments(commentDAO.getCommentsByMeeting(meetingDate, meetingTime));
-            meeting.setAssistantsRole(assisntantRolDAO.getAssistantsRolByMeeting(meetingDate, meetingTime));
+            meeting.setMeetingAgenda(meetingAgendaDAO.getMeetingAgendaByMeeting(meeting.getMeetingKey()));
+            meeting.setAgreements(agreementDAO.getAgreementListByMeeting(meeting.getMeetingKey()));
+            meeting.setComments(commentDAO.getCommentsByMeeting(meeting.getMeetingKey()));
+            meeting.setAssistantsRol(assisntantRolDAO.getAssistantsRolByMeeting(meeting.getMeetingKey()));
         }catch(SQLException sqlException){
             Logger.getLogger(Meeting.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
@@ -95,11 +134,14 @@ public class MeetingDAO implements IMeetingDAO{
             ResultSet queryResult = sentenceQuery.executeQuery();
             while(queryResult.next()){
                 Meeting meeting = new Meeting (
+                queryResult.getInt("meetingKey"),
                 queryResult.getDate("meetingDate").toString(),
                 queryResult.getTime("meetingTime").toString(),
                 queryResult.getString("meetingProject"),
                 queryResult.getDate("meetingRegistrationDate").toString(),
                 queryResult.getString("statusMeeting"),
+                queryResult.getString("placeMeeting"),
+                queryResult.getString("issueMeeting"),
                 queryResult.getString("meetingNote"),
                 queryResult.getString("meetingPending")
                 );
@@ -119,17 +161,21 @@ public class MeetingDAO implements IMeetingDAO{
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "INSERT INTO Meeting (meetingDate, meetingTime, meetingProject, "
-                + "meetingRegistrationDate, statusMeeting, meetingNote, "
-                + "meetingPending) VALUES(?,?,?,?,?,?,?);"
+                + "meetingRegistrationDate, statusMeeting, placeMeeting, issueMeeting, "
+                + "meetingNote, meetingPending) VALUES(?,?,?,?,?,?,?,?,?);",
+                PreparedStatement.RETURN_GENERATED_KEYS
             );
             sentenceQuery.setString(1, newMeeting.getMeetingDate());
             sentenceQuery.setString(2, newMeeting.getMeetingTime());
             sentenceQuery.setString(3, newMeeting.getMeetingProject());
             sentenceQuery.setString(4, newMeeting.getMeetingRegistrationDate());
             sentenceQuery.setString(5, newMeeting.getStatusMeeting());
-            sentenceQuery.setString(6, newMeeting.getMeetingNote());
-            sentenceQuery.setString(7, newMeeting.getMeetingPending());
+            sentenceQuery.setString(6, newMeeting.getPlaceMeeting());
+            sentenceQuery.setString(7, newMeeting.getIssueMeeting());
+            sentenceQuery.setString(8, newMeeting.getMeetingNote());
+            sentenceQuery.setString(9, newMeeting.getMeetingPending());
             sentenceQuery.executeUpdate();
+            this.updateMeetingWithKeyGenerated(sentenceQuery, newMeeting);
             meetingAgendaDAO.addMeetingAgenda(connection, newMeeting);
             agreementDAO.addAgreements(connection, newMeeting);
             commentDAO.addComment(connection, newMeeting);
@@ -158,18 +204,20 @@ public class MeetingDAO implements IMeetingDAO{
             this.deleteAssistantRol(connection, oldMeeting);
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "UPDATE Meeting SET meetingDate = ?, meetingTime = ?, meetingProject = ?, "
-                + "meetingRegistrationDate = ?, statusMeeting = ?, meetingNote = ?, "
-                + "meetingPending = ? WHERE meetingDate = ? AND meetingTime = ?;"
+                + "meetingRegistrationDate = ?, statusMeeting = ?, placeMeeting = ?, "
+                + "issueMeeting = ?, meetingNote = ?, meetingPending = ? "
+                + "WHERE meetingKey = ?;"
             );
             sentenceQuery.setString(1, meeting.getMeetingDate());
             sentenceQuery.setString(2, meeting.getMeetingTime());
             sentenceQuery.setString(3, meeting.getMeetingProject());
             sentenceQuery.setString(4, meeting.getMeetingRegistrationDate());
             sentenceQuery.setString(5, meeting.getStatusMeeting());
-            sentenceQuery.setString(6, meeting.getMeetingNote());
-            sentenceQuery.setString(7, meeting.getMeetingPending());
-            sentenceQuery.setString(8, oldMeeting.getMeetingDate());
-            sentenceQuery.setString(9, oldMeeting.getMeetingTime());
+            sentenceQuery.setString(6, meeting.getPlaceMeeting());
+            sentenceQuery.setString(7, meeting.getIssueMeeting());
+            sentenceQuery.setString(8, meeting.getMeetingNote());
+            sentenceQuery.setString(9, meeting.getMeetingPending());
+            sentenceQuery.setInt(10, oldMeeting.getMeetingKey());
             sentenceQuery.executeUpdate();
             meetingAgendaDAO.addMeetingAgenda(connection, meeting);
             agreementDAO.addAgreements(connection, meeting);
@@ -197,10 +245,9 @@ public class MeetingDAO implements IMeetingDAO{
             this.deleteComment(connection, meeting);
             this.deleteAssistantRol(connection, meeting);
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "DELETE FROM Meeting WHERE meetingDate = ? AND meetingTime = ?;"
+                "DELETE FROM Meeting WHERE meetingKey = ?;"
             );
-            sentenceQuery.setString(1, meeting.getMeetingDate());
-            sentenceQuery.setString(2, meeting.getMeetingTime());
+            sentenceQuery.setInt(1, meeting.getMeetingKey());
             sentenceQuery.executeUpdate();
             connection.commit();
             connection.setAutoCommit(true);
@@ -222,10 +269,9 @@ public class MeetingDAO implements IMeetingDAO{
             meetingAgendaDAO.deleteTopic(connection, meeting.getMeetingAgenda());
             meetingAgendaDAO.deletePrerequisite(connection, meeting.getMeetingAgenda());
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "DELETE FROM MeetingAgenda WHERE meetingDate = ? AND meetingTime = ?;"
+                "DELETE FROM MeetingAgenda WHERE meetingKey = ?;"
             );
-            sentenceQuery.setString(1, meeting.getMeetingDate());
-            sentenceQuery.setString(2, meeting.getMeetingTime());
+            sentenceQuery.setInt(1, meeting.getMeetingKey());
             sentenceQuery.executeUpdate();
         }catch(SQLException sqlException){
             try{
@@ -241,10 +287,9 @@ public class MeetingDAO implements IMeetingDAO{
     public void deleteAgreement(Connection connection, Meeting meeting) {
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "DELETE FROM Agreement WHERE meetingDate = ? AND meetingTime = ?;"
+                "DELETE FROM Agreement WHERE meetingKey = ?;"
             );
-            sentenceQuery.setString(1, meeting.getMeetingDate());
-            sentenceQuery.setString(2, meeting.getMeetingTime());
+            sentenceQuery.setInt(1, meeting.getMeetingKey());
             sentenceQuery.executeUpdate();
         }catch(SQLException sqlException){
             try{
@@ -260,10 +305,9 @@ public class MeetingDAO implements IMeetingDAO{
     public void deleteComment(Connection connection, Meeting meeting) {
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "DELETE FROM Comment WHERE meetingDate = ? AND meetingTime = ?;"
+                "DELETE FROM Comment WHERE meetingKey = ?;"
             );
-            sentenceQuery.setString(1, meeting.getMeetingDate());
-            sentenceQuery.setString(2, meeting.getMeetingTime());
+            sentenceQuery.setInt(1, meeting.getMeetingKey());
             sentenceQuery.executeUpdate();
         }catch(SQLException sqlException){
             try{
@@ -279,10 +323,9 @@ public class MeetingDAO implements IMeetingDAO{
     public void deleteAssistantRol(Connection connection, Meeting meeting) {
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "DELETE FROM IntegrantMeeting WHERE meetingDate = ? AND meetingTime = ?;"
+                "DELETE FROM IntegrantMeeting WHERE meetingKey = ?;"
             );
-            sentenceQuery.setString(1, meeting.getMeetingDate());
-            sentenceQuery.setString(2, meeting.getMeetingTime());
+            sentenceQuery.setInt(1, meeting.getMeetingKey());
             sentenceQuery.executeUpdate();
         }catch(SQLException sqlException){
             try{
@@ -298,11 +341,10 @@ public class MeetingDAO implements IMeetingDAO{
     public void addMeetingNote(String newMeetingNote, Meeting meeting) {
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "UPDATE Meeting SET meetingNote= ? WHERE meetingDate = ?, meetingTime = ? ;"
+                "UPDATE Meeting SET meetingNote= ? WHERE meetingKey = ? ;"
             );
             sentenceQuery.setString(1, newMeetingNote);
-            sentenceQuery.setString(2, meeting.getMeetingDate());
-            sentenceQuery.setString(3, meeting.getMeetingTime());
+            sentenceQuery.setInt(2, meeting.getMeetingKey());
             sentenceQuery.executeUpdate();
         }catch(SQLException ex){
             Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -315,16 +357,26 @@ public class MeetingDAO implements IMeetingDAO{
     public void addMeetingPending(String newMeetingPending, Meeting meeting) {
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "UPDATE Meeting SET meetingNote= ? WHERE meetingDate = ?, meetingTime = ? ;"
+                "UPDATE Meeting SET meetingNote= ? WHERE meetingKey = ?;"
             );
             sentenceQuery.setString(1, newMeetingPending);
-            sentenceQuery.setString(2, meeting.getMeetingDate());
-            sentenceQuery.setString(3, meeting.getMeetingTime());
+            sentenceQuery.setInt(2, meeting.getMeetingKey());
             sentenceQuery.executeUpdate();
         }catch(SQLException ex){
             Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             CONNECTION.closeConnection();
+        }
+    }
+    
+    private void updateMeetingWithKeyGenerated(PreparedStatement statement, Meeting meeting){
+        try{
+            ResultSet result = statement.getGeneratedKeys();
+            if(result.next()){
+                meeting.setMeetingKey(result.getInt(1));
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, ex );
         }
     }
 }

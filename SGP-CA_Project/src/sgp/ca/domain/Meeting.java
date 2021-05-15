@@ -10,11 +10,14 @@ import java.util.List;
 
 
 public class Meeting {
+    private int meetingKey;
     private String  meetingDate;
     private String meetingTime;
     private String meetingProject;
     private String meetingRegistrationDate;
     private String statusMeeting;
+    private String placeMeeting;
+    private String issueMeeting;
     private String meetingNote;
     private String meetingPending;
     private MeetingAgenda meetingAgenda;
@@ -22,14 +25,17 @@ public class Meeting {
     private List <Comment> comments;
     private List <AssistantRol> assistantsRol;
 
-    public Meeting(String meetingDate, String meetingTime, String meetingProject, 
-    String meetingRegistrationDate, String statusMeeting, String meetingNote, 
-    String meetingPending) {
+    public Meeting(int meetingKey, String meetingDate, String meetingTime, String meetingProject, 
+    String meetingRegistrationDate, String statusMeeting, String placeMeeting, 
+    String issueMeeting, String meetingNote, String meetingPending) {
+        this.meetingKey = meetingKey;
         this.meetingDate = meetingDate;
         this.meetingTime = meetingTime;
         this.meetingProject = meetingProject;
         this.meetingRegistrationDate = meetingRegistrationDate;
         this.statusMeeting = statusMeeting;
+        this.placeMeeting = placeMeeting;
+        this.issueMeeting = issueMeeting;
         this.meetingNote = meetingNote;
         this.meetingPending = meetingPending;
         this.meetingAgenda = new MeetingAgenda();
@@ -43,6 +49,10 @@ public class Meeting {
         this.agreements = new ArrayList<>();
         this.comments = new ArrayList<>();
         this.assistantsRol = new ArrayList<>();
+    }
+
+    public int getMeetingKey() {
+        return meetingKey;
     }
 
     public String getMeetingDate() {
@@ -63,6 +73,14 @@ public class Meeting {
 
     public String getStatusMeeting() {
         return statusMeeting;
+    }
+
+    public String getPlaceMeeting() {
+        return placeMeeting;
+    }
+
+    public String getIssueMeeting() {
+        return issueMeeting;
     }
 
     public String getMeetingNote() {
@@ -119,6 +137,10 @@ public class Meeting {
         return assistantsRol;
     }
 
+    public void setMeetingKey(int meetingKey) {
+        this.meetingKey = meetingKey;
+    }
+
     public void setMeetingDate(String meetingDate) {
         this.meetingDate = meetingDate;
     }
@@ -137,6 +159,14 @@ public class Meeting {
 
     public void setStatusMeeting(String statusMeeting) {
         this.statusMeeting = statusMeeting;
+    }
+
+    public void setPlaceMeeting(String placeMeeting) {
+        this.placeMeeting = placeMeeting;
+    }
+
+    public void setIssueMeeting(String issueMeeting) {
+        this.issueMeeting = issueMeeting;
     }
 
     public void setMeetingNote(String meetingNote) {
@@ -174,8 +204,8 @@ public class Meeting {
     public void removeComment(Comment comment){
         comments.remove(comment);
     }
-
-    public void setAssistantsRole(List<AssistantRol> assistantsRol) {
+    
+    public void setAssistantsRol(List<AssistantRol> assistantsRol) {
         this.assistantsRol = assistantsRol;
     }
     
