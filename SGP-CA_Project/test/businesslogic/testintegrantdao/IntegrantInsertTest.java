@@ -36,7 +36,7 @@ public class IntegrantInsertTest{
         
         INTEGRANT_DAO.addIntegrant(integrant);
         Integrant integrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("ocharan@uv.mx");
-        INITIALIZER.cleanIntegrantTest(integrantRetrieved.getRfc());
+        //INITIALIZER.cleanIntegrantTest(integrantRetrieved.getRfc());
         Assert.assertEquals(integrant, integrantRetrieved);
     }
     

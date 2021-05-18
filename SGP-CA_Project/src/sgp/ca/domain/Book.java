@@ -14,14 +14,14 @@ public class Book extends Evidence {
     private double isbn;
     private List<ChapterBook> chapterBooks;
 
-    public Book(String publisher, int editionsNumber, double isbn, String urlFile, 
-    String projectName, String evidenceTitle, String country, String publicationDate, 
-    boolean impactAB, String registrationDate, String registrationResponsible, 
-    String studyDegree, String bodyAcademyKey) {
+    public Book(String urlFile, String projectName, boolean impactAB, String evidenceType, 
+    String evidenceTitle, String registrationResponsible, String registrationDate, 
+    String studyDegree, String publicationDate, String country, String publisher, 
+    int editionsNumber, double isbn) {
         super(
-            urlFile, projectName, evidenceTitle, country, 
-            publicationDate, impactAB, registrationDate, 
-            registrationResponsible, studyDegree, bodyAcademyKey
+            urlFile, projectName, evidenceTitle, country, publicationDate,
+            impactAB,registrationDate, registrationResponsible, studyDegree, 
+            evidenceType
         );
         this.publisher = publisher;
         this.editionsNumber = editionsNumber;

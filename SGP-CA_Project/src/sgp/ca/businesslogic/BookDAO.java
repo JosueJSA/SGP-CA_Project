@@ -1,117 +1,393 @@
-///**
-// * @author estef
-// * Last modification date format: 23-04-2021
-// */
-//
-//package sgp.ca.businesslogic;
-//
-//import java.sql.Connection;
-//import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-//import java.sql.SQLException;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
-//import sgp.ca.dataaccess.ConnectionDatabase;
-//import sgp.ca.domain.Book;
-//
-//public class BookDAO implements IBookDAO {
-//    private final ConnectionDatabase connectionDataBase = new ConnectionDatabase();
-//    private ResultSet results;
-//
-//    @Override
-//    public Book getBookbyURL(String url) {
-//        Book book = null;
-//        try(Connection connection = connectionDataBase.getConnectionDatabase()){
-//            String query = "Select * from Book where urlFile = ? ";
-//            PreparedStatement sentence = connection.prepareStatement(query);
-//            sentence.setString(1, url);
-//            results = sentence.executeQuery();
-//            
-//            while(results.next()){
-//                book = new Book();
-//                book.setUrlFile(results.getString("urlFile"));
-//                book.setProjectName(results.getNString("projectName"));
-//                book.setImpactAB(results.getNString("impactBA"));
-//                book.setEvidenceTitle(results.getNString("evidenceTitle"));
-//                book.setPublicationDate(results.getString("publicationDate"));
-//                book.setCountry(results.getNString("county"));
-//                book.setPublisher(results.getNString("publisher"));
-//                book.setEditionsNumber(results.getInt("editiosNumber"));
-//                book.setIsbn(results.getDouble("isbn"));
-//            }
-//                
-//        }catch(SQLException ex){
-//            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return book;
-//    }
-//
-//    @Override
-//    public void addBook(Book book) {
-//        try{
-//            PreparedStatement sentence = connectionDataBase.getConnectionDatabase().prepareStatement(
-//                    "INSERT INTO Book VALUES (?,?,?,?,?,?,?,?,?);"
-//            );
-//            sentence.setString(1, book.getUrlFile());
-//            sentence.setString(2, book.getProjectName());
-//            sentence.setString(3, book.getImpactAB());
-//            sentence.setString(4, book.getEvidenceTitle());
-//            sentence.setString(5, book.getPublicationDate());
-//            sentence.setString(6, book.getCountry());
-//            sentence.setString(7, book.getPublisher());
-//            sentence.setInt(8, book.getEditionsNumber());
-//            sentence.setDouble(9, book.getIsbn());
-//            sentence.executeUpdate();
-//        }catch(SQLException sqlException){
-//            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, sqlException);
-//        }finally{
-//            connectionDataBase.closeConnection();
-//        }
-//    }
-//
-//    @Override
-//    public void updateBook(Book book, String urlFile) {
-//        try{
-//            PreparedStatement sentence = connectionDataBase.getConnectionDatabase().prepareStatement(
-//                    "UPDATE Book SET urlFile = ?, projectName = ?, impactBA = ?, evidenceTitle = ?," 
-//                    + "publicationDate = ?, country = ?, publisher = ?, editionsNumber = ?, isbn = ?"
-//                    + "WHERE urlFile = ?;"
-//            );
-//            sentence.setString(1, book.getUrlFile());
-//            sentence.setString(2, book.getProjectName());
-//            sentence.setString(3, book.getImpactAB());
-//            sentence.setString(4, book.getEvidenceTitle());
-//            sentence.setString(5, book.getPublicationDate());
-//            sentence.setString(6, book.getCountry());
-//            sentence.setString(7, book.getPublisher());
-//            sentence.setInt(8, book.getEditionsNumber());
-//            sentence.setDouble(9, book.getIsbn());
-//            sentence.setString(10, urlFile);
-//            sentence.executeUpdate();
-//        }catch(SQLException sqlException){
-//            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, sqlException);
-//        }finally{
-//            connectionDataBase.closeConnection();
-//        }
-//    }
-//    
-//    @Override
-//    public boolean deleteBookbyURL(String url) {
-//        boolean deletedBook = false;
-//        try{
-//            PreparedStatement sentenceQuery = connectionDataBase.getConnectionDatabase().prepareStatement(
-//                    "DELETE FROM Book "
-//                    + "WHERE urlFile = ? "
-//                    + "LIMIT 1;"
-//            );
-//            sentenceQuery.setString(1, url);
-//            sentenceQuery.executeUpdate();
-//            deletedBook = true;
-//        }catch(SQLException sqlException){
-//            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, sqlException);
-//        }finally{
-//            connectionDataBase.closeConnection();
-//        }
-//        return deletedBook;
-//    }
-//}
+/**
+ * @author estef
+ * Last modification date format: 16-05-2021
+ */
+
+package sgp.ca.businesslogic;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sgp.ca.dataaccess.ConnectionDatabase;
+import sgp.ca.domain.Book;
+import sgp.ca.domain.ChapterBook;
+import sgp.ca.domain.Collaborator;
+import sgp.ca.domain.Evidence;
+import sgp.ca.domain.Integrant;
+
+public class BookDAO extends EvidenceDAO {
+    private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
+    private final ChapterBookDAO CHAPTER_BOOK_DAO = new ChapterBookDAO();
+
+    @Override
+    public Evidence getEvidenceByUrl(String urlEvidenceFile) {
+        Evidence book = new Book();
+        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "SELECT * FROM Book WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlEvidenceFile);
+            ResultSet resultQuery = sentenceQuery.executeQuery();
+            if(resultQuery.next()){
+                book = this.getoutBookDataFromQuery(resultQuery);
+                book.setIntegrants(this.getIntegrantsBookParticipation(connection, urlEvidenceFile));
+                book.setCollaborators(this.getCollaboratorsBookParticipation(connection, urlEvidenceFile));
+                book.setStudents(this.getStudentNamesBookParticipation(connection, urlEvidenceFile));
+                ((Book)book).setChapterBooks(CHAPTER_BOOK_DAO.getChapterBooksListByBook(connection, urlEvidenceFile));
+            }
+            connection.commit();
+            connection.setAutoCommit(true);
+        }catch(SQLException sqlException){
+            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return book;
+        }
+    }
+
+    @Override
+    public void addNewEvidence(Evidence evidence) {
+        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "INSERT INTO Book VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);"
+            );
+            sentenceQuery.setString(1, evidence.getUrlFile());
+            sentenceQuery.setString(2, evidence.getProjectName());
+            sentenceQuery.setBoolean(3, evidence.getImpactAB());
+            sentenceQuery.setString(4, "Libro");
+            sentenceQuery.setString(5, evidence.getEvidenceTitle());
+            sentenceQuery.setString(6, evidence.getRegistrationResponsible());
+            sentenceQuery.setString(7, evidence.getRegistrationDate());
+            sentenceQuery.setString(8, evidence.getStudyDegree());
+            sentenceQuery.setString(9, evidence.getPublicationDate());
+            sentenceQuery.setString(10, evidence.getCountry());
+            sentenceQuery.setString(11, ((Book)evidence).getPublisher());
+            sentenceQuery.setInt(12, ((Book)evidence).getEditionsNumber());
+            sentenceQuery.setDouble(13, ((Book)evidence).getIsbn());
+            sentenceQuery.executeUpdate();
+            this.insertIntoStudentBook(connection, (Book)evidence);
+            this.insertIntoIntegrantBook(connection, (Book)evidence);
+            this.insertIntoCollaboratorBook(connection, (Book)evidence);
+            CHAPTER_BOOK_DAO.addChapterBooks(connection, ((Book)evidence));
+            connection.commit();
+            connection.setAutoCommit(true);
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }finally{
+            CONNECTION.closeConnection();
+        }
+        
+    }
+
+    @Override
+    public void updateEvidence(Evidence evidence, String oldUrlFile) {
+        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        try{
+            this.deleteStudentsFromURLFileBook(connection, oldUrlFile);
+            this.deleteIntegrantsFromURLFileBook(connection, oldUrlFile);
+            this.deleteCollaboratorsFromURLFileBook(connection, oldUrlFile);
+            this.deleteChapterBooksFromURLFileBook(connection, oldUrlFile);
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "UPDATE Book SET urlFile = ?, projectName = ?, impactBA = ?, "
+                + "evidenceType = ?, evidenceTitle = ?, registrationResponsible = ?,"
+                + " registrationDate = ?, studyDegree = ?, publicationDate = ?, "
+                + "country = ?, publisher = ?, editionsNumber = ?, isbn = ? "
+                + "WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, evidence.getUrlFile());
+            sentenceQuery.setString(2, evidence.getProjectName());
+            sentenceQuery.setBoolean(3, evidence.getImpactAB());
+            sentenceQuery.setString(4, "Libro");
+            sentenceQuery.setString(5, evidence.getEvidenceTitle());
+            sentenceQuery.setString(6, evidence.getRegistrationResponsible());
+            sentenceQuery.setString(7, evidence.getRegistrationDate());
+            sentenceQuery.setString(8, evidence.getStudyDegree());
+            sentenceQuery.setString(9, evidence.getPublicationDate());
+            sentenceQuery.setString(10, evidence.getCountry());
+            sentenceQuery.setString(11, ((Book)evidence).getPublisher());
+            sentenceQuery.setInt(12, ((Book)evidence).getEditionsNumber());
+            sentenceQuery.setDouble(13, ((Book)evidence).getIsbn());
+            sentenceQuery.setString(14, oldUrlFile);
+            sentenceQuery.executeUpdate();
+            this.insertIntoStudentBook(connection, (Book)evidence);
+            this.insertIntoIntegrantBook(connection, (Book)evidence);
+            this.insertIntoCollaboratorBook(connection, (Book)evidence);
+            CHAPTER_BOOK_DAO.addChapterBooks(connection, ((Book)evidence));
+            connection.commit();
+            connection.setAutoCommit(true);
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }finally{
+            CONNECTION.closeConnection();
+        }
+    }
+
+    @Override
+    public void deleteEvidenceByUrl(String urlEvidenceFile) {
+        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        try{
+            this.deleteStudentsFromURLFileBook(connection, urlEvidenceFile);
+            this.deleteIntegrantsFromURLFileBook(connection, urlEvidenceFile);
+            this.deleteCollaboratorsFromURLFileBook(connection, urlEvidenceFile);
+            this.deleteChapterBooksFromURLFileBook(connection, urlEvidenceFile);
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM Book WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlEvidenceFile);
+            sentenceQuery.executeQuery();
+            connection.commit();
+            connection.setAutoCommit(true);
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                connection.close();
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }finally{
+            CONNECTION.closeConnection();
+        }
+    }
+    
+    private void deleteStudentsFromURLFileBook(Connection connection, String urlFileBook){
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM BookStudent WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileBook);
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                connection.close();
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    private void deleteIntegrantsFromURLFileBook(Connection connection, String urlFileBook){
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM IntegrantBook WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileBook);
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                connection.close();
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    private void deleteCollaboratorsFromURLFileBook(Connection connection, String urlFileBook){
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM CollaborateBook WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileBook);
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                connection.close();
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    private void deleteChapterBooksFromURLFileBook(Connection connection, String urlFileBook) {
+        List<ChapterBook> chapterBooks = CHAPTER_BOOK_DAO.getChapterBooksListByBook(connection, urlFileBook);
+        try{
+            CHAPTER_BOOK_DAO.deleteStudentsFromChapterBook(connection, chapterBooks);
+            CHAPTER_BOOK_DAO.deleteIntegrantsFromChapterBook(connection, chapterBooks);
+            CHAPTER_BOOK_DAO.deleteCollaboratorsFromChapterBook(connection, chapterBooks);
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM ChapterBook WHERE urlFileBook = ?;"
+            );
+            sentenceQuery.setString(1, urlFileBook);
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                connection.close();
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    private void insertIntoStudentBook(Connection connection, Book book){
+        book.getStudents().forEach( student -> {
+            try{
+                PreparedStatement sentenceQuery = connection.prepareStatement(
+                    "INSERT INTO BookStudent VALUES(?,?);"
+                );
+                sentenceQuery.setString(1, book.getUrlFile());
+                sentenceQuery.setString(2, student);
+                sentenceQuery.executeUpdate();
+            }catch(SQLException sqlException){
+                try{
+                    connection.rollback();
+                    connection.close();
+                    Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+                }catch(SQLException ex){
+                    Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
+    
+    
+    
+    private void insertIntoIntegrantBook(Connection connection, Book book){
+        book.getIntegrants().forEach( integrant -> {
+            try{
+                PreparedStatement sentenceQuery = connection.prepareStatement(
+                    "INSERT INTO IntegrantBook VALUES(?,?);"
+                );
+                sentenceQuery.setString(1, integrant.getRfc());
+                sentenceQuery.setString(2, book.getUrlFile());
+                sentenceQuery.executeUpdate();
+            }catch(SQLException sqlException){
+                try{
+                    connection.rollback();
+                    connection.close();
+                    Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+                }catch(SQLException ex){
+                    Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
+    
+    private void insertIntoCollaboratorBook(Connection connection, Book book){
+        book.getCollaborators().forEach( collaborator -> {
+            try{
+                PreparedStatement sentenceQuery = connection.prepareStatement(
+                    "INSERT INTO CollaborateBook VALUES(?,?);"
+                );
+                sentenceQuery.setString(1, collaborator.getRfc());
+                sentenceQuery.setString(2, book.getUrlFile());
+                sentenceQuery.executeUpdate();
+            }catch(SQLException sqlException){
+                try{
+                    connection.rollback();
+                    connection.close();
+                    Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+                }catch(SQLException ex){
+                    Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
+    
+    private Book getoutBookDataFromQuery(ResultSet resultBookQuery){
+        Book book = new Book();
+        try{
+            book = new Book(
+                resultBookQuery.getString("urlFile"),
+                resultBookQuery.getString("projectName"),
+                resultBookQuery.getBoolean("impactBA"),
+                resultBookQuery.getString("evidenceType"),
+                resultBookQuery.getString("evidenceTitle"),
+                resultBookQuery.getString("registrationResponsible"),
+                resultBookQuery.getDate("registrationDate").toString(),
+                resultBookQuery.getString("studyDegree"),
+                resultBookQuery.getDate("publicationDate").toString(),
+                resultBookQuery.getString("country"),
+                resultBookQuery.getString("publisher"),
+                resultBookQuery.getInt("editionsNumber"),
+                resultBookQuery.getInt("isbn")
+            );
+        }catch(SQLException sqlException){
+            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            return book;
+        }
+    }
+    
+    private List<Integrant> getIntegrantsBookParticipation(Connection connection, String urlFileBook){
+        List<Integrant> integrants = new ArrayList<>();
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "SELECT i.fullName FROM Integrant i, IntegrantBook ia WHERE ia.rfc = i.rfc AND urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileBook);
+            ResultSet resultQuery = sentenceQuery.executeQuery();
+            while(resultQuery.next()){
+                Integrant integrant = new Integrant();
+                integrant.setFullName(resultQuery.getString("fullName"));
+                integrants.add(integrant);
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            return integrants;
+        }
+    }
+    
+    private List<Collaborator> getCollaboratorsBookParticipation(Connection connection, String urlFileBook){
+        List<Collaborator> collaborators = new ArrayList<>();
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "SELECT c.fullName FROM CollaborateBook ca, Collaborator c WHERE ca.rfc = c.rfc AND urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileBook);
+            ResultSet resultQuery = sentenceQuery.executeQuery();
+            while(resultQuery.next()){
+                Collaborator collaborator = new Collaborator();
+                collaborator.setFullName(resultQuery.getString("fullName"));
+                collaborators.add(collaborator);
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            return collaborators;
+        }
+    }
+    
+    private List<String> getStudentNamesBookParticipation(Connection connection, String urlFileBook){
+        List<String> students = new ArrayList<>();
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "SELECT * FROM BookStudent WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileBook);
+            ResultSet resultQuery = sentenceQuery.executeQuery();
+            while(resultQuery.next()){
+                students.add(resultQuery.getString("student"));
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            return students;
+        }
+    }
+}
