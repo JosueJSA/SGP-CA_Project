@@ -39,6 +39,7 @@ public class MeetingAgendaDAO implements IMeetingAgendaDAO{
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
+                CONNECTION.closeConnection();
                 Logger.getLogger(MeetingAgenda.class.getName()).log(Level.SEVERE, null, sqlException);
             }catch(SQLException ex){
                 Logger.getLogger(MeetingAgendaDAO.class.getName()).log(Level.SEVERE, null, ex);

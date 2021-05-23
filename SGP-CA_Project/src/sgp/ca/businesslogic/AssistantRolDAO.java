@@ -37,6 +37,7 @@ public class AssistantRolDAO implements IAssistantRolDAO{
             }catch(SQLException sqlException){
                 try{
                     connection.rollback();
+                    CONNECTION.closeConnection();
                     Logger.getLogger(AssistantRol.class.getName()).log(Level.SEVERE, null, sqlException);
                 }catch(SQLException ex){
                     Logger.getLogger(AssistantRolDAO.class.getName()).log(Level.SEVERE, null, ex);

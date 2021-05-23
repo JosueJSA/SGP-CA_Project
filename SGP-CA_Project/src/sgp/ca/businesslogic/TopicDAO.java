@@ -41,6 +41,7 @@ public class TopicDAO implements ITopicDAO{
             }catch(SQLException sqlException){
                 try{
                     connection.rollback();
+                    CONNECTION.closeConnection();
                     Logger.getLogger(Topic.class.getName()).log(Level.SEVERE, null, sqlException);
                 }catch(SQLException ex){
                     Logger.getLogger(TopicDAO.class.getName()).log(Level.SEVERE, null, ex);

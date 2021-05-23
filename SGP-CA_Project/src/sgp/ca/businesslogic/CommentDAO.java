@@ -38,6 +38,7 @@ public class CommentDAO implements ICommentDAO {
             }catch(SQLException sqlException){
                 try{
                     connection.rollback();
+                    CONNECTION.closeConnection();
                     Logger.getLogger(Meeting.class.getName()).log(Level.SEVERE, null, sqlException);
                 }catch(SQLException ex){
                     Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, ex);

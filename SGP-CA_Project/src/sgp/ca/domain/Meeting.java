@@ -20,14 +20,15 @@ public class Meeting {
     private String issueMeeting;
     private String meetingNote;
     private String meetingPending;
+    private String integrantResponsible;
     private MeetingAgenda meetingAgenda;
     private List<Agreement> agreements;
     private List <Comment> comments;
     private List <AssistantRol> assistantsRol;
 
     public Meeting(int meetingKey, String meetingDate, String meetingTime, String meetingProject, 
-    String meetingRegistrationDate, String statusMeeting, String placeMeeting, 
-    String issueMeeting, String meetingNote, String meetingPending) {
+    String meetingRegistrationDate, String statusMeeting, String placeMeeting, String issueMeeting, 
+    String meetingNote, String meetingPending, String integrantResponsible) {
         this.meetingKey = meetingKey;
         this.meetingDate = meetingDate;
         this.meetingTime = meetingTime;
@@ -38,6 +39,7 @@ public class Meeting {
         this.issueMeeting = issueMeeting;
         this.meetingNote = meetingNote;
         this.meetingPending = meetingPending;
+        this.integrantResponsible  = integrantResponsible;
         this.meetingAgenda = new MeetingAgenda();
         this.agreements = new ArrayList<>();
         this.comments = new ArrayList<>();
@@ -89,6 +91,10 @@ public class Meeting {
 
     public String getMeetingPending() {
         return meetingPending;
+    }
+
+    public String getIntegrantResponsible() {
+        return integrantResponsible;
     }
 
     public MeetingAgenda getMeetingAgenda() {
@@ -175,6 +181,10 @@ public class Meeting {
 
     public void setMeetingPending(String meetingPending) {
         this.meetingPending = meetingPending;
+    }
+
+    public void setIntegrantResponsible(String integrantResponsible) {
+        this.integrantResponsible = integrantResponsible;
     }
 
     public void setMeetingAgenda(MeetingAgenda meetingAgenda) {

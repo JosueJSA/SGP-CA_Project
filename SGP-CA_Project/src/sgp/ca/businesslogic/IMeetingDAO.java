@@ -14,9 +14,11 @@ public interface IMeetingDAO {
     public List<Meeting> getAllMeetings();
     public Meeting getMeeting(int meetingKey);
     public List<Meeting> getMeetingsbyDate(String meetingDate);
-    public void addMeeting(Meeting newMeeting);
-    public void updateMeeting(Meeting meeting, Meeting oldMeeting);
-    public void deleteMeeting(Meeting meeting);
+    public List<Meeting> getMeetingsbyIssue(String issueMeeting);
+    public List<Meeting> getMeetingsbyDateAndIssue(String meetingDate, String issue);
+    public boolean addMeeting(Meeting newMeeting);
+    public boolean updateMeeting(Meeting meeting, Meeting oldMeeting);
+    public boolean deleteMeeting(Meeting meeting);
     public void deleteMeetingAgenda(Connection connection, Meeting meeting);
     public void deleteAgreement(Connection connection, Meeting meeting);
     public void deleteComment(Connection connection, Meeting meeting);

@@ -37,6 +37,7 @@ public class AgreementDAO implements IAgreementDAO{
             }catch(SQLException sqlException){
                 try{
                     connection.rollback();
+                    CONNECTION.closeConnection();
                     Logger.getLogger(Meeting.class.getName()).log(Level.SEVERE, null, sqlException);
                 }catch(SQLException ex){
                     Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, ex);

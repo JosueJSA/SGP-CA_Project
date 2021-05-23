@@ -5,15 +5,22 @@
 
 package sgp.ca.demodao;
 
+
+import java.io.IOException;
 import java.net.URL;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -21,14 +28,21 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.businesslogic.MeetingDAO;
+import sgp.ca.domain.Meeting;
+import sgp.ca.domain.Prerequisite;
+import sgp.ca.domain.Topic;
 
 public class MeetingFormController implements Initializable {
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
     private final MeetingDAO MEETING_DAO = new MeetingDAO();
-//    private Hashtable gridForm = new Hashtable();
+    private Meeting meeting = new Meeting();
     
     @FXML
     private Button btnRegisterMeeting;
@@ -67,10 +81,21 @@ public class MeetingFormController implements Initializable {
     @FXML
     private TableColumn<AssistantTable, RadioButton> columnTimeTaker;
     @FXML
-    private TableView prerequisiteTableView;
+    private TableView <Prerequisite> prerequisiteTableView;
     @FXML
-    private TableView meetingAgendaTableView;
-    
+    private TableColumn<Prerequisite, String> descriptionPrerequisiteColumn;
+    @FXML
+    private TableColumn<Prerequisite, String> responsiblePrerequisiteColumn;
+    @FXML
+    private TableView <Topic> meetingAgendaTableView;
+    @FXML
+    private TableColumn<Topic, String> estimatedTimeColumn;
+    @FXML
+    private TableColumn<Topic, String> descriptionTopicColumn;
+    @FXML
+    private TableColumn<Topic, String> discussionLeaderCoumn;
+    ObservableList<Prerequisite> itemsPrerequisite = FXCollections.observableArrayList();
+    ObservableList<Topic> itemsTopic = FXCollections.observableArrayList();
     
 
     /**
@@ -80,36 +105,58 @@ public class MeetingFormController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cboBoxMeetingHour.setItems(makeitemsHoursList());
         cboBoxMeetingMinute.setItems(makeitemsMinutesList());
+        
         columnIntegrantName.setCellValueFactory(new PropertyValueFactory<AssistantTable, String>("integrantName"));
-        
-        columnSelectAssistant.setStyle("-fx-alignment: CENTER");
         columnSelectAssistant.setCellValueFactory(new PropertyValueFactory<AssistantTable, RadioButton>("assistant"));
-        
-        columnDiscussionLeader.setStyle("-fx-alignment: CENTER");
         columnDiscussionLeader.setCellValueFactory(new PropertyValueFactory<AssistantTable, RadioButton>("discussionLeader"));
-        
-        columnSecretary.setStyle("-fx-alignment: CENTER");
         columnSecretary.setCellValueFactory(new PropertyValueFactory<AssistantTable, RadioButton>("secretary"));
-        
-        columnTimeTaker.setStyle("-fx-alignment: CENTER");
         columnTimeTaker.setCellValueFactory(new PropertyValueFactory<AssistantTable, RadioButton>("takerTime"));
         assistansTableView.setItems(makeitemsIntegrant());
+        
+        descriptionPrerequisiteColumn.setCellValueFactory(new PropertyValueFactory<Prerequisite, String>("descrptionPrerequisite"));
+        descriptionPrerequisiteColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        responsiblePrerequisiteColumn.setCellValueFactory(new PropertyValueFactory<Prerequisite, String>("responsiblePrerequisite"));
+        responsiblePrerequisiteColumn.setCellFactory(ChoiceBoxTableCell.forTableColumn(makeitemsIntegrantForChoiceBoxTableCell()));
+        responsiblePrerequisiteColumn.setOnEditCommit(data -> {
+            Prerequisite prerequisite = data.getRowValue();
+            prerequisite.setDescrptionPrerequisite(data.getNewValue());
+
+            System.out.println(prerequisite);
+        });
+        prerequisiteTableView.setItems(itemsPrerequisite);
+        
+        estimatedTimeColumn.setCellValueFactory(new PropertyValueFactory<Topic, String>("plannedTime"));
+        estimatedTimeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        descriptionTopicColumn.setCellValueFactory(new PropertyValueFactory<Topic, String>("descriptionTopic"));
+        descriptionTopicColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        discussionLeaderCoumn.setCellValueFactory(new PropertyValueFactory<Topic, String>("discissionLeader"));
+        discussionLeaderCoumn.setCellFactory(ChoiceBoxTableCell.forTableColumn(makeitemsIntegrantForChoiceBoxTableCell()));
+        meetingAgendaTableView.setItems(itemsTopic);
                 
     } 
     
+    public void reciveMeeting (Meeting meeting){
+        this.meeting = meeting;
+    }
+    
     @FXML
     void addNewMeeting(ActionEvent event) {
+        
 
     }
 
     @FXML
     void addRowMeetingAgendaTable(ActionEvent event) {
-
+        Topic newTopic = new Topic();
+        itemsTopic.add(newTopic);
     }
 
     @FXML
     void addRowPrerequisiteTable(ActionEvent event) {
-
+        Prerequisite newPrerequisite = new Prerequisite();
+        itemsPrerequisite.add(newPrerequisite);
+        System.out.print(itemsPrerequisite.size() + " - ");
     }
 
     @FXML
@@ -125,6 +172,13 @@ public class MeetingFormController implements Initializable {
     @FXML
     void removeRowPrerequisiteTable(ActionEvent event) {
 
+    }
+    
+    private ObservableList<String> makeitemsIntegrantForChoiceBoxTableCell(){
+        ObservableList<String> itemsIntegrant = FXCollections.observableArrayList();
+        List<String> integrantsName = INTEGRANT_DAO.getAllIntegrantsName();
+        itemsIntegrant.addAll(integrantsName);
+        return itemsIntegrant;
     }
     
     
@@ -159,6 +213,22 @@ public class MeetingFormController implements Initializable {
             }
         }
         return itemsMinutes;
+    }
+    
+    private FXMLLoader changeWindow(String window, Event event){
+        Stage stage = new Stage();
+        FXMLLoader loader = null;
+        try{
+            loader = new FXMLLoader(getClass().getResource(window));
+            stage.setScene(new Scene((Pane)loader.load()));
+            stage.show();
+            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            currentStage.close();
+        } catch(IOException io){
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
+        } finally {
+            return loader;
+        }
     }
     
 }

@@ -23,7 +23,7 @@ public class MeetingInsertTest {
     
     @Test
     public void testCorrectMeetingInsert(){
-        meeting = new Meeting(0,"2021-05-02", "17:00:00", "Plan de Estudios de ISOF", "2021-04-30", "Realizada", "Teams", "Actualizar plan de estudios", "1. Se necesita un plan de trabajo", "1. Realizar plan de trabajo");
+        meeting = new Meeting(0,"18-15-2021", "17:00:00", "Plan de Estudios de ISOF", "2021-04-30", "Realizada", "Teams", "Segundo ejemplo de prueba", "1. Se necesita un plan de trabajo", "1. Realizar plan de trabajo", "OFIJO3IJ3OIDJ3O");
         meeting.setMeetingAgenda(new MeetingAgenda (0,"02:04:00", "02:00:00", 2));
         meeting.getMeetingAgenda().getTopics().add(new Topic(0, "17:00:00", "18:04:00", "01:00:00","01:04:00","Plan de estudios ISOF", "Dra. María Karen Conrtés Verdín", "Concluido"));
         meeting.getMeetingAgenda().getTopics().add(new Topic(0, "18:04:00", "19:04:00", "01:00:00", "01:00:00", "Eventos del Semestres Enero-Julio 2021", "Mtro. Juan Carlos Perez Arriaga", "Concluido"));
@@ -35,14 +35,14 @@ public class MeetingInsertTest {
         meeting.getComments().add(new Comment(0, "La fecha de reunion con el director de la FEI es incorrecta", "Dra. Maria Karen Cortes Verdín", "19:32:00", "2021-04-30"));
         meeting.getAssistantsRol().add(new AssistantRol(0, "SAGA8906245M7", "Secretario", 1, "AJSG"));
         MEETING_DAO.addMeeting(meeting);
-        Meeting meetingRetrieved = MEETING_DAO.getMeetingbyDateAndTime("2021-05-02", "17:00:00");
-        MEETING_DAO.deleteMeeting(meeting);
+        Meeting meetingRetrieved = MEETING_DAO.getMeeting(4);
+        //MEETING_DAO.deleteMeeting(meeting);
         Assert.assertEquals(meeting.getMeetingDate(), meetingRetrieved.getMeetingDate());
     }
     
     @Test
     public void testIncorrectMeetingInsertInvalidData(){
-        meeting = new Meeting(0,"2021-05-02", "17:00:00", "Plan de Estudios de ISOF", "2021-04-30", "Realizada", "Teams", "Actualizar plan de estudios", "1. Se necesita un plan de trabajo", "1. Realizar plan de trabajo");
+        meeting = new Meeting(0,"2021-05-02", "17:00:00", "Plan de Estudios de ISOF", "2021-04-30", "Realizada", "Teams", "Actualizar plan de estudios", "1. Se necesita un plan de trabajo", "1. Realizar plan de trabajo", "OFIJO3IJ3OIDJ3O");
         meeting.setMeetingAgenda(new MeetingAgenda (0,"02:04:00", "02:00:00",2));
         meeting.getMeetingAgenda().addTopic(new Topic(0, "17:00:00", "18:04:00", "01:00:00","01:04:00","Plan de estudios ISOF", "Dra. María Karen Conrtés Verdín", "Concluido"));
         meeting.getMeetingAgenda().addTopic(new Topic(0, "18:04:00", "19:04:00", "01:00:00", "01:00:00", "Eventos del Semestres Enero-Julio 2021", "Mtro. Juan Carlos Perez Arriaga", "Concluido"));
@@ -54,7 +54,7 @@ public class MeetingInsertTest {
         meeting.getComments().add(new Comment(0, "La fecha de reunion con el director de la FEI es incorrecta", "Dra. Maria Karen Cortes Verdín", "19:32:00", "2021-04-30"));
         meeting.getAssistantsRol().add(new AssistantRol(0, "SAGA8906245M7", "Secretario", 1, "AJSG"));
         MEETING_DAO.addMeeting(meeting);
-        Meeting meetingRetrieved = MEETING_DAO.getMeetingbyDateAndTime("2021-05-02", "17:00:00");
+        Meeting meetingRetrieved = MEETING_DAO.getMeeting(1);
         Assert.assertNull(meetingRetrieved.getMeetingProject());
     }
 }
