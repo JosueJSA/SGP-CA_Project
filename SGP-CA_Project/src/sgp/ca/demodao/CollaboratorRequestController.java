@@ -121,6 +121,9 @@ public class CollaboratorRequestController implements Initializable {
 
     @FXML
     private void editCollaborator(ActionEvent event) {
+        FXMLLoader loader = changeWindow("CollaboratorEdit.fxml", event);
+        CollaboratorEditController controller = loader.getController();
+        controller.showCollaboratorUpdateForm(integrantToken, this.collaborator.getEmailUV());
     }
 
     @FXML

@@ -61,12 +61,12 @@
                   <Font size="17.0" />
                </font>
             </Button>
-            <Button alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="284.0" style="-fx-background-color: black;" text="PRODUCCIÓN ACADÉMICA" textFill="WHITE">
+            <Button fx:id="btnAcademyProduction" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#consultEvidencesList" prefHeight="50.0" prefWidth="284.0" style="-fx-background-color: black;" text="PRODUCCIÓN ACADÉMICA" textFill="WHITE">
                <font>
                   <Font size="17.0" />
                </font>
             </Button>
-            <Button alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="284.0" style="-fx-background-color: black;" text="REUNIONES" textFill="WHITE">
+            <Button fx:id="btnMeetingsRequest" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#consultMeetings" prefHeight="50.0" prefWidth="284.0" style="-fx-background-color: black;" text="REUNIONES" textFill="WHITE">
                <font>
                   <Font size="17.0" />
                </font>

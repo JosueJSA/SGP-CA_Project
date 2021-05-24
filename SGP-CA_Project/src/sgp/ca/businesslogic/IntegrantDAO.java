@@ -230,6 +230,7 @@ import sgp.ca.domain.Schooling;
             sentenceQuery.setString(1, "Dado de baja");
             sentenceQuery.setString(2,emailUV);
             sentenceQuery.executeUpdate();
+            correctUnsubscribe = true;
         }catch(SQLException ex){
             Logger.getLogger(CollaboratorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
@@ -248,6 +249,7 @@ import sgp.ca.domain.Schooling;
             sentenceQuery.setString(1, "Activo");
             sentenceQuery.setString(2,emailUV);
             sentenceQuery.executeUpdate();
+            correctSubscribe = true;
         }catch(SQLException ex){
             Logger.getLogger(CollaboratorDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{

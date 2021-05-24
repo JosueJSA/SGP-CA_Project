@@ -7,10 +7,6 @@ package sgp.ca.demodao;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -27,6 +23,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -35,6 +32,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import sgp.ca.businesslogic.MeetingDAO;
+import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Meeting;
 
 public class MeetingHistoryController implements Initializable {
@@ -64,36 +62,44 @@ public class MeetingHistoryController implements Initializable {
     private TableColumn<Meeting, String> columnIntegrantResponsibleMeeting;
     @FXML
     private Button btnRefreshTable;
+    @FXML
+    private Label lblUserName;
+    
+    private Integrant token;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         preparedMeetingTable();
     }   
     
-    
+    public void receiveToken(Integrant integrantToken){
+        this.token = integrantToken;
+        this.lblUserName.setText(token.getFullName());
+    }
     
     @FXML
-    void addMeeting(ActionEvent event) {
+    public void addMeeting(ActionEvent event) {
         FXMLLoader loader = this.changeWindow("MeetingForm.fxml", event);
         MeetingFormController controller = loader.getController();
         
     }
 
     @FXML
-    void closeMeetingHistoryWindow(ActionEvent event) {
-        
-
+    public void closeMeetingHistoryWindow(ActionEvent event) {
+        FXMLLoader loader = changeWindow("Start.fxml", event);
+        StartController controller = loader.getController();
+        controller.receiveIntegrantToken(token);
     }
 
     @FXML
-    void refreshMeetingHistoryMeeting(ActionEvent event) {
+    public void refreshMeetingHistoryMeeting(ActionEvent event) {
         meetingHistoryTableView.getItems().clear();
         setAllMeetingInformationIntoTable();
         
     }
     
     @FXML
-    void observeMeetingInformation(MouseEvent event) {
+    public void observeMeetingInformation(MouseEvent event) {
         FXMLLoader loader = changeWindow("Meeting.fxml", event);
         MeetingController controller = loader.getController();
         controller.reciveMeeting(
@@ -103,9 +109,9 @@ public class MeetingHistoryController implements Initializable {
     }
 
     @FXML
-    void searchMeeting(ActionEvent event) {
+    public void searchMeeting(ActionEvent event) {
         System.out.print(meetingIssueField.getText());
-        if((meetingIssueField.getText())== null){
+        if((meetingIssueField.getText()).equals(null)){
             if((meetingDateField.getValue())!=null){
                 meetingHistoryTableView.getItems().clear();
                 setMeetingInformationByDate();
@@ -150,12 +156,12 @@ public class MeetingHistoryController implements Initializable {
     }
     
     private void setMeetingInformationByDateAndIssueIntoTable(){
-        String dateMeeting = converterDate(meetingDateField.getValue().toString());
+        String dateMeeting = meetingDateField.getValue().toString();
         String meetingIssue = (meetingIssueField.getText());
         List meetingslist = new ArrayList<>();
         
         for(int i=0; i< this.meetingsList.size(); i++){
-            if((this.meetingsList.get(i).getMeetingDate() == dateMeeting) && 
+            if((this.meetingsList.get(i).getMeetingDate().equals(dateMeeting)) && 
             (this.meetingsList.get(i).getIssueMeeting().contains(meetingIssue))){
                 meetingslist.add(this.meetingsList.get(i));
             }
@@ -175,31 +181,16 @@ public class MeetingHistoryController implements Initializable {
     }
     
     private void setMeetingInformationByDate(){
-        String meetingDate = converterDate(meetingDateField.getValue().toString());
+        String meetingDate = meetingDateField.getValue().toString();
         System.out.print(meetingDate);
         List meetingslist = new ArrayList<>();
         for(int i=0; i<this.meetingsList.size(); i++){
-            if(this.meetingsList.get(i).getMeetingDate() == meetingDate){
+            if(this.meetingsList.get(i).getMeetingDate().equals(meetingDate)){
                 meetingslist.add(this.meetingsList.get(i));
             }
         }
         meetingHistoryTableView.setItems(makeitemsMeetings(meetingslist));
         
-    }
-    
-    private String converterDate(String date){
-        String newDate= "";
-        try{
-            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            DateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date dateConverted = formatter.parse(date);
-            newDate = targetFormat.format(dateConverted);
-            System.out.print(newDate);
-        }catch(ParseException parseException){
-            Logger.getLogger(MeetingHistoryController.class.getName()).log(Level.SEVERE, null, parseException);
-        }finally{
-            return newDate;
-        }
     }
     
     private FXMLLoader changeWindow(String window, Event event){

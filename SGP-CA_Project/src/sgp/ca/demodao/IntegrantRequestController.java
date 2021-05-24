@@ -69,12 +69,17 @@ public class IntegrantRequestController implements Initializable {
     private DatePicker memberRegistrationDateField;
     @FXML
     private PasswordField passwordField;
+    @FXML
+    private TextField fieldParticipationStatus;
 
     private Integrant token;
     private Integrant integrant;
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
+    
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -139,6 +144,7 @@ public class IntegrantRequestController implements Initializable {
         this.memberRegistrationDateField.setValue(LocalDate.parse(this.integrant.getDateOfAdmission()));
         this.memberStaffNumberField.setText(String.valueOf(this.integrant.getStaffNumber()));
         this.lblParticipationType.setText(this.integrant.getParticipationType());
+        this.fieldParticipationStatus.setText(this.integrant.getParticipationStatus());
     }
     
     private FXMLLoader changeWindow(String window, Event event){

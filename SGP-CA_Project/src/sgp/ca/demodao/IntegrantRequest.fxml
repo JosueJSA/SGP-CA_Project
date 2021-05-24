@@ -84,6 +84,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
                   <Label text="RFC: " />
@@ -106,6 +107,8 @@
                   <DatePicker fx:id="memberRegistrationDateField" editable="false" maxWidth="1.7976931348623157E308" promptText="Ejmplo: 2020/12/12" GridPane.columnIndex="3" />
                   <Label text="Contraseña: " GridPane.columnIndex="2" GridPane.rowIndex="4" />
                   <PasswordField fx:id="passwordField" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <Label text="Estado:" GridPane.rowIndex="5" />
+                  <TextField fx:id="fieldParticipationStatus" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
                </children>
             </GridPane>
          </children>

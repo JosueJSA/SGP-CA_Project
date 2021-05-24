@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.gluonhq.charm.glisten.control.Avatar?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
@@ -7,6 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -15,11 +17,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="757.0" prefWidth="1207.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MeetingHistoryController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="757.0" prefWidth="1207.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MeetingHistoryController">
    <top>
-      <HBox alignment="CENTER_LEFT" prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
-            <Label text="REUNIONES" textFill="WHITE" HBox.hgrow="ALWAYS">
+            <Label maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="163.0" text="REUNIONES" textFill="WHITE" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -27,12 +29,18 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </Label>
-            <Label alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Username" textFill="WHITE" HBox.hgrow="ALWAYS">
-               <HBox.margin>
-                  <Insets right="15.0" />
-               </HBox.margin>
-            </Label>
+            <Label fx:id="lblUserName" alignment="CENTER_RIGHT" prefHeight="23.0" prefWidth="347.0" text="..." />
+            <Avatar>
+               <image>
+                  <Image url="@../../../../img/userIcon.png" />
+               </image></Avatar>
          </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
       </HBox>
    </top>
    <bottom>

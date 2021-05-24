@@ -101,6 +101,7 @@ public class CollaboratorEditController implements Initializable {
     
     public void showCollaboratorUpdateForm(Integrant integrantToken, String emailUV){
         this.token = integrantToken;
+        hboxCollaboratorOptions.getChildren().addAll(btnCollaboratorUpdate, btnCancel);
         this.collaborator = (Collaborator) COLLABORATOR_DAO.getMemberByUVmail(emailUV);
         this.oldRFC = collaborator.getRfc();
         this.setIntegrantDataIntoInterface();
@@ -150,6 +151,9 @@ public class CollaboratorEditController implements Initializable {
         this.memberRegistrationDateField.setValue(LocalDate.parse(collaborator.getDateOfAdmission()));
         this.memberStaffNumberField.setText(String.valueOf(collaborator.getStaffNumber()));
         this.lblParticipationType.setText(collaborator.getParticipationType());
+        this.fieldBodyAcademyName.setText(collaborator.getNameBACollaborator());
+        this.fieldHighestDegreeStudies.setText(collaborator.getHighestDegreeStudies());
+        this.fieldStudyArea.setText(collaborator.getStudyArea());
     }
     
     private void getOutIntegrantDataFromInterface(){

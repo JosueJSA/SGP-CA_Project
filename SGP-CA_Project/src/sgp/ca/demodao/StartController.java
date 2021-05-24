@@ -42,6 +42,10 @@ public class StartController implements Initializable {
     private Label lblUserName;
     
     private Integrant integrant;
+    @FXML
+    private Button btnAcademyProduction;
+    @FXML
+    private Button btnMeetingsRequest;
     
 
     /**
@@ -78,6 +82,17 @@ public class StartController implements Initializable {
         FXMLLoader loader = changeWindow("WorkPlan.fxml", event);
         WorkPlanController controller = loader.getController();
         controller.receiveIntegrantToken(integrant);
+    }
+    
+    @FXML
+    private void consultEvidencesList(ActionEvent event) {
+    }
+
+    @FXML
+    private void consultMeetings(ActionEvent event) {
+        FXMLLoader loader = changeWindow("MeetingHistory.fxml", event);
+        MeetingHistoryController controller = loader.getController();
+        controller.receiveToken(integrant);
     }
 
     @FXML
