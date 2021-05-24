@@ -16,7 +16,7 @@ public class ProjectRequestTest {
    public final ProjectDAO PROJECT_DAO = new ProjectDAO();
     
     @Test
-    public void testGetExistReceptionWorkByUrlFile(){
+    public void testGetExistProjectByUrlFile(){
         PROJECT_INITIALIZER.prepareProjectInsertionForTest();
         Project projectRetrieved = PROJECT_DAO.getProjectbyName("Crecimiento de lenguajes de programación");
         String supposedProject = "Crecimiento de lenguajes de programación";
