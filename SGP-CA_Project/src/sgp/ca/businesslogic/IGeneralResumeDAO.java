@@ -12,7 +12,7 @@ public interface IGeneralResumeDAO {
     
     public List<String> getGeneralResumeKeys();
     public GeneralResume getGeneralResumeByKey(String bodyAcademyKey);
-    public void addGeneralResume(GeneralResume newGeneralResume);
-    public void updateGeneralResume(GeneralResume generalResume, String oldBodyAcademyKey);
+    public boolean addGeneralResume(GeneralResume newGeneralResume);
+    public boolean updateGeneralResume(GeneralResume generalResume, String oldBodyAcademyKey);
     
 }

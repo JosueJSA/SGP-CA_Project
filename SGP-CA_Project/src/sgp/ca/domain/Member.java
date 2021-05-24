@@ -7,12 +7,13 @@ package sgp.ca.domain;
 
 import java.util.Objects;
 
-abstract class Member {
+public abstract class Member {
     
     private String rfc;
     private String fullName;
     private String emailUV;
     private String curp;
+    private String participationType;
     private String nationality;
     private String dateOfAdmission;
     private String educationalProgram;
@@ -22,12 +23,13 @@ abstract class Member {
     private String bodyAcademyKey;
 
     public Member(String rfc, String fullName, String emailUV, String participationStatus,
-    String curp, String nationality, String dateOfAdmission, 
+    String curp, String participationType, String nationality, String dateOfAdmission, 
     String educationalProgram, int staffNumber, String cellphone, String bodyAcademyKey){
         this.rfc = rfc;
         this.fullName = fullName;
         this.emailUV = emailUV;
         this.curp = curp;
+        this.participationType = participationType;
         this.nationality = nationality;
         this.dateOfAdmission = dateOfAdmission;
         this.educationalProgram = educationalProgram;
@@ -37,8 +39,23 @@ abstract class Member {
         this.participationStatus = participationStatus;
     }
     
+    public Member(String participationType, String fullName, String emailUV, String cellphone){
+        this.participationType = participationType;
+        this.fullName = fullName;
+        this.emailUV = emailUV;
+        this.cellphone = cellphone;
+    }
+    
     public Member(){
         
+    }
+
+    public String getParticipationType() {
+        return participationType;
+    }
+
+    public void setParticipationType(String participationType) {
+        this.participationType = participationType;
     }
 
     public String getParticipationStatus() {

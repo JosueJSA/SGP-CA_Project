@@ -20,30 +20,30 @@ public class IntegrantUpdateTest{
     @Test
     public void testCorrecIntegrantUpdateWithAddSchooling(){
         INITIALIZER.prepareUpdateTestCase();
-        Integrant oldIntegrant =  INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx");
+        Integrant oldIntegrant =  (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
         Integrant newIntegrant = new Integrant(
             "SAA8906245M8", "Angel Juan Sánchez García", "angelsanchez@uv.mx", "angel", "Activo", "SAGA890624HVZNRN09", 
-            "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 41306, "2281394721",
-            "UV-CA-127", "PTC", "Integrante", "angelsg89@hotmail.com", "2288146210", "141912288421700"
+            "Integrante", "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 41306, "2281394721",
+            "UV-CA-127", "PTC", "angelsg89@hotmail.com", "2288146210", "141912288421700"
         );     
         
         newIntegrant.addSchooling(new Schooling(
-            "Lic. en Ingeniería en Tecnologías Estratégicas de la Información", "Universidad Anáhuac de Xalapa",
-            "Licenciatura", "Veracruz", "Computación", "Ingeniería", "2003-06-08", "08759567"
+            "Licenciatura", "Lic. en Ingeniería en Tecnologías Estratégicas de la Información", "2003-06-08",
+            "Universidad Anáhuac de Xalapa", "Veracruz", "08759567", "Computación", "Ingeniería"
         ));
         
         newIntegrant.addSchooling(new Schooling(
-            "Lic. en Ingeniería en Tecnologías Estratégicas de la Información", "Universidad Anáhuac de Xalapa",
-            "Maestría", "Veracruz", "Inteligencia artificial", "Ingeniería", "2003-06-08", "08759566"
+            "Maestría", "Lic. en Ingeniería en Tecnologías Estratégicas de la Información", "2003-06-08",
+            "Universidad Anáhuac de Xalapa", "Veracruz", "08759566", "Inteligencia artificial", "Ingeniería"
         ));
         
         newIntegrant.addSchooling(new Schooling(
-            "Lic. en Ingeniería en Tecnologías Estratégicas de la Información", "Universidad veracruzana",
-            "Doctorado", "Veracruz", "Ingeniería de software", "Ingeniería", "2003-06-08", "02450244"
+            "Doctorado", "Lic. en Ingeniería en Tecnologías Estratégicas de la Información", "2003-06-08", 
+            "Universidad veracruzana", "Veracruz", "02450244", "Ingeniería de software", "Ingeniería"
         ));
         
-        INTEGRANT_DAO.updateIntegrant(newIntegrant, oldIntegrant.getRfc());
-        Integrant newIntegrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        INTEGRANT_DAO.updateMember(newIntegrant, oldIntegrant.getRfc());
+        Integrant newIntegrantRetrieved = (Integrant) INTEGRANT_DAO.getMemberByUVmail("angelsanchez@uv.mx");
         INITIALIZER.cleanIntegrantTest(newIntegrantRetrieved.getRfc());
         Assert.assertNotEquals(oldIntegrant, newIntegrantRetrieved);
     }
@@ -51,21 +51,22 @@ public class IntegrantUpdateTest{
     @Test
     public void testIncorrectIntegrantDataUpdateNotAdded(){
         INITIALIZER.prepareUpdateTestCase();
-        Integrant oldIntegrant =  INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx");
+        Integrant oldIntegrant =  (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
         
         Integrant newIntegrant = new Integrant(
             "AAS285R5EF", "Angel Juan Sánchez García", "integrantTest@uv.mx", "angel", "Activo", "SAGA890624HVZNRN09", 
-            "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 41306, "2281394721",
-            "UV-CA-127", "PTC", "Integrante", "angelsg89@hotmail.com", "2288146210", "141912288421700"
+            "Integrante", "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 41306, "2281394721",
+            "UV-CA-127", "PTC", "angelsg89@hotmail.com", "2288146210", "141912288421700"
         );     
         
         newIntegrant.addSchooling(new Schooling(
-            "Lic. en Ingeniería en Tecnologías Estratégicas de la Información", "Universidad Anáhuac de Xalapa",
-            "Licenciatura", "Veracruz", "Computación", "Ingeniería", "20000-06-08", "08759567"                                      /*Date format incorrect -> Insertion Error*/
+            "Licenciatura", "Lic. en Ingeniería en Tecnologías Estratégicas de la Información",
+            "200003-06-08", "Universidad Anáhuac de Xalapa",  "Veracruz",  "08759567", 
+            "Computación", "Ingeniería"
         ));
         
-        INTEGRANT_DAO.updateIntegrant(newIntegrant, oldIntegrant.getRfc());
-        Integrant newIntegrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx");
+        INTEGRANT_DAO.updateMember(newIntegrant, oldIntegrant.getRfc());
+        Integrant newIntegrantRetrieved = (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
         INITIALIZER.cleanIntegrantTest("INTEGRANTETEST");
         Assert.assertEquals(oldIntegrant, newIntegrantRetrieved);
     }
@@ -73,38 +74,38 @@ public class IntegrantUpdateTest{
     @Test
     public void testCorrecIntegrantUpdateWithoutSchooling(){
         INITIALIZER.prepareUpdateTestCase();
-        Integrant oldIntegrant =  INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx");
+        Integrant oldIntegrant =  (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
         
         Integrant newIntegrant = new Integrant(
             "JAJCUYEDF2", "Angel Juan Sánchez García", "angelsanchez@uv.mx", "angel", "Activo", "SAGA890624HVZNRN09", 
-            "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 41306, "2281394721",
-            "UV-CA-127", "PTC", "Integrante", "angelsg89@hotmail.com", "2288146210", "141912288421700"
+            "Integrante", "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 41306, "2281394721",
+            "UV-CA-127", "PTC", "angelsg89@hotmail.com", "2288146210", "141912288421700"
         );     
         
-        INTEGRANT_DAO.updateIntegrant(newIntegrant, oldIntegrant.getRfc());
-        Integrant newIntegrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        INTEGRANT_DAO.updateMember(newIntegrant, oldIntegrant.getRfc());
+        Integrant newIntegrantRetrieved = (Integrant) INTEGRANT_DAO.getMemberByUVmail("angelsanchez@uv.mx");
         INITIALIZER.cleanIntegrantTest(newIntegrantRetrieved.getRfc());
         Assert.assertNotEquals(oldIntegrant, newIntegrantRetrieved);
     }
     
     @Test
-    public void correctUnsubscribeCollaborator(){
+    public void correctUnsubscribeIntegrant(){
         INITIALIZER.prepareRequestTestCase();
-        Integrant oldIntegrant = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
-        INTEGRANT_DAO.unsubscribeIntegrantByEmailUV(oldIntegrant.getEmailUV());
-        Integrant integrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        Integrant oldIntegrant = (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
+        INTEGRANT_DAO.unsubscribeMemberByEmailUV(oldIntegrant.getEmailUV());
+        Integrant integrantRetrieved = (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
         INITIALIZER.cleanIntegrantTest(integrantRetrieved.getRfc());
         Assert.assertNotEquals(oldIntegrant.getParticipationStatus(), integrantRetrieved.getParticipationStatus());
     }
     
     @Test
-    public void correctSubscribeCollaborator(){
+    public void correctSubscribeIntegrant(){
         INITIALIZER.prepareRequestTestCase();
-        Integrant oldIntegrant = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
-        INTEGRANT_DAO.unsubscribeIntegrantByEmailUV(oldIntegrant.getEmailUV());
-        oldIntegrant = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
-        INTEGRANT_DAO.subscribeIntegrantByEmailUV(oldIntegrant.getEmailUV());
-        Integrant integrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("angelsanchez@uv.mx");
+        Integrant oldIntegrant = (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
+        INTEGRANT_DAO.unsubscribeMemberByEmailUV(oldIntegrant.getEmailUV());
+        oldIntegrant = (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
+        INTEGRANT_DAO.subscribeMemberByEmailUV(oldIntegrant.getEmailUV());
+        Integrant integrantRetrieved = (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
         INITIALIZER.cleanIntegrantTest(integrantRetrieved.getRfc());
         String stateExpected = "Activo";
         Assert.assertEquals(stateExpected, integrantRetrieved.getParticipationStatus());

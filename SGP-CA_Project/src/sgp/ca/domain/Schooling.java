@@ -18,10 +18,10 @@ public class Schooling{
     private String studyArea;
     private String dateOfObteiningStudies;
     private String idProfessionalStudies;
-
-    public Schooling(String studyName, String studiesInstitution, 
-    String levelOfStudy, String studiesSatate, String studiesDiscipline, 
-    String studyArea, String dateOfObteiningStudies, String idProfessionalStudies){
+    
+    public Schooling(String levelOfStudy, String studyName, 
+    String dateOfObteiningStudies, String studiesInstitution, String studiesSatate, 
+    String idProfessionalStudies, String studyArea, String studiesDiscipline){
         this.studyName = studyName;
         this.studiesInstitution = studiesInstitution;
         this.levelOfStudy = levelOfStudy;

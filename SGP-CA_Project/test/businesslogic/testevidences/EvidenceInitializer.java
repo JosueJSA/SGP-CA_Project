@@ -13,6 +13,8 @@ import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.businesslogic.MagazineDAO;
 import sgp.ca.businesslogic.PrototypeDAO;
 import sgp.ca.domain.Article;
+import sgp.ca.domain.Collaborator;
+import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Magazine;
 import sgp.ca.domain.Prototype;
 
@@ -48,8 +50,8 @@ public class EvidenceInitializer {
                 "prorotipo2", "Mexico", "2020-04-12", true, "2010-01-10",
                 "Jorge Octavio Ocharan", "Licenciatura", "Prototipo", "Ninguna Característica"
             );
-            prototypo.getIntegrants().add(INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx"));
-            prototypo.getCollaborators().add(COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx"));
+            prototypo.getIntegrants().add((Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx"));
+            prototypo.getCollaborators().add((Collaborator) COLLABORATOR_DAO.getMemberByUVmail("prueba@uv.mx"));
             prototypo.getStudents().add("Josue Alarcon");
             prototypo.getStudents().add("Johann Alexis");
             prototypo.getStudents().add("Bere Martínez");
@@ -68,8 +70,8 @@ public class EvidenceInitializer {
             if(MAGAZINE_DAO.getMagazineByName("RevistaParaTest").getEditorialCountry() == null){
                 MAGAZINE_DAO.addMagazine(magazine);
             }
-            article.getIntegrants().add(INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx"));
-            article.getCollaborators().add(COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx"));
+            article.getIntegrants().add((Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx"));
+            article.getCollaborators().add((Collaborator) COLLABORATOR_DAO.getMemberByUVmail("prueba@uv.mx"));
             article.getStudents().add("Johann");
             article.setMagazine(MAGAZINE_DAO.getMagazineByName("RevistaParaTest"));
             ARTICLE_DAO.addNewEvidence(article);

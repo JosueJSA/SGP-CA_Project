@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
@@ -19,6 +21,28 @@ public class WorkPlanDAO implements IWorkPlanDAO{
 
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     private final GoalDAO GOAL_DAO = new GoalDAO();
+    
+    @Override
+    public List<WorkPlan> getWorkPlanPeriots(String bodyAcademyKey){
+        List<WorkPlan> workPlanPeriots = new ArrayList<>();
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT startDate, endDate FROM `WorkPlan` WHERE bodyAcademyKey = ? ORDER BY startDate DESC;"
+            );
+            sentenceQuery.setString(1, bodyAcademyKey);
+            ResultSet queryResult = sentenceQuery.executeQuery();
+            while(queryResult.next()){
+                WorkPlan workplan = new WorkPlan();
+                workplan.setStartDatePlan(queryResult.getDate("startDate").toString());
+                workplan.setEndDatePlan(queryResult.getDate("endDate").toString());
+            }
+        }catch(SQLException sqlException){
+            Logger.getLogger(WorkPlan.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return workPlanPeriots;
+        }
+    }
     
     @Override
     public WorkPlan getWorkPlan(String endDatePlan, String bodyAcademyKey){
@@ -48,8 +72,9 @@ public class WorkPlanDAO implements IWorkPlanDAO{
     }
 
     @Override
-    public void addWorkPlan(WorkPlan newWorkPlan){
+    public boolean addWorkPlan(WorkPlan newWorkPlan){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        boolean correctInsertion = false;
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "INSERT INTO WorkPlan (bodyAcademyKey, startDate, endDate, generalTarjet, durationInYears) VALUES(?, ?, ?, ?, ?);",
@@ -65,8 +90,10 @@ public class WorkPlanDAO implements IWorkPlanDAO{
             GOAL_DAO.addGoals(connection, newWorkPlan);
             connection.commit();
             connection.setAutoCommit(true);
+            correctInsertion = true;
         }catch(SQLException sqlException){
             try{
+                correctInsertion = false;
                 connection.rollback();
                 Logger.getLogger(WorkPlan.class.getName()).log(Level.SEVERE, null, sqlException);
             }catch(SQLException ex){
@@ -74,12 +101,14 @@ public class WorkPlanDAO implements IWorkPlanDAO{
             }
         }finally{
             CONNECTION.closeConnection();
+            return correctInsertion;
         }
     }
 
     @Override
-    public void updateWorkPlan(WorkPlan workPlan,  WorkPlan oldWorkPlan){
+    public boolean updateWorkPlan(WorkPlan workPlan,  WorkPlan oldWorkPlan){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        boolean correctUpdate = false;
         try{
             this.deleteGoals(connection, oldWorkPlan);
             PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -96,8 +125,10 @@ public class WorkPlanDAO implements IWorkPlanDAO{
             GOAL_DAO.addGoals(connection, workPlan);
             connection.commit();
             connection.setAutoCommit(true);
+            correctUpdate = true;
         }catch(SQLException sqlException){
             try{
+                correctUpdate = false;
                 connection.rollback();
                 Logger.getLogger(WorkPlan.class.getName()).log(Level.SEVERE, null, sqlException);
             }catch(SQLException ex){
@@ -105,12 +136,14 @@ public class WorkPlanDAO implements IWorkPlanDAO{
             }
         }finally{
             CONNECTION.closeConnection();
+            return correctUpdate;
         }
     }
 
     @Override
-    public void deleteWorkPlan(WorkPlan workPlan, String bodyAcademyKey){
+    public boolean deleteWorkPlan(WorkPlan workPlan, String bodyAcademyKey){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        boolean correctDelete = false;
         try{
             this.deleteGoals(connection, workPlan);
             PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -120,8 +153,10 @@ public class WorkPlanDAO implements IWorkPlanDAO{
             sentenceQuery.executeUpdate();
             connection.commit();
             connection.setAutoCommit(true);
+            correctDelete = true;
         }catch(SQLException sqlException){
             try {
+                correctDelete = false;
                 connection.rollback();
                 Logger.getLogger(WorkPlanDAO.class.getName()).log(Level.SEVERE, null, sqlException);
             } catch (SQLException ex) {
@@ -129,11 +164,13 @@ public class WorkPlanDAO implements IWorkPlanDAO{
             }
         }finally{
             CONNECTION.closeConnection();
+            return correctDelete;
         }    
     }
     
     @Override
-    public void deleteGoals(Connection connection, WorkPlan workPlan) {
+    public boolean deleteGoals(Connection connection, WorkPlan workPlan) {
+        boolean correctDelete = false;
         try{
             GOAL_DAO.deleteActions(connection, workPlan.getGoals());
             PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -141,24 +178,33 @@ public class WorkPlanDAO implements IWorkPlanDAO{
             );
             sentenceQuery.setInt(1, workPlan.getWorkplanKey());
             sentenceQuery.executeUpdate();
+            correctDelete = true;
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
+                correctDelete = false;
+                connection.close();
                 Logger.getLogger(WorkPlanDAO.class.getName()).log(Level.SEVERE, null, sqlException);
             }catch(SQLException ex){
                 Logger.getLogger(WorkPlanDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }finally{
+            return correctDelete;
         }
     }
     
-    public void updateWorkPlanWithKeyGenerated(PreparedStatement statement, WorkPlan workPlan){
+    public boolean updateWorkPlanWithKeyGenerated(PreparedStatement statement, WorkPlan workPlan){
+        boolean correctUpdate = false;
         try{
             ResultSet result = statement.getGeneratedKeys();
             if(result.next()){
                 workPlan.setWorkplanKey(result.getInt(1));
             }
+            correctUpdate = true;
         }catch(SQLException ex){
             Logger.getLogger(WorkPlanDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            return correctUpdate;
         }
     }
     

@@ -6,15 +6,17 @@
 package sgp.ca.businesslogic;
 
 import java.sql.Connection;
+import java.util.List;
 import sgp.ca.domain.WorkPlan;
 
 
 public interface IWorkPlanDAO {
     
+    public List<WorkPlan> getWorkPlanPeriots(String bodyAcademyKey);
     public WorkPlan getWorkPlan(String endDatePlan, String bodyAcademyKey);
-    public void addWorkPlan(WorkPlan newWorkPlan);
-    public void updateWorkPlan(WorkPlan worPlan, WorkPlan oldWorkPlan);
-    public void deleteWorkPlan(WorkPlan workPlan, String bodyAcademyKey);
-    public void deleteGoals(Connection connection, WorkPlan workPlan);
+    public boolean addWorkPlan(WorkPlan newWorkPlan);
+    public boolean updateWorkPlan(WorkPlan worPlan, WorkPlan oldWorkPlan);
+    public boolean deleteWorkPlan(WorkPlan workPlan, String bodyAcademyKey);
+    public boolean deleteGoals(Connection connection, WorkPlan workPlan);
     
 }

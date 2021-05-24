@@ -13,6 +13,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import sgp.ca.businesslogic.CollaboratorDAO;
 import sgp.ca.businesslogic.IntegrantDAO;
+import sgp.ca.domain.Collaborator;
+import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Prototype;
 
 public class ProtorypeInsertionTest {
@@ -30,8 +32,8 @@ public class ProtorypeInsertionTest {
             "prorotipoInsertado", "Mexico", "2020-04-12", true, "2010-01-10",
             "Jorge Octavio Ocharan", "Licenciatura", "UV-CA-127", "Ninguna Característica"
         );
-        prototypo.getIntegrants().add(INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx"));
-        prototypo.getCollaborators().add(COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx"));
+        prototypo.getIntegrants().add((Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx"));
+        prototypo.getCollaborators().add((Collaborator) COLLABORATOR_DAO.getMemberByUVmail("prueba@uv.mx"));
         prototypo.getStudents().add("Bere Martínez");
         PROTOTYPE_DAO.addNewEvidence(prototypo);
         Prototype retrievedPrototype = (Prototype) PROTOTYPE_DAO.getEvidenceByUrl("testPrototypoInsertion.pdf");
@@ -48,8 +50,8 @@ public class ProtorypeInsertionTest {
             "prorotipoInsertado", "Mexico", "2020-04-12", true, "201012-01-10",
             "Jorge Octavio Ocharan", "Licenciatura", "UV-CA-127", "Ninguna Característica"
         );
-        prototypo.getIntegrants().add(INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx"));
-        prototypo.getCollaborators().add(COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx"));
+        prototypo.getIntegrants().add((Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx"));
+        prototypo.getCollaborators().add((Collaborator) COLLABORATOR_DAO.getMemberByUVmail("prueba@uv.mx"));
         prototypo.getStudents().add("Bere Martínez");
         PROTOTYPE_DAO.addNewEvidence(prototypo);
         Prototype retrievedPrototype = (Prototype) PROTOTYPE_DAO.getEvidenceByUrl("testPrototypoInsertion.pdf");

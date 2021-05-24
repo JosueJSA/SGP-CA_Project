@@ -19,7 +19,6 @@ import javafx.scene.control.TextField;
 public class ValidatorForm{
     
     public static void checkAlaphabeticalFields(List<TextField> fields, int characterSizeLimit) throws InvalidFormException{
-        boolean isCorrect = true;
         for(TextField field : fields){
             chechkAlphabeticalField(field, characterSizeLimit);
         }
@@ -34,12 +33,8 @@ public class ValidatorForm{
     public static void chechkAlphabeticalField(TextField field, int characterSizeLimit) throws InvalidFormException{
         boolean correctField = false;
         if(!field.getText().isEmpty() && field.getText().length() < characterSizeLimit){
-            if(!isNumberData(field.getText())){
-                correctField = true;
-                field.setStyle("-fx-border-color: green;");
-            }else{
-                field.setStyle("-fx-border-color: red;");
-            }
+            field.setStyle("-fx-border-color: green;");
+            correctField = true;
         }else{
             field.setStyle("-fx-border-color: red;");
         }
@@ -51,12 +46,8 @@ public class ValidatorForm{
     public static void chechkAlphabeticalArea(TextArea txtArea, int characterSizeLimit) throws InvalidFormException{
         boolean correctField = false;
         if(!txtArea.getText().isEmpty() && txtArea.getText().length() < characterSizeLimit){
-            if(!isNumberData(txtArea.getText())){
-                correctField = true;
-                txtArea.setStyle("-fx-border-color: green;");
-            }else{
-                txtArea.setStyle("-fx-border-color: red;");
-            }
+            txtArea.setStyle("-fx-border-color: green;");
+            correctField = true;
         }else{
             txtArea.setStyle("-fx-border-color: red;");
         }
@@ -65,23 +56,31 @@ public class ValidatorForm{
         }
     }
     
-    public static boolean isNumberData(String textForCheck){
+    public static void isNumberData(TextField textForCheck) throws InvalidFormException{
         boolean isNumber = false;
         try{
-            double number = Double.parseDouble(textForCheck);
+            double number = Double.parseDouble(textForCheck.getText());
             isNumber = true;
+            textForCheck.setStyle("-fx-border-color: green;");
         }finally{
-            return isNumber;
+            if(!isNumber){
+                textForCheck.setStyle("-fx-border-color: red;");
+                throw new InvalidFormException("Campo no númerico");
+            }
         }
     }
     
-    public static boolean isIntegerNumberData(String textForCheck){
+    public static void isIntegerNumberData(TextField textForCheck) throws InvalidFormException{
         boolean isIntegerNumber = false;
         try{
-            int number = Integer.parseInt(textForCheck);
+            int number = Integer.parseInt(textForCheck.getText());
             isIntegerNumber = true;
+            textForCheck.setStyle("-fx-border-color: green;");
         }finally{
-            return isIntegerNumber;
+            if(!isIntegerNumber){
+                textForCheck.setStyle("-fx-border-color: red;");
+                throw new InvalidFormException("Campo no númerico");
+            }
         }
     }
     

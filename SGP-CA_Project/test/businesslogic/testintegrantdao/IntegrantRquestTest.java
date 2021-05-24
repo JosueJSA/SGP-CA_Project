@@ -18,7 +18,7 @@ public class IntegrantRquestTest {
     @Test
     public void testGetExistIntegrantByUVmail(){
         INITIALIZER.prepareRequestTestCase();
-        Integrant integrant = INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx");
+        Integrant integrant = (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
         String rfcExpected = "INTEGRANTETEST";
         String rfcRetrived = integrant.getRfc();
         INITIALIZER.cleanIntegrantTest(rfcRetrived);
@@ -27,7 +27,7 @@ public class IntegrantRquestTest {
     
     @Test
     public void testGetIntegrantNotRegisteredByUVmail(){
-        Integrant integrant = INTEGRANT_DAO.getIntegrantByUVmail("joijeoijd");
+        Integrant integrant = (Integrant) INTEGRANT_DAO.getMemberByUVmail("joijeoijd");
         String rfcRetrived = integrant.getRfc();
         Assert.assertNull(rfcRetrived);
     }
@@ -35,7 +35,7 @@ public class IntegrantRquestTest {
     @Test 
     public void testGetExistIntegrantStudies(){
         INITIALIZER.prepareRequestTestCase();
-        Integrant integrant = INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx");
+        Integrant integrant = (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
         int StudiesNumberExpected = 2;
         INITIALIZER.cleanIntegrantTest(integrant.getRfc());
         Assert.assertEquals("Get integrant studies, at least 1", StudiesNumberExpected, integrant.getSchooling().size());

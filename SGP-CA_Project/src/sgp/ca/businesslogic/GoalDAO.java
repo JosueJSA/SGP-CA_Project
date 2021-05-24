@@ -27,8 +27,9 @@ public class GoalDAO implements IGoalDAO{
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
 
     @Override
-    public void addGoals(Connection connection, WorkPlan workPlan){
-        workPlan.getGoals().forEach( goal -> {
+    public boolean addGoals(Connection connection, WorkPlan workPlan){
+        boolean correctInsertion = false;
+        for(Goal goal : workPlan.getGoals()){
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
                     "INSERT INTO Goal (workplanKey, startDate, endDate, statusGoal, descriptionGoal) VALUES (?, ?, ?, ?, ?);",
@@ -42,15 +43,19 @@ public class GoalDAO implements IGoalDAO{
                 sentenceQuery.executeUpdate();
                 this.updateGoalWithKeyGenerated(sentenceQuery, goal);
                 this.addActions(connection, goal);
+                correctInsertion = true;
             }catch(SQLException sqlException){
                 try{
+                    correctInsertion = false;
                     connection.rollback();
+                    connection.close();
                     Logger.getLogger(Goal.class.getName()).log(Level.SEVERE, null, sqlException);
                 }catch(SQLException ex){
                     Logger.getLogger(GoalDAO.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        });
+        }
+        return correctInsertion;
     }
 
     @Override
@@ -73,8 +78,8 @@ public class GoalDAO implements IGoalDAO{
                 newGoal.setActions(this.getActionsByGoal(newGoal.getGoalIdentifier()));
                 goalList.add(newGoal);
             }
-            
         }catch(SQLException sqlException){
+            goalList = null;
             Logger.getLogger(GoalDAO.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             return goalList;
@@ -82,28 +87,34 @@ public class GoalDAO implements IGoalDAO{
     }
 
     @Override
-    public void deleteActions(Connection connection, List<Goal> goals){
-        goals.forEach( goal -> {
+    public boolean deleteActions(Connection connection, List<Goal> goals){
+        boolean correctDelete = false;
+        for(Goal goal : goals){
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
                     "DELETE FROM Action WHERE goalIdentifier = ?;"
                 );
                 sentenceQuery.setInt(1, goal.getGoalIdentifier());
                 sentenceQuery.executeUpdate();
+                correctDelete = true;
             }catch(SQLException sqlException){
                 try {
+                    correctDelete = false;
                     connection.rollback();
+                    connection.close();
                     Logger.getLogger(Goal.class.getName()).log(Level.SEVERE, null, sqlException);
                 } catch (SQLException ex) {
                     Logger.getLogger(GoalDAO.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        });
+        }
+        return correctDelete;
     }
     
     @Override
-    public void addActions(Connection connection, Goal goal) {
-        goal.getActions().forEach( action -> {
+    public boolean addActions(Connection connection, Goal goal) {
+        boolean correctInsertion = false;
+        for(Action action : goal.getActions()){
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
                     "INSERT INTO Action (goalIdentifier, startDateAction, endDateAction,"
@@ -119,15 +130,19 @@ public class GoalDAO implements IGoalDAO{
                 sentenceQuery.setString(7, action.getResponsibleAction());
                 sentenceQuery.setString(8, action.getResource());
                 sentenceQuery.executeUpdate();
+                correctInsertion = true;
             }catch(SQLException sqlException){
                 try {
+                    correctInsertion = false;
                     connection.rollback();
+                    connection.close();
                     Logger.getLogger(Goal.class.getName()).log(Level.SEVERE, null, sqlException);
                 } catch (SQLException ex) {
                     Logger.getLogger(GoalDAO.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        });
+        }
+        return correctInsertion;
     }
 
     @Override

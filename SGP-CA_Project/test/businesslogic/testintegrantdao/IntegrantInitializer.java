@@ -22,35 +22,35 @@ public class IntegrantInitializer {
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
     public void prepareRequestTestCase(){
-        if(INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx").getRfc() == null){
+        if(INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx").getRfc() == null){
             Integrant integrant = new Integrant(
                 "INTEGRANTETEST", "Angel Juan Sánchez García", "integrantTest@uv.mx",
-                "password", "Activo", "SAGA890624HVZNRN09", "Mexicano", "2012-08-12", 
+                "password", "Activo", "SAGA890624HVZNRN09", "Integrante","Mexicano", "2012-08-12", 
                 "Licenciatura en Ingeniería de Software", 41306, "2281394721",
-                "UV-CA-127", "PTC", "Integrante", "angelsg89@hotmail.com", "2288146210", 
+                "UV-CA-127", "PTC", "angelsg89@hotmail.com", "2288146210", 
                 "141912288421700"
             );     
 
             integrant.addSchooling(new Schooling(
-                "Lic. en Ingeniería en Tecnologías Estratégicas de la Información",
-                "Universidad Anáhuac de Xalapa", "Licenciatura", "Veracruz", "Computación",
-                "Ingeniería", "2003-06-08", "08759567"
+                "Licenciatura", "Lic. en Ingeniería en Tecnologías Estratégicas de la Información",
+                "2003-06-08", "Universidad Anáhuac de Xalapa",  "Veracruz",  "08759567", 
+                "Computación", "Ingeniería"
             ));
 
             integrant.addSchooling(new Schooling(
-                "Lic. en Ingeniería en Tecnologías Estratégicas de la Información",
-                "Universidad Anáhuac de Xalapa", "Maestría", "Veracruz", "Computación",
-                "Ingeniería", "2003-06-08", "08759566"
+                "Maestría", "Lic. en Ingeniería en Tecnologías Estratégicas de la Información",
+                "2003-06-08", "Universidad Anáhuac de Xalapa", "Veracruz", "08759566", 
+                "Computación", "Ingeniería"
             ));
-            INTEGRANT_DAO.addIntegrant(integrant);
+            INTEGRANT_DAO.addMember(integrant);
         }
     }
     
     public void prepareUpdateTestCase(){
         this.prepareRequestTestCase();
-        Integrant integrantRetrieved = INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx");
+        Integrant integrantRetrieved = (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
         integrantRetrieved.setRfc("SAGA8906245M7");
-        INTEGRANT_DAO.updateIntegrant(integrantRetrieved, INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx").getRfc());
+        INTEGRANT_DAO.updateMember(integrantRetrieved, INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx").getRfc());
     }
     
     public void cleanIntegrantTest(String rfcIntegrant){

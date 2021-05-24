@@ -5,8 +5,6 @@
 
 package sgp.ca.domain;
 
-import java.util.Objects;
-
 
 public class Lgac {
     
@@ -16,6 +14,12 @@ public class Lgac {
     public Lgac(String identifierLgac, String description) {
         this.identifierLgac = identifierLgac;
         this.description = description;
+    }
+
+    public Lgac(String identifierLgac, String description, GeneralResume bodyAcademyRelated) {
+        this.identifierLgac = identifierLgac;
+        this.description = description;
+        this.bodyAcademyRelated = bodyAcademyRelated;
     }
     
     public Lgac(){

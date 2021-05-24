@@ -13,10 +13,10 @@ import sgp.ca.domain.WorkPlan;
 
 public interface IGoalDAO {
     
-    public void addGoals(Connection connection, WorkPlan workPlan);
+    public boolean addGoals(Connection connection, WorkPlan workPlan);
     public List<Goal> getGoalListByWorkPlan(int getWorkplanKey);
-    public void deleteActions(Connection connection, List<Goal> goals);
-    public void addActions(Connection connection, Goal goal);
+    public boolean deleteActions(Connection connection, List<Goal> goals);
+    public boolean addActions(Connection connection, Goal goal);
     public List<Action> getActionsByGoal(int goalIdentifier);
     
 }

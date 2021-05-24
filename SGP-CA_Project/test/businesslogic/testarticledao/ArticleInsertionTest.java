@@ -13,6 +13,8 @@ import sgp.ca.businesslogic.CollaboratorDAO;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.businesslogic.MagazineDAO;
 import sgp.ca.domain.Article;
+import sgp.ca.domain.Collaborator;
+import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Magazine;
 
 public class ArticleInsertionTest {
@@ -35,8 +37,8 @@ public class ArticleInsertionTest {
         if(MAGAZINE_DAO.getMagazineByName("RevistaParaTest").getEditorialCountry() == null){
             MAGAZINE_DAO.addMagazine(magazine);
         }
-        article.getIntegrants().add(INTEGRANT_DAO.getIntegrantByUVmail("integrantTest@uv.mx"));
-        article.getCollaborators().add(COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx"));
+        article.getIntegrants().add((Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx"));
+        article.getCollaborators().add((Collaborator) COLLABORATOR_DAO.getMemberByUVmail("prueba@uv.mx"));
         article.getStudents().add("Johann");
         article.setMagazine(MAGAZINE_DAO.getMagazineByName("RevistaParaTest"));
         ARTICLE_DAO.addNewEvidence(article);

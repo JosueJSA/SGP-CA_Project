@@ -52,8 +52,9 @@ public class BookDAO extends EvidenceDAO {
     }
 
     @Override
-    public void addNewEvidence(Evidence evidence) {
+    public boolean addNewEvidence(Evidence evidence) {
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        boolean correctInsertion = false;
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "INSERT INTO Book VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);"
@@ -78,6 +79,7 @@ public class BookDAO extends EvidenceDAO {
             CHAPTER_BOOK_DAO.addChapterBooks(connection, ((Book)evidence));
             connection.commit();
             connection.setAutoCommit(true);
+            correctInsertion = true;
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
@@ -87,13 +89,14 @@ public class BookDAO extends EvidenceDAO {
             }
         }finally{
             CONNECTION.closeConnection();
+            return correctInsertion;
         }
-        
     }
 
     @Override
-    public void updateEvidence(Evidence evidence, String oldUrlFile) {
+    public boolean updateEvidence(Evidence evidence, String oldUrlFile) {
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        boolean correctUpdate = false;
         try{
             this.deleteStudentsFromURLFileBook(connection, oldUrlFile);
             this.deleteIntegrantsFromURLFileBook(connection, oldUrlFile);
@@ -127,6 +130,7 @@ public class BookDAO extends EvidenceDAO {
             CHAPTER_BOOK_DAO.addChapterBooks(connection, ((Book)evidence));
             connection.commit();
             connection.setAutoCommit(true);
+            correctUpdate = true;
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
@@ -136,12 +140,14 @@ public class BookDAO extends EvidenceDAO {
             }
         }finally{
             CONNECTION.closeConnection();
+            return correctUpdate;
         }
     }
 
     @Override
-    public void deleteEvidenceByUrl(String urlEvidenceFile) {
+    public boolean deleteEvidenceByUrl(String urlEvidenceFile) {
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        boolean correctDelete = false;
         try{
             this.deleteStudentsFromURLFileBook(connection, urlEvidenceFile);
             this.deleteIntegrantsFromURLFileBook(connection, urlEvidenceFile);
@@ -154,6 +160,7 @@ public class BookDAO extends EvidenceDAO {
             sentenceQuery.executeQuery();
             connection.commit();
             connection.setAutoCommit(true);
+            correctDelete = true;
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
@@ -164,6 +171,7 @@ public class BookDAO extends EvidenceDAO {
             }
         }finally{
             CONNECTION.closeConnection();
+            return correctDelete;
         }
     }
     

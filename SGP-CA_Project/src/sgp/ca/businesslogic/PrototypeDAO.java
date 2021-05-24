@@ -50,8 +50,9 @@ public class PrototypeDAO extends EvidenceDAO{
     }
     
     @Override
-    public void addNewEvidence(Evidence evidence){
+    public boolean addNewEvidence(Evidence evidence){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        boolean correctInsert = false;
         try{
             PreparedStatement sentence = connection.prepareStatement(
                 "INSERT INTO Prototype VALUES (?,?,?,?,?,?,?,?,?,?,?);"
@@ -73,6 +74,7 @@ public class PrototypeDAO extends EvidenceDAO{
             this.insertIntoCollaboratorPrototype(connection, (Prototype)evidence);
             connection.commit();
             connection.setAutoCommit(true);
+            correctInsert = true;
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
@@ -82,12 +84,14 @@ public class PrototypeDAO extends EvidenceDAO{
             }
         }finally{
             CONNECTION.closeConnection();
+            return correctInsert;
         }
     }
 
     @Override
-    public void updateEvidence(Evidence evidence, String oldUrlFile){
+    public boolean updateEvidence(Evidence evidence, String oldUrlFile){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        boolean correctUpdate = false;
         try{
             this.deleteStudensFromURLFilePrototype(connection, oldUrlFile);
             this.deleteIntegrantsFromURLFilePrototype(connection, oldUrlFile);
@@ -116,6 +120,7 @@ public class PrototypeDAO extends EvidenceDAO{
             this.insertIntoCollaboratorPrototype(connection, (Prototype)evidence);
             connection.commit();
             connection.setAutoCommit(true);
+            correctUpdate = true;
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
@@ -125,12 +130,14 @@ public class PrototypeDAO extends EvidenceDAO{
             }
         }finally{
             CONNECTION.closeConnection();
+            return correctUpdate;
         }
     }
 
     @Override
-    public void deleteEvidenceByUrl(String urlEvidenceFile){
+    public boolean deleteEvidenceByUrl(String urlEvidenceFile){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        boolean correctDelete = false;
         try{
             this.deleteStudensFromURLFilePrototype(connection, urlEvidenceFile);
             this.deleteIntegrantsFromURLFilePrototype(connection, urlEvidenceFile);
@@ -142,6 +149,7 @@ public class PrototypeDAO extends EvidenceDAO{
             sentenceQuery.executeUpdate();
             connection.commit();
             connection.setAutoCommit(true);
+            correctDelete = true;
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
@@ -152,6 +160,7 @@ public class PrototypeDAO extends EvidenceDAO{
             }
         }finally{
             CONNECTION.closeConnection();
+            return correctDelete;
         }
     }
     

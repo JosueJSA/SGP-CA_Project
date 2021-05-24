@@ -5,6 +5,8 @@
 
 package sgp.ca.domain;
 
+import java.util.ArrayList;
+
 
 public class Collaborator extends Member{
     
@@ -13,16 +15,20 @@ public class Collaborator extends Member{
     private String highestDegreeStudies;
 
     public Collaborator(String rfc, String fullName, String emailUV, String participationStatus, 
-    String curp, String nationality, String dateOfAdmission, 
+    String curp, String participationType, String nationality, String dateOfAdmission, 
     String educationalProgram, int staffNumber, String cellphone, String bodyAcademyKey, String studyArea, 
     String nameBACollaborator, String highestDegreeStudies){
         super(
-            rfc, fullName, emailUV, participationStatus, curp, nationality, dateOfAdmission, 
+            rfc, fullName, emailUV, participationStatus, curp, participationType, nationality, dateOfAdmission, 
             educationalProgram, staffNumber, cellphone, bodyAcademyKey
         );
         this.studyArea = studyArea;
         this.nameBACollaborator = nameBACollaborator;
         this.highestDegreeStudies = highestDegreeStudies;
+    }
+    
+    public Collaborator(String participationType, String fullName, String emailUV, String cellphone){
+        super(participationType, fullName, emailUV, cellphone);
     }
     
     public Collaborator(){

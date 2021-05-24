@@ -19,38 +19,38 @@ public class CollaboratorUpdateTest{
     @Test
     public void correctUpdatedCollaborator(){
         INITIALIZER.prepareRequestTestCase();
-        Collaborator oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx");
+        Collaborator oldCollaborator = (Collaborator) COLLABORATOR_DAO.getMemberByUVmail("prueba@uv.mx");
         Collaborator newCollaborador = new Collaborator(
             "GRTCEVSFTJRB", "María de los Ángeles Arenas Valdes", "arenas@uv.mx", "Activo",
-            "SAGA890624HVZNRN09", "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 
+            "SAGA890624HVZNRN09", "Colaborador", "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 
             41306, "2281394721", "UV-CA-127", "Ingeniería y Tecnologías de software", 
             "Informática", "Maestría"
         );
-        COLLABORATOR_DAO.updateCollaborator(newCollaborador, oldCollaborator.getRfc());
-        Collaborator collaboratorRetrieved = COLLABORATOR_DAO.getCollaboratorByUVmail("arenas@uv.mx");
+        COLLABORATOR_DAO.updateMember(newCollaborador, oldCollaborator.getRfc());
+        Collaborator collaboratorRetrieved = (Collaborator) COLLABORATOR_DAO.getMemberByUVmail("arenas@uv.mx");
         INITIALIZER.cleanCollaboratorTest(collaboratorRetrieved.getRfc());
         Assert.assertNotEquals(oldCollaborator, collaboratorRetrieved);
     }
     
     @Test
     public void incorrectUpdatedCollaboratorNotRegistered(){
-        Collaborator oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("arenas@uv.mx");
+        Collaborator oldCollaborator = (Collaborator) COLLABORATOR_DAO.getMemberByUVmail("arenas@uv.mx");
         Collaborator newCollaborador = new Collaborator(
             "EFFYEVZPF", "Gerardo Contreras Vega", "contreras@uv.mx", "Activo",
-            "SAGA890624HVZNRN09", "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 
+            "SAGA890624HVZNRN09", "Colaborador", "Mexicano", "2012-08-12", "Licenciatura en Ingeniería de Software", 
             41306, "2281394721", "UVV-CA-127", "Ingeniería y Tecnologías de software", 
             "Informática", "Maestría"
         );
-        COLLABORATOR_DAO.updateCollaborator(newCollaborador, oldCollaborator.getRfc());
-        Assert.assertNull(COLLABORATOR_DAO.getCollaboratorByUVmail("contreras@uv.mx").getRfc());
+        COLLABORATOR_DAO.updateMember(newCollaborador, oldCollaborator.getRfc());
+        Assert.assertNull(COLLABORATOR_DAO.getMemberByUVmail("contreras@uv.mx").getRfc());
     }
     
     @Test
     public void correctUnsubscribeCollaborator(){
         INITIALIZER.prepareRequestTestCase();
-        Collaborator oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx");
-        COLLABORATOR_DAO.unsubscribeCollaboratorByEmailUV(oldCollaborator.getEmailUV());
-        Collaborator collaboratorRetrieved = COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx");
+        Collaborator oldCollaborator = (Collaborator) COLLABORATOR_DAO.getMemberByUVmail("prueba@uv.mx");
+        COLLABORATOR_DAO.unsubscribeMemberByEmailUV(oldCollaborator.getEmailUV());
+        Collaborator collaboratorRetrieved = (Collaborator) COLLABORATOR_DAO.getMemberByUVmail("prueba@uv.mx");
         INITIALIZER.cleanCollaboratorTest(collaboratorRetrieved.getRfc());
         Assert.assertNotEquals(oldCollaborator.getParticipationStatus(), collaboratorRetrieved.getParticipationStatus());
     }
@@ -58,11 +58,11 @@ public class CollaboratorUpdateTest{
     @Test
     public void correctSubscribeCollaborator(){
         INITIALIZER.prepareRequestTestCase();
-        Collaborator oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx");
-        COLLABORATOR_DAO.unsubscribeCollaboratorByEmailUV(oldCollaborator.getEmailUV());
-        oldCollaborator = COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx");
-        COLLABORATOR_DAO.subscribeCollaboratorByEmailUV(oldCollaborator.getEmailUV());
-        Collaborator collaboratorRetrieved = COLLABORATOR_DAO.getCollaboratorByUVmail("prueba@uv.mx");
+        Collaborator oldCollaborator = (Collaborator) COLLABORATOR_DAO.getMemberByUVmail("prueba@uv.mx");
+        COLLABORATOR_DAO.unsubscribeMemberByEmailUV(oldCollaborator.getEmailUV());
+        oldCollaborator = (Collaborator) COLLABORATOR_DAO.getMemberByUVmail("prueba@uv.mx");
+        COLLABORATOR_DAO.subscribeMemberByEmailUV(oldCollaborator.getEmailUV());
+        Collaborator collaboratorRetrieved = (Collaborator) COLLABORATOR_DAO.getMemberByUVmail("prueba@uv.mx");
         INITIALIZER.cleanCollaboratorTest(collaboratorRetrieved.getRfc());
         String stateExpected = "Activo";
         Assert.assertEquals(stateExpected, collaboratorRetrieved.getParticipationStatus());

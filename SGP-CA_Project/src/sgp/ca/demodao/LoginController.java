@@ -5,25 +5,29 @@
  */
 package sgp.ca.demodao;
 
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import sgp.ca.businesslogic.GeneralResumeDAO;
+import sgp.ca.businesslogic.IntegrantDAO;
+import sgp.ca.domain.Integrant;
 
 /**
  * FXML Controller class
@@ -45,41 +49,65 @@ public class LoginController implements Initializable {
     @FXML
     private Button btnSignIn;
     
-    private final GeneralResumeDAO GENERAL_RESUME = new GeneralResumeDAO();
+    private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
+    private Integrant integrantLogger;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //Todo
+        integrantLogger = new Integrant();
     }    
 
     @FXML
     private void signIn(ActionEvent event) {
+        if(checkUserLogin()){
+            FXMLLoader loader = changeWindow("Start.fxml", event);
+            StartController controller = loader.getController();
+            controller.receiveIntegrantToken(integrantLogger);
+        }else{
+            AlertGenerator.showErrorAlert(event, "Hay campos inválidos en el formulario");
+        }
     }
     
     @FXML
     private void signUpNewBdyAcademy(MouseEvent event) {
-        this.changeWindow("NewGeneralResume.fxml", event);
+        FXMLLoader loader = changeWindow("GeneralResumeEdit.fxml", event);
+        GeneralResumeEditController controller = loader.getController();
+        controller.showGeneralResumeInsertForm(integrantLogger);
     }
 
     @FXML
     private void signUpNewUser(MouseEvent event) {
-        this.changeWindow("Member.fxml", event);
+        FXMLLoader loader = changeWindow("IntegrantEdit.fxml", event);
+        IntegrantEditController controller = loader.getController();
+        controller.showResponsibleInscriptionForm();
     }
     
-    public void changeWindow(String window, MouseEvent event){
+    private FXMLLoader changeWindow(String window, Event event){
         Stage stage = new Stage();
-        Parent root;
+        FXMLLoader loader = null;
         try{
-            root = FXMLLoader.load(getClass().getResource(window));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-            Node source = (Node) event.getSource();
-            Stage currentStage = (Stage) source.getScene().getWindow();
+            loader = new FXMLLoader(getClass().getResource(window));
+            stage.setScene(new Scene((Pane)loader.load()));
+            stage.show(); 
+            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
             currentStage.close();
-        }catch(IOException ex){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(IOException io){
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
+        } finally {
+            return loader;
         }
+    }
+    
+    private boolean checkUserLogin(){
+        integrantLogger.setEmailUV(this.fieldEmailUv.getText());
+        integrantLogger.setPassword(this.fieldPasswordMailUv.getText());
+        integrantLogger.setBodyAcademyKey(this.fieldBodyAcademyKey.getText());
+        boolean isVerify = false;
+        integrantLogger = INTEGRANT_DAO.getIntegrantTockenVerified(integrantLogger);
+        if(integrantLogger.getFullName() != null){
+            isVerify = true;
+        }
+        return isVerify;
     }
     
 }

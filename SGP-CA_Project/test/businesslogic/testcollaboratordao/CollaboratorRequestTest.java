@@ -22,7 +22,7 @@ public class CollaboratorRequestTest {
     public void testGetExistCollaboratorByUVmail(){
         INITIALIZER.prepareRequestTestCase();
         CollaboratorDAO integrantDao = new CollaboratorDAO();
-        Collaborator integrant = integrantDao.getCollaboratorByUVmail("prueba@uv.mx");
+        Collaborator integrant = (Collaborator) integrantDao.getMemberByUVmail("prueba@uv.mx");
         String rfcExcpected = "COLABORADORTEST";
         String rfcRetrived = integrant.getRfc(); 
         INITIALIZER.cleanCollaboratorTest("COLABORADORTEST"); 
@@ -32,7 +32,7 @@ public class CollaboratorRequestTest {
     @Test
     public void testGetNotExistCollaboratorByUVmail(){
         CollaboratorDAO integrantDao = new CollaboratorDAO();
-        Collaborator integrant = integrantDao.getCollaboratorByUVmail("arenasss@uv.mx");
+        Collaborator integrant = (Collaborator) integrantDao.getMemberByUVmail("arenasss@uv.mx");
         String rfcRetrived = integrant.getRfc();
         Assert.assertNull(rfcRetrived);
     }

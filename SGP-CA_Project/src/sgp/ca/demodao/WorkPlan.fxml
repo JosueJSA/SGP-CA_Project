@@ -12,14 +12,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="706.0" prefWidth="1246.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="1230.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.WorkPlanController">
    <bottom>
       <HBox alignment="CENTER_RIGHT" prefHeight="33.0" prefWidth="1246.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
          <padding>
             <Insets right="30.0" />
          </padding>
          <children>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="87.0" text="SALIR" />
+            <Button fx:id="btnExit" mnemonicParsing="false" onAction="#exit" prefHeight="25.0" prefWidth="87.0" text="SALIR" />
          </children>
       </HBox>
    </bottom>
@@ -47,14 +47,14 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                   </Label>
-                  <ComboBox maxWidth="1.7976931348623157E308" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                  <ComboBox fx:id="cmBoxWorkPlanPeriot" maxWidth="1.7976931348623157E308" onAction="#selectPeriot" prefWidth="150.0" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets right="600.0" />
                      </HBox.margin>
                   </ComboBox>
-                  <Button mnemonicParsing="false" text="ACTUALIZAR" />
-                  <Button mnemonicParsing="false" text="AÑADIR PLAN" />
-                  <Button mnemonicParsing="false" text="ELIMINAR" />
+                  <Button fx:id="btnUpdateWorkplan" mnemonicParsing="false" onAction="#updateWorkplan" text="ACTUALIZAR" />
+                  <Button fx:id="btnAddNewWorkplan" mnemonicParsing="false" onAction="#addNewWorkPlan" text="AÑADIR PLAN" />
+                  <Button fx:id="btnDeleteWorkplan" mnemonicParsing="false" onAction="#deleteWorkplan" text="ELIMINAR" />
                </children>
                <padding>
                   <Insets left="30.0" right="30.0" />
@@ -70,7 +70,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <Label text="Años" />
+                  <Label fx:id="lblDuration" text="Años" />
                </children>
                <padding>
                   <Insets left="30.0" right="30.0" />
@@ -84,7 +84,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextArea prefHeight="89.0" prefWidth="1186.0">
+            <TextArea fx:id="textAreaGeneralTarget" prefHeight="89.0" prefWidth="1186.0">
                <VBox.margin>
                   <Insets left="30.0" right="30.0" />
                </VBox.margin>
@@ -104,10 +104,10 @@
                               <Insets right="10.0" />
                            </HBox.margin>
                         </Label>
-                        <ComboBox maxWidth="1.7976931348623157E308" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="cmBoxGoals" maxWidth="1.7976931348623157E308" prefWidth="150.0" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <TextArea prefHeight="75.0" prefWidth="1186.0">
+                  <TextArea fx:id="textAreaGoalDescription" prefHeight="75.0" prefWidth="1186.0">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
@@ -115,9 +115,9 @@
                   <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="24.0" prefWidth="1186.0" spacing="5.0">
                      <children>
                         <Label maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="93.0" text="Fecha de inicio:" />
-                        <Label maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="139.0" text="..." />
+                        <Label fx:id="lblGoalStartDate" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="139.0" text="..." />
                         <Label maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="77.0" text="Fecha de fin: " />
-                        <Label maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="123.0" text="..." />
+                        <Label fx:id="lblGoalEndDate" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="123.0" text="..." />
                         <Label maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="55.0" text="Estado" textOverrun="LEADING_ELLIPSIS">
                            <font>
                               <Font size="14.0" />
@@ -126,7 +126,7 @@
                               <Insets />
                            </HBox.margin>
                         </Label>
-                        <Label maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="588.0" text="..." HBox.hgrow="ALWAYS" />
+                        <Label fx:id="lblGoalStatus" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="588.0" text="..." HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                </children>
@@ -146,14 +146,14 @@
                               <Insets bottom="5.0" />
                            </padding>
                         </Label>
-                        <TableView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tableViewActions" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                           <columns>
-                            <TableColumn maxWidth="100.0" prefWidth="52.0" text="Estado" />
-                              <TableColumn maxWidth="700.0" prefWidth="271.0" text="Descripción" />
-                              <TableColumn maxWidth="200.0" prefWidth="127.0" text="Fecha estimad de fin" />
-                              <TableColumn maxWidth="200.0" prefWidth="111.0" text="Fecha de fin" />
-                              <TableColumn maxWidth="200.0" prefWidth="136.0" text="Responsable" />
-                            <TableColumn maxWidth="200.0" prefWidth="112.0" text="Fecha de inicio" />
+                            <TableColumn fx:id="columnActionStatus" maxWidth="100.0" prefWidth="52.0" text="Estado" />
+                              <TableColumn fx:id="columnActionDescription" maxWidth="700.0" prefWidth="271.0" text="Descripción" />
+                              <TableColumn fx:id="columnActionEstimatedEndDate" maxWidth="200.0" prefWidth="127.0" text="Fecha estimad de fin" />
+                              <TableColumn fx:id="columnActionEndDate" maxWidth="200.0" prefWidth="111.0" text="Fecha de fin" />
+                              <TableColumn fx:id="columnActoinResponsible" maxWidth="200.0" prefWidth="136.0" text="Responsable" />
+                            <TableColumn fx:id="columnActionStartDate" maxWidth="200.0" prefWidth="112.0" text="Fecha de inicio" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -171,7 +171,7 @@
                               <Insets bottom="5.0" />
                            </padding>
                         </Label>
-                        <TextArea maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="78.0" prefWidth="367.0" VBox.vgrow="ALWAYS" />
+                        <TextArea fx:id="textAreaActionDescription" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="78.0" prefWidth="367.0" VBox.vgrow="ALWAYS" />
                         <Label text="Recursos">
                            <font>
                               <Font size="14.0" />
@@ -180,7 +180,7 @@
                               <Insets bottom="5.0" />
                            </VBox.margin>
                         </Label>
-                        <TextArea maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="168.0" prefWidth="367.0" VBox.vgrow="ALWAYS" />
+                        <TextArea fx:id="textAreaActionResources" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="168.0" prefWidth="367.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </children>

@@ -7,9 +7,11 @@ package sgp.ca.demodao;
 
 import java.util.Optional;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.MouseEvent;
 
 /**
  *
@@ -17,7 +19,7 @@ import javafx.scene.control.ButtonType;
  */
 public class AlertGenerator{
     
-    public static void showErrorAlert(ActionEvent event, String message) {
+    public static void showErrorAlert(Event event, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(null);
         alert.setTitle("Error");
@@ -25,7 +27,7 @@ public class AlertGenerator{
         alert.showAndWait();
     }
     
-    public static void showInfoAlert(ActionEvent event, String message) {
+    public static void showInfoAlert(Event event, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
         alert.setTitle("Info");
@@ -33,7 +35,7 @@ public class AlertGenerator{
         alert.showAndWait();
     }
     
-    public static void showWarningAlert(ActionEvent event, String message) {
+    public static void showWarningAlert(Event event, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setHeaderText(null);
         alert.setTitle("Info");
@@ -41,7 +43,7 @@ public class AlertGenerator{
         alert.showAndWait();
     }
 
-    public static void showConfirmationAlert(ActionEvent event, String message) {
+    public static void showConfirmationAlert(Event event, String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText(null);
         alert.setTitle("Confirmacion");
@@ -49,7 +51,7 @@ public class AlertGenerator{
         alert.showAndWait();
     }
 
-    public static void showHeaderAlert(ActionEvent event, String message) {
+    public static void showHeaderAlert(Event event, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Cabecera");
         alert.setTitle("Info");
@@ -57,7 +59,7 @@ public class AlertGenerator{
         alert.showAndWait();
     }
     
-    public static Optional<ButtonType> showConfirmacionAlert(ActionEvent event, String message){
+    public static Optional<ButtonType> showConfirmacionAlert(Event event, String message){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText(null);
         alert.setTitle("Confirmación");

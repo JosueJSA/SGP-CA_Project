@@ -32,6 +32,7 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
                 generalResumeKeys.add(queryResult.getString("bodyAcademyKey"));
             }
         }catch(SQLException sqlException){
+            generalResumeKeys = null;
             Logger.getLogger(GeneralResumeDAO.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             CONNECTION.closeConnection();
@@ -63,6 +64,7 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
                 );
             }
         }catch(SQLException sqlException){
+            generalResume = null;
             Logger.getLogger(GeneralResume.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             CONNECTION.closeConnection();
@@ -71,7 +73,8 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
     }
 
     @Override
-    public void addGeneralResume(GeneralResume newGeneralResume){
+    public boolean addGeneralResume(GeneralResume newGeneralResume){
+        boolean correctInsertion = false;
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
                 "INSERT INTO GeneralResume VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
@@ -87,15 +90,18 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
             sentenceQuery.setString(9, newGeneralResume.getMission());
             sentenceQuery.setString(10, newGeneralResume.getGeneralTarjet());
             sentenceQuery.executeUpdate();
+            correctInsertion = true;
         }catch(SQLException sqlException){
             Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             CONNECTION.closeConnection();
+            return correctInsertion;
         }
     }
 
     @Override
-    public void updateGeneralResume(GeneralResume generalResume, String oldBodyAcademyKey){
+    public boolean updateGeneralResume(GeneralResume generalResume, String oldBodyAcademyKey){
+        boolean correctUpdate = false;
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
                 "UPDATE GeneralResume SET bodyAcademyKey = ?, nameBA = ?, areaAscription = ?, ascriptionUnit = ?,"
@@ -114,10 +120,12 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
             sentenceQuery.setString(10, generalResume.getGeneralTarjet());
             sentenceQuery.setString(11, oldBodyAcademyKey);
             sentenceQuery.executeUpdate();
+            correctUpdate = true;
         }catch(SQLException sqlException){
             Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             CONNECTION.closeConnection();
+            return correctUpdate;
         }
     }
 

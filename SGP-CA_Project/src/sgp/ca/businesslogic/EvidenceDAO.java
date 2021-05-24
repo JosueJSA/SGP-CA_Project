@@ -130,9 +130,9 @@ public abstract class EvidenceDAO {
     }
     
     public abstract Evidence getEvidenceByUrl(String urlEvidenceFile);
-    public abstract void addNewEvidence(Evidence evidence);
-    public abstract void updateEvidence(Evidence evidence, String oldUrlFile);
-    public abstract void deleteEvidenceByUrl(String urlEvidenceFile);
+    public abstract boolean addNewEvidence(Evidence evidence);
+    public abstract boolean updateEvidence(Evidence evidence, String oldUrlFile);
+    public abstract boolean deleteEvidenceByUrl(String urlEvidenceFile);
     
     
 }

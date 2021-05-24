@@ -48,6 +48,7 @@ CREATE TABLE `Collaborator` (
     `studyArea` varchar(100) DEFAULT NULL,
     `nameBACollaborator` varchar(500),
     `highestDegreeStudies` varchar(100) DEFAULT NULL,
+    `participationType` varchar(50) DEFAULT NULL,
     PRIMARY KEY (`rfc`),
     KEY `fk_member_1` (`bodyAcademyKey`),
     CONSTRAINT `fk_member_1` FOREIGN KEY (`bodyAcademyKey`) REFERENCES `GeneralResume` (`bodyAcademyKey`)
@@ -388,7 +389,10 @@ CREATE TABLE `Meeting` (
     `issueMeeting` varchar(200) DEFAULT NULL,
     `meetingNote` varchar(3000) DEFAULT NULL,
     `meetingPending` varchar(3000) DEFAULT NULL,
-    PRIMARY KEY (`meetingKey`)
+    `integrantResponsible` varchar(20) NOT NULL,
+    PRIMARY KEY (`meetingKey`),
+    CONSTRAINT `fk_meeting_1` FOREIGN KEY (`integrantResponsible`) REFERENCES `Integrant` (`rfc`)
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE `MeetingAgenda` (
