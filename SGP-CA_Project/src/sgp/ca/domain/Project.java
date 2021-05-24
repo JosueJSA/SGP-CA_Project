@@ -20,6 +20,7 @@ public class Project {
     private String description;
     private int durationProjectInMonths;
     private List<Lgac> lgac;
+    private List<Evidence> evidence;
     
     
 
@@ -33,14 +34,18 @@ public class Project {
         this.estimatedEndDate = estimatedEndDate;
         this.description = description;
         this.lgac = new ArrayList<>();
+        this.evidence = new ArrayList<>();
     }
     
    
-    public Project(String projectName, String status, int durationProjectInMonths) {
+    public Project(String projectName, int durationProjectInMonths, String status, String startDate, String endDate) {
         this.projectName = projectName;
-        this.status = status;
         this.durationProjectInMonths = durationProjectInMonths;
+        this.status = status;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.lgac = new ArrayList<>();
+        this.evidence = new ArrayList<>();
     }
 
     public Project(String projectName, String status, int durationProjectInMonths, String startDate) {
@@ -131,5 +136,19 @@ public class Project {
     
     public List<Lgac> getLgacs() {
         return lgac;
+    }
+    
+    public Evidence getEvidenceByUrlFile(String urlFile){
+        Evidence evidenceReturn = null;
+        for(Evidence evidence : this.evidence){
+            if(evidence.getUrlFile() == urlFile){
+                evidenceReturn = evidence;
+            }
+        }
+        return evidenceReturn;
+    }
+    
+    public List<Evidence> getEvidences() {
+        return evidence;
     }
 }

@@ -107,4 +107,8 @@ public class ValidatorForm{
         return newDate;
     }
     
+    public static String convertSQLDateToJavaDate(String date){
+        String newDate = date.replace("-", "/");
+        return newDate;
+    }
 }

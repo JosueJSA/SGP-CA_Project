@@ -16,29 +16,32 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
+import sgp.ca.demodao.ValidatorForm;
 import sgp.ca.domain.Project;
 
 
 public class ProjectDAO implements IProjectDAO{
     
-    private final ConnectionDatabase query = new ConnectionDatabase();
+    private final ConnectionDatabase QUERY = new ConnectionDatabase();
     
     @Override
     public List<Project> getProjectList(){
         List<Project> listProjects = new ArrayList<>();
         try{
-            Statement instructionQuery = query.getConnectionDatabase().createStatement();;
-            ResultSet queryResult = instructionQuery.executeQuery("Select projectName, status, durationProjectInMonths FROM Project");
+            Statement instructionQuery = QUERY.getConnectionDatabase().createStatement();;
+            ResultSet queryResult = instructionQuery.executeQuery("Select projectName, durationProjectInMonths, status, startDate, endDate FROM Project");
             while(queryResult.next()){
                 listProjects.add(new Project(
-                    queryResult.getString("projectName"), 
+                    queryResult.getString("projectName"),
+                    queryResult.getInt("durationProjectInMonths"),
                     queryResult.getString("status"),
-                    queryResult.getInt("durationProjectInMonths")));
+                    queryResult.getString("startDate"),
+                    queryResult.getString(ValidatorForm.convertSQLDateToJavaDate("endDate")))); 
             }
         }catch(SQLException ex){
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            query.closeConnection();
+            QUERY.closeConnection();
             return listProjects;
         }
     }
@@ -46,9 +49,9 @@ public class ProjectDAO implements IProjectDAO{
 
     @Override
     public void addProject(Project newProject){
-        Connection connection = query.getConnectionDatabaseNotAutoCommit();
+        Connection connection = QUERY.getConnectionDatabaseNotAutoCommit();
         try{
-            PreparedStatement sentenceQuery = query.getConnectionDatabase().prepareStatement(
+            PreparedStatement sentenceQuery = QUERY.getConnectionDatabase().prepareStatement(
                 "INSERT INTO Project VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
             );
             sentenceQuery.setString(1, newProject.getProjectName());
@@ -71,7 +74,7 @@ public class ProjectDAO implements IProjectDAO{
                 Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }finally{
-            query.closeConnection();
+            QUERY.closeConnection();
         }
     }
     
@@ -80,20 +83,22 @@ public class ProjectDAO implements IProjectDAO{
     public List<Project> getProjectListbyName(String projectName) {
         List<Project> listProjects = new ArrayList<>();
         try{
-            PreparedStatement instructionQuery = query.getConnectionDatabase().prepareStatement("SELECT projectName, "
-                    + "status, durationProjectInMonths FROM Project WHERE projectName = ? ;");
+            PreparedStatement instructionQuery = QUERY.getConnectionDatabase().prepareStatement("SELECT projectName, "
+                    + "durationProjectInMonths, status, startDate, endDate FROM Project WHERE projectName = ? ;");
             instructionQuery.setString(1, projectName);
             ResultSet queryResult = instructionQuery.executeQuery();
             while(queryResult.next()){
                 listProjects.add(new Project(
-                    queryResult.getString("projectName"), 
+                    queryResult.getString("projectName"),
+                    queryResult.getInt("durationProjectInMonths"),
                     queryResult.getString("status"),
-                    queryResult.getInt("durationProjectInMonths")));
+                    queryResult.getString("startDate"),
+                    queryResult.getString("endDate")));
             }
         }catch(SQLException sqlException){
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
-            query.closeConnection();
+            QUERY.closeConnection();
             return listProjects;
         }
     }
@@ -104,22 +109,23 @@ public class ProjectDAO implements IProjectDAO{
     public List<Project> getProjectListbyDate(String dateFilter, String currentDate) {
         List<Project> listProjects = new ArrayList<>();
         try{
-            PreparedStatement instructionQuery = query.getConnectionDatabase().prepareStatement("SELECT projectName, "
-                    + "status, durationProjectInMonths, startDate FROM Project WHERE startDate BETWEEN ? and ? ;");  
+            PreparedStatement instructionQuery = QUERY.getConnectionDatabase().prepareStatement("SELECT projectName, "
+                    + "durationProjectInMonths, status, startDate, endDate FROM Project WHERE startDate BETWEEN ? and ? ;");  
             instructionQuery.setString(1, dateFilter);
             instructionQuery.setString(2, currentDate);
             ResultSet queryResult = instructionQuery.executeQuery();
             while(queryResult.next()){
                 listProjects.add(new Project(
-                    queryResult.getString("projectName"), 
-                    queryResult.getString("status"),
+                    queryResult.getString("projectName"),
                     queryResult.getInt("durationProjectInMonths"),
-                    queryResult.getString("startDate")));
+                    queryResult.getString("status"),
+                    queryResult.getString("startDate"),
+                    queryResult.getString("endDate")));
             }
         }catch(SQLException sqlException){
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
-            query.closeConnection();
+            QUERY.closeConnection();
             return listProjects;
         }
     }
@@ -128,7 +134,7 @@ public class ProjectDAO implements IProjectDAO{
     public Project getProjectbyName(String projectName) {
         Project project = new Project();
         try{
-            PreparedStatement instructionQuery = query.getConnectionDatabase().prepareStatement("SELECT *"
+            PreparedStatement instructionQuery = QUERY.getConnectionDatabase().prepareStatement("SELECT *"
                     + " FROM Project WHERE projectName = ? ;");
             instructionQuery.setString(1, projectName);
             ResultSet queryResult = instructionQuery.executeQuery();
@@ -147,7 +153,7 @@ public class ProjectDAO implements IProjectDAO{
         }catch(SQLException sqlException){
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
-            query.closeConnection();
+            QUERY.closeConnection();
             return project;
         }
     }
@@ -155,9 +161,9 @@ public class ProjectDAO implements IProjectDAO{
     @Override
     public boolean updateProject(Project project, String oldProjectName){
         boolean check = false;
-        Connection connection = query.getConnectionDatabaseNotAutoCommit();
+        Connection connection = QUERY.getConnectionDatabaseNotAutoCommit();
         try{
-            PreparedStatement sentenceQuery = query.getConnectionDatabase().prepareStatement(
+            PreparedStatement sentenceQuery = QUERY.getConnectionDatabase().prepareStatement(
                 "UPDATE Project SET projectaName = ?, bodyAcademyKey = ?, durationProjectInMonths = ?, status = ?,"
                 + " startDate = ?, endDate = ?, estimatedEndDate = ?, description= ? WHERE projectaName = ?;"
             );
@@ -182,7 +188,7 @@ public class ProjectDAO implements IProjectDAO{
                 Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }finally{
-            query.closeConnection();
+            QUERY.closeConnection();
             check = true;
             return check;
         }

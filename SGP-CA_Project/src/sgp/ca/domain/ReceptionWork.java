@@ -36,6 +36,19 @@ public class ReceptionWork extends Evidence{
         
     }
     
+    public ReceptionWork(String urlFile, String projectName, boolean impactAB, String evidenceType, String evidenceTitle, 
+            String registrationResponsible, String registrationDate, String studyDegree,  String publicationDate, 
+            String country) {
+        super(
+            urlFile, projectName, evidenceTitle, country, 
+            publicationDate, impactAB, registrationDate, 
+            registrationResponsible, studyDegree, evidenceType
+        );
+        this.requirements = new ArrayList();
+        this.lgac = new ArrayList();
+        
+    }
+    
     public ReceptionWork(){
         this.requirements = new ArrayList();
         this.lgac = new ArrayList();

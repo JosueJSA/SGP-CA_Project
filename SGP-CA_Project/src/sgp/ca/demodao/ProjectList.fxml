@@ -63,13 +63,13 @@
                         <Insets top="2.0" />
                      </VBox.margin>
                      <children>
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="31.0" prefWidth="123.0" text="Buscar" />
-                        <TextField maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="861.0" promptText="Escribe el titulo del trabajo recepcional" HBox.hgrow="ALWAYS">
+                        <Button fx:id="btnSearch" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#searchProject" prefHeight="31.0" prefWidth="123.0" text="Buscar" />
+                        <TextField fx:id="searchField" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="861.0" promptText="Escribe el titulo del proyecto" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
                         </TextField>
-                        <DatePicker maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="141.0" promptText="DD/MM/AA" HBox.hgrow="ALWAYS">
+                        <DatePicker fx:id="searchDateField" editable="false" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="141.0" promptText="DD/MM/AA" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -79,13 +79,13 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <TableView editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="360.0" prefWidth="1169.0" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="projectsTableView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#selectProject" prefHeight="360.0" prefWidth="1169.0" VBox.vgrow="ALWAYS">
                     <columns>
-                      <TableColumn maxWidth="577.0" prefWidth="349.0" text="Nombre del Proyecto" />
-                        <TableColumn maxWidth="330.0" minWidth="0.0" prefWidth="227.0" text="No.Evidencias" />
-                        <TableColumn maxWidth="565.0" prefWidth="249.0" text="Estado" />
-                        <TableColumn maxWidth="500.0" minWidth="0.0" prefWidth="217.0" text="Fecha de Inicio" />
-                        <TableColumn maxWidth="270.0" minWidth="5.0" prefWidth="182.0" text="Fecha de Fin" />
+                      <TableColumn fx:id="columnNameProject" maxWidth="577.0" prefWidth="349.0" text="Nombre del Proyecto" />
+                        <TableColumn fx:id="columnDuration" maxWidth="330.0" minWidth="0.0" prefWidth="227.0" text="Duración" />
+                        <TableColumn fx:id="columnStatus" maxWidth="565.0" prefWidth="249.0" text="Estado" />
+                        <TableColumn fx:id="columnStartDate" maxWidth="500.0" minWidth="0.0" prefWidth="217.0" text="Fecha de Inicio" />
+                        <TableColumn fx:id="columnEndDate" maxWidth="270.0" minWidth="5.0" prefWidth="182.0" text="Fecha de Fin" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -104,11 +104,9 @@
    <bottom>
       <HBox alignment="CENTER" fillHeight="false" prefHeight="47.0" prefWidth="1300.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
          <children>
-            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="47.0" prefWidth="331.0" />
-            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="47.0" prefWidth="429.0" HBox.hgrow="ALWAYS" />
-            <HBox maxWidth="1.7976931348623157E308" prefHeight="33.0" prefWidth="523.0" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="33.0" prefWidth="523.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="32.0" prefWidth="309.0" text="AGREGAR TRABAJO RECEPCIONAL" HBox.hgrow="ALWAYS">
+                  <Button fx:id="btnAddIntegrant" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#addProject" prefHeight="32.0" prefWidth="309.0" text="AGREGAR PROYECTO DE INVESTIGACIÓN" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
@@ -116,7 +114,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="32.0" prefWidth="134.0" text="SALIR" HBox.hgrow="ALWAYS">
+                  <Button fx:id="btnExit" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#exit" prefHeight="32.0" prefWidth="134.0" text="SALIR" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>

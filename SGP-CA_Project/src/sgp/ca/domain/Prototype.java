@@ -18,6 +18,16 @@ public class Prototype extends Evidence{
         );
         this.features = features;
     }
+    
+    public Prototype(String urlFile, String projectName, boolean impactAB, String evidenceType, String evidenceTitle, 
+            String registrationResponsible, String registrationDate, String studyDegree,  String publicationDate, 
+            String country) {
+        super(
+            urlFile, projectName, evidenceTitle, country, 
+            publicationDate, impactAB, registrationDate, 
+            registrationResponsible, studyDegree, evidenceType
+        );
+    }
 
     public Prototype(){
         
