@@ -18,6 +18,7 @@
 	* These are values you can edit safely.
 	The "color" is your main color (in this case greenish)
 	*/
+	
 * {
 	-color : #300050;
 	-white : #efefef;
@@ -43,6 +44,7 @@
  * LABELS
  * **********
 */
+
 .label{
 	 -fx-text-fill : -black;
  }
@@ -53,9 +55,10 @@
  * **********
  * 
  */
+
 .button {
     -fx-border-radius: 0;
-	-fx-background-color : #1e1842;
+    -fx-background-color : rgb(32, 0, 51);
 }
 
 .button:hover {
@@ -64,34 +67,6 @@
 	-fx-inner-border : -darkGray;
 	-fx-body-color : -darkGray;
 }
-
-
-.toggle-button{
-    -fx-border-radius: 0;
-	-fx-background-color : -gray;
-}
-
-.toggle-button:selected{
-	-fx-background-color : -darkGray;
-}
-
-.menu-button{
-    -fx-border-radius: 0;
-	-fx-background-color : -gray;
-}
-
-.split-menu-button{
-    -fx-border-radius: 0;
-	-fx-background-color : -gray;
-}
-
-.split-menu-button>*.label{
-	-fx-background-color : -gray;
-}
-
-.split-menu-button>*.arrow-button{
-	-fx-background-color : -gray;
-}
  
  /*
  * **********
@@ -99,23 +74,26 @@
  * **********
  * 
  */
+
 .date-picker{
-	-fx-background-color : -white,-gray,gray;
+	-fx-background-color : transparent;
 }
 
 .date-picker>*.arrow-button{
-	-fx-background-color : -white,-gray,-gray;
+	-fx-background-color : rgb(67, 2, 105);
 }
  
  .date-picker>*.arrow-button>*.arrow{
-	-fx-background-color : -darkGray, -black;
+	-fx-background-color : white;
 }
+
 /*
  * **********
  * SLIDER
  * **********
  * 
  */
+
  .slider>*.track{
 	 -fx-background-color : -gray;
  }
@@ -133,6 +111,7 @@
  * **********
  * 
  */
+
 .combo-box {
 	-fx-background-color : -gray;
 }
@@ -146,23 +125,19 @@
  * **********
  * TABPANE
  * **********
- * 
  */
- .tab-pane>*.tab-header-area{
-	 -fx-padding : 0,0,0,0;
- }
+
 .tab-pane>*.tab-header-area>*.headers-region>*.tab:selected:top{
-	-fx-padding : 6,6,6,6;
 	-fx-text-fill : -white;
 	-fx-background-color : -color;
 }
+
 .tab-pane>*.tab-header-area>*.headers-region>*.tab:selected>*.tab-container>*.tab-label{
 	-fx-font-size : 13.0;
 	-fx-font-weight: bold;
 }
 
 .tab-pane>*.tab-header-area>*.headers-region>*.tab:top{
-	-fx-padding : 4,4,4,4;
 	-fx-text-fill : -white;
 	-fx-background-color : -white;
 }
@@ -175,24 +150,23 @@
 	-fx-background-color : -darkGray;
 }
 
-
 /*
  * **********
  * MENU
  * **********
  * 
  */
+
 .menu-bar{
 	-fx-background-color : -gray;
 }
- 
 
 /*
  * **********
  * Checkbox
  * **********
- * 
  */
+
  .check-box>*.box{
 	 -fx-background-color : -gray;
  }
@@ -204,13 +178,12 @@
 	 -fx-background-color : -black;
  }
  
- 
  /*
  * **********
  * RADIO BUTTONS
  * **********
- * 
  */
+
  .radio-button>*.radio{
 	-fx-background-color : -gray; 
  }
@@ -225,29 +198,47 @@
  * **********
  * 
  */
+
 .text-field{
 	-fx-highlight-fill : -color;
 	-fx-highlight-text-fill : -white;
-        -fx-border-insets: "black" 0,0,0,0;
+        -fx-background-color: transparent;
+        -fx-border-color: 
+        transparent
+        transparent
+        rgb(170, 170, 170)
+        transparent;
+        -fx-border-insets: 0 0 1 0;
+}
+
+.text-field:hover{
+        -fx-background-color: transparent;
+        -fx-border-color: 
+        transparent
+        transparent
+        rgb(67, 2, 105)
+        transparent;
+        -fx-border-insets: 0 0 1 0;
+}
+
+.text-field:focus{
+	-fx-background-color: rgba(64, 5, 94, 0.952);
+	-fx-border-color: 
+		transparent
+		transparent
+		rgb(67, 2, 105)
+		transparent;
+	-fx-border-insets: 0 0 1 0;
 }
 
 .text-area{
-	-fx-highlight-fill : -color;
-	-fx-highlight-text-fill : -white;
-}
- 
-.spinner>*.increment-arrow-button{
-	-fx-background-color : -gray;
+
 }
 
-.spinner>*.decrement-arrow-button{
-	-fx-background-color : -gray;
-}
 /*
  * **********
  * Titled Pane
  * **********
- * 
  */
 
 .first-titled-pane:expanded>*.title{
@@ -268,6 +259,7 @@
  * **********
  * 
  */
+
 .table-view:row-selection{
 	-fx-background-color : -gray;
 }
@@ -300,14 +292,6 @@
 	-fx-background-color : -white;
 }
 
-.tree-table-view>*.column-resize-line{
-	-fx-background-color : -black;
-}
-
-.tree-table-view>*.column-header-background>*.nested-column-header>*.table-column{
-	-fx-background-color : -darkGray, -white;
-}
-
 .tree-table-view>*.column-header-background>*.filler{
 	-fx-background-color : -darkGray, -gray;
 }
@@ -316,13 +300,13 @@
 	-fx-background-color : -gray;
 }
 
-
 /*
  * **********
  * Color picker
  * **********
  * 
  */
+
 .color-picker{
 	-fx-background-color : -gray;
 }
@@ -333,10 +317,11 @@
  * **********
  * 
  */
+
 .scroll-pane>*.scroll-bar{
 	-fx-background-color : -gray;
 }
 
 .scroll-pane>*.scroll-bar>*.thumb{
-	-fx-background-color : -color;
+	-fx-background-color : #1e0033;
 }
