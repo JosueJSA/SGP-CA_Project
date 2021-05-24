@@ -46,6 +46,8 @@ public class StartController implements Initializable {
     private Button btnAcademyProduction;
     @FXML
     private Button btnMeetingsRequest;
+    @FXML
+    private Button btnProject;
     
 
     /**
@@ -85,7 +87,15 @@ public class StartController implements Initializable {
     }
     
     @FXML
+    private void consultProject(ActionEvent event) {
+        FXMLLoader loader = changeWindow("ProjectList.fxml", event);
+        ProjectListController controller = loader.getController();
+        controller.receiveToken(integrant);
+    }
+    
+    @FXML
     private void consultEvidencesList(ActionEvent event) {
+        
     }
 
     @FXML

@@ -76,6 +76,11 @@
                   <Font size="17.0" />
                </font>
             </Button>
+            <Button fx:id="btnProject" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#consultProject" prefHeight="50.0" prefWidth="284.0" style="-fx-background-color: black;" text="PROYECTO" textFill="WHITE">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Button>
          </children>
          <padding>
             <Insets left="20.0" top="10.0" />

@@ -23,6 +23,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -31,6 +32,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import sgp.ca.businesslogic.ProjectDAO;
+import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Project;
 
 /**
@@ -64,7 +66,10 @@ public class ProjectListController implements Initializable {
     private final ProjectDAO PROJECT = new ProjectDAO();
     @FXML
     private DatePicker searchDateField;
+    @FXML
+    private Label lblUserName;
    
+    private Integrant token;
     /**
      * Initializes the controller class.
      */
@@ -78,7 +83,12 @@ public class ProjectListController implements Initializable {
         this.columnStartDate.setCellValueFactory(new PropertyValueFactory ("startDate"));
         this.columnEndDate.setCellValueFactory(new PropertyValueFactory ("endDate"));
         projectsTableView.setItems(FXCollections.observableArrayList(PROJECT.getProjectList()));
-    }    
+    } 
+    
+    public void receiveToken(Integrant integrantToken){
+        this.token = integrantToken;
+        this.lblUserName.setText(integrantToken.getFullName());
+    }
 
     @FXML
     private void addProject(ActionEvent event) {
@@ -87,6 +97,9 @@ public class ProjectListController implements Initializable {
 
     @FXML
     private void exit(ActionEvent event) {
+        FXMLLoader loader = changeWindow("Start.fxml", event);
+        StartController controller = loader.getController();
+        controller.receiveIntegrantToken(token);
         
     }
     

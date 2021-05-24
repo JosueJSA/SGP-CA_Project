@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.gluonhq.charm.glisten.control.Avatar?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
@@ -9,50 +10,10 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="703.0" prefWidth="1229.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.ProjectListController">
-   <top>
-      <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="45.0" prefWidth="1300.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-         <padding>
-            <Insets left="10.0" right="10.0" />
-         </padding>
-         <children>
-            <HBox alignment="CENTER" prefHeight="45.0" prefWidth="685.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="45.0" prefWidth="1077.0">
-                     <children>
-                        <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="45.0" prefWidth="884.0" text="PROYECTOS DE INVESTIGACIÓN" textFill="WHITE">
-                           <font>
-                              <Font name="Calibri Bold" size="25.0" />
-                           </font>
-                           <padding>
-                              <Insets right="530.0" />
-                           </padding>
-                        </Label>
-                     </children>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </Pane>
-                  <HBox prefHeight="45.0" prefWidth="0.0" />
-                  <Label alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="82.0" text="Username" textFill="#f5f0f0" HBox.hgrow="ALWAYS">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </Label>
-               </children>
-            </HBox>
-         </children></VBox>
-   </top>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="703.0" prefWidth="1229.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.ProjectListController">
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
@@ -133,4 +94,16 @@
          </padding>
       </HBox>
    </bottom>
+   <top>
+      <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="1229.0" spacing="10.0" BorderPane.alignment="CENTER_RIGHT">
+         <children>
+            <Label maxWidth="1.7976931348623157E308" prefHeight="36.0" prefWidth="106.0" text="PROYECTOS" HBox.hgrow="ALWAYS" />
+            <Label fx:id="lblUserName" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="340.0" text="..." />
+            <Avatar />
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+      </HBox>
+   </top>
 </BorderPane>
