@@ -59,7 +59,7 @@ public class LoginController implements Initializable {
 
     @FXML
     private void signIn(ActionEvent event) {
-        if(checkUserLogin()){
+        if(checkUserLoginWithBodyKey()){
             FXMLLoader loader = changeWindow("Start.fxml", event);
             StartController controller = loader.getController();
             controller.receiveIntegrantToken(integrantLogger);
@@ -70,15 +70,19 @@ public class LoginController implements Initializable {
     
     @FXML
     private void signUpNewBdyAcademy(MouseEvent event) {
-        FXMLLoader loader = changeWindow("GeneralResumeEdit.fxml", event);
-        GeneralResumeEditController controller = loader.getController();
-        controller.showGeneralResumeInsertForm(integrantLogger);
+        if(checkUserLogin() && this.integrantLogger.getBodyAcademyKey()== null){
+            FXMLLoader loader = changeWindow("GeneralResumeEditable.fxml", event);
+            GeneralResumeEditableController controller = loader.getController();
+            controller.showGeneralResumeInsertForm(integrantLogger);
+        }else{
+            AlertGenerator.showErrorAlert(event, "El email y contraseña deben estar correctos para");
+        }
     }
 
     @FXML
     private void signUpNewUser(MouseEvent event) {
-        FXMLLoader loader = changeWindow("IntegrantEdit.fxml", event);
-        IntegrantEditController controller = loader.getController();
+        FXMLLoader loader = changeWindow("IntegrantEditable.fxml", event);
+        IntegrantEditableController controller = loader.getController();
         controller.showResponsibleInscriptionForm();
     }
     
@@ -101,9 +105,20 @@ public class LoginController implements Initializable {
     private boolean checkUserLogin(){
         integrantLogger.setEmailUV(this.fieldEmailUv.getText());
         integrantLogger.setPassword(this.fieldPasswordMailUv.getText());
+        integrantLogger = INTEGRANT_DAO.getIntegrantToken(this.integrantLogger.getEmailUV(), this.integrantLogger.getPassword());
+        boolean isVerify = false;
+        if(integrantLogger.getFullName() != null){
+            isVerify = true;
+        }
+        return isVerify;
+    }
+    
+    private boolean checkUserLoginWithBodyKey(){
+        integrantLogger.setEmailUV(this.fieldEmailUv.getText());
+        integrantLogger.setPassword(this.fieldPasswordMailUv.getText());
         integrantLogger.setBodyAcademyKey(this.fieldBodyAcademyKey.getText());
         boolean isVerify = false;
-        integrantLogger = INTEGRANT_DAO.getIntegrantTockenVerified(integrantLogger);
+        integrantLogger = INTEGRANT_DAO.getIntegrantTocken(integrantLogger);
         if(integrantLogger.getFullName() != null){
             isVerify = true;
         }

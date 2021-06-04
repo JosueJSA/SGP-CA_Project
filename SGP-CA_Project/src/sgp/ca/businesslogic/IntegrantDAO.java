@@ -19,7 +19,7 @@ import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Member;
 import sgp.ca.domain.Schooling;
 
- public class IntegrantDAO implements IMemberDAO{
+ public class IntegrantDAO implements IMemberDAO, IIntegrantDAO{
 
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
@@ -42,15 +42,16 @@ import sgp.ca.domain.Schooling;
         }
     }
     
-    public Integrant getIntegrantTockenVerified(Integrant integrant){
+    @Override
+    public Integrant getIntegrantTocken(Integrant usuario){
         Integrant integrantVerified = new Integrant();
         try {
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
                 "SELECT emailUV, fullName, bodyAcademyKey, participationType, rfc FROM Integrant WHERE  emailUV = ? AND password = ? AND bodyAcademyKey = ?;"
             );
-            sentenceQuery.setString(1, integrant.getEmailUV());
-            sentenceQuery.setString(2, integrant.getPassword());
-            sentenceQuery.setString(3, integrant.getBodyAcademyKey());
+            sentenceQuery.setString(1, usuario.getEmailUV());
+            sentenceQuery.setString(2, usuario.getPassword());
+            sentenceQuery.setString(3, usuario.getBodyAcademyKey());
             ResultSet result = sentenceQuery.executeQuery();
             if(result.next()){
                 integrantVerified.setFullName(result.getString("fullName"));
@@ -67,6 +68,32 @@ import sgp.ca.domain.Schooling;
         }
     }
     
+    @Override
+    public Integrant getIntegrantToken(String email, String password){
+        Integrant integrantVerified = new Integrant();
+        try {
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT emailUV, fullName, bodyAcademyKey, participationType, rfc FROM Integrant WHERE  emailUV = ? AND password = ?;"
+            );
+            sentenceQuery.setString(1, email);
+            sentenceQuery.setString(2, password);
+            ResultSet result = sentenceQuery.executeQuery();
+            if(result.next()){
+                integrantVerified.setFullName(result.getString("fullName"));
+                integrantVerified.setEmailUV(result.getString("emailUV"));
+                integrantVerified.setBodyAcademyKey(result.getString("bodyAcademyKey"));
+                integrantVerified.setParticipationType(result.getString("participationType"));
+                integrantVerified.setRfc(result.getString("rfc"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(IntegrantDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            CONNECTION.closeConnection();
+            return integrantVerified;
+        }
+    }
+    
+    @Override
     public List<Integrant> getMembers(String bodyAcademyKey){
         List<Integrant> integrants = new ArrayList<>();
         try{
@@ -94,8 +121,9 @@ import sgp.ca.domain.Schooling;
     @Override
     public Member getMemberByUVmail(String emailUV){
         Integrant integrant = new Integrant();
+        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+            PreparedStatement sentenceQuery = connection.prepareStatement(
                 "SELECT * FROM Integrant WHERE emailUV = ?;"
             );
             sentenceQuery.setString(1, emailUV);
@@ -121,7 +149,7 @@ import sgp.ca.domain.Schooling;
                     queryResult.getString("workPhone")
                 );
             }
-            integrant.setSchooling(this.getIntegrantStudies(integrant.getRfc()));
+            integrant.setSchooling(this.getIntegrantStudies(connection, integrant.getRfc()));
         }catch(SQLException sqlException){
             Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
@@ -258,10 +286,10 @@ import sgp.ca.domain.Schooling;
         }
     }
     
-    private List<Schooling> getIntegrantStudies(String integrantRFC){
+    private List<Schooling> getIntegrantStudies(Connection connection, String integrantRFC){
         List<Schooling> schooling = new ArrayList<>();
         try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+            PreparedStatement sentenceQuery = connection.prepareStatement(
                 "SELECT * FROM Schooling WHERE rfc = ?;"
             );
             sentenceQuery.setString(1, integrantRFC);
@@ -279,9 +307,10 @@ import sgp.ca.domain.Schooling;
                 ));
             }
         }catch(SQLException sqlException){
+            connection.rollback();
+            connection.close();
             Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
-            CONNECTION.closeConnection();
             return schooling;
         }
     }

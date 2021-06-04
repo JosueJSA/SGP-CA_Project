@@ -21,6 +21,26 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
     @Override
+    public boolean isBodyAcademyRegistered(String bodyAcademyKey){
+        boolean isRegistered = false;
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT bodyAcademyKey FROM GeneralResume WHERE bodyAcademyKey = ?;"
+            );
+            sentenceQuery.setString(1, bodyAcademyKey);
+            ResultSet queryResult = sentenceQuery.executeQuery();
+            if(queryResult.next()){
+                isRegistered = true;                
+            }
+        }catch(SQLException sqlException){
+            Logger.getLogger(GeneralResumeDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return isRegistered;
+        }
+    }
+    
+    @Override
     public List<String> getGeneralResumeKeys(){
         List<String> generalResumeKeys = new ArrayList<>();
         try{

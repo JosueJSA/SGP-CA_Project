@@ -17,6 +17,5 @@ public interface IWorkPlanDAO {
     public boolean addWorkPlan(WorkPlan newWorkPlan);
     public boolean updateWorkPlan(WorkPlan worPlan, WorkPlan oldWorkPlan);
     public boolean deleteWorkPlan(WorkPlan workPlan, String bodyAcademyKey);
-    public boolean deleteGoals(Connection connection, WorkPlan workPlan);
     
 }

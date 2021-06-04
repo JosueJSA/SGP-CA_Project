@@ -120,8 +120,8 @@ public class IntegrantRequestController implements Initializable {
 
     @FXML
     private void updateIntegrant(ActionEvent event) {
-        FXMLLoader loader = changeWindow("IntegrantEdit.fxml", event);
-        IntegrantEditController controller = loader.getController();
+        FXMLLoader loader = changeWindow("IntegrantEditable.fxml", event);
+        IntegrantEditableController controller = loader.getController();
         controller.showIntegrantUpdateForm(this.token, integrant.getEmailUV());
     }
 

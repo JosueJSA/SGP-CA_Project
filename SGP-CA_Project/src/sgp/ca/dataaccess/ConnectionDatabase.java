@@ -35,7 +35,7 @@ public class ConnectionDatabase {
         }
     }
     
-    public void establishConnection(){
+    private void establishConnection(){
         try{
             connectionDatabase = DriverManager.getConnection(URL, USER, PASSWORD);
         }catch(SQLException sqlException){

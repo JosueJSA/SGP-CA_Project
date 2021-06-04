@@ -30,8 +30,16 @@ public class Action{
         this.statusAction = statusAction;
     }
     
-    public Action(String descriptionAction, String estimatedEndDate, 
-    String endDate, String responsibleAction, String startDate){
+    public Action(String descriptionAction, String estimatedEndDate, String responsibleAction, String startDate, String resource){
+        this.startDate = startDate;
+        this.estimatedEndDate = estimatedEndDate;
+        this.descriptionAction = descriptionAction;
+        this.responsibleAction = responsibleAction;
+        this.resource = resource;
+    }
+    
+    public Action(String descriptionAction, String estimatedEndDate, String endDate, String responsibleAction, String startDate, String resource){
+        this.resource = resource;
         this.startDate = startDate;
         this.endDate = endDate;
         this.estimatedEndDate = estimatedEndDate;

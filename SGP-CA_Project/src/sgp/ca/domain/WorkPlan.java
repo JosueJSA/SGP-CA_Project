@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class WorkPlan {
+public class WorkPlan implements Cloneable{
     
     private int workplanKey;
     private int durationInYears;
@@ -131,6 +131,28 @@ public class WorkPlan {
         return sameWorkPlans;
     }
     
+    public Goal searchGoalByDescription(String goalDescription){
+        Goal goalSearched = null;
+        for(Goal goal : this.goals){
+            if(goal.getDescription().equalsIgnoreCase(goalDescription)){
+                goalSearched = goal;
+            }
+        }
+        return goalSearched;
+    }
     
+    public void deleteGoal(String goalDescription){
+        for(Goal goal : this.goals){
+            if(goal.getDescription().equalsIgnoreCase(goalDescription)){
+                this.goals.remove(goal);
+                break;
+            }
+        }
+    }
+    
+    public void updateGoal(Goal newGoal, String oldGoalDescription){
+        this.deleteGoal(oldGoalDescription);
+        this.goals.add(newGoal);
+    }
     
 }

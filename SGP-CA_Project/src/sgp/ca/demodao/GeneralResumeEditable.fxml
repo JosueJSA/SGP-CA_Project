@@ -19,9 +19,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="653.0" prefWidth="1157.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.GeneralResumeEditController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="653.0" prefWidth="1157.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.GeneralResumeEditableController">
    <bottom>
-      <HBox fx:id="hboxGeneralResumeOptions" alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="1300.0" spacing="10.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER_RIGHT">
+      <HBox fx:id="hboxGeneralResumeOptions" alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="1300.0" spacing="10.0" style="-fx-background-color: #300050;" BorderPane.alignment="CENTER_RIGHT">
          <children>
             <Button fx:id="btnSignUpBodyAcademy" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#signUpBodyAcademy" prefHeight="32.0" prefWidth="111.0" text="REGISTRAR">
                <font>
@@ -76,13 +76,13 @@
                               <Label text="Grado de consolidación: " GridPane.columnIndex="2" />
                               <Label text="Fecha de registro: " GridPane.columnIndex="2" GridPane.rowIndex="1" />
                               <Label text="Última fecha de evaluación: " GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                              <TextField fx:id="bodyAcademyNameField" accessibleHelp="Nombre de cuerpo académico" maxWidth="1.7976931348623157E308" promptText="Ejemplo: Ingeniería Física" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-                              <TextField fx:id="bodyAcademyKeyField" accessibleHelp="Clave de cuerpo académico" maxWidth="1.7976931348623157E308" promptText="Ejemplo: FS-UV-111" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-                              <TextField fx:id="areaAscriptionFiel" accessibleHelp="Area de adscripción" maxWidth="1.7976931348623157E308" promptText="Ejemplo: Física" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-                              <TextField fx:id="ascriptionUnitField" accessibleHelp="Unidad de adscripción" maxWidth="1.7976931348623157E308" promptText="Ejemplo: Facultad de ingenierías" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-                              <DatePicker fx:id="dateFieldRegistration" accessibleHelp="Fecha de registro" editable="false" maxWidth="1.7976931348623157E308" promptText="Selecciona una fecha" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                              <DatePicker fx:id="dateFieldLastEvaluation" accessibleHelp="Fecha de última evaluación" editable="false" maxWidth="1.7976931348623157E308" promptText="Selecciona una fecha" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                              <ComboBox fx:id="cmboxConsolidationDegree" editable="true" maxWidth="1.7976931348623157E308" prefWidth="150.0" promptText="Selecciona un grado de consolidación" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" />
+                              <TextField fx:id="txtFieldBodyAcademyName" accessibleHelp="Nombre de cuerpo académico" maxWidth="1.7976931348623157E308" promptText="Ejemplo: Ingeniería Física" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                              <TextField fx:id="txtFieldBodyAcademyKey" accessibleHelp="Clave de cuerpo académico" disable="true" maxWidth="1.7976931348623157E308" promptText="Ejemplo: FS-UV-111" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtFieldAdscriptionArea" accessibleHelp="Area de adscripción" maxWidth="1.7976931348623157E308" promptText="Ejemplo: Física" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                              <TextField fx:id="txtFieldAdsciptionUnit" accessibleHelp="Unidad de adscripción" maxWidth="1.7976931348623157E308" promptText="Ejemplo: Facultad de ingenierías" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                              <DatePicker fx:id="datePickerRegistrationDate" accessibleHelp="Fecha de registro" editable="false" maxWidth="1.7976931348623157E308" promptText="Selecciona una fecha" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <DatePicker fx:id="datePickerLastEvaluationDate" accessibleHelp="Fecha de última evaluación" editable="false" maxWidth="1.7976931348623157E308" promptText="Selecciona una fecha" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                              <ComboBox fx:id="cboBoxConsolidationDegree" maxWidth="1.7976931348623157E308" prefWidth="150.0" promptText="Selecciona un grado de consolidación" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" />
                            </children>
                            <columnConstraints>
                               <ColumnConstraints halignment="LEFT" maxWidth="197.0" minWidth="10.0" prefWidth="197.0" />
@@ -125,7 +125,7 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <HBox fx:id="hboxLgacTable" alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="1117.0" spacing="10.0" style="-fx-background-color: black;">
+                  <HBox fx:id="hboxLgacTable" alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="1117.0" spacing="10.0" style="-fx-background-color: #300050;">
                      <children>
                         <Button fx:id="btnAddLgac" mnemonicParsing="false" onAction="#addLgac" prefHeight="30.0" prefWidth="87.0" text="Añadir lgac" />
                         <Button fx:id="btnDeleteLgac" mnemonicParsing="false" onAction="#removeLgac" prefHeight="29.0" prefWidth="96.0" text="Eliminar lgac" />
@@ -155,9 +155,9 @@
                         <Label text="Objetivo general:" />
                         <Label text="Misión:" GridPane.columnIndex="1" />
                         <Label text="Visión:" GridPane.columnIndex="2" />
-                        <TextArea fx:id="txtAreaGeneralTarget" accessibleHelp="Objetivo general extendido" prefHeight="56.0" prefWidth="280.0" promptText="Escribe el objetivo general aqui..." GridPane.rowIndex="1" />
-                        <TextArea fx:id="txtAreaMission" accessibleHelp="Misión " prefHeight="200.0" prefWidth="200.0" promptText="Escribe la misión aqui..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextArea fx:id="txtAreaVision" accessibleHelp="Visión" prefHeight="200.0" prefWidth="200.0" promptText="Escribe la visión aqui..." GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <TextArea fx:id="txtAreaGeneralTarget" accessibleHelp="Objetivo general extendido" prefHeight="56.0" prefWidth="280.0" promptText="Escribe el objetivo general aqui..." wrapText="true" GridPane.rowIndex="1" />
+                        <TextArea fx:id="txtAreaMission" accessibleHelp="Misión " prefHeight="200.0" prefWidth="200.0" promptText="Escribe la misión aqui..." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextArea fx:id="txtAreaVision" accessibleHelp="Visión" prefHeight="200.0" prefWidth="200.0" promptText="Escribe la visión aqui..." wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                </children>
@@ -174,7 +174,7 @@
    <top>
       <HBox alignment="CENTER_RIGHT" prefHeight="33.0" prefWidth="1157.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Label maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="305.0" text="CURRÍCULUM GENERAL" HBox.hgrow="ALWAYS" />
+            <Label maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="305.0" text="CURRÍCULUM GENERAL" textFill="#22002f" HBox.hgrow="ALWAYS" />
             <Label fx:id="lblUserName" alignment="CENTER_RIGHT" prefHeight="24.0" prefWidth="333.0" text="..." />
             <Avatar>
                <image>

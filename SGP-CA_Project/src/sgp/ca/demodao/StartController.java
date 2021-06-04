@@ -62,7 +62,7 @@ public class StartController implements Initializable {
     
     public void receiveIntegrantToken(Integrant integrant){
         this.integrant = integrant;
-        this.lblUserName.setText(integrant.getFullName());
+        this.lblUserName.setText(this.integrant.getFullName());
     }
 
     @FXML
@@ -81,8 +81,8 @@ public class StartController implements Initializable {
 
     @FXML
     private void consultWorkPlan(ActionEvent event) {
-        FXMLLoader loader = changeWindow("WorkPlan.fxml", event);
-        WorkPlanController controller = loader.getController();
+        FXMLLoader loader = changeWindow("WorkPlanRequest.fxml", event);
+        WorkPlanRequestController controller = loader.getController();
         controller.receiveIntegrantToken(integrant);
     }
     

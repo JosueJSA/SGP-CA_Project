@@ -40,6 +40,8 @@ public class MemberSelectionController implements Initializable {
     private Integrant token;
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -59,15 +61,15 @@ public class MemberSelectionController implements Initializable {
 
     @FXML
     private void addNewIntegrant(ActionEvent event) {
-        FXMLLoader loader = changeWindow("IntegrantEdit.fxml", event);
-        IntegrantEditController controller = loader.getController();
+        FXMLLoader loader = changeWindow("IntegrantEditable.fxml", event);
+        IntegrantEditableController controller = loader.getController();
         controller.showIntegrantInscriptionForm(token);
     }
 
     @FXML
     private void addNewCollaborator(ActionEvent event) {
-        FXMLLoader loader = changeWindow("CollaboratorEdit.fxml", event);
-        CollaboratorEditController controller = loader.getController();
+        FXMLLoader loader = changeWindow("CollaboratorEditable.fxml", event);
+        CollaboratorEditableController controller = loader.getController();
         controller.showCollaboratorRegistrationForm(token);
     }
     

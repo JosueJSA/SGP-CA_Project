@@ -41,7 +41,7 @@ import sgp.ca.domain.Integrant;
  *
  * @author josue
  */
-public class IntegrantEditController implements Initializable {
+public class IntegrantEditableController implements Initializable {
 
     @FXML
     private Label lblParticipationType;
@@ -90,6 +90,7 @@ public class IntegrantEditController implements Initializable {
     private Integrant token;
     private Integrant integrant;
     private String oldRFC;
+    
 
     /**
      * Initializes the controller class.
@@ -108,8 +109,7 @@ public class IntegrantEditController implements Initializable {
         fields = Arrays.asList(
             memberRFCField, memberFullNameField,
             memberEmailUVField, memberCurpField,
-            memberNationalityField, memberBodyAcademyNameField,
-            memberEducationalProgramField, memberStaffNumberField
+            memberNationalityField, memberEducationalProgramField
         );
         hboxIntegrantOptions.getChildren().removeAll(optionButtons);
     }    
@@ -228,10 +228,17 @@ public class IntegrantEditController implements Initializable {
     }
     
     private void validateForm() throws InvalidFormException{
-        ValidatorForm.checkAlaphabeticalFields(fields, 100);
-        ValidatorForm.isNumberData(this.memberCellNumberField);
-        ValidatorForm.isIntegerNumberData(memberStaffNumberField);
-        ValidatorForm.checkNotEmptyDateField(this.memberRegistrationDateField);   
+        ValidatorForm.checkAlaphabeticalFields(fields, 5, 100);
+        ValidatorForm.isNumberData(this.memberCellNumberField, 8);
+        ValidatorForm.isIntegerNumberData(memberStaffNumberField, 8);
+        ValidatorForm.checkNotEmptyDateField(this.memberRegistrationDateField); 
+        ValidatorForm.chechkAlphabeticalField(passwordField, 5, 50);
+        if(checkBoxIsIntoBodyAcademy.isSelected()){
+            if(!GENERAL_RESUME.isBodyAcademyRegistered(memberBodyAcademyNameField.getText())){
+                memberBodyAcademyNameField.setStyle("-fx-border-color: red;");
+                throw new InvalidFormException("El cuerpo Académico no existe");
+            }
+        }
     }
     
     private void setIntegrantDataIntoInterface(){

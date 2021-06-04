@@ -17,9 +17,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="672.0" prefWidth="1199.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.PersonalResumeEditController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="672.0" prefWidth="1199.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.PersonalResumeEditableController">
    <bottom>
-      <HBox alignment="CENTER_RIGHT" prefHeight="46.0" prefWidth="1121.0" spacing="5.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER_RIGHT">
+      <HBox alignment="CENTER_RIGHT" prefHeight="46.0" prefWidth="1121.0" spacing="5.0" style="-fx-background-color: #300050;" BorderPane.alignment="CENTER_RIGHT">
          <children>
             <Button fx:id="btnUpdate" mnemonicParsing="false" onAction="#updatePersonalResume" prefHeight="30.0" prefWidth="140.0" text="ACTUALIZAR" />
             <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancelUpdate" prefHeight="30.0" prefWidth="123.0" text="CANCELAR" />
@@ -32,7 +32,7 @@
          </padding></HBox>
    </bottom>
    <top>
-      <HBox alignment="CENTER_RIGHT" prefHeight="46.0" prefWidth="1121.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_RIGHT" prefHeight="46.0" prefWidth="1121.0" spacing="10.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
             <Label maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="186.0" text="CURRÍCULUM PERSONAL" HBox.hgrow="ALWAYS" />
             <Label fx:id="lblUserName" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="424.0" text="..." />
@@ -85,23 +85,23 @@
                   <Label text="Tipo de contrato:" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                   <Label text="Tipo de participación:" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                   <Label text="Correo adicional:" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                  <TextField fx:id="fieldRfc" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
-                  <TextField fx:id="fieldFullName" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="fieldEmailUV" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="fieldStatus" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextField fx:id="fieldCurp" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <TextField fx:id="fieldNationality" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <TextField fx:id="fieldEducationalProgram" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                  <TextField fx:id="fieldStaffNumber" GridPane.columnIndex="3" />
-                  <TextField fx:id="fieldCellPhone" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <TextField fx:id="fieldWorkPhone" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <TextField fx:id="fieldHomePhone" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                  <TextField fx:id="fieldBodyAcademyKey" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                  <TextField fx:id="fieldAppointment" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                  <TextField fx:id="fieldParticipationType" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-                  <TextField fx:id="fieldAditionalEmail" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                  <TextField fx:id="txtFieldRfc" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtFieldFullName" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtFieldEmailUv" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtFieldStatus" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtFieldCurp" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="txtFieldNationality" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="txtFieldEducationalProgram" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <TextField fx:id="txtFieldStaffNumber" GridPane.columnIndex="3" />
+                  <TextField fx:id="txtFieldCellPhone" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtFieldWorkPhone" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtFieldHomePhone" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtFieldBodyAcademyKey" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <TextField fx:id="txtFieldAppoinment" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                  <TextField fx:id="txtFieldParticipationType" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                  <TextField fx:id="txtFieldAditionalMail" GridPane.columnIndex="3" GridPane.rowIndex="7" />
                   <DatePicker fx:id="datePickerRegistrationDate" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
-                  <PasswordField fx:id="fieldPassword" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <PasswordField fx:id="passFieldIntegrantPassword" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                   <Label text="Password:" GridPane.rowIndex="8" />
                </children>
                <VBox.margin>
@@ -140,13 +140,13 @@
                         <Label text="Número de cédula" GridPane.columnIndex="5" />
                         <Label text="Área" GridPane.columnIndex="6" />
                         <Label text="Disciplina" GridPane.columnIndex="7" />
-                        <TextField fx:id="fieldStudyDegree" GridPane.rowIndex="1" />
-                        <TextField fx:id="fieldStudyName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="fieldInstitutionSchooling" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                        <TextField fx:id="fieldState" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                        <TextField fx:id="fieldIDCedule" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-                        <TextField fx:id="fieldArea" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-                        <TextField fx:id="fieldDiscipline" GridPane.columnIndex="7" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtFieldStudyDegree" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtFieldStudyName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtFieldInstitutionSchooling" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtFieldState" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtFieldCeduleNumber" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtFieldStudyArea" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtFieldDiscipline" GridPane.columnIndex="7" GridPane.rowIndex="1" />
                         <DatePicker fx:id="datePickerDateStudy" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>

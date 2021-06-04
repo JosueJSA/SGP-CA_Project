@@ -6,12 +6,11 @@
 package sgp.ca.demodao;
 
 import java.util.Optional;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.TextInputDialog;
+import sgp.ca.domain.Integrant;
 
 /**
  *

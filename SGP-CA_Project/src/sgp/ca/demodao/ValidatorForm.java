@@ -18,21 +18,21 @@ import javafx.scene.control.TextField;
  */
 public class ValidatorForm{
     
-    public static void checkAlaphabeticalFields(List<TextField> fields, int characterSizeLimit) throws InvalidFormException{
+    public static void checkAlaphabeticalFields(List<TextField> fields, int characterSizeMinimun, int characterSizeLimit) throws InvalidFormException{
         for(TextField field : fields){
-            chechkAlphabeticalField(field, characterSizeLimit);
+            chechkAlphabeticalField(field, characterSizeMinimun, characterSizeLimit);
         }
     }
     
-    public static void checkAlaphabeticalTextAreas(List<TextArea> textAreas, int characterSizeLimit) throws InvalidFormException{
+    public static void checkAlaphabeticalTextAreas(List<TextArea> textAreas, int characterSizeMinimun, int characterSizeLimit) throws InvalidFormException{
         for(TextArea area : textAreas){
-            chechkAlphabeticalArea(area, characterSizeLimit);
+            chechkAlphabeticalArea(area, characterSizeMinimun, characterSizeLimit);
         }
     }
     
-    public static void chechkAlphabeticalField(TextField field, int characterSizeLimit) throws InvalidFormException{
+    public static void chechkAlphabeticalField(TextField field, int characterSizeMinimun, int characterSizeLimit) throws InvalidFormException{
         boolean correctField = false;
-        if(!field.getText().isEmpty() && field.getText().length() < characterSizeLimit){
+        if(!field.getText().isEmpty() && field.getText().length() >= characterSizeMinimun && field.getText().length() <= characterSizeLimit){
             field.setStyle("-fx-border-color: green;");
             correctField = true;
         }else{
@@ -43,9 +43,9 @@ public class ValidatorForm{
         }
     }
     
-    public static void chechkAlphabeticalArea(TextArea txtArea, int characterSizeLimit) throws InvalidFormException{
+    public static void chechkAlphabeticalArea(TextArea txtArea, int characterSizeMinimun, int characterSizeLimit) throws InvalidFormException{
         boolean correctField = false;
-        if(!txtArea.getText().isEmpty() && txtArea.getText().length() < characterSizeLimit){
+        if(!txtArea.getText().isEmpty() && txtArea.getText().length() >= characterSizeMinimun && txtArea.getText().length() < characterSizeLimit){
             txtArea.setStyle("-fx-border-color: green;");
             correctField = true;
         }else{
@@ -56,7 +56,7 @@ public class ValidatorForm{
         }
     }
     
-    public static void isNumberData(TextField textForCheck) throws InvalidFormException{
+    public static void isNumberData(TextField textForCheck, int characterLimit) throws InvalidFormException{
         boolean isNumber = false;
         try{
             double number = Double.parseDouble(textForCheck.getText());
@@ -70,7 +70,7 @@ public class ValidatorForm{
         }
     }
     
-    public static void isIntegerNumberData(TextField textForCheck) throws InvalidFormException{
+    public static void isIntegerNumberData(TextField textForCheck, int characterLimit) throws InvalidFormException{
         boolean isIntegerNumber = false;
         try{
             int number = Integer.parseInt(textForCheck.getText());

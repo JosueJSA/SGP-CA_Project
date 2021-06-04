@@ -19,7 +19,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="606.0" prefWidth="1139.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.PersonalResumeRequestController">
    <bottom>
-      <HBox alignment="CENTER_RIGHT" prefHeight="46.0" prefWidth="1121.0" spacing="5.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER_RIGHT">
+      <HBox alignment="CENTER_RIGHT" prefHeight="46.0" prefWidth="1121.0" spacing="5.0" style="-fx-background-color: #300050;" BorderPane.alignment="CENTER_RIGHT">
          <children>
             <Button fx:id="btnProduction" mnemonicParsing="false" onAction="#requestProduction" prefHeight="30.0" prefWidth="140.0" text="PRODUCCIÓN" />
             <Button fx:id="btnUpdate" mnemonicParsing="false" onAction="#updatePersonalResume" prefHeight="30.0" prefWidth="140.0" text="EDITAR" />
@@ -34,7 +34,7 @@
       </HBox>
    </bottom>
    <top>
-      <HBox alignment="CENTER_RIGHT" prefHeight="46.0" prefWidth="1121.0" spacing="10.0" style="-fx-background-color: wgite;" BorderPane.alignment="CENTER_RIGHT">
+      <HBox alignment="CENTER_RIGHT" prefHeight="46.0" prefWidth="1121.0" spacing="10.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER_RIGHT">
          <children>
             <Label maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="321.0" text="CURRÍCULUM PERSONAL" HBox.hgrow="ALWAYS" />
             <Label fx:id="lblUserName" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="25.0" prefWidth="364.0" text="..." />
@@ -90,27 +90,27 @@
                   <Label text="Tipo de contrato:" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                   <Label text="Tipo de participación:" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                   <Label text="Correo adicional:" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                  <TextField fx:id="fieldRfc" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
-                  <TextField fx:id="fieldFullName" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="fieldEmailUV" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="fieldStatus" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextField fx:id="fieldCurp" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <TextField fx:id="fieldNationality" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <TextField fx:id="fieldEducationalProgram" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                  <TextField fx:id="fieldStaffNumber" GridPane.columnIndex="3" />
-                  <TextField fx:id="fieldCellPhone" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <TextField fx:id="fieldWorkPhone" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <TextField fx:id="fieldHomePhone" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                  <TextField fx:id="fieldBodyAcademyKey" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                  <TextField fx:id="fieldAppointment" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                  <TextField fx:id="fieldParticipationType" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-                  <TextField fx:id="fieldAditionalEmail" GridPane.columnIndex="3" GridPane.rowIndex="7" />
-                  <DatePicker fx:id="datePickerRegistrationDate" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
-                  <PasswordField fx:id="fieldPassword" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <TextField fx:id="txtFieldRfc" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtFieldFullName" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtFieldEmailUv" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtFieldStatus" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtFieldCurp" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="txtFieldNationality" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="txtFieldEducationalProgram" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <TextField fx:id="txtFieldStaffNumber" editable="false" GridPane.columnIndex="3" />
+                  <TextField fx:id="txtFieldCellPhone" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtFieldWorkPhone" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtFieldHomePhone" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtFieldBodyAcademyKey" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <TextField fx:id="txtFieldAppoinment" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                  <TextField fx:id="txtFieldParticipationType" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                  <TextField fx:id="txtFieldAditionalMail" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                  <DatePicker fx:id="datePickerRegistrationDate" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
+                  <PasswordField fx:id="passFieldIntegrantPassword" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                   <Label text="Password:" GridPane.rowIndex="8" />
                </children>
                <VBox.margin>
-                  <Insets bottom="20.0" />
+                  <Insets bottom="30.0" />
                </VBox.margin>
             </GridPane>
             <TableView fx:id="tableViewSchooling" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="224.0" prefWidth="1159.0" VBox.vgrow="ALWAYS">
@@ -132,6 +132,9 @@
          <padding>
             <Insets left="20.0" right="20.0" top="20.0" />
          </padding>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
       </VBox>
    </center>
 </BorderPane>

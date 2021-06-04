@@ -47,35 +47,38 @@ public class CollaboratorRequestController implements Initializable {
     @FXML
     private Button btnExit;
     @FXML
-    private Label lblParticipationType;
+    private TextField txtFieldRfcMember;
     @FXML
-    private TextField memberRFCField;
+    private TextField txtFieldFullName;
     @FXML
-    private TextField memberFullNameField;
+    private TextField txtFieldEmailUv;
     @FXML
-    private TextField memberEmailUVField;
+    private TextField txtFieldCurp;
     @FXML
-    private TextField memberCurpField;
+    private TextField txtFieldNationality;
     @FXML
-    private TextField memberNationalityField;
+    private TextField txtFieldEducationalProgram;
     @FXML
-    private TextField memberEducationalProgramField;
+    private TextField txtFieldCellNumber;
     @FXML
-    private TextField memberCellNumberField;
+    private TextField txtFieldStatus;
     @FXML
-    private TextField memberStaffNumberField;
+    private TextField txtFieldStaffNumber;
     @FXML
-    private DatePicker memberRegistrationDateField;
+    private DatePicker datePickerAdmisionDate;
     @FXML
-    private TextField fieldStudyArea;
+    private TextField txtFieldStudyArea;
     @FXML
-    private TextField fieldHighestDegreeStudies;
+    private TextField txtFieldBodyAcademyName;
     @FXML
-    private TextField fieldParticipationStatus;
+    private TextField txtFieldLevelStudy;
+    @FXML
+    private Label lbParticipationType;
 
     private Collaborator collaborator;
     private Integrant integrantToken;
     private final CollaboratorDAO COLLABORATOR_DAO = new CollaboratorDAO();
+    
     
     /**
      * Initializes the controller class.
@@ -121,8 +124,8 @@ public class CollaboratorRequestController implements Initializable {
 
     @FXML
     private void editCollaborator(ActionEvent event) {
-        FXMLLoader loader = changeWindow("CollaboratorEdit.fxml", event);
-        CollaboratorEditController controller = loader.getController();
+        FXMLLoader loader = changeWindow("CollaboratorEditable.fxml", event);
+        CollaboratorEditableController controller = loader.getController();
         controller.showCollaboratorUpdateForm(integrantToken, this.collaborator.getEmailUV());
     }
 
@@ -134,19 +137,20 @@ public class CollaboratorRequestController implements Initializable {
     }
     
     private void setIntegrantDataIntoInterface(){
-        this.memberCellNumberField.setText(this.collaborator.getCellphone());
-        this.memberCurpField.setText(this.collaborator.getCurp());
-        this.memberEducationalProgramField.setText(this.collaborator.getEducationalProgram());
-        this.memberEmailUVField.setText(this.collaborator.getEmailUV());
-        this.memberFullNameField.setText(this.collaborator.getFullName());
-        this.memberNationalityField.setText(this.collaborator.getNationality());
-        this.memberRFCField.setText(this.collaborator.getRfc());
-        this.memberRegistrationDateField.setValue(LocalDate.parse(this.collaborator.getDateOfAdmission()));
-        this.memberStaffNumberField.setText(String.valueOf(this.collaborator.getStaffNumber()));
-        this.lblParticipationType.setText(this.collaborator.getParticipationType());
-        this.fieldHighestDegreeStudies.setText(this.collaborator.getHighestDegreeStudies());
-        this.fieldParticipationStatus.setText(this.collaborator.getParticipationStatus());
-        this.fieldStudyArea.setText(this.collaborator.getStudyArea());
+        this.txtFieldCellNumber.setText(collaborator.getCellphone());
+        this.txtFieldCurp.setText(collaborator.getCurp());
+        this.txtFieldEducationalProgram.setText(collaborator.getEducationalProgram());
+        this.txtFieldEmailUv.setText(collaborator.getEmailUV());
+        this.txtFieldFullName.setText(collaborator.getFullName());
+        this.txtFieldNationality.setText(collaborator.getNationality());
+        this.txtFieldRfcMember.setText(collaborator.getRfc());
+        this.datePickerAdmisionDate.setValue(LocalDate.parse(collaborator.getDateOfAdmission()));
+        this.txtFieldStaffNumber.setText(String.valueOf(collaborator.getStaffNumber()));
+        this.lbParticipationType.setText(collaborator.getParticipationType());
+        this.txtFieldBodyAcademyName.setText(collaborator.getNameBACollaborator());
+        this.txtFieldLevelStudy.setText(collaborator.getHighestDegreeStudies());
+        this.txtFieldStudyArea.setText(collaborator.getStudyArea());
+        this.txtFieldStatus.setText(collaborator.getParticipationStatus());
     }
     
     private FXMLLoader changeWindow(String window, Event event){

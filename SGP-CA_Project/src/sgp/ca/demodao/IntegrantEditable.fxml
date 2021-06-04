@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="482.0" prefWidth="974.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.IntegrantEditController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="482.0" prefWidth="974.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.IntegrantEditableController">
    <bottom>
-      <HBox fx:id="hboxIntegrantOptions" alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="974.0" spacing="10.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+      <HBox fx:id="hboxIntegrantOptions" alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="974.0" spacing="10.0" style="-fx-background-color: #300050;" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnIntegrantRegistrer" mnemonicParsing="false" onAction="#addNewIntegrant" prefHeight="33.0" prefWidth="98.0" text="REGISTRAR" />
             <Button fx:id="btnResponsibleRegistrer" mnemonicParsing="false" onAction="#addNewResponsible" prefHeight="33.0" prefWidth="98.0" text="REGISTRAR" />
@@ -31,9 +31,9 @@
       </HBox>
    </bottom>
    <top>
-      <HBox alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="974.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_RIGHT" prefHeight="44.0" prefWidth="974.0" spacing="10.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
-            <Label text="DATOS CURRICULARES" textFill="WHITE">
+            <Label maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="245.0" text="DATOS CURRICULARES" textFill="#3c024a" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -43,7 +43,7 @@
             <Insets />
          </opaqueInsets>
          <padding>
-            <Insets left="30.0" />
+            <Insets left="30.0" right="30.0" />
          </padding>
       </HBox>
    </top>
@@ -53,7 +53,7 @@
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
          </padding>
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="914.0" style="-fx-background-color: #CDCBCB;">
+            <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="914.0" style="-fx-background-color: #d7b4ee83;">
                <VBox.margin>
                   <Insets bottom="20.0" />
                </VBox.margin>
@@ -111,7 +111,7 @@
                   <TextField fx:id="memberStaffNumberField" accessibleHelp="5 números enteros" promptText="Ejemplo: 23643" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                   <DatePicker fx:id="memberRegistrationDateField" editable="false" maxWidth="1.7976931348623157E308" promptText="Ejmplo: 2020/12/12" GridPane.columnIndex="3" />
                   <Label text="Contraseña: " GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                  <PasswordField fx:id="passwordField" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <PasswordField fx:id="passwordField" promptText="Contraseña" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                   <CheckBox fx:id="checkBoxIsIntoBodyAcademy" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#confirmBodyAcademyRegistered" prefHeight="17.0" prefWidth="650.0" text="Estoy en un cuerpo académico registrado" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
                </children>
             </GridPane>

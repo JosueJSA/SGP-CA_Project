@@ -84,11 +84,11 @@ public class ProjectFormController implements Initializable {
     }
     
     public void isValidForm() throws InvalidFormException{
-        ValidatorForm.chechkAlphabeticalField(titleProjectField, 80);
-        ValidatorForm.isNumberData(durationField);
-        ValidatorForm.checkNotEmptyDateField(startDateField);
-        ValidatorForm.checkNotEmptyDateField(estimatedEndDateField);
-        ValidatorForm.chechkAlphabeticalArea(descriptionField, 500);
+//        ValidatorForm.chechkAlphabeticalField(titleProjectField, 80);
+//        ValidatorForm.isNumberData(durationField);
+//        ValidatorForm.checkNotEmptyDateField(startDateField);
+//        ValidatorForm.checkNotEmptyDateField(estimatedEndDateField);
+//        ValidatorForm.chechkAlphabeticalArea(descriptionField, 500);
     }
 
     @FXML

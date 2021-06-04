@@ -24,10 +24,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import sgp.ca.businesslogic.WorkPlanDAO;
 import sgp.ca.domain.Action;
+import sgp.ca.domain.Goal;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.WorkPlan;
 
@@ -36,7 +39,7 @@ import sgp.ca.domain.WorkPlan;
  *
  * @author josue
  */
-public class WorkPlanController implements Initializable {
+public class WorkPlanRequestController implements Initializable {
 
     @FXML
     private Button btnExit;
@@ -65,52 +68,67 @@ public class WorkPlanController implements Initializable {
     @FXML
     private TableView<Action> tableViewActions;
     @FXML
-    private TableColumn<Action, String> columnActionStatus;
-    @FXML
     private TableColumn<Action, String> columnActionDescription;
     @FXML
     private TableColumn<Action, String> columnActionEstimatedEndDate;
     @FXML
     private TableColumn<Action, String> columnActionEndDate;
     @FXML
-    private TableColumn<Action, String> columnActoinResponsible;
-    @FXML
     private TableColumn<Action, String> columnActionStartDate;
+    @FXML
+    private TableColumn<Action, String> columnResources;
+    @FXML
+    private TableColumn<Action, String> columnActionResponsible;
     @FXML
     private TextArea textAreaActionDescription;
     @FXML
     private TextArea textAreaActionResources;
     
-    private Integrant integrant;
+    private Integrant token;
     private final WorkPlanDAO WORKPLAN_DAO = new WorkPlanDAO();
+    private WorkPlan workplan;
+    
+    
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        this.workplan = new WorkPlan();
+        this.preprareActionsTable();
     }    
 
     @FXML
     private void exit(ActionEvent event) {
         FXMLLoader loader = changeWindow("Start.fxml", event);
         StartController controller = loader.getController();
-        controller.receiveIntegrantToken(integrant);
+        controller.receiveIntegrantToken(token);
     }
 
     @FXML
     private void updateWorkplan(ActionEvent event) {
+        String date = this.cmBoxWorkPlanPeriot.getSelectionModel().getSelectedItem();
+        date = date.substring(date.length()-11, date.length()-1);
+        FXMLLoader loader = changeWindow("WorkPlanEditable.fxml", event);
+        WorkPlanEditableController controller = loader.getController();
+        controller.showWorkPlanUpdateForm(token, date); 
     }
 
     @FXML
     private void addNewWorkPlan(ActionEvent event) {
         FXMLLoader loader = changeWindow("WorkPlanEditable.fxml", event);
         WorkPlanEditableController controller = loader.getController();
-        //controller.receiveIntegrantToken(integrant);
+        controller.showWorkPlanInsertionForm(token);
     }
     
     @FXML
     private void selectPeriot(ActionEvent event) {
+        String date = this.cmBoxWorkPlanPeriot.getSelectionModel().getSelectedItem();
+        date = date.substring(date.length()-11, date.length()-1);
+        this.workplan = WORKPLAN_DAO.getWorkPlan(date, this.token.getBodyAcademyKey());
+        this.setWorkPlanSelectedDataIntoInterface();
     }
 
     @FXML
@@ -118,14 +136,59 @@ public class WorkPlanController implements Initializable {
     }
     
     public void receiveIntegrantToken(Integrant integrant){
-        this.integrant = integrant;
+        this.token = integrant;
+        this.setDataInWorkPlanInterface();
     }
     
     public void setDataInWorkPlanInterface(){
-        List<WorkPlan> workplanPeriots = WORKPLAN_DAO.getWorkPlanPeriots(integrant.getBodyAcademyKey());
+        List<WorkPlan> workplanPeriots = WORKPLAN_DAO.getWorkPlanPeriots(token.getBodyAcademyKey());
         workplanPeriots.forEach(periot -> {
             cmBoxWorkPlanPeriot.getItems().add("Periodo: [" + periot.getStartDatePlan() + " - " + periot.getEndDatePlan() + "]");
         });
+    }
+
+    @FXML
+    private void selectGoal(ActionEvent event) {
+        String goalDescriptionSelected = this.cmBoxGoals.getSelectionModel().getSelectedItem(); 
+        if(!goalDescriptionSelected.isEmpty()){
+            Goal goal = this.workplan.searchGoalByDescription(goalDescriptionSelected);
+            this.lblGoalStatus.setText(String.valueOf(goal.isStatusGoal()));
+            this.lblGoalStartDate.setText(goal.getStartDate());
+            this.lblGoalEndDate.setText(goal.getEndDate());
+            this.textAreaGoalDescription.setText(goal.getDescription());
+            this.tableViewActions.getItems().clear();
+            goal.getActions().forEach(action -> {
+                this.tableViewActions.getItems().add(action);
+            });
+        }
+    }
+
+    @FXML
+    private void selectAction(MouseEvent event) {
+        String actionDescription = this.tableViewActions.getSelectionModel().getSelectedItem().getDescriptionAction();
+        if(!actionDescription.isEmpty()){
+            Action action = this.tableViewActions.getSelectionModel().getSelectedItem();
+            this.textAreaActionDescription.setText(action.getDescriptionAction());
+            this.textAreaActionResources.setText(action.getResource());
+        }
+    }
+    
+    private void setWorkPlanSelectedDataIntoInterface(){
+        this.lblDuration.setText(String.valueOf(this.workplan.getDurationInYears()));
+        this.textAreaGeneralTarget.setText(this.workplan.getGeneralTarget());
+        this.cmBoxGoals.getItems().clear();
+        this.workplan.getGoals().forEach(goal -> {
+            cmBoxGoals.getItems().add(goal.getDescription());
+        });
+    }
+    
+    private void preprareActionsTable(){
+        columnActionDescription.setCellValueFactory(new PropertyValueFactory<>("descriptionAction"));
+        columnActionEndDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        columnActionEstimatedEndDate.setCellValueFactory(new PropertyValueFactory<>("estimatedEndDate"));
+        columnActionStartDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        columnResources.setCellValueFactory(new PropertyValueFactory<>("resource"));
+        columnActionResponsible.setCellValueFactory(new PropertyValueFactory<>("responsibleAction"));
     }
     
     private FXMLLoader changeWindow(String window, Event event){

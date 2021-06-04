@@ -98,6 +98,16 @@ public class Goal{
         this.description = description;
     }
     
+    public Action searchActionByDescripcion(String actionDescription){
+        Action actionReturn = null;
+        for(Action action : this.actions){
+            if(action.getDescriptionAction().equalsIgnoreCase(actionDescription)){
+                actionReturn = action;
+            }
+        }
+        return actionReturn;
+    }
+    
     @Override
     public boolean equals(Object obj){
         boolean isEqual = false;

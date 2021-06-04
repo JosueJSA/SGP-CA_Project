@@ -24,7 +24,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="653.0" prefWidth="1157.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.GeneralResumeRequestController">
    <bottom>
-      <HBox fx:id="hboxGeneralResumeOptions" alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="1300.0" spacing="10.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER_RIGHT">
+      <HBox fx:id="hboxGeneralResumeOptions" alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="1300.0" spacing="10.0" style="-fx-background-color: #300050;" BorderPane.alignment="CENTER_RIGHT">
          <children>
             <Button fx:id="brtnProduction" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#requestEvidencesList" prefHeight="32.0" prefWidth="145.0" text="PRODUCCIÓN">
                <font>
@@ -57,7 +57,7 @@
                <children>
                   <HBox prefHeight="221.0" prefWidth="1137.0">
                      <children>
-                        <GridPane maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="1053.0" HBox.hgrow="ALWAYS">
+                        <GridPane maxWidth="1.7976931348623157E308" prefHeight="201.0" prefWidth="996.0" HBox.hgrow="ALWAYS">
                           <columnConstraints>
                             <ColumnConstraints maxWidth="294.0" minWidth="10.0" prefWidth="196.0" />
                             <ColumnConstraints hgrow="ALWAYS" maxWidth="413.0" minWidth="10.0" prefWidth="391.0" />
@@ -79,23 +79,23 @@
                               <Label text="Grado de consolidación: " GridPane.rowIndex="4" />
                               <Label text="Fecha de registro: " GridPane.rowIndex="5" />
                               <Label text="Última fecha de evaluación: " GridPane.rowIndex="6" />
-                              <Label fx:id="lblBodyAcademyName" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-                              <Label fx:id="lblBodyAcademyKey" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-                              <Label fx:id="lblSubscriptionArea" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-                              <Label fx:id="lblAdscriptionUnit" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-                              <Label fx:id="lblConsolidationDegree" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
-                              <Label fx:id="lblRegistrationDate" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
-                              <Label fx:id="lblLastEvaluationDate" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
+                              <Label fx:id="lbBodyAcademyName" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                              <Label fx:id="lbBodyAcademyKey" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                              <Label fx:id="lbSubscriptionArea" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                              <Label fx:id="lbAdscriptionUnit" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                              <Label fx:id="lbConsolidationDegree" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+                              <Label fx:id="lbRegistrationDate" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
+                              <Label fx:id="lbLastEvaluationDate" maxWidth="1.7976931348623157E308" text="..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
                            </children>
                         </GridPane>
                         <VBox maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="996.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Label text="Objetivo general:" />
-                              <TextArea fx:id="textAreGeneralTarget" maxHeight="1.7976931348623157E308" prefHeight="50.0" prefWidth="540.0" VBox.vgrow="ALWAYS" />
+                              <TextArea fx:id="txtAreaGeneralTarget" editable="false" maxHeight="1.7976931348623157E308" prefHeight="50.0" prefWidth="540.0" wrapText="true" VBox.vgrow="ALWAYS" />
                               <Label text="Misión: " />
-                              <TextArea fx:id="textAreaMission" maxHeight="1.7976931348623157E308" prefHeight="66.0" prefWidth="540.0" VBox.vgrow="ALWAYS" />
+                              <TextArea fx:id="txtAreaMission" editable="false" maxHeight="1.7976931348623157E308" prefHeight="66.0" prefWidth="540.0" wrapText="true" VBox.vgrow="ALWAYS" />
                               <Label text="Visión:" />
-                              <TextArea fx:id="textAreaVision" maxHeight="1.7976931348623157E308" prefHeight="62.0" prefWidth="540.0" VBox.vgrow="ALWAYS" />
+                              <TextArea fx:id="txtAreaVision" editable="false" maxHeight="1.7976931348623157E308" prefHeight="62.0" prefWidth="540.0" wrapText="true" VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
                      </children>
@@ -122,10 +122,10 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="1137.0" spacing="10.0" style="-fx-background-color: black;">
+                  <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="1137.0" spacing="10.0" style="-fx-background-color: #300050; -fx-background-radius: 50px;">
                      <children>
                         <Button fx:id="btnSearchMember" mnemonicParsing="false" onAction="#searchMember" prefHeight="31.0" prefWidth="87.0" text="Buscar" />
-                        <TextField fx:id="fieldFullNameMember" maxWidth="1.7976931348623157E308" prefHeight="12.0" prefWidth="1020.0" style="-fx-background-color: white;" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="txtFieldMemberNameForSearch" maxWidth="1.7976931348623157E308" prefHeight="12.0" prefWidth="1020.0" promptText="Escribe el nombre del miembro a buscar" style="-fx-background-color: white; -fx-background-radius: 50px; -fx-border-color: transparent;" HBox.hgrow="ALWAYS" />
                      </children>
                      <padding>
                         <Insets left="10.0" right="10.0" />

@@ -49,39 +49,7 @@ public class PersonalResumeRequestController implements Initializable {
     @FXML
     private Label lblUserName;
     @FXML
-    private TextField fieldRfc;
-    @FXML
-    private TextField fieldFullName;
-    @FXML
-    private TextField fieldEmailUV;
-    @FXML
-    private TextField fieldStatus;
-    @FXML
-    private TextField fieldCurp;
-    @FXML
-    private TextField fieldNationality;
-    @FXML
-    private TextField fieldEducationalProgram;
-    @FXML
-    private TextField fieldStaffNumber;
-    @FXML
-    private TextField fieldCellPhone;
-    @FXML
-    private TextField fieldWorkPhone;
-    @FXML
-    private TextField fieldHomePhone;
-    @FXML
-    private TextField fieldBodyAcademyKey;
-    @FXML
-    private TextField fieldAppointment;
-    @FXML
-    private TextField fieldParticipationType;
-    @FXML
-    private TextField fieldAditionalEmail;
-    @FXML
     private DatePicker datePickerRegistrationDate;
-    @FXML
-    private PasswordField fieldPassword;
     @FXML
     private TableView<Schooling> tableViewSchooling;
     @FXML
@@ -104,6 +72,38 @@ public class PersonalResumeRequestController implements Initializable {
     private Button btnProduction;
     @FXML
     private Button btnExit;
+    @FXML
+    private TextField txtFieldRfc;
+    @FXML
+    private TextField txtFieldFullName;
+    @FXML
+    private TextField txtFieldEmailUv;
+    @FXML
+    private TextField txtFieldStatus;
+    @FXML
+    private TextField txtFieldCurp;
+    @FXML
+    private TextField txtFieldNationality;
+    @FXML
+    private TextField txtFieldEducationalProgram;
+    @FXML
+    private TextField txtFieldStaffNumber;
+    @FXML
+    private TextField txtFieldCellPhone;
+    @FXML
+    private TextField txtFieldWorkPhone;
+    @FXML
+    private TextField txtFieldHomePhone;
+    @FXML
+    private TextField txtFieldBodyAcademyKey;
+    @FXML
+    private TextField txtFieldAppoinment;
+    @FXML
+    private TextField txtFieldParticipationType;
+    @FXML
+    private TextField txtFieldAditionalMail;
+    @FXML
+    private PasswordField passFieldIntegrantPassword;
     
     private Integrant integrantToken;
     private IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
@@ -113,15 +113,6 @@ public class PersonalResumeRequestController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        List<TextField> fields = Arrays.asList(
-            fieldRfc, fieldFullName, fieldStatus, fieldCurp, fieldNationality,
-            fieldEducationalProgram, fieldStaffNumber, fieldCellPhone, fieldWorkPhone,
-            fieldHomePhone, fieldBodyAcademyKey, fieldAppointment, fieldParticipationType,
-            fieldAditionalEmail, fieldEmailUV
-        );
-        fields.forEach(field -> field.setStyle("-fx-background-color: transparent;"));
-        datePickerRegistrationDate.setStyle("-fx-background-color: transparent;");
-        this.fieldPassword.setStyle("-fx-background-color: transparent;");
         this.preprareSchoolingTable();
         
     }    
@@ -134,8 +125,8 @@ public class PersonalResumeRequestController implements Initializable {
 
     @FXML
     private void updatePersonalResume(ActionEvent event) {
-        FXMLLoader loader = changeWindow("PersonalResumeEdit.fxml", event);
-        PersonalResumeEditController controller = loader.getController();
+        FXMLLoader loader = changeWindow("PersonalResumeEditable.fxml", event);
+        PersonalResumeEditableController controller = loader.getController();
         controller.receiveIntegrantToken(integrantToken);
     }
     
@@ -153,22 +144,22 @@ public class PersonalResumeRequestController implements Initializable {
     private void setIntegrantDataIntoInterface(){
         Integrant integrant = (Integrant) INTEGRANT_DAO.getMemberByUVmail(integrantToken.getEmailUV());
         if(integrant != null){
-            this.fieldAditionalEmail.setText(integrant.getAditionalMail());
-            this.fieldAppointment.setText(integrant.getAppointmentMember());
-            this.fieldBodyAcademyKey.setText(integrant.getBodyAcademyKey());
-            this.fieldCellPhone.setText(integrant.getCellphone());
-            this.fieldCurp.setText(integrant.getCurp());
-            this.fieldEducationalProgram.setText(integrant.getEducationalProgram());
-            this.fieldEmailUV.setText(integrant.getEmailUV());
-            this.fieldFullName.setText(integrant.getFullName());
-            this.fieldHomePhone.setText(integrant.getHomePhone());
-            this.fieldNationality.setText(integrant.getNationality());
-            this.fieldParticipationType.setText(integrant.getParticipationType());
-            this.fieldPassword.setText(integrant.getPassword());
-            this.fieldRfc.setText(integrant.getRfc());
-            this.fieldStaffNumber.setText(String.valueOf(integrant.getStaffNumber()));
-            this.fieldStatus.setText(integrant.getParticipationStatus());
-            this.fieldWorkPhone.setText(integrant.getWorkPhone());
+            this.txtFieldAditionalMail.setText(integrant.getAditionalMail());
+            this.txtFieldAppoinment.setText(integrant.getAppointmentMember());
+            this.txtFieldBodyAcademyKey.setText(integrant.getBodyAcademyKey());
+            this.txtFieldCellPhone.setText(integrant.getCellphone());
+            this.txtFieldCurp.setText(integrant.getCurp());
+            this.txtFieldEducationalProgram.setText(integrant.getEducationalProgram());
+            this.txtFieldEmailUv.setText(integrant.getEmailUV());
+            this.txtFieldFullName.setText(integrant.getFullName());
+            this.txtFieldHomePhone.setText(integrant.getHomePhone());
+            this.txtFieldNationality.setText(integrant.getNationality());
+            this.txtFieldParticipationType.setText(integrant.getParticipationType());
+            this.passFieldIntegrantPassword.setText(integrant.getPassword());
+            this.txtFieldRfc.setText(integrant.getRfc());
+            this.txtFieldStaffNumber.setText( String.valueOf(integrant.getStaffNumber()));
+            this.txtFieldStatus.setText(integrant.getParticipationStatus());
+            this.txtFieldWorkPhone.setText(integrant.getWorkPhone());
             this.datePickerRegistrationDate.setValue(LocalDate.parse(integrant.getDateOfAdmission()));
             ObservableList<Schooling> list = FXCollections.observableArrayList();
             list.addAll(integrant.getSchooling());

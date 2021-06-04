@@ -361,7 +361,7 @@ CREATE TABLE `IntegrantReceptionWork` (
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     KEY `fk_integrantReceptionWork_1` (`rfc`),
-    CONSTRAINT `fk_integrantReceptionWork_1` FOREIGN KEY (`rfc`) REFERENCES `Integrant` (`rfc`),
+    CONSTRAINT `fk_integrantReceptionWork_1` FOREIGN KEY (`rfc`) REFERENCES `Integrant` (`rfc`) ON UPDATE CASCADE,
     KEY `fk_integrantReceptionWork_2` (`urlFile`),
     CONSTRAINT `fk_integrantReceptionWork_2` FOREIGN KEY (`urlFile`) REFERENCES `ReceptionWork` (`urlFile`)
     ON UPDATE CASCADE

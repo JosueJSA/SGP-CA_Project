@@ -13,9 +13,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="974.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.CollaboratorEditController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="974.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.CollaboratorEditableController">
    <bottom>
-      <HBox fx:id="hboxCollaboratorOptions" alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="974.0" spacing="10.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+      <HBox fx:id="hboxCollaboratorOptions" alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="974.0" spacing="10.0" style="-fx-background-color: #300050;" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnRegistrerColaborator" mnemonicParsing="false" onAction="#addNewCollaborator" prefHeight="33.0" prefWidth="98.0" text="REGISTRAR" />
             <Button fx:id="btnCollaboratorUpdate" mnemonicParsing="false" onAction="#updateCollaborator" prefHeight="33.0" prefWidth="98.0" text="ACTUALIZAR" />
@@ -27,9 +27,9 @@
       </HBox>
    </bottom>
    <top>
-      <HBox alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="974.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="974.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
-            <Label text="DATOS CURRICULARES" textFill="WHITE">
+            <Label text="DATOS CURRICULARES" textFill="#545252">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -49,7 +49,7 @@
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
          </padding>
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="914.0" style="-fx-background-color: #CDCBCB;">
+            <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="914.0" style="-fx-background-color: #d7b4ee83;">
                <VBox.margin>
                   <Insets bottom="20.0" />
                </VBox.margin>
@@ -59,7 +59,7 @@
                         <Insets left="20.0" right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <Label fx:id="lblParticipationType" prefHeight="26.0" prefWidth="144.0" text="Colaborador">
+                  <Label fx:id="lbParticipationType" prefHeight="26.0" prefWidth="144.0" text="Colaborador">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
@@ -92,26 +92,24 @@
                   <Label text="Nacionalidad:" GridPane.rowIndex="4" />
                   <Label text="Fecha de admisión:" GridPane.columnIndex="2" />
                   <Label text="Programa educativo:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Label text="Estado:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                   <Label text="Numero de personal:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                   <Label text="Número celular:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                   <Label text="Correo institucional:" GridPane.rowIndex="2" />
-                  <TextField fx:id="memberRFCField" accessibleHelp="RFC" accessibleText="Ejemplo: GHWERDFT4YHF3" promptText="Ejemplo: GHWERDFT4YHF3" GridPane.columnIndex="1" />
-                  <TextField fx:id="memberFullNameField" accessibleHelp="Nombre(s) + Apellido paterno + apellido materno (Solo letras)" accessibleText="Ejemplo: Josué Sanagabriel Alarcón" promptText="Ejemplo: Josué Sanagabriel Alarcón" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="memberEmailUVField" accessibleHelp="Terminación: @uv.mx (Caracteres alfanumpericos)" accessibleText="Ejemplo: josue@estudiantes.uv.mx" promptText="Ejemplo: josue@estudiantes.uv.mx" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="memberCurpField" accessibleHelp="18 Carteres alfanumpericos (NO címbolos)" promptText="Ejemplo: 3FU5YS67YDGLO8SUR" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextField fx:id="memberNationalityField" accessibleHelp="Solo letras" accessibleText="Ejemplo: Mexicano (a)" promptText="Ejemplo: Mexicano (a)" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <TextField fx:id="memberEducationalProgramField" accessibleHelp="Solo letras" promptText="Ejemplo: Ingenieria de software" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <TextField fx:id="memberCellNumberField" accessibleHelp="10 dígitos (Solo números enteros)" promptText="Ejemplo: 22-82-90-98-34" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <TextField fx:id="memberStateField" accessibleHelp="Solo letras" promptText="Ejemplo: Veracruz" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                  <TextField fx:id="memberStaffNumberField" accessibleHelp="5 números enteros" promptText="Ejemplo: 23643" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                  <DatePicker fx:id="memberRegistrationDateField" editable="false" maxWidth="1.7976931348623157E308" promptText="Ejmplo: 2020/12/12" GridPane.columnIndex="3" />
+                  <TextField fx:id="txtFieldRfcMember" accessibleHelp="RFC" accessibleText="Ejemplo: GHWERDFT4YHF3" promptText="Ejemplo: GHWERDFT4YHF3" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtFieldFullName" accessibleHelp="Nombre(s) + Apellido paterno + apellido materno (Solo letras)" accessibleText="Ejemplo: Josué Sanagabriel Alarcón" promptText="Ejemplo: Josué Sanagabriel Alarcón" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtFieldEmailUv" accessibleHelp="Terminación: @uv.mx (Caracteres alfanumpericos)" accessibleText="Ejemplo: josue@estudiantes.uv.mx" promptText="Ejemplo: josue@estudiantes.uv.mx" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtFieldCurp" accessibleHelp="18 Carteres alfanumpericos (NO címbolos)" promptText="Ejemplo: 3FU5YS67YDGLO8SUR" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtFieldNationality" accessibleHelp="Solo letras" accessibleText="Ejemplo: Mexicano (a)" promptText="Ejemplo: Mexicano (a)" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="txtFieldEducationalProgram" accessibleHelp="Solo letras" promptText="Ejemplo: Ingenieria de software" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtFieldCellNumber" accessibleHelp="10 dígitos (Solo números enteros)" promptText="Ejemplo: 22-82-90-98-34" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtFieldStaffNumber" accessibleHelp="5 números enteros" promptText="Ejemplo: 23643" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <DatePicker fx:id="datePickerAdmisionDate" editable="false" maxWidth="1.7976931348623157E308" promptText="Ejmplo: 2020/12/12" GridPane.columnIndex="3" />
                   <Label text="Area de estudio: " GridPane.rowIndex="5" />
                   <Label text="Nombre de cuerpo académico:" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                  <TextField fx:id="fieldStudyArea" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
-                  <TextField fx:id="fieldBodyAcademyName" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
-                  <TextField fx:id="fieldHighestDegreeStudies" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
-                  <Label text="Mayor grado de estudios:" GridPane.rowIndex="6" />
+                  <TextField fx:id="txtFieldStudyArea" maxWidth="1.7976931348623157E308" promptText="Ejemplo: Matemáticas" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
+                  <TextField fx:id="txtFieldBodyAcademyName" maxWidth="1.7976931348623157E308" promptText="Ejemplo: Física aplicada" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
+                  <TextField fx:id="txtFieldLevelStudy" maxWidth="1.7976931348623157E308" promptText="Ejemplo: Maestría" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                  <Label text="Mayor grado de estudios:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </children>

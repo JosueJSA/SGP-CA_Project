@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -40,7 +38,6 @@ import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.GeneralResume;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Lgac;
-import sgp.ca.domain.Member;
 
 /**
  * FXML Controller class
@@ -58,27 +55,29 @@ public class GeneralResumeRequestController implements Initializable {
     @FXML
     private Button btnExit;
     @FXML
-    private Label lblBodyAcademyName;
-    @FXML
-    private Label lblBodyAcademyKey;
-    @FXML
-    private Label lblSubscriptionArea;
-    @FXML
-    private Label lblAdscriptionUnit;
-    @FXML
-    private Label lblConsolidationDegree;
-    @FXML
-    private Label lblRegistrationDate;
-    @FXML
-    private Label lblLastEvaluationDate;
-    @FXML
     private Label lblUserName;
     @FXML
-    private TextArea textAreGeneralTarget;
+    private Label lbBodyAcademyName;
     @FXML
-    private TextArea textAreaMission;
+    private Label lbBodyAcademyKey;
     @FXML
-    private TextArea textAreaVision;
+    private Label lbSubscriptionArea;
+    @FXML
+    private Label lbAdscriptionUnit;
+    @FXML
+    private Label lbConsolidationDegree;
+    @FXML
+    private Label lbRegistrationDate;
+    @FXML
+    private Label lbLastEvaluationDate;
+    @FXML
+    private TextArea txtAreaGeneralTarget;
+    @FXML
+    private TextArea txtAreaMission;
+    @FXML
+    private TextArea txtAreaVision;
+    @FXML
+    private TextField txtFieldMemberNameForSearch;
     @FXML
     private TableView<Lgac> textFieldLhac;
     @FXML
@@ -93,8 +92,6 @@ public class GeneralResumeRequestController implements Initializable {
     private RadioButton chckBoxUnavailables;
     @FXML
     private Button btnSearchMember;
-    @FXML
-    private TextField fieldFullNameMember;
     @FXML
     private TableView<Integrant> tebleViewIntegrants;
     @FXML
@@ -122,15 +119,17 @@ public class GeneralResumeRequestController implements Initializable {
     private final CollaboratorDAO COLLABORATOR_DAO = new CollaboratorDAO();
     private List<TextArea> textAreas;
     
+    
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.prepareCollaboratorTable();
         this.prepareIntegratsTable();
-        textAreas = Arrays.asList(textAreGeneralTarget, textAreaMission, textAreaVision);
-        textAreas.forEach(txtArea -> {txtArea.setWrapText(true);});
+        textAreas = Arrays.asList(txtAreaGeneralTarget, txtAreaMission, txtAreaVision);
     }
 
     public void showGeneralResume(Integrant integrantToken){
@@ -144,16 +143,16 @@ public class GeneralResumeRequestController implements Initializable {
     
     private void setGeneralResumeDataIntoInterface(GeneralResume generalResume){
         if(generalResume != null){
-            lblBodyAcademyKey.setText(generalResume.getBodyAcademyKey());
-            lblBodyAcademyName.setText(generalResume.getBodyAcademyName());
-            lblAdscriptionUnit.setText(generalResume.getAscriptionUnit());
-            lblConsolidationDegree.setText(generalResume.getConsolidationDegree());
-            lblRegistrationDate.setText(generalResume.getRegistrationDate());
-            lblSubscriptionArea.setText(generalResume.getAscriptionArea());
-            lblLastEvaluationDate.setText(generalResume.getLastEvaluation());
-            textAreGeneralTarget.setText(generalResume.getGeneralTarjet());
-            textAreaMission.setText(generalResume.getMission());
-            textAreaVision.setText(generalResume.getVision());
+            lbBodyAcademyKey.setText(generalResume.getBodyAcademyKey());
+            lbBodyAcademyName.setText(generalResume.getBodyAcademyName());
+            lbAdscriptionUnit.setText(generalResume.getAscriptionUnit());
+            lbConsolidationDegree.setText(generalResume.getConsolidationDegree());
+            lbRegistrationDate.setText(generalResume.getRegistrationDate());
+            lbSubscriptionArea.setText(generalResume.getAscriptionArea());
+            lbLastEvaluationDate.setText(generalResume.getLastEvaluation());
+            txtAreaGeneralTarget.setText(generalResume.getGeneralTarjet());
+            txtAreaMission.setText(generalResume.getMission());
+            txtAreaVision.setText(generalResume.getVision());
         }
     }
 
@@ -163,8 +162,8 @@ public class GeneralResumeRequestController implements Initializable {
 
     @FXML
     private void editGeneralResume(ActionEvent event) {
-        FXMLLoader loader = changeWindow("GeneralResumeEdit.fxml", event);
-        GeneralResumeEditController controller = loader.getController();
+        FXMLLoader loader = changeWindow("GeneralResumeEditable.fxml", event);
+        GeneralResumeEditableController controller = loader.getController();
         controller.showGeneralResumeUpdateForm(this.token);
     }
 

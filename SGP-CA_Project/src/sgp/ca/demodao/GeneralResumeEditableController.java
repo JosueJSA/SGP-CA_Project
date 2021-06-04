@@ -46,20 +46,8 @@ import sgp.ca.domain.Lgac;
  *
  * @author josue
  */
-public class GeneralResumeEditController implements Initializable {
-
-    @FXML
-    private TextField bodyAcademyNameField;
-    @FXML
-    private TextField bodyAcademyKeyField;
-    @FXML
-    private TextField areaAscriptionFiel;
-    @FXML
-    private TextField ascriptionUnitField;
-    @FXML
-    private DatePicker dateFieldRegistration;
-    @FXML
-    private DatePicker dateFieldLastEvaluation;
+public class GeneralResumeEditableController implements Initializable {
+    
     @FXML
     private TableView<Lgac> tableViewLgac;
     @FXML
@@ -77,8 +65,6 @@ public class GeneralResumeEditController implements Initializable {
     @FXML
     private TableColumn<Lgac, String> coloumnLgacDescription;
     @FXML
-    private ComboBox<String> cmboxConsolidationDegree;
-    @FXML
     private HBox hboxGeneralResumeOptions;
     @FXML
     private HBox hboxLgacTable;
@@ -92,6 +78,20 @@ public class GeneralResumeEditController implements Initializable {
     private Button btnCancelRegistration;
     @FXML
     private Label lblUserName;
+    @FXML
+    private TextField txtFieldBodyAcademyName;
+    @FXML
+    private TextField txtFieldBodyAcademyKey;
+    @FXML
+    private TextField txtFieldAdscriptionArea;
+    @FXML
+    private TextField txtFieldAdsciptionUnit;
+    @FXML
+    private DatePicker datePickerRegistrationDate;
+    @FXML
+    private DatePicker datePickerLastEvaluationDate;
+    @FXML
+    private ComboBox<String> cboBoxConsolidationDegree;
 
     private final GeneralResumeDAO GENERAL_RESUME_DAO = new GeneralResumeDAO();
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
@@ -106,9 +106,9 @@ public class GeneralResumeEditController implements Initializable {
         this.btnDeleteLgac.setDisable(true);
         optionButtons = Arrays.asList(btnCancelChanges, btnSignUpBodyAcademy, btnUpdate, btnCancelRegistration);
         this.hboxGeneralResumeOptions.getChildren().removeAll(optionButtons);
-        cmboxConsolidationDegree.getItems().addAll("En formación", "En consolidación", "Consolidado");
+        cboBoxConsolidationDegree.getItems().addAll("En formación", "En consolidación", "Consolidado");
         textAreas = Arrays.asList(txtAreaGeneralTarget, txtAreaMission, txtAreaVision);
-        fields = Arrays.asList(bodyAcademyNameField, bodyAcademyKeyField, areaAscriptionFiel, ascriptionUnitField);
+        fields = Arrays.asList(txtFieldAdsciptionUnit, txtFieldAdscriptionArea, txtFieldBodyAcademyKey, txtFieldBodyAcademyName);
         textAreas.forEach(txtArea -> txtArea.setWrapText(true));
     }
     
@@ -129,10 +129,10 @@ public class GeneralResumeEditController implements Initializable {
     @FXML
     private void signUpBodyAcademy(ActionEvent event) {
         try {
-            isValidForm();
+            checkGeneralResumeForm();
+            checkExistBodyAcademyKey();
             GeneralResume generalResume = this.getOutGeneralResumeFormData();
             if(GENERAL_RESUME_DAO.addGeneralResume(generalResume)){
-                AlertGenerator.showInfoAlert(event, "El currículum general ha sido registrado con éxito");
                 this.addResponsibleInGeneralResumeRegistered(generalResume, event);
             }else{
                 AlertGenerator.showErrorAlert(event, "Error del sistema, favor de contactar a soporte técnico");
@@ -147,6 +147,7 @@ public class GeneralResumeEditController implements Initializable {
         this.responsibleToken = (Integrant) INTEGRANT_DAO.getMemberByUVmail(responsibleToken.getEmailUV());
         this.responsibleToken.setBodyAcademyKey(generalResume.getBodyAcademyKey());
         if(INTEGRANT_DAO.updateMember(responsibleToken, responsibleToken.getRfc())){
+            AlertGenerator.showInfoAlert(event, "El currículum general ha sido registrado con éxito");
             FXMLLoader loader = changeWindow("Start.fxml", event);
             StartController controller = loader.getController();
             controller.receiveIntegrantToken(responsibleToken);
@@ -159,7 +160,7 @@ public class GeneralResumeEditController implements Initializable {
     @FXML
     private void updateGeneralResume(ActionEvent event){
         try {
-            isValidForm();
+            checkGeneralResumeForm();
             GeneralResume generalResume = this.getOutGeneralResumeFormData();
             if(GENERAL_RESUME_DAO.updateGeneralResume(generalResume, this.responsibleToken.getBodyAcademyKey())){
                 this.responsibleToken.setBodyAcademyKey(generalResume.getBodyAcademyKey());
@@ -207,37 +208,46 @@ public class GeneralResumeEditController implements Initializable {
     
     private GeneralResume getOutGeneralResumeFormData() {
         GeneralResume generalResume = new GeneralResume(
-            bodyAcademyKeyField.getText(), 
-            bodyAcademyNameField.getText(), 
-            areaAscriptionFiel.getText(), 
-            ascriptionUnitField.getText(),
-            cmboxConsolidationDegree.getValue(),
+            txtFieldBodyAcademyKey.getText(), 
+            txtFieldBodyAcademyName.getText(), 
+            txtFieldAdscriptionArea.getText(), 
+            txtFieldAdsciptionUnit.getText(),
+            cboBoxConsolidationDegree.getValue(),
             txtAreaVision.getText(), 
             txtAreaMission.getText(), 
             txtAreaGeneralTarget.getText(), 
-            ValidatorForm.convertJavaDateToSQlDate(dateFieldRegistration), 
-            ValidatorForm.convertJavaDateToSQlDate(dateFieldLastEvaluation)
+            ValidatorForm.convertJavaDateToSQlDate(datePickerRegistrationDate), 
+            ValidatorForm.convertJavaDateToSQlDate(datePickerLastEvaluationDate)
         );
         return generalResume;
     }
     
-    private void isValidForm() throws InvalidFormException{
-        ValidatorForm.checkAlaphabeticalFields(fields, 100);
-        ValidatorForm.checkAlaphabeticalTextAreas(textAreas, 5000);
-        ValidatorForm.checkNotEmptyDateField(dateFieldRegistration);
-        ValidatorForm.checkNotEmptyDateField(dateFieldLastEvaluation);
-        ValidatorForm.isComboBoxSelected(cmboxConsolidationDegree);
+    private void checkGeneralResumeForm() throws InvalidFormException{
+        ValidatorForm.checkAlaphabeticalFields(fields, 5, 100);
+        ValidatorForm.checkAlaphabeticalTextAreas(textAreas, 50, 5000);
+        ValidatorForm.checkNotEmptyDateField(datePickerRegistrationDate);
+        ValidatorForm.checkNotEmptyDateField(datePickerLastEvaluationDate);
+        ValidatorForm.isComboBoxSelected(cboBoxConsolidationDegree);
     }
+    
+    private void checkExistBodyAcademyKey() throws InvalidFormException{
+        if(GENERAL_RESUME_DAO.isBodyAcademyRegistered(this.txtFieldBodyAcademyKey.getText())){
+            this.txtFieldBodyAcademyKey.setStyle("-fx-border-color: red;");
+            throw new InvalidFormException("Ya hay un cuerpo académico con la misma clave");
+        }
+    }
+    
+    
     
     private void setGeneralResumeDataIntoInterface(GeneralResume generalResume){
         if(generalResume != null){
-            this.bodyAcademyKeyField.setText(generalResume.getBodyAcademyKey());
-            this.bodyAcademyNameField.setText(generalResume.getBodyAcademyName());
-            this.ascriptionUnitField.setText(generalResume.getAscriptionUnit());
-            this.cmboxConsolidationDegree.setValue(generalResume.getConsolidationDegree());
-            this.dateFieldRegistration.setValue(LocalDate.parse(generalResume.getRegistrationDate()));
-            this.areaAscriptionFiel.setText(generalResume.getAscriptionArea());
-            this.dateFieldLastEvaluation.setValue(LocalDate.parse(generalResume.getLastEvaluation()));
+            this.txtFieldBodyAcademyKey.setText(generalResume.getBodyAcademyKey());
+            this.txtFieldBodyAcademyName.setText(generalResume.getBodyAcademyName());
+            this.txtFieldAdsciptionUnit.setText(generalResume.getAscriptionUnit());
+            this.cboBoxConsolidationDegree.setValue(generalResume.getConsolidationDegree());
+            this.datePickerRegistrationDate.setValue(LocalDate.parse(generalResume.getRegistrationDate()));
+            this.txtFieldAdscriptionArea.setText(generalResume.getAscriptionArea());
+            this.datePickerLastEvaluationDate.setValue(LocalDate.parse(generalResume.getLastEvaluation()));
             this.txtAreaGeneralTarget.setText(generalResume.getGeneralTarjet());
             this.txtAreaMission.setText(generalResume.getMission());
             this.txtAreaVision.setText(generalResume.getVision());
