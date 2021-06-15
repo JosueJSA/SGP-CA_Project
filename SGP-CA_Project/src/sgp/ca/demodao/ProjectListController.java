@@ -49,27 +49,28 @@ public class ProjectListController implements Initializable {
     @FXML
     private Button btnSearch;
     @FXML
-    private TextField searchField;
+    private TextField txtFieldSearch;
     @FXML
-    private TableView<Project> projectsTableView;
+    private DatePicker dtpSearchDate;
     @FXML
-    private TableColumn<Project, String> columnNameProject;
+    private TableView<Project> tvProjects;
     @FXML
-    private TableColumn<Project, String> columnDuration;
+    private TableColumn<Project, String> colNameProject;
     @FXML
-    private TableColumn<Project, String> columnStatus;
+    private TableColumn<Project, String> colDuration;
     @FXML
-    private TableColumn<Project, String> columnStartDate;
+    private TableColumn<Project, String> colStatus;
     @FXML
-    private TableColumn<Project, String> columnEndDate;
-
-    private final ProjectDAO PROJECT = new ProjectDAO();
+    private TableColumn<Project, String> colStartDate;
     @FXML
-    private DatePicker searchDateField;
+    private TableColumn<Project, String> colEndDate;
     @FXML
     private Label lblUserName;
-   
+    
     private Integrant token;
+    private final ProjectDAO PROJECT = new ProjectDAO();
+    
+   
     /**
      * Initializes the controller class.
      */
@@ -77,14 +78,13 @@ public class ProjectListController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         Project initializeProject = new Project();
         
-        this.columnNameProject.setCellValueFactory(new PropertyValueFactory ("projectName"));
-        this.columnDuration.setCellValueFactory(new PropertyValueFactory ("durationProjectInMonths"));
-        this.columnStatus.setCellValueFactory(new PropertyValueFactory ("status"));
-        this.columnStartDate.setCellValueFactory(new PropertyValueFactory ("startDate"));
-        this.columnEndDate.setCellValueFactory(new PropertyValueFactory ("endDate"));
-        projectsTableView.setItems(FXCollections.observableArrayList(PROJECT.getProjectList()));
-    } 
-    
+        this.colNameProject.setCellValueFactory(new PropertyValueFactory ("projectName"));
+        this.colDuration.setCellValueFactory(new PropertyValueFactory ("durationProjectInMonths"));
+        this.colStatus.setCellValueFactory(new PropertyValueFactory ("status"));
+        this.colStartDate.setCellValueFactory(new PropertyValueFactory ("startDate"));
+        this.colEndDate.setCellValueFactory(new PropertyValueFactory ("endDate"));
+        tvProjects.setItems(FXCollections.observableArrayList(PROJECT.getProjectList()));
+    }    
     public void receiveToken(Integrant integrantToken){
         this.token = integrantToken;
         this.lblUserName.setText(integrantToken.getFullName());
@@ -93,6 +93,8 @@ public class ProjectListController implements Initializable {
     @FXML
     private void addProject(ActionEvent event) {
         FXMLLoader loader = changeWindow("ProjectForm.fxml", event);
+        ProjectFormController controller = loader.getController();
+        controller.receiveProjectSave();
     }
 
     @FXML
@@ -100,22 +102,21 @@ public class ProjectListController implements Initializable {
         FXMLLoader loader = changeWindow("Start.fxml", event);
         StartController controller = loader.getController();
         controller.receiveIntegrantToken(token);
-        
     }
     
     @FXML
     private void searchProject(ActionEvent event) {
-        List<Project> result = PROJECT.getProjectListbyName(searchField.getText());
-        if (searchField.getText().isEmpty()){
+        List<Project> result = PROJECT.getProjectListbyName(txtFieldSearch.getText());
+        if (txtFieldSearch.getText().isEmpty()){
             result = PROJECT.getProjectList();
         }
         ObservableList<Project> itemsProject = FXCollections.observableArrayList(result);
-        projectsTableView.setItems(itemsProject);
+        tvProjects.setItems(itemsProject);
     }
 
     @FXML
     private void selectProject(MouseEvent event) {
-        Project projectSelected = this.projectsTableView.getSelectionModel().getSelectedItem();
+        Project projectSelected = this.tvProjects.getSelectionModel().getSelectedItem();
         if (projectSelected != null){
             FXMLLoader loader = changeWindow("Project.fxml", event);
             ProjectController controller = loader.getController();

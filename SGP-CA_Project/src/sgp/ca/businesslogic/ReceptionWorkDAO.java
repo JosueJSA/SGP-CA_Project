@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
+import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Evidence;
+import sgp.ca.domain.Integrant;
 import sgp.ca.domain.ReceptionWork;
 
 public class ReceptionWorkDAO extends EvidenceDAO{
@@ -50,7 +52,6 @@ public class ReceptionWorkDAO extends EvidenceDAO{
             this.insertIntoCollaboratorReceptionWork(connection, newReceptionWork);
             this.insertIntoStudentReceptionWork(connection, newReceptionWork);
             this.insertIntoRequirementReceptionWork(connection, newReceptionWork);
-            this.insertIntoLgacReceptionWork(connection, newReceptionWork);
             connection.commit();
             connection.setAutoCommit(true);
         }catch(SQLException sqlEsception){
@@ -100,35 +101,56 @@ public class ReceptionWorkDAO extends EvidenceDAO{
         }
     }
 
-    public ReceptionWork getReceptionWork(String urlFile){
-        ReceptionWork receptionWork = new ReceptionWork();
+    @Override
+    public ReceptionWork getEvidenceByUrl(String urlEvidenceFile) {
+        ReceptionWork ReceptionWork = new ReceptionWork();
+        Connection connection = QUERY.getConnectionDatabaseNotAutoCommit();
         try{
-            PreparedStatement sentenceQuery = QUERY.getConnectionDatabase().prepareStatement(
+            PreparedStatement senenceQuery = connection.prepareStatement(
                 "SELECT * FROM ReceptionWork WHERE urlFile = ?;"
             );
-            sentenceQuery.setString(1, urlFile);
-            ResultSet queryResult = sentenceQuery.executeQuery();
-            if(queryResult.next()){receptionWork = new ReceptionWork(
-                queryResult.getString("urlFile"), 
-                queryResult.getString("projectName"),
-                queryResult.getBoolean("impactBA"),
-                queryResult.getString("evidenceType"),
-                queryResult.getString("evidenceTitle"),
-                queryResult.getString("registrationResponsible"),
-                queryResult.getString("registrationDate"),
-                queryResult.getString("studyDegree"),
-                queryResult.getString("publicationDate"),
-                queryResult.getString("country"),
-                queryResult.getString("description"),
-                queryResult.getString("status"),
-                queryResult.getInt("actualDurationInMonths"),
-                queryResult.getInt("estimatedDurationInMonths"),
-                queryResult.getString("modality")
-            );}
-        }catch(SQLException sqlException){
-            Logger.getLogger(ReceptionWorkDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            senenceQuery.setString(1, urlEvidenceFile);
+            ResultSet resultQuery = senenceQuery.executeQuery();
+            if(resultQuery.next()){
+                ReceptionWork = this.getReceptionWorkFromQuery(resultQuery);
+                ReceptionWork.setIntegrants(this.getIntegrantsReceptionWorkParticipation(connection, urlEvidenceFile));
+                ReceptionWork.setCollaborators(this.getCollaboratorsReceptionWorkParticipation(connection, urlEvidenceFile));
+                ReceptionWork.setStudents(this.getStudentNamesReceptionWorkParticipation(connection, urlEvidenceFile));
+                ReceptionWork.setRequirements(this.getRequirementsReceptionWork(connection, urlEvidenceFile));
+            }
+            connection.commit();
+            connection.setAutoCommit(true);
+        }catch(SQLException ex){
+            Logger.getLogger(ReceptionWorkDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             QUERY.closeConnection();
+            return ReceptionWork;
+        }
+    }
+    
+    public ReceptionWork getReceptionWorkFromQuery(ResultSet resultReceptionWorkQuery){
+        ReceptionWork receptionWork = new ReceptionWork();
+            try {
+                receptionWork = new ReceptionWork(
+                        resultReceptionWorkQuery.getString("urlFile"),
+                        resultReceptionWorkQuery.getString("projectName"),
+                        resultReceptionWorkQuery.getBoolean("impactBA"),
+                        resultReceptionWorkQuery.getString("evidenceType"),
+                        resultReceptionWorkQuery.getString("evidenceTitle"),
+                        resultReceptionWorkQuery.getString("registrationResponsible"),
+                        resultReceptionWorkQuery.getString("registrationDate"),
+                        resultReceptionWorkQuery.getString("studyDegree"),
+                        resultReceptionWorkQuery.getString("publicationDate"),
+                        resultReceptionWorkQuery.getString("country"),
+                        resultReceptionWorkQuery.getString("description"),
+                        resultReceptionWorkQuery.getString("status"),
+                        resultReceptionWorkQuery.getInt("actualDurationInMonths"),
+                        resultReceptionWorkQuery.getInt("estimatedDurationInMonths"),
+                        resultReceptionWorkQuery.getString("modality")
+                );
+            } catch (SQLException ex) {
+                Logger.getLogger(ReceptionWorkDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
             return receptionWork;
         }
     }
@@ -164,7 +186,6 @@ public class ReceptionWorkDAO extends EvidenceDAO{
             this.insertIntoCollaboratorReceptionWork(connection, receptionWork);
             this.insertIntoStudentReceptionWork(connection, receptionWork);
             this.insertIntoRequirementReceptionWork(connection, receptionWork);
-            this.insertIntoLgacReceptionWork(connection, receptionWork);
             connection.commit();
             connection.setAutoCommit(true);
         }catch(SQLException sqlException){
@@ -289,26 +310,6 @@ public class ReceptionWorkDAO extends EvidenceDAO{
         });
     }
     
-    public void insertIntoLgacReceptionWork(Connection connection, ReceptionWork receptionWork){
-        receptionWork.getLgacs().forEach( lgac -> {
-            try{
-                PreparedStatement sentenceQuery = connection.prepareStatement(
-                    "INSERT INTO LGAK-ReceptionWork (identifierLGAC, urlFile) VALUES (?, ?);"
-                );
-                sentenceQuery.setString(1, lgac.getIdentifierLgac() );
-                sentenceQuery.setString(2, receptionWork.getUrlFile());
-                sentenceQuery.executeUpdate();
-            }catch(SQLException sqlException){
-                try{
-                    connection.rollback();
-                    Logger.getLogger(ReceptionWork.class.getName()).log(Level.SEVERE, null, sqlException);
-                }catch(SQLException ex){
-                    Logger.getLogger(ReceptionWorkDAO.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-    }
-    
     public void deleteIntegrantsFromURLFileReceptionWork(Connection connection, String urlFile){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -379,29 +380,6 @@ public class ReceptionWorkDAO extends EvidenceDAO{
             }
         }
     }
-    
-    public void deleteLgacFromURLFileReceptionWork(Connection connection, String urlFile){
-        try{
-            PreparedStatement sentenceQuery = connection.prepareStatement(
-                "DELETE FROM LGAK-ReceptionWork WHERE urlFile = ?;"
-            );
-            sentenceQuery.setString(1, urlFile);
-            sentenceQuery.executeUpdate();
-        }catch(SQLException sqlException){
-            try{
-                connection.rollback();
-                connection.close();
-                Logger.getLogger(ReceptionWork.class.getName()).log(Level.SEVERE, null, sqlException);
-            }catch(SQLException ex){
-                Logger.getLogger(ReceptionWorkDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    @Override
-    public Evidence getEvidenceByUrl(String urlEvidenceFile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public boolean addNewEvidence(Evidence evidence) {
@@ -431,7 +409,6 @@ public class ReceptionWorkDAO extends EvidenceDAO{
             this.insertIntoCollaboratorReceptionWork(connection, ((ReceptionWork)evidence));
             this.insertIntoStudentReceptionWork(connection, ((ReceptionWork)evidence));
             this.insertIntoRequirementReceptionWork(connection, ((ReceptionWork)evidence));
-            this.insertIntoLgacReceptionWork(connection, ((ReceptionWork)evidence));
             connection.commit();
             connection.setAutoCommit(true);
             correctInsert = true;
@@ -454,7 +431,6 @@ public class ReceptionWorkDAO extends EvidenceDAO{
         Connection connection = QUERY.getConnectionDatabaseNotAutoCommit();
         this.deleteCollaboratorsFromURLFileReceptionWork(connection, oldUrlFile);
         this.deleteIntegrantsFromURLFileReceptionWork(connection, oldUrlFile);
-        this.deleteLgacFromURLFileReceptionWork(connection, oldUrlFile);
         this.deleteRequirementsFromURLFileReceptionWork(connection, oldUrlFile);
         this.deleteStudensFromURLFileReceptionWork(connection, oldUrlFile);
         try{
@@ -484,7 +460,6 @@ public class ReceptionWorkDAO extends EvidenceDAO{
             this.insertIntoCollaboratorReceptionWork(connection, ((ReceptionWork)evidence));
             this.insertIntoStudentReceptionWork(connection, ((ReceptionWork)evidence));
             this.insertIntoRequirementReceptionWork(connection, ((ReceptionWork)evidence));
-            this.insertIntoLgacReceptionWork(connection, ((ReceptionWork)evidence));
             connection.commit();
             connection.setAutoCommit(true);
             correctUpdate = true;
@@ -556,6 +531,82 @@ public class ReceptionWorkDAO extends EvidenceDAO{
         }finally{
             QUERY.closeConnection();
             return listReceptionWork;
+        }
+    }
+    
+    private List<Integrant> getIntegrantsReceptionWorkParticipation(Connection connection, String urlFileReceptionWork){
+        List<Integrant> integrants = new ArrayList<>();
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "SELECT i.fullName FROM Integrant i, IntegrantReceptionWork ia WHERE ia.rfc = i.rfc AND urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileReceptionWork);
+            ResultSet resultQuery = sentenceQuery.executeQuery();
+            while(resultQuery.next()){
+                Integrant integrant = new Integrant();
+                integrant.setFullName(resultQuery.getString("fullName"));
+                integrants.add(integrant);
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(ReceptionWorkDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            return integrants;
+        }
+    }
+    
+    private List<Collaborator> getCollaboratorsReceptionWorkParticipation(Connection connection, String urlFileReceptionWork){
+        List<Collaborator> collaborators = new ArrayList<>();
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "SELECT c.fullName FROM CollaborateReceptionWork ca, Collaborator c WHERE ca.rfc = c.rfc AND urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileReceptionWork);
+            ResultSet resultQuery = sentenceQuery.executeQuery();
+            while(resultQuery.next()){
+                Collaborator collaborator = new Collaborator();
+                collaborator.setFullName(resultQuery.getString("fullName"));
+                collaborators.add(collaborator);
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(ReceptionWorkDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            return collaborators;
+        }
+    }
+    
+    private List<String> getStudentNamesReceptionWorkParticipation(Connection connection, String urlFileReceptionWork){
+        List<String> students = new ArrayList<>();
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "SELECT * FROM ReceptionWorkStudent WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileReceptionWork);
+            ResultSet resultQuery = sentenceQuery.executeQuery();
+            while(resultQuery.next()){
+                students.add(resultQuery.getString("student"));
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(ReceptionWorkDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            return students;
+        }
+    }
+    
+    private List<String> getRequirementsReceptionWork(Connection connection, String urlFileReceptionWork){
+        List<String> students = new ArrayList<>();
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "SELECT * FROM ReceptionWorkRequirement WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileReceptionWork);
+            ResultSet resultQuery = sentenceQuery.executeQuery();
+            while(resultQuery.next()){
+                students.add(resultQuery.getString("requirement"));
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(ReceptionWorkDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            return students;
         }
     }
 }

@@ -37,6 +37,10 @@ public class Integrant extends Member{
         super(participationType, fullName, emailUV, cellphone);
     }
 
+    public Integrant(String rfc,String fullName){
+        super(rfc, fullName);
+    }
+
     public Integrant(){
         super();
         this.schooling = new ArrayList<>();

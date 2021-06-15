@@ -209,4 +209,44 @@ public class CollaboratorDAO implements IMemberDAO{
         }
     }
     
+public List<String> getAllCollaboratorsName() {
+        List<String> CollaboratorsNameList = new ArrayList();
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT * FROM Collaborator;"
+            );
+            ResultSet queryResult = sentenceQuery.executeQuery();
+            while(queryResult.next()){
+                String integrantName = queryResult.getString("fullName");
+                CollaboratorsNameList.add(integrantName);
+            }
+        }catch(SQLException sqlException){
+            Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return CollaboratorsNameList;
+        }
+    }
+    
+    public List<Collaborator> getAllCollaboratorsRfcName() {
+        List<Collaborator> CollaboratorsRfcNameList = new ArrayList();
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT * FROM Collaborator;"
+            );
+            ResultSet queryResult = sentenceQuery.executeQuery();
+            while(queryResult.next()){
+                String integrantRfc = queryResult.getString("rfc");
+                String integrantName = queryResult.getString("fullName");
+                CollaboratorsRfcNameList.add(new Collaborator(integrantRfc, integrantName));
+            }
+        }catch(SQLException sqlException){
+            Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return CollaboratorsRfcNameList;
+        }
+    }
+}
+
 }

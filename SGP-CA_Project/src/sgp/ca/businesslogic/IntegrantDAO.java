@@ -382,4 +382,23 @@ import sgp.ca.domain.Schooling;
         }
     }
 
+     public List<Integrant> getAllIntegrantsRfcName() {
+        List<Integrant> integrantsRfcNameList = new ArrayList();
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT * FROM Integrant;"
+            );
+            ResultSet queryResult = sentenceQuery.executeQuery();
+            while(queryResult.next()){
+                String integrantRfc = queryResult.getString("rfc");
+                String integrantName = queryResult.getString("fullName");
+                integrantsRfcNameList.add(new Integrant(integrantRfc, integrantName));
+            }
+        }catch(SQLException sqlException){
+            Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return integrantsRfcNameList;
+        }
+    }
 }

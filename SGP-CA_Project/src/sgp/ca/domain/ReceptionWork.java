@@ -14,7 +14,7 @@ public class ReceptionWork extends Evidence{
     private String modality;
     private int actualDurationInMonths;
     private int estimatedDurationInMonths;
-    private List<String> requirements;
+    private List<String>requirements;
     private List<Lgac> lgac;
     
     public ReceptionWork(String urlFile, String projectName, boolean impactAB, String evidenceType, String evidenceTitle, 

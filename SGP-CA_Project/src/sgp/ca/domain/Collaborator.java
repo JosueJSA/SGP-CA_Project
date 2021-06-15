@@ -31,6 +31,10 @@ public class Collaborator extends Member{
         super(participationType, fullName, emailUV, cellphone);
     }
     
+    public Collaborator(String rfc, String fullName){
+        super(rfc, fullName);
+    }
+
     public Collaborator(){
         
     }

@@ -46,6 +46,11 @@ public abstract class Member {
         this.cellphone = cellphone;
     }
     
+    public Member(String rfc, String fullName){
+        this.rfc = rfc;
+        this.fullName = fullName;
+    }
+    
     public Member(){
         
     }

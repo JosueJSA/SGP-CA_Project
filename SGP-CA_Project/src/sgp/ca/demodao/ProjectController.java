@@ -5,13 +5,21 @@
  */
 package sgp.ca.demodao;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -19,6 +27,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import sgp.ca.businesslogic.ProjectDAO;
 import sgp.ca.businesslogic.EvidenceDAO;
 import sgp.ca.businesslogic.PrototypeDAO;
@@ -35,52 +45,50 @@ import sgp.ca.domain.ReceptionWork;
  */
 public class ProjectController implements Initializable {
 
+     @FXML
+    private Button btnModify;
     @FXML
-    private Button btn;
+    private Button btnExit;
+    
     @FXML
-    private TextField projectNameField;
+    private TextField txtFieldProjectName;
     @FXML
-    private TextField lgacAssociateFIeld;
+    private TextField txtFieldLgacAssociate;
     @FXML
-    private TextField durationField;
+    private TextField txtFieldDuration;
     @FXML
-    private TextField startDateField;
+    private TextField txtFieldStartDate;
     @FXML
-    private TextField estimatedEndDateField;
+    private TextField txtFieldEstimatedEndDate;
     @FXML
-    private TextField endDateField;
+    private TextField txtFieldEndDate;
     @FXML
-    private TextField statusField;
+    private TextField txtFieldStatus;
     @FXML
-    private TextArea descriptionField;
+    private TextArea txtAreaDescription;
     @FXML
-    private Button btnSearch;
+    private TableView<Evidence> tvEvidence;
     @FXML
-    private TextField searchEvidenceField;
+    private TableColumn<Evidence, String> colEvidenceName;
     @FXML
-    private DatePicker searchDateFIeld;
+    private TableColumn<Evidence, String> colPublicationDate;
     @FXML
-    private TableView<Evidence> evidenceTableView;
-    @FXML
-    private TableColumn<Evidence, String> columnEvidenceName;
-    @FXML
-    private TableColumn<Evidence, String> columnPublicationDate;
-    @FXML
-    private TableColumn<Evidence, String> columnImpactBA;
+    private TableColumn<Evidence, String> colImpactBA;
     
     private final ProjectDAO PROJECT_DAO = new ProjectDAO();
     private final ReceptionWorkDAO RECEPTIONWORK_DAO = new ReceptionWorkDAO();
+    private  Project PROJECT = new Project();
     private final PrototypeDAO PROTOTYPE_DAO = new PrototypeDAO();
-    
+     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.columnEvidenceName.setCellValueFactory(new PropertyValueFactory ("evidenceTitle"));
-        this.columnPublicationDate.setCellValueFactory(new PropertyValueFactory ("registrationDate"));
-        this.columnImpactBA.setCellValueFactory(new PropertyValueFactory ("impactBA"));
-        evidenceTableView.setItems(makeItemsEvidence());
+        this.colEvidenceName.setCellValueFactory(new PropertyValueFactory ("evidenceTitle"));
+        this.colPublicationDate.setCellValueFactory(new PropertyValueFactory ("registrationDate"));
+        this.colImpactBA.setCellValueFactory(new PropertyValueFactory ("impactBA"));
+        tvEvidence.setItems(makeItemsEvidence());
     }    
     
     public void receiveProject(Project projectSelected){
@@ -88,18 +96,15 @@ public class ProjectController implements Initializable {
     }
     
     private void setProjectInformation(String projectName){
-        Project source = PROJECT_DAO.getProjectbyName(projectName);
-        this.projectNameField.setText(source.getProjectName());
-        this.lgacAssociateFIeld.setText(source.getBodyAcademyKey());
-        this.durationField.setText(Integer.toString(source.getDurationProjectInMonths()));
-        this.startDateField.setText(source.getStartDate());
-        this.estimatedEndDateField.setText(source.getEstimatedEndDate());
-        this.endDateField.setText(source.getEndDate());
-        this.statusField.setText(source.getStatus());
-        this.descriptionField.setText(source.getDescription());
-    
-        
-        
+        PROJECT = PROJECT_DAO.getProjectbyName(projectName);
+        this.txtFieldProjectName.setText(PROJECT.getProjectName());
+        this.txtFieldLgacAssociate.setText(PROJECT.getBodyAcademyKey());
+        this.txtFieldDuration.setText(Integer.toString(PROJECT.getDurationProjectInMonths()));
+        this.txtFieldStartDate.setText(PROJECT.getStartDate());
+        this.txtFieldEstimatedEndDate.setText(PROJECT.getEstimatedEndDate());
+        this.txtFieldEndDate.setText(PROJECT.getEndDate());
+        this.txtFieldStatus.setText(PROJECT.getStatus());
+        this.txtAreaDescription.setText(PROJECT.getDescription());
     }
     
     private ObservableList<Evidence> makeItemsEvidence(){
@@ -111,6 +116,34 @@ public class ProjectController implements Initializable {
             itemsEvidence.add(evidenceTable);
         }
         return itemsEvidence;
+    }
+
+    @FXML
+    private void modiftyProject(ActionEvent event) {
+        FXMLLoader loader = changeWindow("ProjectForm.fxml", event);
+        ProjectFormController controller = loader.getController();
+        controller.receiveProjectUpdate(PROJECT);
+    }
+
+     @FXML
+    private void exit(ActionEvent event) {
+        FXMLLoader loader = changeWindow("ProjectList.fxml", event);
+    }
+    
+    private FXMLLoader changeWindow(String window, Event event){
+        Stage stage = new Stage();
+        FXMLLoader loader = null;
+        try{
+            loader = new FXMLLoader(getClass().getResource(window));
+            stage.setScene(new Scene((Pane)loader.load()));
+            stage.show();
+            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            currentStage.close();
+        } catch(IOException io){
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
+        } finally {
+            return loader;
+        }
     }
     
 }

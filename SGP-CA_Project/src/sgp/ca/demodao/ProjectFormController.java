@@ -7,6 +7,9 @@ package sgp.ca.demodao;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,9 +21,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import sgp.ca.businesslogic.ProjectDAO;
@@ -38,61 +43,100 @@ public class ProjectFormController implements Initializable {
     @FXML
     private Button btnExit;
     @FXML
-    private TextField titleProjectField;
+    private Button btnUpdate;
+    
     @FXML
-    private TextField lgacAssociateField;
+    private TextField txtFieldTitleProject;
     @FXML
-    private DatePicker startDateField;
+    private TextField txtFieldLgacAssociate;
     @FXML
-    private DatePicker estimatedEndDateField;
+    private DatePicker dtpStartDate;
     @FXML
-    private TextField durationField;
+    private DatePicker dtpEstimatedEndDate;
     @FXML
-    private TextField statusField;
+    private CheckBox chBoxEndDate;
     @FXML
-    private TextArea descriptionField;
+    private DatePicker dtpEndDate;
+    @FXML
+    private TextField txtFieldDuration;
+    @FXML
+    private TextField txtFieldStatus;
+    @FXML
+    private TextArea txtAreaDescription;
+    @FXML
+    private HBox hboxProjectOptions;
     
     private final ProjectDAO PROJECT_DAO = new ProjectDAO();
-
+    private List<Button> optionButtons;
+    private Project oldProject  = new Project();
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+    public void initialize(URL url, ResourceBundle rb){
+         optionButtons = Arrays.asList(
+            btnUpdate, btnSave, 
+            btnExit
+        );
+        hboxProjectOptions.getChildren().removeAll(optionButtons);
     }    
 
+    public void showProjectSaveForm(){
+        hboxProjectOptions.getChildren().addAll(btnSave, btnExit);
+    }
+    
+     public void showProjectUpdateForm(Project project){
+        oldProject = project;
+        this.txtFieldTitleProject.setText(project.getProjectName());
+        this.txtFieldLgacAssociate.setText(project.getBodyAcademyKey());
+        this.txtFieldDuration.setText(Integer.toString(project.getDurationProjectInMonths()));
+        this.dtpStartDate.setValue(LocalDate.parse(project.getStartDate()));
+        this.dtpEstimatedEndDate.setValue(LocalDate.parse(project.getEstimatedEndDate()));
+        this.txtFieldStatus.setText(project.getStatus());
+        this.txtAreaDescription.setText(project.getDescription());
+        //this.dtpEndDate.setValue(LocalDate.parse(project.getEndDate()));
+        hboxProjectOptions.getChildren().addAll(btnUpdate,  btnExit);
+    }
+     
     @FXML
-    private void saveProject(ActionEvent event) {
-        try{
-            this.isValidForm();
+    private void saveProject(ActionEvent event){
+//        try{
+//            this.isValidForm();
             Project project = new Project(
-                titleProjectField.getText(), 
+                txtFieldTitleProject.getText(), 
                 "UV-CA-127",
-                Integer.parseInt(durationField.getText()),
-                statusField.getText(),
-                ValidatorForm.convertJavaDateToSQlDate(startDateField),
+                Integer.parseInt(txtFieldDuration.getText()),
+                txtFieldStatus.getText(),
+                ValidatorForm.convertJavaDateToSQlDate(dtpStartDate),
                 null, 
-                ValidatorForm.convertJavaDateToSQlDate(estimatedEndDateField),
-                descriptionField.getText()
+                ValidatorForm.convertJavaDateToSQlDate(dtpEstimatedEndDate),
+                txtAreaDescription.getText()
             );
             PROJECT_DAO.addProject(project);
             AlertGenerator.showInfoAlert(event, "Proyecto registrado correctamente");
-        }catch(InvalidFormException ie){
-            AlertGenerator.showErrorAlert(event, ie.getMessage());
-        }
+//        }catch(InvalidFormException ie){
+//            AlertGenerator.showErrorAlert(event, ie.getMessage());
+//        }
     }
     
-    public void isValidForm() throws InvalidFormException{
-//        ValidatorForm.chechkAlphabeticalField(titleProjectField, 80);
-//        ValidatorForm.isNumberData(durationField);
-//        ValidatorForm.checkNotEmptyDateField(startDateField);
-//        ValidatorForm.checkNotEmptyDateField(estimatedEndDateField);
-//        ValidatorForm.chechkAlphabeticalArea(descriptionField, 500);
+//    public void isValidForm() throws InvalidFormException{
+//        ValidatorForm.chechkAlphabeticalField(txtFieldTitleProject, 80);
+//        ValidatorForm.isNumberData(txtFieldDuration);
+//        ValidatorForm.checkNotEmptyDateField(dtpStartDate);
+//        ValidatorForm.checkNotEmptyDateField(dtpEstimatedEndDate);
+//        ValidatorForm.chechkAlphabeticalArea(txtAreaDescription, 500);
+//    }
+    
+    public void receiveProjectUpdate(Project project){
+        showProjectUpdateForm(project);
+    }
+    
+     public void receiveProjectSave(){
+        showProjectSaveForm();
     }
 
     @FXML
-    private void exit(ActionEvent event) {
+    private void exit(ActionEvent event){
         FXMLLoader loader = changeWindow("ProjectList.fxml", event);
     }
     
@@ -110,5 +154,26 @@ public class ProjectFormController implements Initializable {
         } finally {
             return loader;
         }
+    }
+
+    @FXML
+    private void updateProyect(ActionEvent event){
+//        try{
+//            this.isValidForm();
+            Project project = new Project(
+                txtFieldTitleProject.getText(), 
+                "UV-CA-127",
+                Integer.parseInt(txtFieldDuration.getText()),
+                txtFieldStatus.getText(),
+                ValidatorForm.convertJavaDateToSQlDate(dtpStartDate),
+                null, 
+                ValidatorForm.convertJavaDateToSQlDate(dtpEstimatedEndDate),
+                txtAreaDescription.getText()
+            );
+            PROJECT_DAO.updateProject(project, oldProject.getProjectName());
+            AlertGenerator.showInfoAlert(event, "Proyecto actualizado correctamente");
+//        }catch(InvalidFormException ie){
+//            AlertGenerator.showErrorAlert(event, ie.getMessage());
+//        }
     }
 }
