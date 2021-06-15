@@ -38,6 +38,7 @@ public class Integrant extends Member{
     }
 
     public Integrant(){
+        super();
         this.schooling = new ArrayList<>();
     }
 
@@ -103,14 +104,18 @@ public class Integrant extends Member{
         return super.getEmailUV().hashCode();
     }
     
+//    @Override
+//    public boolean equals(Object obj){
+//        boolean isEqual = false;
+//        Integrant integrant = (Integrant)obj;
+//        if((super.getRfc().equals(integrant.getRfc())) && (this.schooling.size() == integrant.getSchooling().size())){
+//            isEqual = true;
+//        }
+//        return isEqual;
+//    }
+
     @Override
-    public boolean equals(Object obj){
-        boolean isEqual = false;
-        Integrant integrant = (Integrant)obj;
-        if((super.getRfc().equals(integrant.getRfc())) && (this.schooling.size() == integrant.getSchooling().size())){
-            isEqual = true;
-        }
-        return isEqual;
-    }
-    
+    public String toString() {
+        return super.toString();
+    }   
 }

@@ -78,38 +78,42 @@ public class MeetingHistoryController implements Initializable {
     }
     
     @FXML
-    public void addMeeting(ActionEvent event) {
-        FXMLLoader loader = this.changeWindow("MeetingForm.fxml", event);
-        MeetingFormController controller = loader.getController();
+    private void addMeeting(ActionEvent event) {
+        FXMLLoader loader = this.changeWindow("MeetingEdit.fxml", event);
+        MeetingEditController controller = loader.getController();
+        controller.receiveToken(token);
+        controller.addNewMeeting(true);
         
     }
 
     @FXML
-    public void closeMeetingHistoryWindow(ActionEvent event) {
+    private void closeMeetingHistoryWindow(ActionEvent event) {
         FXMLLoader loader = changeWindow("Start.fxml", event);
         StartController controller = loader.getController();
         controller.receiveIntegrantToken(token);
     }
 
     @FXML
-    public void refreshMeetingHistoryMeeting(ActionEvent event) {
+    private void refreshMeetingHistoryMeeting(ActionEvent event) {
         meetingHistoryTableView.getItems().clear();
         setAllMeetingInformationIntoTable();
         
     }
     
     @FXML
-    public void observeMeetingInformation(MouseEvent event) {
-        FXMLLoader loader = changeWindow("Meeting.fxml", event);
-        MeetingController controller = loader.getController();
-        controller.reciveMeeting(
-            meetingHistoryTableView.getSelectionModel().getSelectedItem().getMeetingKey()
-        );
-
+    private void observeMeetingInformation(MouseEvent event) {
+        if(meetingHistoryTableView.getSelectionModel().getSelectedItem() != null){
+            FXMLLoader loader = changeWindow("MeetingRequest.fxml", event);
+            MeetingRequestController controller = loader.getController();
+            controller.receiveToken(token);
+            controller.reciveMeeting(
+                meetingHistoryTableView.getSelectionModel().getSelectedItem().getMeetingKey()
+            );
+        }
     }
 
     @FXML
-    public void searchMeeting(ActionEvent event) {
+    private void searchMeeting(ActionEvent event) {
         System.out.print(meetingIssueField.getText());
         if((meetingIssueField.getText()).equals(null)){
             if((meetingDateField.getValue())!=null){
@@ -160,7 +164,7 @@ public class MeetingHistoryController implements Initializable {
         String meetingIssue = (meetingIssueField.getText());
         List meetingslist = new ArrayList<>();
         
-        for(int i=0; i< this.meetingsList.size(); i++){
+        for(int i=0; i< this.meetingsList.size(); i++){ //Cambiar el for
             if((this.meetingsList.get(i).getMeetingDate().equals(dateMeeting)) && 
             (this.meetingsList.get(i).getIssueMeeting().contains(meetingIssue))){
                 meetingslist.add(this.meetingsList.get(i));
@@ -169,7 +173,7 @@ public class MeetingHistoryController implements Initializable {
        meetingHistoryTableView.setItems(makeitemsMeetings(meetingslist));
     }
     
-    private void setMeetingInformationByIssue(){
+    private void setMeetingInformationByIssue(){  //Cambiar el for
         String meetingIssue = (meetingIssueField.getText());
         List meetingslist = new ArrayList<>();
         for(int i=0; i< this.meetingsList.size(); i++){
@@ -180,7 +184,7 @@ public class MeetingHistoryController implements Initializable {
         meetingHistoryTableView.setItems(makeitemsMeetings(meetingslist));
     }
     
-    private void setMeetingInformationByDate(){
+    private void setMeetingInformationByDate(){  //Cambiar el for
         String meetingDate = meetingDateField.getValue().toString();
         System.out.print(meetingDate);
         List meetingslist = new ArrayList<>();

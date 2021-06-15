@@ -42,6 +42,7 @@ public class MeetingDAO implements IMeetingDAO{
                 meetingsList.add(meeting);
             }
         }catch(SQLException sqlException){
+            meetingsList = null;
             Logger.getLogger(Meeting.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             CONNECTION.closeConnection();
@@ -77,111 +78,11 @@ public class MeetingDAO implements IMeetingDAO{
             meeting.setComments(commentDAO.getCommentsByMeeting(meetingKey));
             meeting.setAssistantsRol(assisntantRolDAO.getAssistantsRolByMeeting(meetingKey));
         }catch(SQLException sqlException){
+            meeting = null;
             Logger.getLogger(Meeting.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             CONNECTION.closeConnection();
             return meeting;
-        }
-    }
-    
-
-    @Override
-    public List<Meeting> getMeetingsbyDate(String meetingDate) {
-        List<Meeting> meetingsList = new ArrayList();
-        try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Meeting WHERE meetingDate = ?;"
-            );
-            sentenceQuery.setString(1, meetingDate);
-            ResultSet queryResult = sentenceQuery.executeQuery();
-            while(queryResult.next()){
-                Meeting meeting = new Meeting (
-                queryResult.getInt("meetingKey"),
-                queryResult.getDate("meetingDate").toString(),
-                queryResult.getTime("meetingTime").toString(),
-                queryResult.getString("meetingProject"),
-                queryResult.getDate("meetingRegistrationDate").toString(),
-                queryResult.getString("statusMeeting"),
-                queryResult.getString("placeMeeting"),
-                queryResult.getString("issueMeeting"),
-                queryResult.getString("meetingNote"),
-                queryResult.getString("meetingPending"),
-                queryResult.getString("integrantResponsible")
-                );
-                meetingsList.add(meeting);
-            }
-        }catch(SQLException sqlException){
-            Logger.getLogger(Meeting.class.getName()).log(Level.SEVERE, null, sqlException);
-        }finally{
-            CONNECTION.closeConnection();
-            return meetingsList;
-        }
-    }
-    
-    @Override
-    public List<Meeting> getMeetingsbyIssue(String issueMeeting) {
-        List<Meeting> meetingsList = new ArrayList();
-        try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Meeting WHERE issueMeeting = ?;"
-            );
-            sentenceQuery.setString(1, issueMeeting);
-            ResultSet queryResult = sentenceQuery.executeQuery();
-            while(queryResult.next()){
-                Meeting meeting = new Meeting (
-                queryResult.getInt("meetingKey"),
-                queryResult.getDate("meetingDate").toString(),
-                queryResult.getTime("meetingTime").toString(),
-                queryResult.getString("meetingProject"),
-                queryResult.getDate("meetingRegistrationDate").toString(),
-                queryResult.getString("statusMeeting"),
-                queryResult.getString("placeMeeting"),
-                queryResult.getString("issueMeeting"),
-                queryResult.getString("meetingNote"),
-                queryResult.getString("meetingPending"),
-                queryResult.getString("integrantResponsible")
-                );
-                meetingsList.add(meeting);
-            }
-        }catch(SQLException sqlException){
-            Logger.getLogger(Meeting.class.getName()).log(Level.SEVERE, null, sqlException);
-        }finally{
-            CONNECTION.closeConnection();
-            return meetingsList;
-        }
-    }
-    
-    @Override
-    public List<Meeting> getMeetingsbyDateAndIssue(String meetingDate, String issueMeeting) {
-        List<Meeting> meetingsList = new ArrayList();
-        try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Meeting WHERE meetingDate = ? AND issueMeeting = ?;"
-            );
-            sentenceQuery.setString(1, meetingDate);
-            sentenceQuery.setString(2, issueMeeting);
-            ResultSet queryResult = sentenceQuery.executeQuery();
-            while(queryResult.next()){
-                Meeting meeting = new Meeting (
-                queryResult.getInt("meetingKey"),
-                queryResult.getDate("meetingDate").toString(),
-                queryResult.getTime("meetingTime").toString(),
-                queryResult.getString("meetingProject"),
-                queryResult.getDate("meetingRegistrationDate").toString(),
-                queryResult.getString("statusMeeting"),
-                queryResult.getString("placeMeeting"),
-                queryResult.getString("issueMeeting"),
-                queryResult.getString("meetingNote"),
-                queryResult.getString("meetingPending"),
-                queryResult.getString("integrantResponsible")
-                );
-                meetingsList.add(meeting);
-            }
-        }catch(SQLException sqlException){
-            Logger.getLogger(Meeting.class.getName()).log(Level.SEVERE, null, sqlException);
-        }finally{
-            CONNECTION.closeConnection();
-            return meetingsList;
         }
     }
 
@@ -305,8 +206,7 @@ public class MeetingDAO implements IMeetingDAO{
         }
     }
     
-    @Override
-    public void deleteMeetingAgenda(Connection connection, Meeting meeting) {
+    private void deleteMeetingAgenda(Connection connection, Meeting meeting) {
         try{
             meetingAgendaDAO.deleteTopic(connection, meeting.getMeetingAgenda());
             meetingAgendaDAO.deletePrerequisite(connection, meeting.getMeetingAgenda());
@@ -325,8 +225,7 @@ public class MeetingDAO implements IMeetingDAO{
         }
     }
 
-    @Override
-    public void deleteAgreement(Connection connection, Meeting meeting) {
+    private void deleteAgreement(Connection connection, Meeting meeting) {
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM Agreement WHERE meetingKey = ?;"
@@ -343,8 +242,7 @@ public class MeetingDAO implements IMeetingDAO{
         }
     }
 
-    @Override
-    public void deleteComment(Connection connection, Meeting meeting) {
+    private void deleteComment(Connection connection, Meeting meeting) {
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM Comment WHERE meetingKey = ?;"
@@ -361,8 +259,7 @@ public class MeetingDAO implements IMeetingDAO{
         }
     }
 
-    @Override
-    public void deleteAssistantRol(Connection connection, Meeting meeting) {
+    private void deleteAssistantRol(Connection connection, Meeting meeting) {
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM IntegrantMeeting WHERE meetingKey = ?;"

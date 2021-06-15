@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="757.0" prefWidth="1246.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.UpdateMeetingController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1246.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MeetingRealizedEditController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
          <children>
@@ -26,7 +26,7 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <Label alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" text="Username" textFill="WHITE" HBox.hgrow="ALWAYS">
+            <Label fx:id="lblUserName" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" text="Username" textFill="WHITE" HBox.hgrow="ALWAYS">
                <padding>
                   <Insets right="15.0" />
                </padding>
@@ -79,8 +79,8 @@
                   <TableView fx:id="agreementTableView" prefHeight="238.0" prefWidth="1226.0">
                     <columns>
                       <TableColumn fx:id="descriptionAgreementColumn" prefWidth="686.0" resizable="false" text="Descripción" />
-                      <TableColumn fx:id="deliveryDateColumn" prefWidth="188.0" resizable="false" text="Fecha de realización" />
-                        <TableColumn fx:id="responsibleAgreementColumn" prefWidth="371.0" resizable="false" text="Integrante encargado" />
+                      <TableColumn fx:id="deliveryDateColumn" prefWidth="186.0" resizable="false" text="Fecha de realización" />
+                        <TableColumn fx:id="responsibleAgreementColumn" prefWidth="333.0" resizable="false" text="Integrante encargado" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

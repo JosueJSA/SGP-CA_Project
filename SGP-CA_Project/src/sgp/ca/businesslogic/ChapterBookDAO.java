@@ -21,40 +21,9 @@ import sgp.ca.domain.Integrant;
 
 public class ChapterBookDAO implements IChapterBookDAO{
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
-
+    
     @Override
-    public void addChapterBooks(Connection connection, Book book) {
-        book.getChapterBooks().forEach(chapterBook -> {
-            try{
-                PreparedStatement sentenceQuery = connection.prepareStatement(
-                    "INSERT INTO ChapterBook (urlFile, chapterBookTitle, "
-                    + "registrationDate, registrationResponsible, pages-number, "
-                    + "urlFileBook) VALUES(?,?,?,?,?,?);"
-                );
-                sentenceQuery.setString(1, chapterBook.getUrlFile());
-                sentenceQuery.setString(2, chapterBook.getChapterBookTitle());
-                sentenceQuery.setString(3, chapterBook.getRegistrationDate());
-                sentenceQuery.setString(4, chapterBook.getRegistrationResponsible());
-                sentenceQuery.setString(5, chapterBook.getPageNumberRange());
-                sentenceQuery.setString(6, book.getUrlFile());
-                sentenceQuery.executeUpdate();
-                this.insertIntoChapterbookStudent(connection, chapterBook);
-                this.insertIntoIntegrantChapterbook(connection, chapterBook);
-                this.insertIntoCollaborateChapterbook(connection, chapterBook);
-            }catch(SQLException sqlException){
-                try{
-                    connection.rollback();
-                    connection.close();
-                    Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
-                }catch(SQLException ex){
-                    Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-    }
-
-    @Override
-    public List<ChapterBook> getChapterBooksListByBook(Connection connection, String urlFileBook) {
+    public List<ChapterBook> getChapterBooksListByBook(String urlFileBook) {
         List<ChapterBook> chapterBooksList = new ArrayList();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
@@ -63,86 +32,211 @@ public class ChapterBookDAO implements IChapterBookDAO{
             sentenceQuery.setString(1, urlFileBook);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
-                ChapterBook chapterBook = new ChapterBook(
-                    resultQuery.getString("urlFile"),
-                    resultQuery.getString("chapterBookTitle"),
-                    resultQuery.getDate("registrationDate").toString(),
-                    resultQuery.getString("registrationResponsible"),
-                    resultQuery.getString("pages-number")
-                );
-                chapterBook.setStudents(this.getStudentNamesChapterBookParticipation(connection, chapterBook.getUrlFile()));
-                chapterBook.setIntegrants(this.getIntegrantsChapterBookParticipation(connection, chapterBook.getUrlFile()));
-                chapterBook.setCollaborators(this.getCollaboratorsChapterBookParticipation(connection, chapterBook.getUrlFile()));
+                ChapterBook chapterBook = new ChapterBook();
+                chapterBook.setUrlFile(resultQuery.getString("urlFile"));
+                chapterBook.setChapterBookTitle(resultQuery.getString("chapterBookTitle"));
+                chapterBook.setPageNumberRange(resultQuery.getString("pages-number"));
+                chapterBook.setUrlFileBook(resultQuery.getString("urlFileBook"));
                 chapterBooksList.add(chapterBook);
             }
         }catch(SQLException sqlException){
+            chapterBooksList = null;
             Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             return chapterBooksList;
         }
     }
-
+    
     @Override
-    public void deleteStudentsFromChapterBook(Connection connection, List<ChapterBook> chapterBooks) {
-        chapterBooks.forEach(chapterBook -> {
-            try{
-                PreparedStatement sentenceQuery = connection.prepareStatement(
-                    "DELETE FROM ChapterbookStudent WHERE urlFile = ?;"
+    public ChapterBook getChapterBookByURLFile(String urlFileChapterBook) {
+        ChapterBook chapterBook = new ChapterBook();
+        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "SELECT * FROM ChapterBook WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileChapterBook);
+            ResultSet resultQuery = sentenceQuery.executeQuery();
+            if(resultQuery.next()){
+                chapterBook = new ChapterBook(
+                    resultQuery.getString("urlFile"),
+                    resultQuery.getString("chapterBookTitle"),
+                    resultQuery.getString("registrationDate"),
+                    resultQuery.getString("registrationResponsible"),
+                    resultQuery.getString("pages-number"),
+                    resultQuery.getString("urlFileBook")
                 );
-                sentenceQuery.setString(1, chapterBook.getUrlFile());
-                sentenceQuery.executeUpdate();
-            }catch(SQLException sqlException){
-                try{
-                    connection.rollback();
-                    connection.close();
-                    Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
-                }catch(SQLException ex){
-                    Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                chapterBook.setStudents(this.getStudentNamesChapterBookParticipation(connection, urlFileChapterBook));
+                chapterBook.setIntegrants(this.getIntegrantsChapterBookParticipation(connection, urlFileChapterBook));
+                chapterBook.setCollaborators(this.getCollaboratorsChapterBookParticipation(connection, urlFileChapterBook));
+                
             }
-        });
+            connection.commit();
+            connection.setAutoCommit(true);
+        }catch(SQLException sqlException){
+            chapterBook = null;
+            Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return chapterBook;
+        }
+    }
+    
+    @Override
+    public boolean addChapterBook(ChapterBook chapterBook, Book book) {
+        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        boolean correctInsertion = false;
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "INSERT INTO ChapterBook VALUES (?,?,?,?,?,?);"
+            );
+            sentenceQuery.setString(1, chapterBook.getUrlFile());
+            sentenceQuery.setString(2, chapterBook.getChapterBookTitle());
+            sentenceQuery.setString(3, chapterBook.getRegistrationDate());
+            sentenceQuery.setString(4, chapterBook.getRegistrationResponsible());
+            sentenceQuery.setString(6, chapterBook.getPageNumberRange());
+            sentenceQuery.setString(7, book.getUrlFile());
+            sentenceQuery.executeUpdate();
+            this.insertIntoChapterbookStudent(connection, chapterBook);
+            this.insertIntoIntegrantChapterbook(connection, chapterBook);
+            this.insertIntoCollaborateChapterbook(connection, chapterBook);
+            connection.commit();
+            connection.setAutoCommit(true);
+            correctInsertion = true;
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }finally{
+            CONNECTION.closeConnection();
+            return correctInsertion;
+        }
     }
 
     @Override
-    public void deleteIntegrantsFromChapterBook(Connection connection, List<ChapterBook> chapterBooks) {
-        chapterBooks.forEach(chapterBook -> {
+    public boolean updateChepterBook(ChapterBook newChapterBook, String oldUrlFile) {
+         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        boolean correctUpdate = false;
+        try{
+            this.deleteStudentsFromChapterBook(connection, oldUrlFile);
+            this.deleteIntegrantsFromChapterBook(connection, oldUrlFile);
+            this.deleteCollaboratorsFromChapterBook(connection, oldUrlFile);
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "UPDATE BChapterBookook SET urlFile = ?, chapterBookTitle = ?, registrationDate = ?, "
+                + "registrationResponsible = ?, pages-number = ?, urlFileBook = ?"
+                + "WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, newChapterBook.getUrlFile());
+            sentenceQuery.setString(2, newChapterBook.getChapterBookTitle());
+            sentenceQuery.setString(3, newChapterBook.getRegistrationDate());
+            sentenceQuery.setString(4, newChapterBook.getRegistrationResponsible());
+            sentenceQuery.setString(5, newChapterBook.getPageNumberRange());
+            sentenceQuery.setString(7, newChapterBook.getUrlFileBook());
+            sentenceQuery.executeUpdate();
+            this.insertIntoChapterbookStudent(connection, newChapterBook);
+            this.insertIntoIntegrantChapterbook(connection, newChapterBook);
+            this.insertIntoCollaborateChapterbook(connection, newChapterBook);
+            connection.commit();
+            connection.setAutoCommit(true);
+            correctUpdate = true;
+        }catch(SQLException sqlException){
             try{
-                PreparedStatement sentenceQuery = connection.prepareStatement(
-                    "DELETE FROM IntegrantChapterbook WHERE urlFile = ?;"
-                );
-                sentenceQuery.setString(1, chapterBook.getUrlFile());
-                sentenceQuery.executeUpdate();
-            }catch(SQLException sqlException){
-                try{
-                    connection.rollback();
-                    connection.close();
-                    Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
-                }catch(SQLException ex){
-                    Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                connection.rollback();
+                Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-        });
+        }finally{
+            CONNECTION.closeConnection();
+            return correctUpdate;
+        }
     }
 
     @Override
-    public void deleteCollaboratorsFromChapterBook(Connection connection, List<ChapterBook> chapterBooks) {
-        chapterBooks.forEach(chapterBook -> {
+    public boolean deleteChapterBook(String urlFileChapterBook) {
+        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
+        boolean correctDelete = false;
+        try{
+            this.deleteStudentsFromChapterBook(connection, urlFileChapterBook);
+            this.deleteIntegrantsFromChapterBook(connection, urlFileChapterBook);
+            this.deleteCollaboratorsFromChapterBook(connection, urlFileChapterBook);
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM ChapterBook WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileChapterBook);
+            sentenceQuery.executeQuery();
+            connection.commit();
+            connection.setAutoCommit(true);
+            correctDelete = true;
+        }catch(SQLException sqlException){
             try{
-                PreparedStatement sentenceQuery = connection.prepareStatement(
-                    "DELETE FROM CollaborateChapterbook WHERE urlFile = ?;"
-                );
-                sentenceQuery.setString(1, chapterBook.getUrlFile());
-                sentenceQuery.executeUpdate();
-            }catch(SQLException sqlException){
-                try{
-                    connection.rollback();
-                    connection.close();
-                    Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
-                }catch(SQLException ex){
-                    Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                connection.rollback();
+                connection.close();
+                Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-        });
+        }finally{
+            CONNECTION.closeConnection();
+            return correctDelete;
+        }
+    }
+
+    private void deleteStudentsFromChapterBook(Connection connection, String urlFileChapterBook) {
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM ChapterbookStudent WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileChapterBook);
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                connection.close();
+                Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void deleteIntegrantsFromChapterBook(Connection connection, String urlFileChapterBook) {
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM IntegrantChapterbook WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileChapterBook);
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                connection.close();
+                Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void deleteCollaboratorsFromChapterBook(Connection connection, String urlFileChapterBook) {
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM CollaborateChapterbook WHERE urlFile = ?;"
+            );
+            sentenceQuery.setString(1, urlFileChapterBook);
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                connection.close();
+                Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(ChapterBookDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     private void insertIntoChapterbookStudent(Connection connection, ChapterBook chapterBook){

@@ -14,17 +14,19 @@ public class ChapterBook {
     private String registrationDate;
     private String registrationResponsible;
     private String pageNumberRange;
+    private String urlFileBook;
     private List<String> students;
     private List<Integrant> integrants;
     private List<Collaborator> collaborators;
 
     public ChapterBook(String urlFile, String chapterBookTitle, String registrationDate, 
-    String registrationResponsible, String pageNumberRange) {
+    String registrationResponsible, String pageNumberRange, String urlFileBook) {
         this.urlFile = urlFile;
         this.chapterBookTitle = chapterBookTitle;
         this.registrationDate = registrationDate;
         this.registrationResponsible = registrationResponsible;
         this.pageNumberRange = pageNumberRange;
+        this.urlFileBook = urlFileBook;
         this.students = new ArrayList<>();
         this.integrants = new ArrayList<>();
         this.collaborators = new ArrayList<>();
@@ -54,6 +56,10 @@ public class ChapterBook {
 
     public String getPageNumberRange() {
         return pageNumberRange;
+    }
+
+    public String getUrlFileBook() {
+        return urlFileBook;
     }
 
     public List<String> getStudents() {
@@ -86,6 +92,10 @@ public class ChapterBook {
 
     public void setPageNumberRange(String pageNumberRange) {
         this.pageNumberRange = pageNumberRange;
+    }
+
+    public void setUrlFileBook(String urlFileBook) {
+        this.urlFileBook = urlFileBook;
     }
 
     public void setStudents(List<String> students) {

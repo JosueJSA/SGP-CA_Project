@@ -11,6 +11,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import sgp.ca.domain.Book;
+import sgp.ca.domain.Collaborator;
+import sgp.ca.domain.Integrant;
 
 /**
  *
@@ -94,6 +97,33 @@ public class ValidatorForm{
     }
     
     public static void isComboBoxSelected(ComboBox<String> comboBox) throws InvalidFormException{
+        if(comboBox.getValue() == null){
+            comboBox.setStyle("-fx-border-color: red;");
+            throw new InvalidFormException("Campos sin seleccionar");
+        }else{
+            comboBox.setStyle("-fx-border-color: green;");
+        }
+    }
+    
+    public static void isComboBoxSelectedIntegrant(ComboBox<Integrant> comboBox) throws InvalidFormException{
+        if(comboBox.getValue() == null){
+            comboBox.setStyle("-fx-border-color: red;");
+            throw new InvalidFormException("Campos sin seleccionar");
+        }else{
+            comboBox.setStyle("-fx-border-color: green;");
+        }
+    }
+    
+    public static void isComboBoxSelectedCollaborator(ComboBox<Collaborator> comboBox) throws InvalidFormException{
+        if(comboBox.getValue() == null){
+            comboBox.setStyle("-fx-border-color: red;");
+            throw new InvalidFormException("Campos sin seleccionar");
+        }else{
+            comboBox.setStyle("-fx-border-color: green;");
+        }
+    }
+    
+    public static void isComboBoxSelectedBook(ComboBox<Book> comboBox) throws InvalidFormException{
         if(comboBox.getValue() == null){
             comboBox.setStyle("-fx-border-color: red;");
             throw new InvalidFormException("Campos sin seleccionar");

@@ -26,6 +26,7 @@ public class Article extends Evidence{
     }
 
     public Article(){
+        super();
         magazine = new Magazine();
     }
 

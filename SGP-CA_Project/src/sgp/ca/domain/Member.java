@@ -153,13 +153,18 @@ public abstract class Member {
         return hash;
     }
 
+//    @Override
+//    public boolean equals(Object obj) {
+//        boolean isEqual = false;
+//        if(this.rfc.equals(((Member)obj).getRfc())){
+//            isEqual = true;
+//        }
+//        return isEqual;
+//    }
+
     @Override
-    public boolean equals(Object obj) {
-        boolean isEqual = false;
-        if(this.rfc.equals(((Member)obj).getRfc())){
-            isEqual = true;
-        }
-        return isEqual;
+    public String toString() {
+        return rfc + " - " + fullName;
     }
         
 }

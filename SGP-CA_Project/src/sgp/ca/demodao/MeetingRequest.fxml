@@ -16,11 +16,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="757.0" prefWidth="1246.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MeetingController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1246.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MeetingRequestController">
    <top>
-      <HBox alignment="CENTER_LEFT" prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_LEFT" prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: WHITE;" BorderPane.alignment="CENTER">
          <children>
-            <Label text="REUNIÓN" textFill="WHITE">
+            <Label text="REUNIÓN" textFill="#919494">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -28,7 +28,7 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </Label>
-            <Label alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Username" textFill="WHITE" HBox.hgrow="ALWAYS">
+            <Label fx:id="lbUserName" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Username" textFill="#919494" HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets right="15.0" />
                </HBox.margin>
@@ -37,12 +37,12 @@
       </HBox>
    </top>
    <bottom>
-      <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #300050;" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnCloseMeetingWindow" mnemonicParsing="false" onAction="#closeMeetingWindow" prefHeight="31.0" prefWidth="91.0" text="SALIR" />
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Button fx:id="btnDownloadMinute" mnemonicParsing="false" onAction="#downloadMinute" text="DESCARGAR MINUTA" />
+                  <Button fx:id="btnDownloadMinute" disable="true" mnemonicParsing="false" onAction="#downloadMinute" text="DESCARGAR MINUTA" />
                   <Button fx:id="btnCancelMeeting" mnemonicParsing="false" onAction="#CancelMeeting" text="CANCELAR REUNIÓN" />
                </children>
                <padding>
@@ -56,18 +56,26 @@
       </HBox>
    </bottom>
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: WHITE;" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER_RIGHT" prefHeight="32.0" prefWidth="1246.0" spacing="5.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="1246.0" spacing="5.0">
                <children>
-                  <Label text="Fecha de registro:" />
-                  <TextField fx:id="meetingRecordDateField" editable="false" style="-fx-background-color: WHITESMOKE;" />
+                  <Label fx:id="lbCanceledMetting" maxWidth="1.7976931348623157E308" prefHeight="21.0" prefWidth="950.0" text="REUNIÓN CANCELADA" textFill="#d61118" visible="false">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label prefHeight="21.0" prefWidth="128.0" text="Fecha de registro:" />
+                  <TextField fx:id="txtFieldMeetingRecordDate" editable="false" prefHeight="31.0" prefWidth="160.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font></TextField>
                </children>
                <padding>
-                  <Insets right="20.0" />
+                  <Insets left="20.0" />
                </padding>
             </HBox>
-            <HBox prefHeight="154.0" prefWidth="1246.0" style="-fx-background-color: LIGHTGREY;">
+            <HBox prefHeight="154.0" prefWidth="1246.0" style="-fx-background-color: #EFE1F8;">
                <children>
                   <GridPane prefHeight="164.0" prefWidth="318.0" HBox.hgrow="ALWAYS">
                     <columnConstraints>
@@ -114,10 +122,10 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="meetingProjectLabel" editable="false" style="-fx-background-color: LIGHTGRAY;" GridPane.columnIndex="1" />
-                        <TextField fx:id="meetingIssueLabel" editable="false" style="-fx-background-color: LIGHTGRAY;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="meetingPlaceLabel" editable="false" style="-fx-background-color: LIGHTGRAY;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="estimatedTotalTimeLabel" editable="false" style="-fx-background-color: LIGHTGRAY;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="txtFieldMeetingProject" editable="false" GridPane.columnIndex="1" />
+                        <TextField fx:id="txtFieldMeetingIssue" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtFieldMeetingPlace" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtFieldEstimatedTotalTime" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
                   <GridPane prefHeight="134.0" prefWidth="358.0" HBox.hgrow="ALWAYS">
@@ -156,12 +164,12 @@
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </Label>
-                        <TextField fx:id="meetingDateLabel" editable="false" style="-fx-background-color: LIGHTGRAY;" GridPane.columnIndex="1" />
-                        <TextField fx:id="meetingTimeLabel" editable="false" style="-fx-background-color: LIGHTGRAY;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <TextField fx:id="txtFieldMeetingDate" editable="false" GridPane.columnIndex="1" />
+                        <TextField fx:id="txtFieldMeetingTime" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets></TextField>
-                        <TextField fx:id="totalTimeLabel" editable="false" style="-fx-background-color: LIGHTGRAY;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="txtFieldTotalTime" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
                   <GridPane alignment="CENTER_RIGHT" prefHeight="147.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
@@ -205,16 +213,16 @@
             </HBox>
             <HBox prefHeight="440.0" prefWidth="1246.0" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox prefHeight="440.0" prefWidth="301.0" spacing="5.0" style="-fx-background-color: DARKGRAY;" HBox.hgrow="ALWAYS">
+                  <VBox prefHeight="440.0" prefWidth="301.0" spacing="5.0" style="-fx-background-color: WHITE;" HBox.hgrow="ALWAYS">
                      <children>
                         <Label text="COMENTARIOS">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font></Label>
-                        <TableView fx:id="commentsTableView" prefHeight="397.0" prefWidth="319.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tvComments" prefHeight="397.0" prefWidth="319.0" VBox.vgrow="ALWAYS">
                           <columns>
-                            <TableColumn fx:id="commentatorColumn" editable="false" prefWidth="109.0" sortable="false" text="Integrante" />
-                            <TableColumn fx:id="commentDescriptionColumn" editable="false" prefWidth="203.0" sortable="false" text="Comentario" />
+                            <TableColumn fx:id="colCommentator" editable="false" prefWidth="90.0" resizable="false" sortable="false" text="Integrante" />
+                            <TableColumn fx:id="colCommentDescription" editable="false" prefWidth="222.0" resizable="false" sortable="false" text="Comentario" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -225,8 +233,8 @@
                               <TextArea fx:id="txtAreaComment" prefHeight="122.0" prefWidth="314.0" promptText="Escribir comentario" />
                               <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                                  <children>
-                                    <Button fx:id="btnDeleteComment" mnemonicParsing="false" onAction="#deleteComment" text="ELIMINAR" />
-                                    <Button fx:id="btnAddNewComment" mnemonicParsing="false" onAction="#addNewComment" text="AGREGAR COMENTARIO" />
+                                    <Button fx:id="btnDeleteComment" mnemonicParsing="false" onAction="#deleteComment" style="-fx-background-color: #EFE1F8;" text="ELIMINAR" />
+                                    <Button fx:id="btnAddNewComment" mnemonicParsing="false" onAction="#addNewComment" style="-fx-background-color: #EFE1F8;" text="AGREGAR COMENTARIO" />
                                  </children>
                               </HBox>
                            </children>
@@ -258,11 +266,11 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TableView fx:id="assistantRolTableView" prefHeight="200.0" prefWidth="200.0">
+                                    <TableView fx:id="tvAssistantRol" prefHeight="200.0" prefWidth="200.0">
                                       <columns>
-                                        <TableColumn fx:id="assistantNameColumn" editable="false" prefWidth="75.0" sortable="false" text="Integrante" />
-                                        <TableColumn fx:id="rolAssistantColumn" editable="false" prefWidth="75.0" sortable="false" text="Rol" />
-                                          <TableColumn fx:id="initialsAssistantsColumn" editable="false" prefWidth="75.0" sortable="false" text="Iniciales" />
+                                        <TableColumn fx:id="colAssistantName" editable="false" prefWidth="371.0" resizable="false" sortable="false" text="Integrante" />
+                                        <TableColumn fx:id="colRolAssistant" editable="false" prefWidth="343.0" resizable="false" sortable="false" text="Rol" />
+                                          <TableColumn fx:id="colInitialsAssistants" editable="false" prefWidth="180.0" resizable="false" sortable="false" text="Iniciales" />
                                       </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -283,10 +291,10 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TableView fx:id="prerequisitetableView" prefHeight="223.0" prefWidth="895.0">
+                                    <TableView fx:id="tvPrerequisite" prefHeight="223.0" prefWidth="895.0">
                                       <columns>
-                                        <TableColumn fx:id="descriptionPrerequisiteColumn" editable="false" prefWidth="75.0" sortable="false" text="Descripción" />
-                                        <TableColumn fx:id="responsiblePrerequisiteColumn" editable="false" prefWidth="75.0" sortable="false" text="Integrante a cargo" />
+                                        <TableColumn fx:id="colDescriptionPrerequisite" editable="false" prefWidth="586.0" resizable="false" sortable="false" text="Descripción" />
+                                        <TableColumn fx:id="colResponsiblePrerequisite" editable="false" prefWidth="308.0" resizable="false" sortable="false" text="Integrante a cargo" />
                                       </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -307,14 +315,14 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TableView fx:id="meetingAgendaTableView" prefHeight="282.0" prefWidth="895.0">
+                                    <TableView fx:id="tvMeetingAgenda" prefHeight="282.0" prefWidth="895.0">
                                       <columns>
-                                        <TableColumn fx:id="startTimeColumn" editable="false" prefWidth="88.0" sortable="false" text="Hora inicio" />
-                                        <TableColumn fx:id="endTimeColumn" editable="false" prefWidth="85.0" sortable="false" text="Hora fin" />
-                                          <TableColumn fx:id="plannedTimeColumn" editable="false" prefWidth="170.0" sortable="false" text="Tiempo estimado" />
-                                          <TableColumn fx:id="realTimeColumn" editable="false" prefWidth="93.032470703125" sortable="false" text="Tiempo real" />
-                                          <TableColumn fx:id="descriptionTopicColumn" editable="false" prefWidth="299.1802978515625" sortable="false" text="Tema a tratar" />
-                                          <TableColumn fx:id="discussionLeaderColumn" editable="false" prefWidth="146.0" sortable="false" text="Líder de discusión" />
+                                        <TableColumn fx:id="colStartTime" editable="false" prefWidth="88.0" resizable="false" sortable="false" text="Hora inicio" />
+                                        <TableColumn fx:id="colEndTime" editable="false" prefWidth="86.0" resizable="false" sortable="false" text="Hora fin" />
+                                          <TableColumn fx:id="colPlannedTime" editable="false" prefWidth="133.0" resizable="false" sortable="false" text="Tiempo estimado" />
+                                          <TableColumn fx:id="colRealTime" editable="false" prefWidth="130.0" resizable="false" sortable="false" text="Tiempo real" />
+                                          <TableColumn fx:id="colDescriptionTopic" editable="false" prefWidth="299.1802978515625" resizable="false" sortable="false" text="Tema a tratar" />
+                                          <TableColumn fx:id="colDiscussionLeader" editable="false" prefWidth="157.0" resizable="false" sortable="false" text="Líder de discusión" />
                                       </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -335,11 +343,11 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TableView fx:id="agreementTableView" prefHeight="226.0" prefWidth="895.0">
+                                    <TableView fx:id="tvAgreement" prefHeight="226.0" prefWidth="895.0">
                                       <columns>
-                                        <TableColumn fx:id="descriptionAgreementColumn" editable="false" prefWidth="461.6419677734375" sortable="false" text="Descripción" />
-                                        <TableColumn fx:id="deliveryDateColumn" editable="false" prefWidth="152.851806640625" sortable="false" text="Fecha de realización" />
-                                          <TableColumn fx:id="responsibleAgreementColumn" editable="false" prefWidth="270.888916015625" sortable="false" text="Integrante encargado" />
+                                        <TableColumn fx:id="colDescriptionAgreement" editable="false" prefWidth="461.6419677734375" resizable="false" sortable="false" text="Descripción" />
+                                        <TableColumn fx:id="colDeliveryDate" editable="false" prefWidth="152.851806640625" resizable="false" sortable="false" text="Fecha de realización" />
+                                          <TableColumn fx:id="colResponsibleAgreement" editable="false" prefWidth="279.0" resizable="false" sortable="false" text="Integrante encargado" />
                                       </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

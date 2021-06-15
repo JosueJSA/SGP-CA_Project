@@ -22,13 +22,11 @@ public class MeetingAgenda {
         this.estimatedTotalTime = estimatedTotalTime;
         this.totaltopics = totaltopics;
         this.topics = new ArrayList<>();
-        this.totaltopics = topics.size();
         this.prerequisites = new ArrayList<>();
     }
 
     public MeetingAgenda() {
         this.topics = new ArrayList<>();
-        this.totaltopics = topics.size();
         this.prerequisites = new ArrayList<>();
     }
 

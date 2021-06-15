@@ -46,6 +46,23 @@ public class ProjectDAO implements IProjectDAO{
         }
     }
     
+    public List<String> getProjectNameListForEvidence(){
+        List<String> projectNamesList = new ArrayList<>();
+        try{
+            Statement instructionQuery = QUERY.getConnectionDatabase().createStatement();
+            ResultSet queryResult = instructionQuery.executeQuery("Select projectName FROM Project");
+            while(queryResult.next()){
+                String projectName = queryResult.getString("projectName");
+                projectNamesList.add(projectName);
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            QUERY.closeConnection();
+            return projectNamesList;
+        }
+    }
+    
 
     @Override
     public void addProject(Project newProject){
@@ -77,7 +94,6 @@ public class ProjectDAO implements IProjectDAO{
             QUERY.closeConnection();
         }
     }
-    
 
     @Override
     public List<Project> getProjectListbyName(String projectName) {

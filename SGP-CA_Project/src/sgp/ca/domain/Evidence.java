@@ -153,5 +153,9 @@ public abstract class Evidence {
         this.collaborators = collaborators;
     }
 
+    @Override
+    public String toString() {
+        return evidenceTitle + " - ";
+    }
 }
 

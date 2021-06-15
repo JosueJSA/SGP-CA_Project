@@ -117,6 +117,28 @@ import sgp.ca.domain.Schooling;
             return integrants;
         }
     }
+    
+    public List<Integrant> getIntegrantsForEvidence(String bodyAcademyKey){
+        List<Integrant> integrants = new ArrayList<>();
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT fullName, rfc FROM `Integrant` WHERE bodyAcademyKey = ? AND participationStatus = 'Activo';"
+            );
+            sentenceQuery.setString(1, bodyAcademyKey);
+            ResultSet result = sentenceQuery.executeQuery();
+            while(result.next()){
+                Integrant integrant = new Integrant();
+                integrant.setFullName(result.getString("fullName"));
+                integrant.setRfc(result.getString("rfc"));
+                integrants.add(integrant);
+            }
+        }catch(SQLException sqlException){
+            Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return integrants;
+        }
+    }
        
     @Override
     public Member getMemberByUVmail(String emailUV){

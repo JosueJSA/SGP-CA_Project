@@ -48,6 +48,28 @@ public class CollaboratorDAO implements IMemberDAO{
         }
     }
     
+    public List<Collaborator> getCollaboratorsForEvidence(String bodyAcademyKey){
+        List<Collaborator> collaborators = new ArrayList<>();
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT fullName, rfc FROM `Collaborator` WHERE bodyAcademyKey = ? AND participationStatus = 'Activo';"
+            );
+            sentenceQuery.setString(1, bodyAcademyKey);
+            ResultSet result = sentenceQuery.executeQuery();
+            while(result.next()){
+                Collaborator collaborator = new Collaborator();
+                collaborator.setFullName(result.getString("fullName"));
+                collaborator.setRfc(result.getString("rfc"));
+                collaborators.add(collaborator);
+            }
+        }catch(SQLException sqlException){
+            Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return collaborators;
+        }
+    }
+    
     @Override
     public Member getMemberByUVmail(String emailUV){
         Collaborator collaborator = new Collaborator();

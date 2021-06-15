@@ -16,7 +16,7 @@ public class SGPCA_Project extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("ChapterBookEdit.fxml"));
         
         Scene scene = new Scene(root);
         
