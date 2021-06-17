@@ -1,8 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.businesslogic;
 
 import java.sql.Connection;
@@ -91,11 +92,11 @@ public class GoalDAO implements IGoalDAO{
                 sentenceQuery.setInt(1, goal.getGoalIdentifier());
                 sentenceQuery.executeUpdate();
             }catch(SQLException sqlException){
-                try {
+                try{
                     connection.rollback();
                     connection.close();
                     Logger.getLogger(Goal.class.getName()).log(Level.SEVERE, null, sqlException);
-                } catch (SQLException ex) {
+                }catch(SQLException ex){
                     Logger.getLogger(GoalDAO.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -103,7 +104,7 @@ public class GoalDAO implements IGoalDAO{
     }
     
     @Override
-    public void addActions(Connection connection, Goal goal) {
+    public void addActions(Connection connection, Goal goal){
         for(Action action : goal.getActions()){
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -121,11 +122,11 @@ public class GoalDAO implements IGoalDAO{
                 sentenceQuery.setString(8, action.getResource());
                 sentenceQuery.executeUpdate();
             }catch(SQLException sqlException){
-                try {
+                try{
                     connection.rollback();
                     connection.close();
                     Logger.getLogger(Goal.class.getName()).log(Level.SEVERE, null, sqlException);
-                } catch (SQLException ex) {
+                }catch(SQLException ex){
                     Logger.getLogger(GoalDAO.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -133,7 +134,7 @@ public class GoalDAO implements IGoalDAO{
     }
 
     @Override
-    public List<Action> getActionsByGoal(Connection connection, int goalIdentifier) {
+    public List<Action> getActionsByGoal(Connection connection, int goalIdentifier){
         List<Action> actionList = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(

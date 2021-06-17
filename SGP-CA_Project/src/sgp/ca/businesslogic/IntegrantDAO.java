@@ -1,7 +1,8 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 
-*/
+/*
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
+ */
 
 package sgp.ca.businesslogic;
 
@@ -23,7 +24,7 @@ import sgp.ca.domain.Schooling;
 
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
-    public List<String> getAllIntegrantsName() {
+    public List<String> getAllIntegrantsName(){
         List<String> integrantsNameList = new ArrayList();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
@@ -45,7 +46,7 @@ import sgp.ca.domain.Schooling;
     @Override
     public Integrant getIntegrantTocken(Integrant usuario){
         Integrant integrantVerified = new Integrant();
-        try {
+        try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
                 "SELECT emailUV, fullName, bodyAcademyKey, participationType, rfc, participationStatus FROM Integrant WHERE  emailUV = ? AND password = ? AND bodyAcademyKey = ?;"
             );
@@ -61,9 +62,9 @@ import sgp.ca.domain.Schooling;
                 integrantVerified.setRfc(result.getString("rfc"));
                 integrantVerified.setParticipationStatus(result.getString("participationStatus"));
             }
-        } catch (SQLException ex) {
+        }catch(SQLException ex){
             Logger.getLogger(IntegrantDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
+        }finally{
             CONNECTION.closeConnection();
             return integrantVerified;
         }
@@ -72,7 +73,7 @@ import sgp.ca.domain.Schooling;
     @Override
     public Integrant getIntegrantToken(String email, String password){
         Integrant integrantVerified = new Integrant();
-        try {
+        try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
                 "SELECT emailUV, fullName, bodyAcademyKey, participationType, rfc FROM Integrant WHERE  emailUV = ? AND password = ?;"
             );
@@ -86,9 +87,9 @@ import sgp.ca.domain.Schooling;
                 integrantVerified.setParticipationType(result.getString("participationType"));
                 integrantVerified.setRfc(result.getString("rfc"));
             }
-        } catch (SQLException ex) {
+        }catch(SQLException ex){
             Logger.getLogger(IntegrantDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
+        }finally{
             CONNECTION.closeConnection();
             return integrantVerified;
         }
@@ -356,7 +357,7 @@ import sgp.ca.domain.Schooling;
             try{
                 connection.rollback();
                 Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
-            }catch(SQLException ex) {
+            }catch(SQLException ex){
                 Logger.getLogger(IntegrantDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

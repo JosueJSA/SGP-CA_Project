@@ -1,8 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
 import com.jfoenix.controls.JFXDatePicker;
@@ -10,8 +11,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +18,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -35,12 +33,7 @@ import sgp.ca.domain.Goal;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.WorkPlan;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
-public class WorkPlanEditableController implements Initializable {
+public class WorkPlanEditableController implements Initializable{
 
     @FXML
     private HBox hboxWorkPlanOptions;
@@ -111,7 +104,7 @@ public class WorkPlanEditableController implements Initializable {
     private final WorkPlanDAO WORKPLAN_DAO = new WorkPlanDAO();
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         this.hboxWorkPlanOptions.getChildren().removeAll(btnSaveWorkplan, btnUpdateWorkplan, btnCancelChanges);
         this.preprareActionsTable();
         this.workplan = new WorkPlan();
@@ -133,8 +126,8 @@ public class WorkPlanEditableController implements Initializable {
     }
     
     @FXML
-    private void saveWorkPlan(ActionEvent event) {
-        try {
+    private void saveWorkPlan(ActionEvent event){
+        try{
             this.getOutWorkPlanDataFromInterface();
             if(WORKPLAN_DAO.addWorkPlan(this.workplan)){
                 GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El plan de trabajo ha sido registrado exitosamente");
@@ -144,14 +137,14 @@ public class WorkPlanEditableController implements Initializable {
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("WorkPlanRequest.fxml", btnCancelChanges);
             WorkPlanRequestController controller = loader.getController();
             controller.receiveToken(token);
-        } catch (InvalidFormException ex) {
+        }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
-    private void updateWorkPlan(ActionEvent event) {
-        try {
+    private void updateWorkPlan(ActionEvent event){
+        try{
             this.getOutWorkPlanDataFromInterface();
             if(WORKPLAN_DAO.updateWorkPlan(this.workplan, this.oldWorkPlanClone)){
                 GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El plan de trabajo ha sido actualizado exitosamente");
@@ -161,13 +154,13 @@ public class WorkPlanEditableController implements Initializable {
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("WorkPlanRequest.fxml", btnCancelChanges);
             WorkPlanRequestController controller = loader.getController();
             controller.receiveToken(token);
-        } catch (InvalidFormException ex) {
+        }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
-    private void cancelChanges(ActionEvent event) {
+    private void cancelChanges(ActionEvent event){
         Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event, "¿Seguro que deseas cancelar los cambios?");
         if(action.get() == ButtonType.OK){
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("WorkPlanRequest.fxml", btnCancelChanges);
@@ -177,7 +170,7 @@ public class WorkPlanEditableController implements Initializable {
     }
 
     @FXML
-    private void addAction(ActionEvent event) {
+    private void addAction(ActionEvent event){
         Action newAction = this.getActionDataFromInterface();
         if(newAction != null){
             Action oldAction = this.searchActionByDescription(txtAreaActionDescriptionDetail.getText());
@@ -191,7 +184,7 @@ public class WorkPlanEditableController implements Initializable {
     
     private Action getActionDataFromInterface(){
         Action action = null;
-        try {
+        try{
             this.checkActionForm();
             action = new Action(
                     this.txtAreaActionDescriptionDetail.getText(),
@@ -211,14 +204,14 @@ public class WorkPlanEditableController implements Initializable {
     
 
     @FXML
-    private void deleteAction(ActionEvent event) {
+    private void deleteAction(ActionEvent event){
         tvWorkplanActions.getItems().remove(
             tvWorkplanActions.getSelectionModel().getSelectedItem()
         );
     }
 
     @FXML
-    private void selectAction(MouseEvent event) {
+    private void selectAction(MouseEvent event){
         if(tvWorkplanActions.getSelectionModel().getSelectedItem() != null){
             Action action = tvWorkplanActions.getSelectionModel().getSelectedItem();
             this.txtFieldActionResponsible.setText(action.getResponsibleAction());
@@ -232,12 +225,12 @@ public class WorkPlanEditableController implements Initializable {
     }
 
     @FXML
-    private void addGoal(ActionEvent event) {
+    private void addGoal(ActionEvent event){
         this.lvGoals.getItems().add("[Sin guardar]");
     }
 
     @FXML
-    private void saveGoalChanges(ActionEvent event) {
+    private void saveGoalChanges(ActionEvent event){
         Goal goal = saveGoalDataFromInterface();
         if(goal != null){
             if(workplan.searchGoalByDescription(this.lvGoals.getSelectionModel().getSelectedItem()) == null){
@@ -251,7 +244,7 @@ public class WorkPlanEditableController implements Initializable {
     }
 
     @FXML
-    private void deleteGoal(ActionEvent event) {
+    private void deleteGoal(ActionEvent event){
         if(this.lvGoals.getSelectionModel().getSelectedItem() != null){
             this.workplan.deleteGoal(this.lvGoals.getSelectionModel().getSelectedItem());
             this.refreshGoalsList();
@@ -259,7 +252,7 @@ public class WorkPlanEditableController implements Initializable {
     }
     
     @FXML
-    private void selectGoal(MouseEvent event) {
+    private void selectGoal(MouseEvent event){
         this.clearGoalForm();
         if(this.lvGoals.getSelectionModel().getSelectedItem() != null){
             this.setGoalDataInInterface(this.workplan.searchGoalByDescription(this.lvGoals.getSelectionModel().getSelectedItem()));
@@ -318,7 +311,7 @@ public class WorkPlanEditableController implements Initializable {
     
     private Goal saveGoalDataFromInterface(){
         Goal goal = null;
-        try {
+        try{
             this.checkGoalForm();
             goal = new Goal();
             goal.setDescription(txtAreaGoalDescripctionDetail.getText());
@@ -329,7 +322,7 @@ public class WorkPlanEditableController implements Initializable {
             }
             goal.updateEndDate();
             goal.updateStatus();
-        } catch (InvalidFormException ex) {
+        }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), ex.getMessage());
         }finally{
             return goal;

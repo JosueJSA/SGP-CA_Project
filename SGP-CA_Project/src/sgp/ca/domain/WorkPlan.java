@@ -1,7 +1,8 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 06-04-2021
-*/
+/*
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
+ */
 
 package sgp.ca.domain;
 
@@ -45,19 +46,19 @@ public class WorkPlan implements Cloneable{
         return goalReturn;
     }
 
-    public List<Goal> getGoals() {
+    public List<Goal> getGoals(){
         return goals;
     }
 
-    public void setGoals(List<Goal> goals) {
+    public void setGoals(List<Goal> goals){
         this.goals = goals;
     }
 
-    public String getBodyAcademyKey() {
+    public String getBodyAcademyKey(){
         return bodyAcademyKey;
     }
 
-    public void setBodyAcademyKey(String bodyAcademyKey) {
+    public void setBodyAcademyKey(String bodyAcademyKey){
         this.bodyAcademyKey = bodyAcademyKey;
     }
     
@@ -110,14 +111,14 @@ public class WorkPlan implements Cloneable{
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode(){
         int hash = Integer.parseInt(this.endDatePlan.substring(0, 4));
         hash += this.bodyAcademyKey.hashCode();
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj){
         boolean sameWorkPlans = true;
         WorkPlan workPlan = (WorkPlan)obj;
         if((this.hashCode() != workPlan.hashCode()) || (this.goals.size() != workPlan.getGoals().size())){

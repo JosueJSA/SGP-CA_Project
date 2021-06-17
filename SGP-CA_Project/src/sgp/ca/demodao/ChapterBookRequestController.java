@@ -125,12 +125,9 @@ public class ChapterBookRequestController implements Initializable {
     
     @FXML
     private void closeWindow(ActionEvent event) {
-        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceRequest.fxml", btnCloseWindow);
-        EvidenceRequestController controller = loader.getController();
-        Book book = new Book();
-        book.setUrlFile(chapterBook.getUrlFileBook());
-        controller.receiveEvidence(book);
-        controller.receiveToken(token);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnCloseWindow);
+        EvidenceListController controller = loader.getController();
+        controller.showGeneralResumeEvidences(token);
     }
 
     @FXML

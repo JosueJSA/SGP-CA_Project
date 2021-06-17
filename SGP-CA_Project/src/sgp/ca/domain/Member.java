@@ -1,13 +1,14 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 05-04-2021
-*/
+/*
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
+ */
 
 package sgp.ca.domain;
 
 import java.util.Objects;
 
-public abstract class Member {
+public abstract class Member{
     
     private String rfc;
     private String fullName;
@@ -55,27 +56,27 @@ public abstract class Member {
         
     }
 
-    public String getParticipationType() {
+    public String getParticipationType(){
         return participationType;
     }
 
-    public void setParticipationType(String participationType) {
+    public void setParticipationType(String participationType){
         this.participationType = participationType;
     }
 
-    public String getParticipationStatus() {
+    public String getParticipationStatus(){
         return participationStatus;
     }
 
-    public void setParticipationStatus(String participationStatus) {
+    public void setParticipationStatus(String participationStatus){
         this.participationStatus = participationStatus;
     }
 
-    public String getBodyAcademyKey() {
+    public String getBodyAcademyKey(){
         return bodyAcademyKey;
     }
 
-    public void setBodyAcademyKey(String bodyAcademyKey) {
+    public void setBodyAcademyKey(String bodyAcademyKey){
         this.bodyAcademyKey = bodyAcademyKey;
     }
     
@@ -150,22 +151,6 @@ public abstract class Member {
     public void setDateOfAdmission(String dateOfAdmission){
         this.dateOfAdmission = dateOfAdmission;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 61 * hash + Objects.hashCode(this.rfc);
-        return hash;
-    }
-
-//    @Override
-//    public boolean equals(Object obj) {
-//        boolean isEqual = false;
-//        if(this.rfc.equals(((Member)obj).getRfc())){
-//            isEqual = true;
-//        }
-//        return isEqual;
-//    }
 
     @Override
     public String toString() {

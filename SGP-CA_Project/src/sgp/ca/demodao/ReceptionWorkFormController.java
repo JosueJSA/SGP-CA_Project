@@ -1,14 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* @author Johann
+* @versión v1.0
+* Last modification date: 17-06-2021
+*/
 package sgp.ca.demodao;
 
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -50,11 +52,6 @@ import sgp.ca.domain.Member;
 import sgp.ca.domain.Project;
 import sgp.ca.domain.ReceptionWork;
 
-/**
- * FXML Controller class
- *
- * @author johan
- */
 public class ReceptionWorkFormController implements Initializable {
 
     @FXML
@@ -116,13 +113,10 @@ public class ReceptionWorkFormController implements Initializable {
     private final ProjectDAO PROJECT_DAO = new ProjectDAO();
     private List<Button> optionButtons;
     private DialogBox TESTBOX;
-    String FILE = null;
+    private String FILE = null;
+    private Integrant token;
     private ObservableList<String> MODALITYLIST = FXCollections.observableArrayList("Tesis", "Tesina");
     
-    
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb){
         colIntegrantName.setCellValueFactory(new PropertyValueFactory<IntegrantTable, String>("integrantName"));
@@ -137,24 +131,57 @@ public class ReceptionWorkFormController implements Initializable {
             btnUpdate, btnSave, 
             btnExit
         );
-        hboxReceptionOptions.getChildren().removeAll(optionButtons);
-        hboxReceptionOptions.getChildren().addAll(btnSave, btnExit);
+        hboxReceptionOptions.getChildren().removeAll(optionButtons);        
     }    
 
+    public void showReceptionWorkSaveForm(){
+        hboxReceptionOptions.getChildren().addAll(btnSave, btnExit);
+    }
+    
+     public void showReceptionWorkUpdateForm(String receptionWorkUrl){
+        hboxReceptionOptions.getChildren().addAll(btnUpdate, btnExit);
+        ReceptionWork receptionWork = RECEPTIONWORK_DAO.getEvidenceByUrl(receptionWorkUrl);
+        this.chBoxImpactBA.setSelected(receptionWork.getImpactAB());
+        this.txtFieldReceptionWorkName.setText(receptionWork.getEvidenceTitle());
+        this.txtFieldCountry.setText(receptionWork.getCountry());
+        this.dtpPublicationDate.setValue(LocalDate.parse(receptionWork.getPublicationDate()));
+        this.cboxProject.setValue(receptionWork.getProjectName());
+        tvIntegrant.setItems(makeitemsIntegrant());
+        tvCollaborator.setItems(makeitemsCollaborator());
+//        this.tvIntegrant.setItems(makeItemsIntegrantName(receptionWork.getIntegrants()));
+//        this.tvCollaborator.setItems(makeItemsCollaboratorName(receptionWork.getCollaborators()));
+        this.lvStudent.setItems(makeItemsStudent(receptionWork.getStudents()));
+        this.txtFieldEstimatedDurationMonth.setText(Integer.toString(receptionWork.getEstimatedDurationInMonths()));
+        this.txtFieldStatus.setText(receptionWork.getStatus());
+        this.cboBoxModality.setValue(receptionWork.getModality());
+        this.txtAreaDescription.setText(receptionWork.getDescription());
+        this.lvRequirements.setItems(makeItemsRequirements(receptionWork.getRequirements()));
+    }
+    
+    public void receiveReceptionWorkUpdateToken(ReceptionWork receptionWork, Integrant integrantToken){
+        this.token = integrantToken;
+        showReceptionWorkUpdateForm(receptionWork.getUrlFile());
+    }
+    
+     public void receiveReceptionWorkSaveToken(Integrant integrantToken){
+        this.token = integrantToken;
+        showReceptionWorkSaveForm();
+    }
+    
     @FXML
     private void saveReceptionWork(ActionEvent event){
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
         List<String> listRequirements = new ArrayList<>();
-//         try{
-//            this.isValidForm();
+        try{
+            this.isValidForm();
             ReceptionWork receptionWork = new ReceptionWork(
                 "PRUEBA3",
                 cboxProject.getValue(),
                 chBoxImpactBA.isSelected(),
                 "Trabajo Recepcional",
                 txtFieldReceptionWorkName.getText(),
-                "Responsable",
+                token.getFullName(),
                 dateFormat.format(date),
                 "Estudios",
                 ValidatorForm.convertJavaDateToSQlDate(dtpPublicationDate),
@@ -170,52 +197,102 @@ public class ReceptionWorkFormController implements Initializable {
             receptionWork.setIntegrants(IntegrantList());
             receptionWork.setCollaborators(CollaboratorList());
             RECEPTIONWORK_DAO.addNewEvidence(receptionWork);
-            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Proyecto registrado correctamente");
-//        }catch(InvalidFormException ie){
-//            AlertGenerator.showErrorAlert(event, ie.getMessage());
-//        }
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Trabajo recepcional registrado correctamente");
+        }catch(InvalidFormException ie){
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), ie.getMessage());
+        }
+    }
+    
+    
+    @FXML
+    private void updateReceptioWork(ActionEvent event){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        List<String> listRequirements = new ArrayList<>();
+         try{
+            this.isValidForm();
+            ReceptionWork receptionWork = new ReceptionWork(
+                "PRUEBA3",
+                cboxProject.getValue(),
+                chBoxImpactBA.isSelected(),
+                "Trabajo Recepcional",
+                txtFieldReceptionWorkName.getText(),
+                token.getFullName(),
+                dateFormat.format(date),
+                "Estudios",
+                ValidatorForm.convertJavaDateToSQlDate(dtpPublicationDate),
+                txtFieldCountry.getText(),
+                txtAreaDescription.getText(),
+                txtFieldStatus.getText(),
+                0,
+                Integer.parseInt(txtFieldEstimatedDurationMonth.getText()),
+                cboBoxModality.getValue()
+            );
+            receptionWork.setRequirements(lvRequirements.getItems());
+            receptionWork.setStudents(lvStudent.getItems());
+            receptionWork.setIntegrants(IntegrantList());
+            receptionWork.setCollaborators(CollaboratorList());
+            RECEPTIONWORK_DAO.addNewEvidence(receptionWork);
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Trabajo recepcional actualizado correctamente");
+        }catch(InvalidFormException ie){
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), ie.getMessage());
+        }
     }
 
     @FXML
     private void exit(ActionEvent event){
-        FXMLLoader loader = changeWindow("ReceptionWork.fxml", event);          /*Solo para testear*/
-        ReceptionWorkController controller = loader.getController();
-        String url = "PRUEBA3";
-        //controller. receiveReceptionWork(url);
-       
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", txtFieldReceptionWorkName);          
+        EvidenceListController controller = loader.getController();
+        controller.showGeneralResumeEvidences(token);
     }
     
-//    public void isValidForm() throws InvalidFormException{
-//        //ValidatorForm.chechkAlphabeticalString(FILE, 100);
-//        ValidatorForm.chechkAlphabeticalField(txtFieldReceptionWorkName, 80);
-//        ValidatorForm.checkNotEmptyDateField(dtpPublicationDate);
-//        ValidatorForm.chechkAlphabeticalField(txtFieldCountry, 40);
-//        ValidatorForm.isComboBoxSelected(cboxProject);
-//        ValidatorForm.isNumberData(txtFieldEstimatedDurationMonth);
-//        ValidatorForm.chechkAlphabeticalField(txtFieldStatus, 10);
-//        ValidatorForm.isComboBoxSelected(cboBoxModality);
-//        ValidatorForm.chechkAlphabeticalArea(txtAreaDescription, 500);
-//    }
+    public void isValidForm() throws InvalidFormException{
+        //ValidatorForm.chechkAlphabeticalString(FILE, 100);
+        ValidatorForm.chechkAlphabeticalField(txtFieldReceptionWorkName, 5,80);
+        ValidatorForm.checkNotEmptyDateField(dtpPublicationDate);
+        ValidatorForm.chechkAlphabeticalField(txtFieldCountry, 3,40);
+        ValidatorForm.isComboBoxSelected(cboxProject);
+        ValidatorForm.isNumberData(txtFieldEstimatedDurationMonth, 2);
+        ValidatorForm.chechkAlphabeticalField(txtFieldStatus,3 ,10);
+        ValidatorForm.isComboBoxSelected(cboBoxModality);
+        ValidatorForm.chechkAlphabeticalArea(txtAreaDescription, 1 ,500);
+    }
     
-//    private ObservableList<IntegrantTable> makeitemsIntegrant(){
-//        ObservableList<IntegrantTable> itemsIntegrant = FXCollections.observableArrayList();
-//        //List<Integrant> integrantsRfcName = INTEGRANT_DAO.getAllIntegrantsRfcName();
-//        for(int i = 0; i < integrantsRfcName.size(); i++){
-//            IntegrantTable participationIntegrantTable = new IntegrantTable(integrantsRfcName.get(i).getRfc(), integrantsRfcName.get(i).getFullName());
-//            itemsIntegrant.add(participationIntegrantTable);
-//        }
-//        return itemsIntegrant;
-//    }
+    private ObservableList<IntegrantTable> makeitemsIntegrant(){
+        ObservableList<IntegrantTable> itemsIntegrant = FXCollections.observableArrayList();
+        List<Member> integrantsRfcName = INTEGRANT_DAO.getMembers(token.getBodyAcademyKey());
+        for(int i = 0; i < integrantsRfcName.size(); i++){
+            IntegrantTable participationIntegrantTable = new IntegrantTable(integrantsRfcName.get(i).getRfc(), integrantsRfcName.get(i).getFullName());
+            itemsIntegrant.add(participationIntegrantTable);
+        }
+        return itemsIntegrant;
+    }
     
-//    private ObservableList<CollaboratorTable> makeitemsCollaborator(){
-////        ObservableList<CollaboratorTable> itemsCollaborator = FXCollections.observableArrayList();
-////        //List<Member> collaboratorRfcName = COLLABORATOR_DAO.getAllCollaboratorsRfcName();
-////        for(int i = 0; i < collaboratorRfcName.size(); i++){
-////            CollaboratorTable participationCollaboratorTable = new CollaboratorTable(collaboratorRfcName.get(i).getRfc(), collaboratorRfcName.get(i).getFullName());
-////            itemsCollaborator.add(participationCollaboratorTable);
-////        }
-////        return itemsCollaborator;
-//    }
+    private ObservableList<CollaboratorTable> makeitemsCollaborator(){
+        ObservableList<CollaboratorTable> itemsCollaborator = FXCollections.observableArrayList();
+        List<Member> collaboratorRfcName = COLLABORATOR_DAO.getMembers(token.getBodyAcademyKey());
+        for(int i = 0; i < collaboratorRfcName.size(); i++){
+            CollaboratorTable participationCollaboratorTable = new CollaboratorTable(collaboratorRfcName.get(i).getRfc(), collaboratorRfcName.get(i).getFullName());
+            itemsCollaborator.add(participationCollaboratorTable);
+        }
+        return itemsCollaborator;
+    }
+    
+    private ObservableList<String> makeItemsRequirements(List<String> requirementstList){
+        ObservableList<String> itemsRequirements= FXCollections.observableArrayList();
+        for(String requirements : requirementstList){
+            itemsRequirements.add(requirements);
+        }
+        return itemsRequirements;
+    }
+    
+    private ObservableList<String> makeItemsStudent(List<String> studentList){
+        ObservableList<String> itemsStudent= FXCollections.observableArrayList();
+        for(String student : studentList){
+            itemsStudent.add(student);
+        }
+        return itemsStudent;
+    }
 
     private ObservableList<String> makeitemsProject(){
         ObservableList<String> itemsProject = FXCollections.observableArrayList();
@@ -225,13 +302,6 @@ public class ReceptionWorkFormController implements Initializable {
             itemsProject.add(projectName);
         }
         return itemsProject;
-    }
-    
-    private ObservableList<String> makeitemsModality(){
-        ObservableList<String> itemsModality = FXCollections.observableArrayList();
-        itemsModality.add("Tesis");
-        itemsModality.add("Tesina");
-        return itemsModality;
     }
     
     @FXML
@@ -262,8 +332,7 @@ public class ReceptionWorkFormController implements Initializable {
         List<Integrant> itemsIntegrantSelected = new ArrayList<>();
         for(IntegrantTable integrantTable : tvIntegrant.getItems()){
             if(integrantTable.getParticipation().isSelected()){
-               //itemsIntegrantSelected.add(new Integrant(integrantTable.getIntegrantRfc(), integrantTable.getIntegrantName()));
-               //System.out.println(integrantTable.getIntegrantRfc());
+               itemsIntegrantSelected.add(new Integrant(integrantTable.getIntegrantRfc(), integrantTable.getIntegrantName()));
             }
         }
         return itemsIntegrantSelected;
@@ -273,26 +342,9 @@ public class ReceptionWorkFormController implements Initializable {
         List<Collaborator> itemsCollaboratorSelected = new ArrayList<>();
         for(CollaboratorTable collaboratorTable : tvCollaborator.getItems()){
             if(collaboratorTable.getParticipation().isSelected()){
-               //itemsCollaboratorSelected.add(new Collaborator(collaboratorTable.getCollaboratorRfc(), collaboratorTable.getCollaboratorName()));
-               //System.out.println(collaboratorTable.getCollaboratorName());
+               itemsCollaboratorSelected.add(new Collaborator(collaboratorTable.getCollaboratorRfc(), collaboratorTable.getCollaboratorName()));
             }
         }
         return itemsCollaboratorSelected;
-    }
-
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show();
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
     }
 }

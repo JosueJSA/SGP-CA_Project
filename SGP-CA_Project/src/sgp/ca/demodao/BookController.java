@@ -21,6 +21,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import sgp.ca.businesslogic.BookDAO;
@@ -94,6 +95,7 @@ public class BookController implements Initializable, EvidenceWindow {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         book = new Book();
+        this.prepareChapterBookTable();
     }
     
     public void showBook(String url, Integrant token){
@@ -108,6 +110,9 @@ public class BookController implements Initializable, EvidenceWindow {
 
     @FXML
     private void updateEvidence(ActionEvent event) {
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceEdit.fxml", btnCloseWindowEvidenceRequest);
+        EvidenceEditController controller = loader.getController();
+        controller.receiveBookAndToken(this.book,token);
     }
 
     @FXML
@@ -147,12 +152,22 @@ public class BookController implements Initializable, EvidenceWindow {
     }
     
     private void setDataIntoBookInterface(){
+        if(this.book.getImpactAB()){
+            this.chBoxImpactAB.setSelected(true);
+        }
         lvStudent.getItems().addAll(this.book.getStudents());
         this.book.getIntegrants().forEach(integrant -> this.lvIntegrants.getItems().add(integrant.getFullName()));
         this.book.getCollaborators().forEach(collaborator -> this.lvCollaborators.getItems().add(collaborator.getFullName()));
         this.txtFieldPublisher.setText(this.book.getPublisher());
         this.txtFieldNumberEdition.setText(this.book.getEditionsNumber() + "");
         this.txtFieldISBN.setText(this.book.getIsbn() + "");
+        this.lbTypeEvidence.setText(this.book.getEvidenceType());
+        this.txtFieldEvidenceTittle.setText(this.book.getEvidenceTitle());
+        this.txtFieldPublisherDate.setText(this.book.getPublicationDate());
+        this.txtFieldPublicationCountry.setText(this.book.getCountry());
+        this.txtFieldInvestigationProject.setText(this.book.getProjectName());
+        this.txtFieldStudyDegree.setText(this.book.getStudyDegree());
+        this.lbDocumentName.setText(this.book.getUrlFile());
     }
 
     @Override
@@ -167,6 +182,12 @@ public class BookController implements Initializable, EvidenceWindow {
             BookController controller = loader.getController();
             controller.showBook(evidence.getUrlFile(), token);
         }
+    }
+    
+    private void prepareChapterBookTable(){
+        this.colTitleChapterBook.setCellValueFactory(new PropertyValueFactory<ChapterBook, String>("chapterBookTitle"));
+        this.colRegistrationDateChapterBook.setCellValueFactory(new PropertyValueFactory<ChapterBook, String>("registrationDate"));
+        this.colRangePagesChapterBook.setCellValueFactory(new PropertyValueFactory<ChapterBook, String>("pageNumberRange"));
     }
     
 }

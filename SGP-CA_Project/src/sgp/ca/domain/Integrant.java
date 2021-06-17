@@ -1,7 +1,8 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 06-04-2021
-*/
+/*
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
+ */
 
 package sgp.ca.domain;
 
@@ -41,15 +42,15 @@ public class Integrant extends Member{
         this.schooling = new ArrayList<>();
     }
 
-    public String getPassword() {
+    public String getPassword(){
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password){
         this.password = password;
     }
 
-    public List<Schooling> getSchooling() {
+    public List<Schooling> getSchooling(){
         return schooling;
     }
     
@@ -61,7 +62,7 @@ public class Integrant extends Member{
         this.schooling.remove(schooling);
     }
 
-    public void setSchooling(List<Schooling> schooling) {
+    public void setSchooling(List<Schooling> schooling){
         this.schooling = schooling;
     }  
     
@@ -98,19 +99,13 @@ public class Integrant extends Member{
         this.workPhone = workPhone;
     }
     
+    public Integrant(String rfc,String fullName){
+        super(rfc, fullName);
+    }
+    
     @Override
     public int hashCode(){
         return super.getEmailUV().hashCode();
     }
-    
-//    @Override
-//    public boolean equals(Object obj){
-//        boolean isEqual = false;
-//        Integrant integrant = (Integrant)obj;
-//        if((super.getRfc().equals(integrant.getRfc())) && (this.schooling.size() == integrant.getSchooling().size())){
-//            isEqual = true;
-//        }
-//        return isEqual;
-//    }
     
 }

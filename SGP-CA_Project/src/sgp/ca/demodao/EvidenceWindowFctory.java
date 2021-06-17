@@ -19,7 +19,9 @@ public class EvidenceWindowFctory {
     
     private static List<EvidenceWindow> listEvidenceView = Arrays.asList(
         new BookController(),
-        new ReceptionWorkController()
+        new ReceptionWorkController(),
+        new ArticleController(),
+        new PrototypeController()
     );
     
     public static void showSpecificEvidenceWindow(Evidence evidence, Node graphic, Integrant token){

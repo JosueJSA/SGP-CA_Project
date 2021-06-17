@@ -1,8 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
 import com.jfoenix.controls.JFXDatePicker;
@@ -20,7 +21,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
@@ -33,11 +33,6 @@ import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Schooling;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
 public class PersonalResumeEditableController implements Initializable {
 
     @FXML
@@ -128,7 +123,7 @@ public class PersonalResumeEditableController implements Initializable {
     private List<TextField> listPersonalResumeFields;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         this.preprareSchoolingTable();
         listSchoolingFields = Arrays.asList(
             txtFieldStudyDegree, txtFieldStudyName, 
@@ -149,8 +144,8 @@ public class PersonalResumeEditableController implements Initializable {
     }
 
     @FXML
-    private void updatePersonalResume(ActionEvent event) {
-        try {
+    private void updatePersonalResume(ActionEvent event){
+        try{
             this.checkPersonalResumeForm();
             this.getOutIntegrantData();
             if(INTEGRANT_DAO.updateMember(this.integrantUpdated, token.getRfc())){
@@ -162,13 +157,13 @@ public class PersonalResumeEditableController implements Initializable {
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("PersonalResumeRequest.fxml", btnCancel);
             PersonalResumeRequestController controller = loader.getController();
             controller.receiveIntegrantToken(this.integrantUpdated);
-        } catch (InvalidFormException ex) {
+        }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
     
     @FXML
-    private void selectSchooling(MouseEvent event) {
+    private void selectSchooling(MouseEvent event){
         if(tvSchooling.getSelectionModel().getSelectedItem() != null){
             this.btnRemoveSchooling.setDisable(false);
         }else{
@@ -177,7 +172,7 @@ public class PersonalResumeEditableController implements Initializable {
     }
     
     @FXML
-    private void cancelUpdate(ActionEvent event) {
+    private void cancelUpdate(ActionEvent event){
         Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event, "¿Seguro que deseas cancelar la operción?");
         if(action.get() == ButtonType.OK){
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("PersonalResumeRequest.fxml", btnCancel);
@@ -187,7 +182,7 @@ public class PersonalResumeEditableController implements Initializable {
     }
 
     @FXML
-    private void addSchooling(ActionEvent event) {
+    private void addSchooling(ActionEvent event){
         try {
             this.checkShooling();
             tvSchooling.getItems().add(this.getOutSchooling());
@@ -197,7 +192,7 @@ public class PersonalResumeEditableController implements Initializable {
     }
 
     @FXML
-    private void removeSchooling(ActionEvent event) {
+    private void removeSchooling(ActionEvent event){
         tvSchooling.getItems().remove(
             tvSchooling.getSelectionModel().getSelectedItem()
         );

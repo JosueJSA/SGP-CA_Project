@@ -1,8 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
 import com.jfoenix.controls.JFXTextArea;
@@ -35,7 +36,7 @@ import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Member;
 
 
-public class GeneralResumeRequestController implements Initializable {
+public class GeneralResumeRequestController implements Initializable{
 
     @FXML
     private Button brtnProduction;
@@ -112,7 +113,7 @@ public class GeneralResumeRequestController implements Initializable {
     + "favor de ponerse en contacto con soporte técnico si es que el problema persiste.";
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         this.prepareCollaboratorTable();
         this.prepareIntegratsTable();
         this.rdoBtnSubscribeMembers.setToggleGroup(rbGroup);
@@ -155,35 +156,35 @@ public class GeneralResumeRequestController implements Initializable {
     }
 
     @FXML
-    private void requestEvidencesList(ActionEvent event) {
+    private void requestEvidencesList(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnExit);
         EvidenceListController controller = loader.getController();
         controller.showGeneralResumeEvidences(token);
     }
 
     @FXML
-    private void editGeneralResume(ActionEvent event) {
+    private void editGeneralResume(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeEditable.fxml", btnExit);
         GeneralResumeEditableController controller = loader.getController();
         controller.showGeneralResumeUpdateForm(this.token);
     }
 
     @FXML
-    private void exit(ActionEvent event) {
+    private void exit(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnExit);
         StartController controller = loader.getController();
         controller.receiveIntegrantToken(this.token);
     }
 
     @FXML
-    private void addMember(ActionEvent event) {
+    private void addMember(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MemberSelection.fxml", btnExit);
         MemberSelectionController controller = loader.getController();
         controller.receiveResponsibeleToken(token);
     }
     
     @FXML
-    private void showIntegrant(MouseEvent event) {
+    private void showIntegrant(MouseEvent event){
         Integrant integrant = (Integrant) tvIntegrants.getSelectionModel().getSelectedItem();
         if(integrant != null){
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("IntegrantRequest.fxml", btnExit);
@@ -193,7 +194,7 @@ public class GeneralResumeRequestController implements Initializable {
     }
 
     @FXML
-    private void showCollaborator(MouseEvent event) {
+    private void showCollaborator(MouseEvent event){
         Collaborator collaborator = (Collaborator) tvCollaborators.getSelectionModel().getSelectedItem();
         if(collaborator != null){
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("CollaboratorRequest.fxml", btnExit);
@@ -218,17 +219,17 @@ public class GeneralResumeRequestController implements Initializable {
     }
 
     @FXML
-    private void showSubscribeMembers(ActionEvent event) {
+    private void showSubscribeMembers(ActionEvent event){
         this.filterSubscribeMembersInTable();
     }
 
     @FXML
-    private void showUnsubscribeMembers(ActionEvent event) {
+    private void showUnsubscribeMembers(ActionEvent event){
         this.filterUnsubscribeMembersInTable();
     }
 
     @FXML
-    private void showLgacDescription(MouseEvent event) {
+    private void showLgacDescription(MouseEvent event){
         this.txtAreaLgacDescription.setText(this.generalResume.getLgacDescriptionByTitle(lvLgac.getSelectionModel().getSelectedItem()));
     }
     

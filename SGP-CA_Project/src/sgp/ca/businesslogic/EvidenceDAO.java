@@ -1,28 +1,23 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.businesslogic;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.demodao.EvidenceFactory;
 import sgp.ca.domain.Evidence;
 
-/**
- *
- * @author josue
- */
-public abstract class EvidenceDAO {
+public abstract class EvidenceDAO{
     
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     

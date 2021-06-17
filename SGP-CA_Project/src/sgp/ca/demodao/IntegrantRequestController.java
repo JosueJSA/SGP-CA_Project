@@ -1,8 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
 import com.jfoenix.controls.JFXDatePicker;
@@ -14,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -22,11 +22,6 @@ import javafx.scene.layout.HBox;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.Integrant;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
 public class IntegrantRequestController implements Initializable {
 
     @FXML
@@ -69,7 +64,7 @@ public class IntegrantRequestController implements Initializable {
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         hbIntegrantOptions.getChildren().removeAll(btnUnsubscribe, btnSubscribe, btnIntegrantUpdate, btnExit);
     }
     
@@ -88,7 +83,7 @@ public class IntegrantRequestController implements Initializable {
     }
 
     @FXML
-    private void unsubscribeIntegrant(ActionEvent event) {
+    private void unsubscribeIntegrant(ActionEvent event){
         if(INTEGRANT_DAO.unsubscribeMemberByEmailUV(integrant.getEmailUV())){
             GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El integrante ha sido dado de baja");
         }else{
@@ -100,7 +95,7 @@ public class IntegrantRequestController implements Initializable {
     }
 
     @FXML
-    private void subscribeIntegrant(ActionEvent event) {
+    private void subscribeIntegrant(ActionEvent event){
         if(INTEGRANT_DAO.subscribeMemberByEmailUV(integrant.getEmailUV())){
             GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El integrante ha sido dado de alta");
         }else{
@@ -112,14 +107,14 @@ public class IntegrantRequestController implements Initializable {
     }
 
     @FXML
-    private void updateIntegrant(ActionEvent event) {
+    private void updateIntegrant(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("IntegrantEditable.fxml", btnExit);
         IntegrantEditableController controller = loader.getController();
         controller.showIntegrantUpdateForm(this.token, integrant.getEmailUV());
     }
 
     @FXML
-    private void exit(ActionEvent event) {
+    private void exit(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnExit);
         GeneralResumeRequestController controller = loader.getController();
         controller.showGeneralResume(this.token);

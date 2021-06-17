@@ -7,8 +7,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -266,28 +264,6 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <VBox fx:id="vbChapterBook" prefHeight="325.0" prefWidth="1205.0" spacing="10.0" visible="false">
-                                 <children>
-                                    <Label text="CAPÍTULOS DEL LIBRO">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <TableView fx:id="tvChapterBook" onMouseClicked="#observeChapterBookInformation" prefHeight="258.0" prefWidth="1205.0">
-                                       <columns>
-                                          <TableColumn fx:id="colTitleChapterBook" editable="false" prefWidth="614.1332725286484" resizable="false" sortable="false" text="Título" />
-                                          <TableColumn fx:id="colRegistrationDateChapterBook" editable="false" prefWidth="134.66668701171875" resizable="false" sortable="false" text="Fecha de registro" />
-                                          <TableColumn fx:id="colRangePagesChapterBook" editable="false" prefWidth="436.533203125" resizable="false" sortable="false" text="Rango de páginas" />
-                                       </columns>
-                                       <columnResizePolicy>
-                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                       </columnResizePolicy>
-                                    </TableView>
-                                 </children>
-                                 <padding>
-                                    <Insets left="10.0" right="10.0" top="10.0" />
-                                 </padding>
-                              </VBox>
                            </children>
                         </VBox>
                      </children>

@@ -365,7 +365,6 @@ public class ArticleDAO extends EvidenceDAO {
         }catch(SQLException ex){
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            CONNECTION.closeConnection();
             return integrants;
         }
     }
@@ -386,7 +385,6 @@ public class ArticleDAO extends EvidenceDAO {
         }catch(SQLException ex){
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            CONNECTION.closeConnection();
             return collaborators;
         }
     }
@@ -405,7 +403,6 @@ public class ArticleDAO extends EvidenceDAO {
         }catch(SQLException ex){
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            CONNECTION.closeConnection();
             return students;
         }
     }
@@ -424,7 +421,6 @@ public class ArticleDAO extends EvidenceDAO {
         }catch(SQLException ex){
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            CONNECTION.closeConnection();
             return magazine;
         }
     }

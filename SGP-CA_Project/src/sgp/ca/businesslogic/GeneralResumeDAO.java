@@ -1,7 +1,8 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 
-*/
+/*
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
+ */
 
 package sgp.ca.businesslogic;
 
@@ -63,7 +64,7 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
     }
     
     @Override
-    public GeneralResume getGeneralResumeByKey(String bodyAcademyKey) {
+    public GeneralResume getGeneralResumeByKey(String bodyAcademyKey){
         GeneralResume generalResume = new GeneralResume();
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
@@ -168,7 +169,7 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
     
     private List<Lgac> getAllBodyAcademyListLgac(Connection connection, GeneralResume bodyAcadmyKey){
         List<Lgac> listLgac = new ArrayList<>();
-        try {
+        try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "SELECT * FROM `LGAK` WHERE bodyAcademyKey = ?;"
             );
@@ -182,7 +183,7 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
                     bodyAcadmyKey
                 ));
             }
-        } catch (SQLException ex) {
+        }catch(SQLException ex){
             listLgac = null;
             connection.rollback();
             Logger.getLogger(GeneralResumeDAO.class.getName()).log(Level.SEVERE, null, ex);

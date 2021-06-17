@@ -1,12 +1,10 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 05-04-2021
-*/
+/*
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
+ */
 
 package sgp.ca.domain;
-
-import java.util.ArrayList;
-
 
 public class Collaborator extends Member{
     
@@ -54,17 +52,12 @@ public class Collaborator extends Member{
     public String getHighestDegreeStudies(){
         return highestDegreeStudies;
     }
+    
+    public Collaborator(String rfc, String fullName){
+        super(rfc, fullName);
+    }
 
     public void setHighestDegreeStudies(String highestDegreeStudies){
         this.highestDegreeStudies = highestDegreeStudies;
     }
-    
-//    @Override
-//    public boolean equals(Object obj){
-//        boolean isEqual = false;
-//        if(super.getRfc().equals(((Collaborator)obj).getRfc())){
-//            isEqual = true;
-//        }
-//        return isEqual;
-//    }
 }

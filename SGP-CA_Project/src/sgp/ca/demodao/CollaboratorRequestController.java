@@ -1,7 +1,7 @@
 /*
- * @author Josué Sangabriel Alarcón
- * @version v0.7
- * Last modification: dd-mm-yy
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.demodao;
@@ -20,7 +20,7 @@ import sgp.ca.businesslogic.CollaboratorDAO;
 import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Integrant;
 
-public class CollaboratorRequestController implements Initializable {
+public class CollaboratorRequestController implements Initializable{
 
     @FXML
     private Button btnUnsubscribe;
@@ -67,7 +67,7 @@ public class CollaboratorRequestController implements Initializable {
     
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         hbCollaboratorOptions.getChildren().removeAll(btnCollaboratorEdit, btnExit, btnSubscribe, btnUnsubscribe);
     }
 
@@ -86,7 +86,7 @@ public class CollaboratorRequestController implements Initializable {
     }
 
     @FXML
-    private void unsubscribeCollaborator(ActionEvent event) {
+    private void unsubscribeCollaborator(ActionEvent event){
         if(COLLABORATOR_DAO.unsubscribeMemberByEmailUV(this.collaborator.getEmailUV())){
             GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Colaborador dado de baja");
         }else{
@@ -98,7 +98,7 @@ public class CollaboratorRequestController implements Initializable {
     }
 
     @FXML
-    private void subscribeCollaborator(ActionEvent event) {
+    private void subscribeCollaborator(ActionEvent event){
         if(COLLABORATOR_DAO.subscribeMemberByEmailUV(this.collaborator.getEmailUV())){
             GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Colaborador dado de alta");
         }else{
@@ -110,14 +110,14 @@ public class CollaboratorRequestController implements Initializable {
     }
 
     @FXML
-    private void editCollaborator(ActionEvent event) {
+    private void editCollaborator(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("CollaboratorEditable.fxml", btnExit);
         CollaboratorEditableController controller = loader.getController();
         controller.showCollaboratorUpdateForm(token, this.collaborator.getEmailUV());
     }
 
     @FXML
-    private void exit(ActionEvent event) {
+    private void exit(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnExit);
         GeneralResumeRequestController controller = loader.getController();
         controller.showGeneralResume(token);

@@ -1,7 +1,7 @@
 /*
- * @author Josué Sangabriel Alarcón
- * @version v0.7
- * Last modification: dd-mm-yy
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.demodao;
@@ -34,7 +34,7 @@ public class GenericWindowDriver{
         return genericWindowDriver;
     }
     
-    public void showErrorAlert(Event event, String message) {
+    public void showErrorAlert(Event event, String message){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(null);
         alert.setTitle("Error");
@@ -42,7 +42,7 @@ public class GenericWindowDriver{
         alert.showAndWait();
     }
     
-    public void showInfoAlert(Event event, String message) {
+    public void showInfoAlert(Event event, String message){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
         alert.setTitle("Info");
@@ -50,7 +50,7 @@ public class GenericWindowDriver{
         alert.showAndWait();
     }
     
-    public void showWarningAlert(Event event, String message) {
+    public void showWarningAlert(Event event, String message){
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setHeaderText(null);
         alert.setTitle("Info");
@@ -58,7 +58,7 @@ public class GenericWindowDriver{
         alert.showAndWait();
     }
 
-    public void showConfirmationAlert(Event event, String message) {
+    public void showConfirmationAlert(Event event, String message){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText(null);
         alert.setTitle("Confirmacion");
@@ -66,7 +66,7 @@ public class GenericWindowDriver{
         alert.showAndWait();
     }
 
-    public void showHeaderAlert(Event event, String message) {
+    public void showHeaderAlert(Event event, String message){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Cabecera");
         alert.setTitle("Info");

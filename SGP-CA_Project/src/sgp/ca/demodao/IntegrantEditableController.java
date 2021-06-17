@@ -1,8 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
 import com.jfoenix.controls.JFXDatePicker;
@@ -27,12 +28,7 @@ import sgp.ca.businesslogic.GeneralResumeDAO;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.Integrant;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
-public class IntegrantEditableController implements Initializable {
+public class IntegrantEditableController implements Initializable{
 
     @FXML
     private Button btnIntegrantRegistrer;
@@ -81,7 +77,7 @@ public class IntegrantEditableController implements Initializable {
     private String oldRfcForUpdate = null;    
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         fields = Arrays.asList(
             txtFieldMemberEducationalProgram, txtFieldMemberEmailUv,
             txtFieldMemberFullName, txtFieldMemberNationality
@@ -119,7 +115,7 @@ public class IntegrantEditableController implements Initializable {
     }
 
     @FXML
-    private void confirmBodyAcademyRegistered(ActionEvent event) {
+    private void confirmBodyAcademyRegistered(ActionEvent event){
         if(chBoxIsIntoBodyAcademy.isSelected()){
             this.txtFieldMemberBodyAcademyKey.setDisable(false);
         }else{
@@ -128,8 +124,8 @@ public class IntegrantEditableController implements Initializable {
     }
 
     @FXML
-    private void addNewIntegrant(ActionEvent event) {
-        try {
+    private void addNewIntegrant(ActionEvent event){
+        try{
             validateForm();
             this.integrant.setBodyAcademyKey(this.token.getBodyAcademyKey());
             this.getOutIntegrantDataFromInterface();
@@ -141,14 +137,14 @@ public class IntegrantEditableController implements Initializable {
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancelIntegrantChanges);
             GeneralResumeRequestController controller = loader.getController();
             controller.showGeneralResume(this.token);
-        } catch (InvalidFormException ex) {
+        }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
-    private void updateIntegrant(ActionEvent event) {
-        try {
+    private void updateIntegrant(ActionEvent event){
+        try{
             validateForm();
             this.getOutIntegrantDataFromInterface();
             this.integrant.setBodyAcademyKey(this.token.getBodyAcademyKey());
@@ -160,14 +156,14 @@ public class IntegrantEditableController implements Initializable {
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancelIntegrantChanges);
             GeneralResumeRequestController controller = loader.getController();
             controller.showGeneralResume(this.token);
-        } catch (InvalidFormException ex) {
+        }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
     
     @FXML
-    private void addNewResponsible(ActionEvent event) {
-        try {
+    private void addNewResponsible(ActionEvent event){
+        try{
             validateForm();
             this.getOutIntegrantDataFromInterface();
             if(INTEGRANT_DAO.addMember(this.integrant)){
@@ -177,13 +173,13 @@ public class IntegrantEditableController implements Initializable {
             }
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnResponsibleRegistrer);
             
-        } catch (InvalidFormException ex) {
+        }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
-    private void cancelIntegrantChanges(ActionEvent event) {
+    private void cancelIntegrantChanges(ActionEvent event){
         Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event, "¿Seguro que deseas cancelar la actualización?");
         if(action.get() == ButtonType.OK){
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancelIntegrantChanges);
@@ -193,7 +189,7 @@ public class IntegrantEditableController implements Initializable {
     }
 
     @FXML
-    private void cancelResponsibleSignUp(ActionEvent event) {
+    private void cancelResponsibleSignUp(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnCancelResponsibleResgistration);
     }
     

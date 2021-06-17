@@ -229,10 +229,9 @@ public class ChapterBookEditController implements Initializable {
             }else{
                 GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
             }
-            FXMLLoader loader = changeWindow("EvidenceRequest.fxml", event);
-            EvidenceRequestController controller = loader.getController();
-            controller.receiveEvidence(relatedBook);
-            controller.receiveToken(token);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnCloseWindow);
+            EvidenceListController controller = loader.getController();
+            controller.showGeneralResumeEvidences(token);
         }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
@@ -284,12 +283,9 @@ public class ChapterBookEditController implements Initializable {
             "¿Seguro que desea salir? No se guardará la información");
         if(action.get() == ButtonType.OK){
             if(this.addNewChapterBook){
-                FXMLLoader loader = this.changeWindow("EvidenceRequest.fxml", event);
-                EvidenceRequestController controller = loader.getController();
-                Book book = new Book();
-                book.setUrlFile(this.chapterBook.getUrlFileBook());
-                controller.receiveEvidence(book);
-                controller.receiveToken(token);
+                FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnCloseWindow);
+            EvidenceListController controller = loader.getController();
+            controller.showGeneralResumeEvidences(token);
             }else{
                FXMLLoader loader = this.changeWindow("ChapterBookRequest.fxml", event);
                ChapterBookRequestController controller = loader.getController();
@@ -297,7 +293,6 @@ public class ChapterBookEditController implements Initializable {
                controller.receiveBook(this.book);
                controller.receiveToken(token);
             }
-
         }
     }
 
@@ -312,7 +307,7 @@ public class ChapterBookEditController implements Initializable {
     private void removeRowIntegrantTable(ActionEvent event) {
         Member integrantRemove = this.tvIntegrant.getSelectionModel().getSelectedItem();
         this.chapterBook.getIntegrants().remove(integrantRemove);
-         this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
+        this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
     }
 
     @FXML

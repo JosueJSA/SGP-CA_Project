@@ -6,6 +6,7 @@
 package sgp.ca.demodao;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -19,7 +20,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import sgp.ca.businesslogic.EvidenceDAOFactory;
 import sgp.ca.businesslogic.ReceptionWorkDAO;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
@@ -58,10 +58,11 @@ public class EvidenceListController implements Initializable {
 
     private final ReceptionWorkDAO RECEPTION_WORK_DAO = new ReceptionWorkDAO();
     private Integrant token;
+    List<Evidence> listEvidences;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        List<Evidence> listEvidences = RECEPTION_WORK_DAO.getAllEvidences();
+        listEvidences = RECEPTION_WORK_DAO.getAllEvidences();
         preprareSchoolingTable();
         tvEvidences.getItems().addAll(listEvidences);
     }
@@ -72,11 +73,26 @@ public class EvidenceListController implements Initializable {
     }
 
     @FXML
-    private void searchEvidence(ActionEvent event) {
+    private void searchEvidence(ActionEvent event){
+        List<Evidence> listEvidenceFiltered = new ArrayList<>();
+        this.tvEvidences.getItems().clear();
+        for(Evidence evidence : this.listEvidences){
+            if(evidence.getEvidenceTitle().contains(this.txtFieldEvicendeSearch.getText())){
+                listEvidenceFiltered.add(evidence);
+            }
+        }
+        if(listEvidenceFiltered.isEmpty()){
+            tvEvidences.getItems().addAll(this.listEvidences);
+        }else{
+            tvEvidences.getItems().addAll(listEvidenceFiltered);
+        }
     }
 
     @FXML
     private void addEvidence(ActionEvent event) {
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceSelection.fxml", btnClose);
+        EvidenceSelectionController controller = loader.getController();
+        controller.receiveToken(this.token);
     }
 
     @FXML

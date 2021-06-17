@@ -1,16 +1,15 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.businesslogic;
 
 import java.util.List;
 import sgp.ca.domain.Member;
 
-
-
-public interface IMemberDAO {
+public interface IMemberDAO{
     
     public Member getMemberByUVmail(String emailUV);
     public boolean addMember(Member newMember);

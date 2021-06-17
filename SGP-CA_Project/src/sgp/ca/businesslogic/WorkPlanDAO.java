@@ -1,7 +1,8 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 06-04-2021
-*/
+/*
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
+ */
 
 package sgp.ca.businesslogic;
 
@@ -162,11 +163,11 @@ public class WorkPlanDAO implements IWorkPlanDAO{
             connection.setAutoCommit(true);
             correctDelete = true;
         }catch(SQLException sqlException){
-            try {
+            try{
                 correctDelete = false;
                 connection.rollback();
                 Logger.getLogger(WorkPlanDAO.class.getName()).log(Level.SEVERE, null, sqlException);
-            } catch (SQLException ex) {
+            }catch(SQLException ex){
                 Logger.getLogger(WorkPlanDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }finally{
@@ -175,7 +176,7 @@ public class WorkPlanDAO implements IWorkPlanDAO{
         }    
     }
     
-    public void deleteGoals(Connection connection, WorkPlan workPlan) {
+    public void deleteGoals(Connection connection, WorkPlan workPlan){
         try{
             GOAL_DAO.deleteActions(connection, workPlan.getGoals());
             PreparedStatement sentenceQuery = connection.prepareStatement(

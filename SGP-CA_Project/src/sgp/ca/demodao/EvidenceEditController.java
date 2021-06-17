@@ -5,7 +5,6 @@
 
 package sgp.ca.demodao;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -14,17 +13,12 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
@@ -39,8 +33,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.ArticleDAO;
 import sgp.ca.businesslogic.BookDAO;
 import sgp.ca.businesslogic.CollaboratorDAO;
@@ -56,7 +48,7 @@ import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Member;
 import sgp.ca.domain.Prototype;
 
-public class EvidenceEditController implements Initializable {
+public class EvidenceEditController implements Initializable{
 
     @FXML
     private Label lbWindowTitle;
@@ -151,23 +143,36 @@ public class EvidenceEditController implements Initializable {
     Calendar date = new GregorianCalendar();
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         setWindowInformationCamps();
         prepareIntegrantTable();
         prepareCollaboratorTable();
         prepareStudentTable();
-        
     }    
     
-    public void receiveToken(Integrant integrantToken){
-        this.token = integrantToken;
+    public void receiveBookAndToken(Book book, Integrant token){
+        this.token = token;
         this.lbUsername.setText(token.getFullName());
+        this.urlFileEvidence = book.getUrlFile();
+        determineBookEvidence(book);
+        determineTypeOperationBook(book);
+        
+    }
+    public void receiveArticleAndToken(Article article, Integrant token){
+        this.token = token;
+        this.lbUsername.setText(token.getFullName());
+        this.urlFileEvidence = article.getUrlFile();
+        determineArticleEvidence(article);
+        determineTypeOperationArticle(article);
+        
     }
     
-    public void receiveEvidence(Evidence evidence){
-        this.urlFileEvidence = evidence.getUrlFile();
-        determineTypeEvidence(evidence);
-        determineTypeOperation(evidence);
+    public void receivePrototypeAndToken(Prototype prototype, Integrant token){
+        this.token = token;
+        this.lbUsername.setText(token.getFullName());
+        this.urlFileEvidence = prototype.getUrlFile();
+        determinePrototypeEvidence(prototype);
+        determineTypeOperationPrototype(prototype);
         
     }
     
@@ -180,58 +185,88 @@ public class EvidenceEditController implements Initializable {
         this.cboBoxStudyDegree.setValue(evidence.getStudyDegree());
     }
     
-    private void determineTypeEvidence(Evidence evidence){
-        if(evidence instanceof Book){
-            this.evidence = new Book();
-            this.EVIDENCE_DAO = new BookDAO();
-            this.lbTypeEvidence.setText("Libro");
-            this.tabBook.setDisable(false);
-        }
-        if(evidence instanceof Prototype){
-            this.evidence = new Prototype();
-            this.EVIDENCE_DAO = new PrototypeDAO();
-            this.lbTypeEvidence.setText("Prototipo");
-            this.tabPrototype.setDisable(false);
-            
-        }
-        if(evidence instanceof Article){
-            this.evidence = new Article();
-            this.EVIDENCE_DAO = new ArticleDAO();
-            this.lbTypeEvidence.setText("Artículo");
-            this.tabArticle.setDisable(false);
-        }
+    private void determineBookEvidence(Book book){
+        this.evidence = new Book();
+        this.EVIDENCE_DAO = new BookDAO();
+        this.lbTypeEvidence.setText("Libro");
+        this.tabBook.setDisable(false);
     }
     
-    private void determineTypeOperation(Evidence evidence){
-        if(evidence.getUrlFile() == null){
+    private void determinePrototypeEvidence(Prototype prototype){
+        this.evidence = new Prototype();
+        this.EVIDENCE_DAO = new PrototypeDAO();
+        this.lbTypeEvidence.setText("Prototipo");
+        this.tabPrototype.setDisable(false);
+    }
+    
+    private void determineArticleEvidence(Article article){
+        this.evidence = new Article();
+        this.EVIDENCE_DAO = new ArticleDAO();
+        this.lbTypeEvidence.setText("Artículo");
+        this.tabArticle.setDisable(false);
+    }
+    
+    
+    private void determineTypeOperationBook(Book book){
+        if(book.getUrlFile() == null){
             this.btnAddEvidence.setVisible(true);
         }else{
-            this.evidence = evidence;
+            this.evidence = book;
             this.btnUpdateEvidence.setVisible(true);
             modifyWindowForModification();
             setEvidenceInformationModification();
-            evidenceTypeInformationModification();
+            setBookInformationModification(book);
             prepareIntegrantTable();
             prepareCollaboratorTable();
             prepareStudentTable();
         }
     }
     
-    private void evidenceTypeInformationModification(){
-        if(evidence instanceof Book){
-            this.txtFieldPublisher.setText(((Book)evidence).getPublisher());
-            this.txtFieldEditionsNumber.setText(((Book)evidence).getEditionsNumber() + "");
-            this.txtFieldISBN.setText(((Book)evidence).getIsbn() + "");
+    private void determineTypeOperationArticle(Article article){
+        if(article.getUrlFile() == null){
+            this.btnAddEvidence.setVisible(true);
+        }else{
+            this.evidence = article;
+            this.btnUpdateEvidence.setVisible(true);
+            modifyWindowForModification();
+            setEvidenceInformationModification();
+            setArticleInformationModification(article);
+            prepareIntegrantTable();
+            prepareCollaboratorTable();
+            prepareStudentTable();
         }
-        if(evidence instanceof Prototype){
-            this.txtAreaFeatures.setText(((Prototype) evidence).getFeatures());
+    }
+    
+    private void determineTypeOperationPrototype(Prototype prototype){
+        if(prototype.getUrlFile() == null){
+            this.btnAddEvidence.setVisible(true);
+        }else{
+            this.evidence = prototype;
+            this.btnUpdateEvidence.setVisible(true);
+            modifyWindowForModification();
+            setEvidenceInformationModification();
+            setPrototypeInformationModification(prototype);
+            prepareIntegrantTable();
+            prepareCollaboratorTable();
+            prepareStudentTable();
         }
-        if(evidence instanceof Article){
-            this.txtFieldMagazineName.setText(((Article) evidence).getMagazineName());
-            this.txtFieldMagazineEditorial.setText(((Article) evidence).getMagazineEditorial());
-            this.txtFieldISNN.setText(((Article) evidence).getIsnn() + "");
-            this.txtFieldIndex.setText(((Article) evidence).getIndex() + "");
-        }
+    }
+    
+    private void setBookInformationModification(Book book){
+        this.txtFieldPublisher.setText(book.getPublisher());
+        this.txtFieldEditionsNumber.setText(book.getEditionsNumber() + "");
+        this.txtFieldISBN.setText(book.getIsbn() + "");
+    }
+    
+    private void setPrototypeInformationModification(Prototype prototype){
+        this.txtAreaFeatures.setText(prototype.getFeatures());
+    }
+    
+    private void setArticleInformationModification(Article article){
+        this.txtFieldMagazineName.setText(article.getMagazineName());
+        this.txtFieldMagazineEditorial.setText(article.getMagazineEditorial());
+        this.txtFieldISNN.setText(article.getIsnn() + "");
+        this.txtFieldIndex.setText(article.getIndex() + "");
     }
     
     private void setWindowInformationCamps(){
@@ -261,7 +296,7 @@ public class EvidenceEditController implements Initializable {
         this.btnReplaceDocument.setVisible(true);
     }
     
-    private void validateEvidenceInformation() throws InvalidFormException{
+    public void validateEvidenceInformation() throws InvalidFormException{
         ValidatorForm.chechkAlphabeticalField(this.txtFieldEvidenceTittle, 5, 80);
         ValidatorForm.checkNotEmptyDateField(dtpPublicationDate);
         ValidatorForm.chechkAlphabeticalField(this.txtFieldPublicationCountry, 3, 90);
@@ -269,13 +304,13 @@ public class EvidenceEditController implements Initializable {
         ValidatorForm.isComboBoxSelected(this.cboBoxStudyDegree);
     }
     
-    private void validateBookInformation() throws InvalidFormException{
+    public void validateBookInformation() throws InvalidFormException{
         ValidatorForm.chechkAlphabeticalField(this.txtFieldPublisher, 2, 30);
         ValidatorForm.isIntegerNumberData(this.txtFieldEditionsNumber, 3);
         ValidatorForm.isNumberData(this.txtFieldISBN, 13);
     }
     
-    private void validateArticleInformation() throws InvalidFormException{
+    public void validateArticleInformation() throws InvalidFormException{
         ValidatorForm.chechkAlphabeticalField(this.txtFieldMagazineName, 1, 100);
         ValidatorForm.chechkAlphabeticalField(this.txtFieldMagazineEditorial, 1, 100);
         ValidatorForm.isNumberData(this.txtFieldISNN, 13);
@@ -347,9 +382,9 @@ public class EvidenceEditController implements Initializable {
             }else{
                 GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
             }
-//            FXMLLoader loader = changeWindow("MeetingHistory.fxml", event); Informacion de la ventana lista de evidencias
-//            MeetingHistoryController controller = loader.getController();
-//            controller.receiveToken(token);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnCloseWindow);
+            EvidenceListController controller = loader.getController();
+            controller.showGeneralResumeEvidences(token);
         }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
@@ -399,16 +434,9 @@ public class EvidenceEditController implements Initializable {
         Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
             "¿Seguro que desea salir? No se guardará la información");
         if(action.get() == ButtonType.OK){
-            if(this.urlFileEvidence == null){
-    //            FXMLLoader loader = this.changeWindow("Name.fxml", event); Lista de evidencias
-    //            ChapterBookEditController controller = loader.getController();
-            }else{
-               FXMLLoader loader = this.changeWindow("EvidenceRequest.fxml", event);
-               EvidenceRequestController controller = loader.getController();
-               controller.receiveEvidence(this.evidence);
-               controller.receiveToken(token);
-            }
-
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnCloseWindow);
+            EvidenceListController controller = loader.getController();
+            controller.showGeneralResumeEvidences(token);
         }
     }
 
@@ -462,10 +490,9 @@ public class EvidenceEditController implements Initializable {
                 GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
             }
             
-            FXMLLoader loader = changeWindow("EvidenceRequest.fxml", event);
-            EvidenceRequestController controller = loader.getController();
-            controller.receiveEvidence(this.evidence);
-            controller.receiveToken(token);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnCloseWindow);
+            EvidenceListController controller = loader.getController();
+            controller.showGeneralResumeEvidences(token);
         }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
@@ -533,21 +560,5 @@ public class EvidenceEditController implements Initializable {
         List<String> studiesList = Arrays.asList("Licenciatura", "Maestría", "Doctorado", "Especialidad");
         itemsStudies.addAll(studiesList);
         return itemsStudies;
-    }
-    
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show();
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
     }
 }

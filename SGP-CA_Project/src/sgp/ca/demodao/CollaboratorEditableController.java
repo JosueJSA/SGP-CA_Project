@@ -1,8 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
 import com.jfoenix.controls.JFXDatePicker;
@@ -16,7 +17,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -24,12 +24,7 @@ import sgp.ca.businesslogic.CollaboratorDAO;
 import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Integrant;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
-public class CollaboratorEditableController implements Initializable {
+public class CollaboratorEditableController implements Initializable{
 
     @FXML
     private Button btnRegistrerColaborator;
@@ -73,7 +68,7 @@ public class CollaboratorEditableController implements Initializable {
     private final CollaboratorDAO COLLABORATOR_DAO = new CollaboratorDAO();
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         collaborator = new Collaborator();
         this.fields = Arrays.asList(
             txtFieldBodyAcademyName, txtFieldEducationalProgram,
@@ -97,7 +92,7 @@ public class CollaboratorEditableController implements Initializable {
     }
 
     @FXML
-    private void addNewCollaborator(ActionEvent event) {
+    private void addNewCollaborator(ActionEvent event){
         try {
             this.validateForm();
             this.getOutIntegrantDataFromInterface();
@@ -116,7 +111,7 @@ public class CollaboratorEditableController implements Initializable {
     }
 
     @FXML
-    private void updateCollaborator(ActionEvent event) {
+    private void updateCollaborator(ActionEvent event){
         try {
             this.validateForm();
             this.getOutIntegrantDataFromInterface();
@@ -134,7 +129,7 @@ public class CollaboratorEditableController implements Initializable {
     }
 
     @FXML
-    private void cancelCollaboratorChanges(ActionEvent event) {
+    private void cancelCollaboratorChanges(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancel);
         GeneralResumeRequestController controller = loader.getController();
         controller.showGeneralResume(token);

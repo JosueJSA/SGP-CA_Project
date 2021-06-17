@@ -1,8 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
 import com.jfoenix.controls.JFXDatePicker;
@@ -32,12 +33,7 @@ import sgp.ca.domain.GeneralResume;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Lgac;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
-public class GeneralResumeEditableController implements Initializable {
+public class GeneralResumeEditableController implements Initializable{
     
     @FXML
     private Button btnAddLgac;
@@ -92,7 +88,7 @@ public class GeneralResumeEditableController implements Initializable {
     private GeneralResume generalResume;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         this.hbGeneralResumeOptions.getChildren().removeAll(btnCancelChanges, btnSignUpBodyAcademy, btnUpdate, btnCancelRegistration);
         cboBoxConsolidationDegree.getItems().addAll("En formación", "En consolidación", "Consolidado");
         listTextAreas = Arrays.asList(txtAreaGeneralTarget, txtAreaMission, txtAreaVision);
@@ -107,7 +103,7 @@ public class GeneralResumeEditableController implements Initializable {
         this.generalResume = new GeneralResume();
     }
     
-    public void showGeneralResumeUpdateForm(Integrant responsible) {
+    public void showGeneralResumeUpdateForm(Integrant responsible){
         this.hbGeneralResumeOptions.getChildren().addAll(btnUpdate, btnCancelChanges);
         this.token = responsible;
         this.lbUserName.setText(this.token.getFullName());
@@ -116,8 +112,8 @@ public class GeneralResumeEditableController implements Initializable {
     }
 
     @FXML
-    private void signUpBodyAcademy(ActionEvent event) {
-        try {
+    private void signUpBodyAcademy(ActionEvent event){
+        try{
             checkGeneralResumeForm();
             checkExistBodyAcademyKey();
             this.getOutGeneralResumeFormData();
@@ -127,7 +123,7 @@ public class GeneralResumeEditableController implements Initializable {
                 GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error del sistema, favor de contactar a soporte técnico");
                 FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnCancelChanges);
             }
-        } catch (InvalidFormException ex) {
+        }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
@@ -147,7 +143,7 @@ public class GeneralResumeEditableController implements Initializable {
     
     @FXML
     private void updateGeneralResume(ActionEvent event){
-        try {
+        try{
             checkGeneralResumeForm();
             this.getOutGeneralResumeFormData();
             if(GENERAL_RESUME_DAO.updateGeneralResume(generalResume, this.token.getBodyAcademyKey())){
@@ -159,13 +155,13 @@ public class GeneralResumeEditableController implements Initializable {
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancelChanges);
             GeneralResumeRequestController controller = loader.getController();
             controller.showGeneralResume(this.token);
-        } catch (InvalidFormException ex) {
+        }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
     
     @FXML
-    private void cancelChanges(ActionEvent event) {
+    private void cancelChanges(ActionEvent event){
         Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event, "¿Seguro que deseas cancelar la actualización?");
         if(action.get() == ButtonType.OK){
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnCancelChanges);
@@ -183,8 +179,8 @@ public class GeneralResumeEditableController implements Initializable {
     }
     
     @FXML
-    private void addLgac(ActionEvent event) {
-        try {
+    private void addLgac(ActionEvent event){
+        try{
             this.checkLgaFrom();
             GeneralResume bodyAcademy = new GeneralResume();
             bodyAcademy.setBodyAcademyKey(this.token.getBodyAcademyKey());
@@ -195,13 +191,13 @@ public class GeneralResumeEditableController implements Initializable {
             ));
             this.lvLgac.getItems().clear();
             this.generalResume.getLgacList().forEach(lgac -> this.lvLgac.getItems().add(lgac.getTitle()));
-        } catch (InvalidFormException ex) {
+        }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
-    private void removeLgac(ActionEvent event) {
+    private void removeLgac(ActionEvent event){
         if(this.lvLgac.getSelectionModel().getSelectedItem() != null){
             this.generalResume.removeLgac(this.lvLgac.getSelectionModel().getSelectedItem());
             this.lvLgac.getItems().remove(this.lvLgac.getSelectionModel().getSelectedItem());
@@ -252,7 +248,7 @@ public class GeneralResumeEditableController implements Initializable {
         this.generalResume.getLgacList().forEach(lgac -> this.lvLgac.getItems().add(lgac.getTitle()));
     }
     
-    private void getOutGeneralResumeFormData() {
+    private void getOutGeneralResumeFormData(){
         this.generalResume.setBodyAcademyKey(txtFieldBodyAcademyKey.getText());
         this.generalResume.setBodyAcademyName(txtFieldBodyAcademyName.getText()); 
         this.generalResume.setAscriptionArea(txtFieldAdscriptionArea.getText());
@@ -266,7 +262,7 @@ public class GeneralResumeEditableController implements Initializable {
     }
 
     @FXML
-    private void selectLgac(MouseEvent event) {
+    private void selectLgac(MouseEvent event){
         String lgacTitle = this.lvLgac.getSelectionModel().getSelectedItem();
         if(lgacTitle != null){
             this.txtAreaLgacTitle.setText(lgacTitle);

@@ -1,23 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -27,15 +22,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.WorkPlanDAO;
 import sgp.ca.domain.Action;
 import sgp.ca.domain.Goal;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.WorkPlan;
 
-public class WorkPlanRequestController implements Initializable {
+public class WorkPlanRequestController implements Initializable{
 
     @FXML
     private Button btnExit;
@@ -89,7 +82,7 @@ public class WorkPlanRequestController implements Initializable {
     private WorkPlan workplan;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         this.workplan = new WorkPlan();
         this.preprareActionsTable();
     }
@@ -104,7 +97,7 @@ public class WorkPlanRequestController implements Initializable {
     }
 
     @FXML
-    private void exit(ActionEvent event) {
+    private void exit(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnExit);
         StartController controller = loader.getController();
         controller.receiveIntegrantToken(token);
@@ -124,14 +117,14 @@ public class WorkPlanRequestController implements Initializable {
     }
 
     @FXML
-    private void addNewWorkPlan(ActionEvent event) {
+    private void addNewWorkPlan(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("WorkPlanEditable.fxml", btnExit);
         WorkPlanEditableController controller = loader.getController();
         controller.showWorkPlanInsertionForm(token);
     }
     
     @FXML
-    private void selectPeriot(ActionEvent event) {
+    private void selectPeriot(ActionEvent event){
         String date = this.cboBoxWorkPlanPeriot.getSelectionModel().getSelectedItem();
         date = date.substring(date.length()-11, date.length()-1);
         this.workplan = WORKPLAN_DAO.getWorkPlan(date, this.token.getBodyAcademyKey());
@@ -145,7 +138,7 @@ public class WorkPlanRequestController implements Initializable {
     }
 
     @FXML
-    private void deleteWorkplan(ActionEvent event) {
+    private void deleteWorkplan(ActionEvent event){
     }
     
     private void setDataInWorkPlanInterface(){
@@ -163,7 +156,7 @@ public class WorkPlanRequestController implements Initializable {
     }
 
     @FXML
-    private void selectGoal(ActionEvent event) {
+    private void selectGoal(ActionEvent event){
         String goalDescriptionSelected = this.cboBoxGoals.getSelectionModel().getSelectedItem(); 
         if(!goalDescriptionSelected.isEmpty()){
             Goal goal = this.workplan.searchGoalByDescription(goalDescriptionSelected);
@@ -179,7 +172,7 @@ public class WorkPlanRequestController implements Initializable {
     }
 
     @FXML
-    private void selectAction(MouseEvent event) {
+    private void selectAction(MouseEvent event){
         if(tvActions.getSelectionModel().getSelectedItem() != null){
             Action action = this.tvActions.getSelectionModel().getSelectedItem();
             this.txtAreaActionDescription.setText(action.getDescriptionAction());

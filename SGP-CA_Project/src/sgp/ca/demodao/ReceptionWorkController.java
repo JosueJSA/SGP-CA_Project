@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* @author Johann
+* @versión v1.0
+* Last modification date: 17-06-2021
+*/
 package sgp.ca.demodao;
 
 import java.net.URL;
@@ -26,11 +26,6 @@ import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.ReceptionWork;
 
-/**
- * FXML Controller class
- *
- * @author johan
- */
 public class ReceptionWorkController implements Initializable, EvidenceWindow {
 
     @FXML
@@ -67,8 +62,8 @@ public class ReceptionWorkController implements Initializable, EvidenceWindow {
     private ListView<String> lvRequirements;
     
     private final ReceptionWorkDAO RECEPTIONWORK_DAO = new ReceptionWorkDAO();
-    private  ReceptionWork RECEPTIONWORK = new ReceptionWork();
     private Integrant token;
+    private ReceptionWork receptionWork;
     
     
     @Override
@@ -78,36 +73,36 @@ public class ReceptionWorkController implements Initializable, EvidenceWindow {
 
     public void receiveReceptionWork(String url, Integrant token){  
         this.token = token;
-        //setReceptionWorkInformation(receptionWorkSelected.getUrlFile());                  /*Usar esto despues de testear*/ 
-        //setReceptionWorkInformation(url);
+        setReceptionWorkInformation(url);
     }
     
     private void setReceptionWorkInformation(String receptionWorkUrl){
-        RECEPTIONWORK = RECEPTIONWORK_DAO.getEvidenceByUrl(receptionWorkUrl);
-        this.chBoxImpactBA.setSelected(RECEPTIONWORK.getImpactAB());
-        this.txtFieldReceptionWorkName.setText(RECEPTIONWORK.getEvidenceTitle());
-        this.txtFieldCountry.setText(RECEPTIONWORK.getCountry());
-        this.txtFieldPublicationDate.setText(RECEPTIONWORK.getPublicationDate());
-        this.txtFieldProject.setText(RECEPTIONWORK.getProjectName());
-        this.lvIntegrant.setItems(makeItemsIntegrantName(RECEPTIONWORK.getIntegrants()));
-        this.lvCollaborator.setItems(makeItemsCollaboratorName(RECEPTIONWORK.getCollaborators()));
-        this.lvStudent.setItems(makeItemsStudent(RECEPTIONWORK.getStudents()));
-        this.txtFieldEstimatedDurationMonth.setText(Integer.toString(RECEPTIONWORK.getEstimatedDurationInMonths()));
-        this.txtFieldStatus.setText(RECEPTIONWORK.getStatus());
-        this.txtFieldModality.setText(RECEPTIONWORK.getModality());
-        this.txtAreaDescription.setText(RECEPTIONWORK.getDescription());
-        this.lvRequirements.setItems(makeItemsRequirements(RECEPTIONWORK.getRequirements()));
+        receptionWork = RECEPTIONWORK_DAO.getEvidenceByUrl(receptionWorkUrl);
+        this.chBoxImpactBA.setDisable(true);
+        this.chBoxImpactBA.setSelected(receptionWork.getImpactAB());
+        this.txtFieldReceptionWorkName.setText(receptionWork.getEvidenceTitle());
+        this.txtFieldCountry.setText(receptionWork.getCountry());
+        this.txtFieldPublicationDate.setText(receptionWork.getPublicationDate());
+        this.txtFieldProject.setText(receptionWork.getProjectName());
+        this.lvIntegrant.setItems(makeItemsIntegrantName(receptionWork.getIntegrants()));
+        this.lvCollaborator.setItems(makeItemsCollaboratorName(receptionWork.getCollaborators()));
+        this.lvStudent.setItems(makeItemsStudent(receptionWork.getStudents()));
+        this.txtFieldEstimatedDurationMonth.setText(Integer.toString(receptionWork.getEstimatedDurationInMonths()));
+        this.txtFieldStatus.setText(receptionWork.getStatus());
+        this.txtFieldModality.setText(receptionWork.getModality());
+        this.txtAreaDescription.setText(receptionWork.getDescription());
+        this.lvRequirements.setItems(makeItemsRequirements(receptionWork.getRequirements()));
     }
     
-
     @FXML
-    private void exit(ActionEvent event) {
+    private void exit(ActionEvent event){
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", txtFieldReceptionWorkName);          
+        EvidenceListController controller = loader.getController();
+        controller.showGeneralResumeEvidences(token);
     }
     
     private ObservableList<String> makeItemsIntegrantName(List<Integrant> integrantList){
         ObservableList<String> itemsIntegrant= FXCollections.observableArrayList();
-        //List<Integrant> integrant = RECEPTIONWORK_DAO.ge;
-        //integrantList.forEach(itemsIntegrant.add(new integrant;
         for(Integrant integrant : integrantList){
             itemsIntegrant.add(integrant.getFullName());
         }
@@ -116,8 +111,6 @@ public class ReceptionWorkController implements Initializable, EvidenceWindow {
     
     private ObservableList<String> makeItemsCollaboratorName(List<Collaborator> collaboratorList){
         ObservableList<String> itemsCollaborator= FXCollections.observableArrayList();
-        //List<Integrant> integrant = RECEPTIONWORK_DAO.ge;
-        //integrantList.forEach(itemsIntegrant.add(new integrant;
         for(Collaborator collaborator : collaboratorList){
             itemsCollaborator.add(collaborator.getFullName());
         }
@@ -126,8 +119,6 @@ public class ReceptionWorkController implements Initializable, EvidenceWindow {
     
     private ObservableList<String> makeItemsStudent(List<String> studentList){
         ObservableList<String> itemsStudent= FXCollections.observableArrayList();
-        //List<Integrant> integrant = RECEPTIONWORK_DAO.ge;
-        //integrantList.forEach(itemsIntegrant.add(new integrant;
         for(String student : studentList){
             itemsStudent.add(student);
         }
@@ -136,8 +127,6 @@ public class ReceptionWorkController implements Initializable, EvidenceWindow {
     
     private ObservableList<String> makeItemsRequirements(List<String> requirementstList){
         ObservableList<String> itemsRequirements= FXCollections.observableArrayList();
-        //List<Integrant> requirements = RECEPTIONWORK_DAO.ge;
-        //integrantList.forEach(itemsIntegrant.add(new integrant;
         for(String requirements : requirementstList){
             itemsRequirements.add(requirements);
         }
@@ -145,7 +134,10 @@ public class ReceptionWorkController implements Initializable, EvidenceWindow {
     }
 
     @FXML
-    private void updateReceptionWork(ActionEvent event) {
+    private void updateReceptionWork(ActionEvent event){
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ReceptionWorkForm.fxml", txtFieldReceptionWorkName);
+        ReceptionWorkFormController controller = loader.getController();
+        controller.receiveReceptionWorkUpdateToken(receptionWork, token);
     }
     
     @Override
@@ -154,7 +146,7 @@ public class ReceptionWorkController implements Initializable, EvidenceWindow {
     }
 
     @Override
-    public void createWindowAccordingEvidenceType(Evidence evidence, Node graphicElement, Integrant token) {
+    public void createWindowAccordingEvidenceType(Evidence evidence, Node graphicElement, Integrant token){
         if(this.toString().equalsIgnoreCase(evidence.getEvidenceType())){
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ReceptionWork.fxml", graphicElement);
             ReceptionWorkController controller = loader.getController();

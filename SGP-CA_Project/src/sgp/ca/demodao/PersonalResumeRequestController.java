@@ -1,12 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
@@ -26,12 +25,7 @@ import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Schooling;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
-public class PersonalResumeRequestController implements Initializable {
+public class PersonalResumeRequestController implements Initializable{
 
     @FXML
     private Button btnUpdate;
@@ -98,9 +92,8 @@ public class PersonalResumeRequestController implements Initializable {
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         this.preprareSchoolingTable();
-        
     }    
     
     public void receiveIntegrantToken(Integrant integrant){
@@ -110,18 +103,21 @@ public class PersonalResumeRequestController implements Initializable {
     }
 
     @FXML
-    private void updatePersonalResume(ActionEvent event) {
+    private void updatePersonalResume(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("PersonalResumeEditable.fxml", btnExit);
         PersonalResumeEditableController controller = loader.getController();
         controller.receiveIntegrantToken(integrantToken);
     }
     
     @FXML
-    private void requestProduction(ActionEvent event) {
+    private void requestProduction(ActionEvent event){
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnExit);
+        EvidenceListController controller = loader.getController();
+        controller.showGeneralResumeEvidences(integrantToken);
     }
 
     @FXML
-    private void exit(ActionEvent event) {
+    private void exit(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnExit);
         StartController controller = loader.getController();
         controller.receiveIntegrantToken(integrantToken);

@@ -1,12 +1,10 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 26-03-2021
-*/
+/*
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
+ */
 
 package sgp.ca.domain;
-
-import java.util.Objects;
-
 
 public class Schooling{
     
@@ -101,7 +99,7 @@ public class Schooling{
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj){
         boolean isEqual = false;
         if(this.idProfessionalStudies.equals(((Schooling)obj).getIdProfessionalStudies())){
             isEqual = true;

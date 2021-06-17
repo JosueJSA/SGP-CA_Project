@@ -1,7 +1,8 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 06-04-2021
-*/
+/*
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
+ */
 
 package sgp.ca.domain;
 
@@ -43,11 +44,11 @@ public class Goal{
         return actionReturn;
     }
 
-    public List<Action> getActions() {
+    public List<Action> getActions(){
         return actions;
     }
 
-    public void setActions(List<Action> actions) {
+    public void setActions(List<Action> actions){
         this.actions = actions;
     }
     

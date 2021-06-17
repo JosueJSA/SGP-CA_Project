@@ -1,7 +1,7 @@
 /*
- * @author Josué Sangabriel Alarcón
- * @version v0.7
- * Last modification: dd-mm-yy
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.demodao;
@@ -21,7 +21,7 @@ import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.Integrant;
 
 
-public class LoginController implements Initializable {
+public class LoginController implements Initializable{
 
     @FXML
     private Label btnSignUpNewBdyAcademy;
@@ -40,12 +40,12 @@ public class LoginController implements Initializable {
     private Integrant integrantLogger;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         integrantLogger = new Integrant();
     }    
 
     @FXML
-    private void signIn(ActionEvent event) {
+    private void signIn(ActionEvent event){
         if(checkUserLoginWithBodyKey()){
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnSignIn);
             StartController controller = loader.getController();
@@ -56,7 +56,7 @@ public class LoginController implements Initializable {
     }
     
     @FXML
-    private void signUpNewBdyAcademy(MouseEvent event) {
+    private void signUpNewBdyAcademy(MouseEvent event){
         if(checkUserLogin() && this.integrantLogger.getBodyAcademyKey()== null){
             System.out.println(btnSignUpNewUser.getScene().getWindow());
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeEditable.fxml", btnSignIn);
@@ -68,7 +68,7 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    private void signUpNewUser(MouseEvent event) {
+    private void signUpNewUser(MouseEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("IntegrantEditable.fxml", btnSignIn);
         IntegrantEditableController controller = loader.getController();
         controller.showResponsibleInscriptionForm();

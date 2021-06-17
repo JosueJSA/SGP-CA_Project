@@ -24,8 +24,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import sgp.ca.businesslogic.PrototypeDAO;
+import sgp.ca.domain.Book;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
+import sgp.ca.domain.Prototype;
 
 /**
  * FXML Controller class
@@ -70,20 +72,11 @@ public class PrototypeController implements Initializable, EvidenceWindow {
     private Button btnDownloadDocument;
     @FXML
     private Label lbDocumentName;
-    @FXML
-    private VBox vbChapterBook;
-    @FXML
-    private TableView<?> tvChapterBook;
-    @FXML
-    private TableColumn<?, ?> colTitleChapterBook;
-    @FXML
-    private TableColumn<?, ?> colRegistrationDateChapterBook;
-    @FXML
-    private TableColumn<?, ?> colRangePagesChapterBook;
 
     
     private final PrototypeDAO PROTOTYPE_DAO = new PrototypeDAO();
     private Integrant token;
+    private Prototype prototype;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -92,10 +85,17 @@ public class PrototypeController implements Initializable, EvidenceWindow {
     
     public void showPrototypeByUrl(String url, Integrant token){
         this.token = token;
+        this.prototype = (Prototype) PROTOTYPE_DAO.getEvidenceByUrl(url);
+        if(this.prototype != null){
+            this.setPrototypeDataIntoInterface();
+        }
     }
 
     @FXML
     private void updateEvidence(ActionEvent event) {
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceEdit.fxml", btnCloseWindowEvidenceRequest);
+        EvidenceEditController controller = loader.getController();
+        controller.receivePrototypeAndToken(this.prototype,token);
     }
 
     @FXML
@@ -104,7 +104,7 @@ public class PrototypeController implements Initializable, EvidenceWindow {
 
     @FXML
     private void closeWindowEvidenceRequest(ActionEvent event) {
-        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EidenceList.fxml", btnCloseWindowEvidenceRequest);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnCloseWindowEvidenceRequest);
         EvidenceListController controller = loader.getController();
         controller.showGeneralResumeEvidences(token);
     }
@@ -112,9 +112,22 @@ public class PrototypeController implements Initializable, EvidenceWindow {
     @FXML
     private void downloadDocument(ActionEvent event) {
     }
-
-    @FXML
-    private void observeChapterBookInformation(MouseEvent event) {
+    
+    private void setPrototypeDataIntoInterface(){
+        if(this.prototype.getImpactAB()){
+            this.chBoxImpactAB.setSelected(true);
+        }
+        lvStudents.getItems().addAll(this.prototype.getStudents());
+        this.prototype.getIntegrants().forEach(integrant -> this.lvIntegrants.getItems().add(integrant.getFullName()));
+        this.prototype.getCollaborators().forEach(collaborator -> this.lvCollaborators.getItems().add(collaborator.getFullName()));
+        this.txtAreaCharacteristics.setText(this.prototype.getFeatures());
+        this.lbTypeEvidence.setText(this.prototype.getEvidenceType());
+        this.txtFieldEvidenceTittle.setText(this.prototype.getEvidenceTitle());
+        this.txtFieldPublisherDate.setText(this.prototype.getPublicationDate());
+        this.txtFieldPublicationCountry.setText(this.prototype.getCountry());
+        this.txtFieldInvestigationProject.setText(this.prototype.getProjectName());
+        this.txtFieldStudyDegree.setText(this.prototype.getStudyDegree());
+        this.lbDocumentName.setText(this.prototype.getUrlFile());
     }
     
     @Override

@@ -20,17 +20,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import sgp.ca.businesslogic.ArticleDAO;
+import sgp.ca.domain.Article;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
 public class ArticleController implements Initializable, EvidenceWindow {
 
     @FXML
@@ -74,30 +69,31 @@ public class ArticleController implements Initializable, EvidenceWindow {
     @FXML
     private Label lbDocumentName;
     @FXML
-    private VBox vbChapterBook;
-    @FXML
-    private TableView<?> tvChapterBook;
-    @FXML
-    private TableColumn<?, ?> colTitleChapterBook;
-    @FXML
-    private TableColumn<?, ?> colRegistrationDateChapterBook;
-    @FXML
-    private TableColumn<?, ?> colRangePagesChapterBook;
-    @FXML
     private HBox hbOptions;
 
     private Integrant token;
+    private final ArticleDAO ARTICLE_DAO = new ArticleDAO();
+    private Article article = new Article();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        hbOptions.getChildren().removeAll(btnRemoveEvidence, btnUpdateEvidence);
     } 
     
     public void showArticleByUrl(String url, Integrant token){
         this.token = token;
+        this.article = (Article) ARTICLE_DAO.getEvidenceByUrl(url);
+        if(this.article != null){
+            this.setArticleDataIntoInterface();
+            this.grantPermissions();
+        }
     }
 
     @FXML
-    private void updateEvidence(ActionEvent event) {
+    private void updateEvidence(ActionEvent event){
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceEdit.fxml", btnCloseWindowEvidenceRequest);
+        EvidenceEditController controller = loader.getController();
+        controller.receiveArticleAndToken(this.article,token);
     }
 
     @FXML
@@ -106,15 +102,40 @@ public class ArticleController implements Initializable, EvidenceWindow {
 
     @FXML
     private void closeWindowEvidenceRequest(ActionEvent event) {
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnCloseWindowEvidenceRequest);
+        EvidenceListController controller = loader.getController();
+        controller.showGeneralResumeEvidences(token);
     }
-
 
     @FXML
     private void downloadDocument(ActionEvent event) {
     }
 
-    @FXML
-    private void observeChapterBookInformation(MouseEvent event) {
+    
+    private void setArticleDataIntoInterface(){
+        if(this.article.getImpactAB()){
+            this.chBoxImpactAB.setSelected(true);
+        }
+        lvStudents.getItems().addAll(this.article.getStudents());
+        this.article.getIntegrants().forEach(integrant -> this.lvIntegrants.getItems().add(integrant.getFullName()));
+        this.article.getCollaborators().forEach(collaborator -> this.lvCollaborators.getItems().add(collaborator.getFullName()));
+        this.txtFieldMagazineName.setText(this.article.getMagazineName());
+        this.txtFieldMagazineEditorial.setText(this.article.getMagazineEditorial());
+        this.txtFieldISnn.setText(this.article.getIsnn() + "");
+        this.txtAreaIndex.setText(this.article.getIndex() + "");
+        this.lbTypeEvidence.setText(this.article.getEvidenceType());
+        this.txtFieldEvidenceTittle.setText(this.article.getEvidenceTitle());
+        this.txtFieldPublisherDate.setText(this.article.getPublicationDate());
+        this.txtFieldPublicationCountry.setText(this.article.getCountry());
+        this.txtFieldInvestigationProject.setText(this.article.getProjectName());
+        this.txtFieldStudyDegree.setText(this.article.getStudyDegree());
+        this.lbDocumentName.setText(this.article.getUrlFile());
+    }
+    
+    private void grantPermissions(){
+        if(this.token.getFullName().equalsIgnoreCase(this.article.getRegistrationResponsible())){
+            hbOptions.getChildren().addAll(btnUpdateEvidence, btnRemoveEvidence);
+        }
     }
     
     @Override

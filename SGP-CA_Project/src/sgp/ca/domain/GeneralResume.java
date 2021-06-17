@@ -1,7 +1,8 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 6-04-2021
-*/
+/*
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
+ */
 
 package sgp.ca.domain;
 
@@ -28,7 +29,7 @@ public class GeneralResume{
     public GeneralResume(String bodyAcademyKey, String bodyAcademyName, 
     String ascriptionArea, String ascriptionUnit, String consolidationDegree, 
     String vision, String mission, String generalTarjet, 
-    String registrationDate, String lastEvaluation) {
+    String registrationDate, String lastEvaluation){
         this.bodyAcademyKey = bodyAcademyKey;
         this.bodyAcademyName = bodyAcademyName;
         this.ascriptionArea = ascriptionArea;
