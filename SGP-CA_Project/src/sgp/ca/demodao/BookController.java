@@ -25,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import sgp.ca.businesslogic.BookDAO;
 import sgp.ca.domain.Book;
+import sgp.ca.domain.ChapterBook;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 
@@ -72,13 +73,13 @@ public class BookController implements Initializable, EvidenceWindow {
     @FXML
     private VBox vbChapterBook;
     @FXML
-    private TableView<?> tvChapterBook;
+    private TableView<ChapterBook> tvChapterBook;
     @FXML
-    private TableColumn<?, ?> colTitleChapterBook;
+    private TableColumn<ChapterBook, String> colTitleChapterBook;
     @FXML
-    private TableColumn<?, ?> colRegistrationDateChapterBook;
+    private TableColumn<ChapterBook, String> colRegistrationDateChapterBook;
     @FXML
-    private TableColumn<?, ?> colRangePagesChapterBook;
+    private TableColumn<ChapterBook, String> colRangePagesChapterBook;
     @FXML
     private ListView<String> lvIntegrants;
     @FXML
@@ -130,6 +131,19 @@ public class BookController implements Initializable, EvidenceWindow {
 
     @FXML
     private void observeChapterBookInformation(MouseEvent event) {
+        if(this.tvChapterBook.getSelectionModel().getSelectedItem() != null){
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ChapterBookRequest.fxml", btnCloseWindowEvidenceRequest);
+            ChapterBookRequestController controller = loader.getController();
+            Book book = new Book();
+            book.setUrlFile(this.book.getUrlFile());
+            book.setEvidenceTitle(this.book.getEvidenceTitle());
+            book.setEditionsNumber(this.book.getEditionsNumber());
+            controller.receiveBook(book);
+            controller.receiveChapterBookURLFile(
+                this.tvChapterBook.getSelectionModel().getSelectedItem().getUrlFile()
+            );
+            controller.receiveToken(token);
+        }
     }
     
     private void setDataIntoBookInterface(){

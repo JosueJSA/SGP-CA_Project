@@ -95,5 +95,12 @@ public class EvidenceListController implements Initializable {
         colRegistrationResponsible.setCellValueFactory(new PropertyValueFactory<>("registrationResponsible"));
         colUrl.setCellValueFactory(new PropertyValueFactory<>("urlFile"));
     }
+
+    @FXML
+    private void closeWindow(ActionEvent event) {
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnClose);
+        StartController controller = loader.getController();
+        controller.receiveIntegrantToken(this.token);
+    }
     
 }

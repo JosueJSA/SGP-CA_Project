@@ -6,37 +6,26 @@
 package sgp.ca.demodao;
 
 import com.jfoenix.controls.JFXDatePicker;
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.GeneralResumeDAO;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.GeneralResume;
@@ -154,7 +143,6 @@ public class GeneralResumeEditableController implements Initializable {
         }else{
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnCancelChanges);
         }
-        
     }
     
     @FXML
@@ -187,7 +175,7 @@ public class GeneralResumeEditableController implements Initializable {
     }
     
     @FXML
-    private void cancelSignUpBodyAcademy(ActionEvent event) {
+    private void cancelSignUpBodyAcademy(ActionEvent event){
         Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event, "¿Seguro que deseas cancelar el registro?");
         if(action.get() == ButtonType.OK){
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnCancelChanges);

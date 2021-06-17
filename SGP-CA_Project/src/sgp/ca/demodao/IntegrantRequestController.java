@@ -94,9 +94,9 @@ public class IntegrantRequestController implements Initializable {
         }else{
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error del sistema, favor de contactas a soporte técnico");
         }
-        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnExit);
-        StartController controller = loader.getController();
-        controller.receiveIntegrantToken(this.token);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnExit);
+        GeneralResumeRequestController controller = loader.getController();
+        controller.showGeneralResume(this.token);
     }
 
     @FXML
@@ -106,9 +106,9 @@ public class IntegrantRequestController implements Initializable {
         }else{
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error del sistema, favor de contactas a soporte técnico");
         }
-        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnExit);
-        StartController controller = loader.getController();
-        controller.receiveIntegrantToken(this.token);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnExit);
+        GeneralResumeRequestController controller = loader.getController();
+        controller.showGeneralResume(this.token);
     }
 
     @FXML

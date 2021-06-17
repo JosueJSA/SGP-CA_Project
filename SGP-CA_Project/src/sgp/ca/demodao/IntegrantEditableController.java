@@ -19,7 +19,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -95,6 +94,7 @@ public class IntegrantEditableController implements Initializable {
     }    
     
     public void showResponsibleInscriptionForm(){
+        this.integrant = new Integrant();
         this.lbParticipationType.setText("Responsable");
         hbIntegrantOptions.getChildren().addAll(btnResponsibleRegistrer, btnCancelResponsibleResgistration);
     }
@@ -175,7 +175,8 @@ public class IntegrantEditableController implements Initializable {
             }else{
                 GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contactor con soporte técnico");
             }
-            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnCancelIntegrantChanges);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnResponsibleRegistrer);
+            
         } catch (InvalidFormException ex) {
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }

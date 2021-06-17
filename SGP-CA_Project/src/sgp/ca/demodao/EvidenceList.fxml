@@ -15,7 +15,7 @@
    <bottom>
       <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="970.0" style="-fx-background-color: #300050;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnClose" mnemonicParsing="false" prefHeight="27.0" prefWidth="81.0" text="CERRAR" />
+            <Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeWindow" prefHeight="27.0" prefWidth="81.0" text="CERRAR" />
          </children>
          <padding>
             <Insets right="10.0" />

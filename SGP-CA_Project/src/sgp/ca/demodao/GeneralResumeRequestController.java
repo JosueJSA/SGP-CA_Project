@@ -8,11 +8,9 @@ package sgp.ca.demodao;
 import com.jfoenix.controls.JFXTextArea;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -205,12 +203,17 @@ public class GeneralResumeRequestController implements Initializable {
     }
 
     @FXML
-    private void searchMember(ActionEvent event) {
-        List<Member> members = new ArrayList<>();
+    private void searchMember(ActionEvent event){
         if(rdoBtnSubscribeMembers.isSelected()){
             tvIntegrants.getItems().clear();
+            tvCollaborators.getItems().clear();
+            tvIntegrants.getItems().addAll(this.getIntegrantsFiltered("Activo"));
+            tvCollaborators.getItems().addAll(this.getCollaboratorsFiltered("Activo"));
         }else{
-            
+            tvIntegrants.getItems().clear();
+            tvCollaborators.getItems().clear();
+            tvIntegrants.getItems().addAll(this.getIntegrantsFiltered("Dado de baja"));
+            tvCollaborators.getItems().addAll(this.getCollaboratorsFiltered("Dado de baja"));
         }
     }
 
@@ -255,5 +258,25 @@ public class GeneralResumeRequestController implements Initializable {
         tvIntegrants.getItems().clear();
         tvCollaborators.getItems().addAll(this.generalResume.getCollaborators("Dado de baja"));
         tvIntegrants.getItems().addAll(this.generalResume.getIntegrants("Dado de baja"));
+    } 
+    
+    private List<Integrant> getIntegrantsFiltered(String status){
+        List<Integrant> integrantsWanted = new ArrayList<>();
+        for(Integrant integrante : this.generalResume.getIntegrants(status)){
+            if(integrante.getFullName().contains(this.txtFieldMemberNameForSearch.getText())){
+                integrantsWanted.add(integrante);
+            }
+        }
+        return integrantsWanted;
+    }
+    
+    private List<Collaborator> getCollaboratorsFiltered(String status){
+        List<Collaborator> collaboratorsWanted = new ArrayList<>();
+        for(Collaborator collaborator : this.generalResume.getCollaborators(status)){
+            if(collaborator.getFullName().contains(this.txtFieldMemberNameForSearch.getText())){
+                collaboratorsWanted.add(collaborator);
+            }
+        }
+        return collaboratorsWanted;
     }    
 }
