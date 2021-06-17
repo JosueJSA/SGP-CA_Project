@@ -1,7 +1,8 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 
-*/
+/*
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
+ */
 
 package businesslogic.testintegrantdao;
 
@@ -39,7 +40,7 @@ public class IntegrantInsertTest{
         INTEGRANT_DAO.addMember(integrant);
         Integrant integrantRetrieved = (Integrant) INTEGRANT_DAO.getMemberByUVmail("ocharan@uv.mx");
         INITIALIZER.cleanIntegrantTest(integrantRetrieved.getRfc());
-        Assert.assertEquals(integrant, integrantRetrieved);
+        Assert.assertEquals(integrant.getEmailUV(), integrantRetrieved.getEmailUV());
     }
     
     @Test

@@ -133,11 +133,11 @@ public class GeneralResumeEditableController implements Initializable{
         this.token.setBodyAcademyKey(generalResume.getBodyAcademyKey());
         if(INTEGRANT_DAO.updateMember(token, token.getRfc())){
             GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El currículum general ha sido registrado con éxito");
-            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnCancelChanges);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnCancelRegistration);
             StartController controller = loader.getController();
             controller.receiveIntegrantToken(token);
         }else{
-            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnCancelChanges);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnCancelRegistration);
         }
     }
     
@@ -208,7 +208,7 @@ public class GeneralResumeEditableController implements Initializable{
     
     private void checkGeneralResumeForm() throws InvalidFormException{
         ValidatorForm.checkAlaphabeticalFields(listFields, 5, 100);
-        ValidatorForm.chechkAlphabeticalField(txtFieldBodyAcademyKey, 6, 15);
+        ValidatorForm.chechkAlphabeticalField(txtFieldBodyAcademyKey, 6, 13);
         ValidatorForm.checkAlaphabeticalTextAreas(listTextAreas, 5, 450);
         ValidatorForm.checkNotEmptyDateField(dtpRegistrationDate);
         ValidatorForm.checkNotEmptyDateField(dtpLastEvaluationDate);

@@ -24,17 +24,17 @@ import sgp.ca.domain.Integrant;
 public class LoginController implements Initializable{
 
     @FXML
-    private Label btnSignUpNewBdyAcademy;
-    @FXML
-    private Label btnSignUpNewUser;
-    @FXML
-    private TextField fieldEmailUv;
-    @FXML
-    private PasswordField fieldPasswordMailUv;
-    @FXML
-    private TextField fieldBodyAcademyKey;
-    @FXML
     private Button btnSignIn;
+    @FXML
+    private Label lbSignUpNewBdyAcademy;
+    @FXML
+    private Label lbSignUpNewUser;
+    @FXML
+    private TextField txtFieldEmailUv;
+    @FXML
+    private PasswordField passFieldPasswordUvmail;
+    @FXML
+    private TextField txtFieldBodyAcademyKey;
     
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
     private Integrant integrantLogger;
@@ -58,12 +58,13 @@ public class LoginController implements Initializable{
     @FXML
     private void signUpNewBdyAcademy(MouseEvent event){
         if(checkUserLogin() && this.integrantLogger.getBodyAcademyKey()== null){
-            System.out.println(btnSignUpNewUser.getScene().getWindow());
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeEditable.fxml", btnSignIn);
             GeneralResumeEditableController controller = loader.getController();
             controller.showGeneralResumeInsertForm(integrantLogger);
         }else{
-            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "El email y contraseña deben estar correctos para");
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(
+                event, "El email y contraseña deben estar llenos correctamente y No debes pertenecer a ningún cuerpo académico"
+            );
         }
     }
 
@@ -75,8 +76,8 @@ public class LoginController implements Initializable{
     }
     
     private boolean checkUserLogin(){
-        integrantLogger.setEmailUV(this.fieldEmailUv.getText());
-        integrantLogger.setPassword(this.fieldPasswordMailUv.getText());
+        integrantLogger.setEmailUV(this.txtFieldEmailUv.getText());
+        integrantLogger.setPassword(this.passFieldPasswordUvmail.getText());
         integrantLogger = INTEGRANT_DAO.getIntegrantToken(this.integrantLogger.getEmailUV(), this.integrantLogger.getPassword());
         boolean isVerify = false;
         if(integrantLogger.getFullName() != null){
@@ -86,9 +87,9 @@ public class LoginController implements Initializable{
     }
     
     private boolean checkUserLoginWithBodyKey(){
-        integrantLogger.setEmailUV(this.fieldEmailUv.getText());
-        integrantLogger.setPassword(this.fieldPasswordMailUv.getText());
-        integrantLogger.setBodyAcademyKey(this.fieldBodyAcademyKey.getText());
+        integrantLogger.setEmailUV(this.txtFieldEmailUv.getText());
+        integrantLogger.setPassword(this.passFieldPasswordUvmail.getText());
+        integrantLogger.setBodyAcademyKey(this.txtFieldBodyAcademyKey.getText());
         boolean isVerify = false;
         integrantLogger = INTEGRANT_DAO.getIntegrantTocken(integrantLogger);
         if(integrantLogger.getFullName() != null && integrantLogger.getParticipationStatus().equalsIgnoreCase("Activo")){

@@ -1,7 +1,8 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 05-04-2021
-*/
+/*
+ * @author Josué 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
+ */
 
 package businesslogic.testcollaboratordao;
 
@@ -9,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import sgp.ca.businesslogic.CollaboratorDAO;
 import sgp.ca.domain.Collaborator;
-
 
 public class CollaboratorUpdateTest{
     

@@ -11,10 +11,6 @@ import javafx.scene.Node;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 
-/**
- *
- * @author josue
- */
 public class EvidenceWindowFctory {
     
     private static List<EvidenceWindow> listEvidenceView = Arrays.asList(

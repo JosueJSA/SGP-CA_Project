@@ -9,10 +9,6 @@ import javafx.scene.Node;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 
-/**
- *
- * @author josue
- */
 public interface EvidenceWindow {
     
     public void createWindowAccordingEvidenceType(Evidence evidence, Node graphicElement, Integrant token);

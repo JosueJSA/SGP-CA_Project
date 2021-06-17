@@ -10,7 +10,7 @@ import org.junit.Assert;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.Integrant;
 
-public class IntegrantRquestTest {
+public class IntegrantRquestTest{
     
     private final IntegrantInitializer INITIALIZER = new IntegrantInitializer();
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
