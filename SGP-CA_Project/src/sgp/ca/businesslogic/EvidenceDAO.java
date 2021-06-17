@@ -107,29 +107,23 @@ public abstract class EvidenceDAO {
         }
     }
     
-    public List<Map> getEvidencesByStudent(String student){
-        List<Map> evidences = new ArrayList<>();
+    public List<String> getStudentsNameByEvidenceUrl(String url){
+        List<String> students = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT DISTINCT * FROM (SELECT * FROM Evidences GROUP BY urlFile) ev, Students  WHERE ev.urlFile = Students.urlFile AND Students.student = ?;"
+                "SELECT student FROM `Students` WHERE urlFile = ?;"
             );
-            sentenceQuery.setString(1, student);
+            sentenceQuery.setString(1, url);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
-                Map<String,Object> evidence = new HashMap<>();
-                evidence.put("urlFile", resultQuery.getString("urlFile"));
-                evidence.put("evidenceType", resultQuery.getString("evidenceType"));
-                evidence.put("evidenceTitle", resultQuery.getString("evidenceTitle"));
-                evidence.put("impactBA", resultQuery.getBoolean("impactBA"));
-                evidence.put("registrationResponsible", resultQuery.getString("registrationResponsible"));
-                evidence.put("registrationDate", resultQuery.getString("registrationDate"));
-                evidences.add(evidence);
+                students.add(resultQuery.getString("student"));
             }
         }catch(SQLException ex){
+            students = null;
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             CONNECTION.closeConnection();
-            return evidences;
+            return students;
         }
     }
     

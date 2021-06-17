@@ -65,11 +65,6 @@ public class EvidenceListController implements Initializable {
         preprareSchoolingTable();
         tvEvidences.getItems().addAll(listEvidences);
     }
-
-    public void showPersonalResume(Integrant token){
-        this.token = token;
-        lbUserName.setText(this.token.getFullName());
-    }
     
     public void showGeneralResumeEvidences(Integrant token){
         this.token = token;
@@ -86,12 +81,10 @@ public class EvidenceListController implements Initializable {
 
     @FXML
     private void showEvidence(MouseEvent event) {
-        System.out.println(
-            tvEvidences.getSelectionModel().getSelectedItem().toString()
-        );
-        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceRequest.fxml", btnClose);
-        EvidenceRequestController controller = loader.getController();
-        //controller.showEvidence(EvidenceDAOFactory.getSpecificEvidenceDaoInstance(""));
+        if(tvEvidences.getSelectionModel().getSelectedItem() != null){
+            Evidence evidence = tvEvidences.getSelectionModel().getSelectedItem();
+            EvidenceWindowFctory.showSpecificEvidenceWindow(evidence, btnClose, token);
+        }
     }
     
     private void preprareSchoolingTable(){

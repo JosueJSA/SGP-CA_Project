@@ -181,7 +181,7 @@ public class ReceptionWorkFormController implements Initializable {
         FXMLLoader loader = changeWindow("ReceptionWork.fxml", event);          /*Solo para testear*/
         ReceptionWorkController controller = loader.getController();
         String url = "PRUEBA3";
-        controller. receiveReceptionWork(url);
+        //controller. receiveReceptionWork(url);
        
     }
     

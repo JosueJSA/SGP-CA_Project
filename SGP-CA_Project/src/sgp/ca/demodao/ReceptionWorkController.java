@@ -12,7 +12,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
@@ -20,6 +22,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import sgp.ca.businesslogic.ReceptionWorkDAO;
 import sgp.ca.domain.Collaborator;
+import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.ReceptionWork;
 
@@ -28,7 +31,7 @@ import sgp.ca.domain.ReceptionWork;
  *
  * @author johan
  */
-public class ReceptionWorkController implements Initializable {
+public class ReceptionWorkController implements Initializable, EvidenceWindow {
 
     @FXML
     private Button btnUpdate;
@@ -65,19 +68,18 @@ public class ReceptionWorkController implements Initializable {
     
     private final ReceptionWorkDAO RECEPTIONWORK_DAO = new ReceptionWorkDAO();
     private  ReceptionWork RECEPTIONWORK = new ReceptionWork();
+    private Integrant token;
     
     
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
 
-    public void receiveReceptionWork(String url){                      
+    public void receiveReceptionWork(String url, Integrant token){  
+        this.token = token;
         //setReceptionWorkInformation(receptionWorkSelected.getUrlFile());                  /*Usar esto despues de testear*/ 
-        setReceptionWorkInformation(url);
+        //setReceptionWorkInformation(url);
     }
     
     private void setReceptionWorkInformation(String receptionWorkUrl){
@@ -144,5 +146,19 @@ public class ReceptionWorkController implements Initializable {
 
     @FXML
     private void updateReceptionWork(ActionEvent event) {
+    }
+    
+    @Override
+    public String toString(){
+        return "Trabajo Recepcional";
+    }
+
+    @Override
+    public void createWindowAccordingEvidenceType(Evidence evidence, Node graphicElement, Integrant token) {
+        if(this.toString().equalsIgnoreCase(evidence.getEvidenceType())){
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ReceptionWork.fxml", graphicElement);
+            ReceptionWorkController controller = loader.getController();
+            controller.receiveReceptionWork(evidence.getUrlFile(), token);
+        }
     }
 }

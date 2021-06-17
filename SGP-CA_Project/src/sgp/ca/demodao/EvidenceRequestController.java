@@ -144,8 +144,6 @@ public class EvidenceRequestController implements Initializable {
     @FXML
     private Button btnDownloadDocument;
 
-    @FXML
-    private ImageView imgViewPDFEvidence;
 
     @FXML
     private Label lbDocumentName;
