@@ -5,22 +5,17 @@
  */
 package sgp.ca.demodao;
 
-import java.io.IOException;
+import com.jfoenix.controls.JFXDatePicker;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
@@ -28,10 +23,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.GeneralResumeDAO;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.Integrant;
@@ -44,34 +36,6 @@ import sgp.ca.domain.Integrant;
 public class IntegrantEditableController implements Initializable {
 
     @FXML
-    private Label lblParticipationType;
-    @FXML
-    private TextField memberRFCField;
-    @FXML
-    private TextField memberFullNameField;
-    @FXML
-    private TextField memberEmailUVField;
-    @FXML
-    private TextField memberCurpField;
-    @FXML
-    private TextField memberNationalityField;
-    @FXML
-    private TextField memberBodyAcademyNameField;
-    @FXML
-    private TextField memberEducationalProgramField;
-    @FXML
-    private TextField memberCellNumberField;
-    @FXML
-    private TextField memberStaffNumberField;
-    @FXML
-    private DatePicker memberRegistrationDateField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private CheckBox checkBoxIsIntoBodyAcademy;
-    @FXML
-    private HBox hboxIntegrantOptions;
-    @FXML
     private Button btnIntegrantRegistrer;
     @FXML
     private Button btnResponsibleRegistrer;
@@ -81,68 +45,85 @@ public class IntegrantEditableController implements Initializable {
     private Button btnCancelIntegrantChanges;
     @FXML
     private Button btnCancelResponsibleResgistration;
-    
+    @FXML
+    private HBox hbIntegrantOptions;
+    @FXML
+    private Label lbParticipationType;
+    @FXML
+    private TextField txtFieldMemberRfc;
+    @FXML
+    private TextField txtFieldMemberFullName;
+    @FXML
+    private TextField txtFieldMemberEmailUv;
+    @FXML
+    private TextField txtFieldMemberCurp;
+    @FXML
+    private TextField txtFieldMemberNationality;
+    @FXML
+    private TextField txtFieldMemberEducationalProgram;
+    @FXML
+    private TextField txtFieldMemberCellNumber;
+    @FXML
+    private TextField txtFieldMemberStaffNumber;
+    @FXML
+    private TextField txtFieldMemberBodyAcademyKey;
+    @FXML
+    private PasswordField passFieldMemberPassword;
+    @FXML
+    private CheckBox chBoxIsIntoBodyAcademy;
+    @FXML
+    private JFXDatePicker dtpAdmisionDate;
     
     private List<TextField> fields;
-    private List<Button> optionButtons;
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
     private final GeneralResumeDAO GENERAL_RESUME = new GeneralResumeDAO();
-    private Integrant token;
+    private Integrant token = null;
     private Integrant integrant;
-    private String oldRFC;
-    
+    private String oldRfcForUpdate = null;    
 
-    /**
-     * Initializes the controller class.
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        integrant = new Integrant();
-        this.checkBoxIsIntoBodyAcademy.setSelected(true);
-        optionButtons = Arrays.asList(
+        fields = Arrays.asList(
+            txtFieldMemberEducationalProgram, txtFieldMemberEmailUv,
+            txtFieldMemberFullName, txtFieldMemberNationality
+        );
+        hbIntegrantOptions.getChildren().removeAll(
             btnIntegrantRegistrer, btnCancelIntegrantChanges, 
             btnCancelResponsibleResgistration, 
             btnUpdateIntegrant, btnResponsibleRegistrer
         );
-        fields = Arrays.asList(
-            memberRFCField, memberFullNameField,
-            memberEmailUVField, memberCurpField,
-            memberNationalityField, memberEducationalProgramField
-        );
-        hboxIntegrantOptions.getChildren().removeAll(optionButtons);
     }    
     
     public void showResponsibleInscriptionForm(){
-        this.lblParticipationType.setText("Responsable");
-        hboxIntegrantOptions.getChildren().addAll(btnResponsibleRegistrer, btnCancelResponsibleResgistration);
+        this.lbParticipationType.setText("Responsable");
+        hbIntegrantOptions.getChildren().addAll(btnResponsibleRegistrer, btnCancelResponsibleResgistration);
     }
     
     public void showIntegrantInscriptionForm(Integrant responsibleToken){
         this.token = responsibleToken;
-        this.lblParticipationType.setText("Integrante");
-        hboxIntegrantOptions.getChildren().addAll(btnIntegrantRegistrer, btnCancelIntegrantChanges);
-        memberBodyAcademyNameField.setVisible(false);
-        checkBoxIsIntoBodyAcademy.setVisible(false);
+        this.lbParticipationType.setText("Integrante");
+        hbIntegrantOptions.getChildren().addAll(btnIntegrantRegistrer, btnCancelIntegrantChanges);
+        this.integrant = new Integrant();
+        txtFieldMemberBodyAcademyKey.setVisible(false);
+        chBoxIsIntoBodyAcademy.setVisible(false);
     }
     
     public void showIntegrantUpdateForm(Integrant integrantToken, String emailUV){
         this.token = integrantToken;
         this.integrant = (Integrant) INTEGRANT_DAO.getMemberByUVmail(emailUV);
-        this.oldRFC = this.integrant.getRfc();
+        this.oldRfcForUpdate = this.integrant.getRfc();
         setIntegrantDataIntoInterface();
-        hboxIntegrantOptions.getChildren().addAll(btnUpdateIntegrant,  btnCancelIntegrantChanges);
-        memberBodyAcademyNameField.setDisable(true);
-        checkBoxIsIntoBodyAcademy.setDisable(true);
+        hbIntegrantOptions.getChildren().addAll(btnUpdateIntegrant,  btnCancelIntegrantChanges);
+        txtFieldMemberBodyAcademyKey.setDisable(true);
+        chBoxIsIntoBodyAcademy.setDisable(true);
     }
 
     @FXML
     private void confirmBodyAcademyRegistered(ActionEvent event) {
-        if(checkBoxIsIntoBodyAcademy.isSelected()){
-            this.memberBodyAcademyNameField.setDisable(false);
+        if(chBoxIsIntoBodyAcademy.isSelected()){
+            this.txtFieldMemberBodyAcademyKey.setDisable(false);
         }else{
-            this.memberBodyAcademyNameField.setDisable(true);
+            this.txtFieldMemberBodyAcademyKey.setDisable(true);
         }
     }
 
@@ -150,17 +131,18 @@ public class IntegrantEditableController implements Initializable {
     private void addNewIntegrant(ActionEvent event) {
         try {
             validateForm();
-            integrant.setBodyAcademyKey(this.token.getBodyAcademyKey());
-            if(INTEGRANT_DAO.addMember(integrant)){
-                AlertGenerator.showInfoAlert(event, "Integrante registrado con éxito");
+            this.integrant.setBodyAcademyKey(this.token.getBodyAcademyKey());
+            this.getOutIntegrantDataFromInterface();
+            if(INTEGRANT_DAO.addMember(this.integrant)){
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Integrante registrado con éxito");
             }else{
-                AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de ponerse en contactor con soporte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contactor con soporte técnico");
             }
-            FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancelIntegrantChanges);
             GeneralResumeRequestController controller = loader.getController();
             controller.showGeneralResume(this.token);
         } catch (InvalidFormException ex) {
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
@@ -170,16 +152,16 @@ public class IntegrantEditableController implements Initializable {
             validateForm();
             this.getOutIntegrantDataFromInterface();
             this.integrant.setBodyAcademyKey(this.token.getBodyAcademyKey());
-            if(INTEGRANT_DAO.updateMember(this.integrant, oldRFC)){
-                AlertGenerator.showInfoAlert(event, "Integrante actualizado con éxito");
+            if(INTEGRANT_DAO.updateMember(this.integrant, oldRfcForUpdate)){
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Integrante actualizado con éxito");
             }else{
-                AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de ponerse en contactor con soporte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contactor con soporte técnico");
             }
-            FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancelIntegrantChanges);
             GeneralResumeRequestController controller = loader.getController();
             controller.showGeneralResume(this.token);
         } catch (InvalidFormException ex) {
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
     
@@ -189,88 +171,80 @@ public class IntegrantEditableController implements Initializable {
             validateForm();
             this.getOutIntegrantDataFromInterface();
             if(INTEGRANT_DAO.addMember(this.integrant)){
-                AlertGenerator.showInfoAlert(event, "Integrante registrado con éxito");
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Integrante registrado con éxito");
             }else{
-                AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de ponerse en contactor con soporte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contactor con soporte técnico");
             }
-            FXMLLoader loader = changeWindow("Login.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnCancelIntegrantChanges);
         } catch (InvalidFormException ex) {
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
     private void cancelIntegrantChanges(ActionEvent event) {
-        FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
-        GeneralResumeRequestController controller = loader.getController();
-        controller.showGeneralResume(this.token);
+        Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event, "¿Seguro que deseas cancelar la actualización?");
+        if(action.get() == ButtonType.OK){
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancelIntegrantChanges);
+            GeneralResumeRequestController controller = loader.getController();
+            controller.showGeneralResume(this.token);
+        }
     }
 
     @FXML
     private void cancelResponsibleSignUp(ActionEvent event) {
-        FXMLLoader loader = changeWindow("Login.fxml", event);
-    }
-    
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show(); 
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnCancelResponsibleResgistration);
     }
     
     private void validateForm() throws InvalidFormException{
-        ValidatorForm.checkAlaphabeticalFields(fields, 5, 100);
-        ValidatorForm.isNumberData(this.memberCellNumberField, 8);
-        ValidatorForm.isIntegerNumberData(memberStaffNumberField, 8);
-        ValidatorForm.checkNotEmptyDateField(this.memberRegistrationDateField); 
-        ValidatorForm.chechkAlphabeticalField(passwordField, 5, 50);
-        if(checkBoxIsIntoBodyAcademy.isSelected()){
-            if(!GENERAL_RESUME.isBodyAcademyRegistered(memberBodyAcademyNameField.getText())){
-                memberBodyAcademyNameField.setStyle("-fx-border-color: red;");
+        int smallestCharacterSize = 5;
+        int largestCharacterSize = 100;
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldMemberRfc, smallestCharacterSize, 18);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldMemberCurp, smallestCharacterSize, 19);
+        ValidatorForm.checkAlaphabeticalFields(this.fields, smallestCharacterSize, largestCharacterSize);
+        ValidatorForm.isNumberData(this.txtFieldMemberCellNumber, 10);
+        ValidatorForm.isIntegerNumberData(this.txtFieldMemberStaffNumber, smallestCharacterSize);
+        ValidatorForm.checkNotEmptyDateField(this.dtpAdmisionDate);
+        ValidatorForm.chechkPasswordField(passFieldMemberPassword, smallestCharacterSize, 50);
+        if(chBoxIsIntoBodyAcademy.isVisible() && chBoxIsIntoBodyAcademy.isSelected()){
+            if(!GENERAL_RESUME.isBodyAcademyRegistered(txtFieldMemberBodyAcademyKey.getText())){
+                txtFieldMemberBodyAcademyKey.setStyle("-fx-border-color: red;");
                 throw new InvalidFormException("El cuerpo Académico no existe");
             }
         }
     }
     
     private void setIntegrantDataIntoInterface(){
-        this.passwordField.setText(integrant.getPassword());
-        this.memberBodyAcademyNameField.setText(integrant.getBodyAcademyKey());
-        this.memberCellNumberField.setText(integrant.getCellphone());
-        this.memberCurpField.setText(integrant.getCurp());
-        this.memberEducationalProgramField.setText(integrant.getEducationalProgram());
-        this.memberEmailUVField.setText(integrant.getEmailUV());
-        this.memberFullNameField.setText(integrant.getFullName());
-        this.memberNationalityField.setText(integrant.getNationality());
-        this.memberRFCField.setText(integrant.getRfc());
-        this.memberRegistrationDateField.setValue(LocalDate.parse(integrant.getDateOfAdmission()));
-        this.memberStaffNumberField.setText(String.valueOf(integrant.getStaffNumber()));
-        this.lblParticipationType.setText(integrant.getParticipationType());
+        this.passFieldMemberPassword.setText(integrant.getPassword());
+        this.txtFieldMemberBodyAcademyKey.setText(integrant.getBodyAcademyKey());
+        this.txtFieldMemberCellNumber.setText(integrant.getCellphone());
+        this.txtFieldMemberCurp.setText(integrant.getCurp());
+        this.txtFieldMemberEducationalProgram.setText(integrant.getEducationalProgram());
+        this.txtFieldMemberEmailUv.setText(integrant.getEmailUV());
+        this.txtFieldMemberFullName.setText(integrant.getFullName());
+        this.txtFieldMemberNationality.setText(integrant.getNationality());
+        this.txtFieldMemberRfc.setText(integrant.getRfc());
+        this.dtpAdmisionDate.setValue(LocalDate.parse(integrant.getDateOfAdmission()));
+        this.txtFieldMemberStaffNumber.setText(String.valueOf(integrant.getStaffNumber()));
+        this.lbParticipationType.setText(integrant.getParticipationType());
     }
     
     private void getOutIntegrantDataFromInterface(){
-        integrant.setRfc(this.memberRFCField.getText());
-        integrant.setFullName(this.memberFullNameField.getText());
-        integrant.setEmailUV(this.memberEmailUVField.getText());
-        integrant.setCurp(this.memberCurpField.getText());
-        integrant.setNationality(this.memberNationalityField.getText());
-        integrant.setParticipationType(this.lblParticipationType.getText());
-        integrant.setParticipationStatus("Activo");
-        if(this.checkBoxIsIntoBodyAcademy.isSelected()){
-            integrant.setBodyAcademyKey(this.memberBodyAcademyNameField.getText());
+        this.integrant.setRfc(this.txtFieldMemberRfc.getText());
+        this.integrant.setFullName(this.txtFieldMemberFullName.getText());
+        this.integrant.setEmailUV(this.txtFieldMemberEmailUv.getText());
+        this.integrant.setCurp(this.txtFieldMemberCurp.getText());
+        this.integrant.setNationality(this.txtFieldMemberNationality.getText());
+        this.integrant.setCellphone(this.txtFieldMemberCellNumber.getText());
+        this.integrant.setParticipationType(this.lbParticipationType.getText());
+        this.integrant.setParticipationStatus("Activo");
+        if(chBoxIsIntoBodyAcademy.isVisible() && this.chBoxIsIntoBodyAcademy.isSelected()){
+            this.integrant.setBodyAcademyKey(this.txtFieldMemberBodyAcademyKey.getText());
         }
-        integrant.setEducationalProgram(this.memberEducationalProgramField.getText());
-        integrant.setStaffNumber(Integer.parseInt(this.memberStaffNumberField.getText()));
-        integrant.setDateOfAdmission(ValidatorForm.convertJavaDateToSQlDate(this.memberRegistrationDateField));
-        integrant.setPassword(this.passwordField.getText());
+        this.integrant.setEducationalProgram(this.txtFieldMemberEducationalProgram.getText());
+        this.integrant.setStaffNumber(Integer.parseInt(this.txtFieldMemberStaffNumber.getText()));
+        this.integrant.setDateOfAdmission(ValidatorForm.convertJavaDateToSQlDate(this.dtpAdmisionDate));
+        this.integrant.setPassword(this.passFieldMemberPassword.getText());
     }
     
 }

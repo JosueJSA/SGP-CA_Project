@@ -29,6 +29,11 @@ public class Prototype extends Evidence{
         );
     }
 
+    public Prototype(String evidenceType, String evidenceTitle, 
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+        super(evidenceType, evidenceTitle, impactAB, registrationResponsible, registrationDate, urlFile);
+    }
+
     public Prototype(){
         
     }
@@ -39,6 +44,37 @@ public class Prototype extends Evidence{
 
     public void setFeatures(String features) {
         this.features = features;
+    }
+    
+    @Override
+    public String toString(){
+        return "Prototipo";
+    }
+
+    @Override
+    public Evidence getSpecificEvidenceInstance(String evidenceType) {
+        Evidence evidence = null;
+        if(this.toString().equalsIgnoreCase(evidenceType)){
+            evidence = new Prototype();
+        }
+        return evidence;
+    }
+
+    @Override
+    public Evidence getSpecificEvidenceInstance(String evidenceType, String evidenceTitle, 
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+        Evidence evidence = null;
+        if(this.toString().equalsIgnoreCase(evidenceType)){
+            evidence = new Prototype(
+                evidenceType,
+                evidenceTitle,
+                impactAB,
+                registrationResponsible,
+                registrationDate,
+                urlFile
+            );
+        }
+        return evidence;
     }
     
     

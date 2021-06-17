@@ -11,12 +11,12 @@ import java.util.List;
 
 public class Integrant extends Member{
     
-    private String appointmentMember;
-    private String aditionalMail;
-    private String homePhone;
-    private String workPhone;
+    private String appointmentMember = "PTC";
+    private String aditionalMail = "";
+    private String homePhone = "";
+    private String workPhone = "";
     private List<Schooling> schooling;
-    String password = null;
+    String password = "root";
 
     public Integrant(String rfc,String fullName, String emailUV, String participationStatus, String password,
     String curp, String participationType, String nationality, String dateOfAdmission, String educationalProgram, 
@@ -37,12 +37,7 @@ public class Integrant extends Member{
         super(participationType, fullName, emailUV, cellphone);
     }
 
-    public Integrant(String rfc,String fullName){
-        super(rfc, fullName);
-    }
-
     public Integrant(){
-        super();
         this.schooling = new ArrayList<>();
     }
 
@@ -108,18 +103,14 @@ public class Integrant extends Member{
         return super.getEmailUV().hashCode();
     }
     
-//    @Override
-//    public boolean equals(Object obj){
-//        boolean isEqual = false;
-//        Integrant integrant = (Integrant)obj;
-//        if((super.getRfc().equals(integrant.getRfc())) && (this.schooling.size() == integrant.getSchooling().size())){
-//            isEqual = true;
-//        }
-//        return isEqual;
-//    }
-
     @Override
-    public String toString() {
-        return super.toString();
-    }   
+    public boolean equals(Object obj){
+        boolean isEqual = false;
+        Integrant integrant = (Integrant)obj;
+        if((super.getRfc().equals(integrant.getRfc())) && (this.schooling.size() == integrant.getSchooling().size())){
+            isEqual = true;
+        }
+        return isEqual;
+    }
+    
 }

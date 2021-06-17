@@ -5,6 +5,7 @@
 
 package sgp.ca.domain;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,6 +149,12 @@ public class WorkPlan implements Cloneable{
                 break;
             }
         }
+    }
+    
+    public void calculateDurationInYears(){
+        LocalDate limimitDate = LocalDate.parse(this.endDatePlan);
+        LocalDate initDate = LocalDate.parse(this.startDatePlan);
+        this.durationInYears = limimitDate.getYear() - initDate.getYear();
     }
     
     public void updateGoal(Goal newGoal, String oldGoalDescription){

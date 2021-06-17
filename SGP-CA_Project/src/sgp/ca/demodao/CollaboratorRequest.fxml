@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -15,7 +14,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="387.0" prefWidth="991.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.CollaboratorRequestController">
    <bottom>
-      <HBox fx:id="hboxIntegrantOptions" alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="974.0" spacing="10.0" style="-fx-background-color: #300050;" BorderPane.alignment="CENTER">
+      <HBox fx:id="hbCollaboratorOptions" alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="974.0" spacing="10.0" style="-fx-background-color: #300050;" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnUnsubscribe" mnemonicParsing="false" onAction="#unsubscribeCollaborator" prefHeight="33.0" prefWidth="98.0" text="DAR DE BAJA" />
             <Button fx:id="btnSubscribe" mnemonicParsing="false" onAction="#subscribeCollaborator" prefHeight="33.0" prefWidth="98.0" text="DAR DE ALTA" />
@@ -106,13 +105,13 @@
                   <TextField fx:id="txtFieldCellNumber" accessibleHelp="10 dígitos (Solo números enteros)" editable="false" promptText="Ejemplo: 22-82-90-98-34" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                   <TextField fx:id="txtFieldStatus" accessibleHelp="Solo letras" editable="false" promptText="Ejemplo: Veracruz" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                   <TextField fx:id="txtFieldStaffNumber" accessibleHelp="5 números enteros" editable="false" promptText="Ejemplo: 23643" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                  <DatePicker fx:id="datePickerAdmisionDate" editable="false" maxWidth="1.7976931348623157E308" promptText="Ejmplo: 2020/12/12" GridPane.columnIndex="3" />
                   <Label text="Area de estudio: " GridPane.rowIndex="5" />
                   <Label text="Nombre de cuerpo académico:" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                   <TextField fx:id="txtFieldStudyArea" editable="false" maxWidth="1.7976931348623157E308" promptText="Ejemplo: Matemáticas" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
                   <TextField fx:id="txtFieldBodyAcademyName" editable="false" maxWidth="1.7976931348623157E308" promptText="Ejemplo: Física aplicada" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
                   <TextField fx:id="txtFieldLevelStudy" editable="false" maxWidth="1.7976931348623157E308" promptText="Ejemplo: Maestría" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
                   <Label text="Mayor grado de estudios:" GridPane.rowIndex="6" />
+                  <TextField fx:id="txtFieldRegistrationDate" editable="false" GridPane.columnIndex="3" />
                </children>
             </GridPane>
          </children>

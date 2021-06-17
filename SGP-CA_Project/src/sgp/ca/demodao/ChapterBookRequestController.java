@@ -125,7 +125,7 @@ public class ChapterBookRequestController implements Initializable {
     
     @FXML
     private void closeWindow(ActionEvent event) {
-        FXMLLoader loader = this.changeWindow("EvidenceRequest.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceRequest.fxml", btnCloseWindow);
         EvidenceRequestController controller = loader.getController();
         Book book = new Book();
         book.setUrlFile(chapterBook.getUrlFileBook());
@@ -142,7 +142,7 @@ public class ChapterBookRequestController implements Initializable {
 
     @FXML
     private void removeChapterBook(ActionEvent event) {
-        Optional<ButtonType> action = AlertGenerator.showConfirmacionAlert(event,
+        Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(new ActionEvent(),
             "¿Seguro que desea eliminar este capítulo? Ya no se podrá recuperar.");
         if(action.get() == ButtonType.OK){
 
@@ -151,7 +151,7 @@ public class ChapterBookRequestController implements Initializable {
 
     @FXML
     private void updateChapterBook(ActionEvent event) {
-        FXMLLoader loader = this.changeWindow("ChapterBookEdit.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ChapterBookEdit.fxml", btnCloseWindow);
         ChapterBookEditController controller = loader.getController();
         controller.receiveChapterBook(this.chapterBook);
         controller.receiveBook(this.book);
@@ -192,22 +192,6 @@ public class ChapterBookRequestController implements Initializable {
         List<String> studentList = chapterBook.getStudents();
         itemsStudentNames.addAll(studentList);
         return itemsStudentNames;
-    }
-    
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show();
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
     }
     
     private void errorReturnChapterBook(){

@@ -25,8 +25,12 @@ public class Article extends Evidence{
         magazine = new Magazine();
     }
 
+    public Article(String evidenceType, String evidenceTitle, 
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+        super(evidenceType, evidenceTitle, impactAB, registrationResponsible, registrationDate, urlFile);
+    }
+
     public Article(){
-        super();
         magazine = new Magazine();
     }
 
@@ -68,6 +72,37 @@ public class Article extends Evidence{
     
     public void setMagazine(Magazine magazine){
         this.magazine = magazine;
+    }
+    
+    @Override
+    public String toString(){
+        return "Artículo";
+    }
+
+    @Override
+    public Evidence getSpecificEvidenceInstance(String evidenceType) {
+        Evidence evidence = null;
+        if(this.toString().equalsIgnoreCase(evidenceType)){
+            evidence = new Article();
+        }
+        return evidence;
+    }
+
+    @Override
+    public Evidence getSpecificEvidenceInstance(String evidenceType, String evidenceTitle, 
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+        Evidence evidence = null;
+        if(this.toString().equalsIgnoreCase(evidenceType)){
+            evidence = new Article(
+                evidenceType, 
+                evidenceTitle, 
+                impactAB, 
+                registrationResponsible, 
+                registrationDate, 
+                urlFile
+            );
+        }
+        return evidence;
     }
     
 }

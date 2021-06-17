@@ -21,9 +21,9 @@ public class GeneralResume{
     private String generalTarjet;
     private String registrationDate;
     private String lastEvaluation;
-    private List<Member> members;
+    private List<Member> listMembers;
     private List<Lgac> listLgac;
-    private List<WorkPlan> workplans;
+    private List<WorkPlan> listWorkplans;
 
     public GeneralResume(String bodyAcademyKey, String bodyAcademyName, 
     String ascriptionArea, String ascriptionUnit, String consolidationDegree, 
@@ -39,33 +39,36 @@ public class GeneralResume{
         this.generalTarjet = generalTarjet;
         this.registrationDate = registrationDate;
         this.lastEvaluation = lastEvaluation;
-        members = new ArrayList<>();
+        listMembers = new ArrayList<>();
         listLgac = new ArrayList<>();
-        workplans = new ArrayList<>();
+        listWorkplans = new ArrayList<>();
     }
-
-    
     
     public GeneralResume(){
-        members = new ArrayList<>();
+        listMembers = new ArrayList<>();
         listLgac = new ArrayList<>();
-        workplans = new ArrayList<>();
+        listWorkplans = new ArrayList<>();
     }
     
     public void addMember(Member newMember){
-        members.add(newMember);
+        listMembers.add(newMember);
     }
     
     public void removeMember(Member member){
-        members.remove(member);
+        listMembers.remove(member);
     }
     
     public void addLgac(Lgac newLgac){
         listLgac.add(newLgac);
     }
     
-    public void removeLgac(Lgac lgac){
-        listLgac.remove(lgac);
+    public void removeLgac(String lgacTitle){
+        for(Lgac lgac : this.listLgac){
+            if(lgac.getTitle().equalsIgnoreCase(lgacTitle)){
+                this.listLgac.remove(lgac);
+                break;
+            }
+        }
     }
 
     public String getBodyAcademyKey(){
@@ -147,6 +150,50 @@ public class GeneralResume{
 
     public void setRegistrationDate(String registrationDate){
         this.registrationDate = registrationDate;
+    }
+    
+    public void addLgacList(List<Lgac> listLgac){
+        this.listLgac = listLgac;
+    }
+    
+    public List<Lgac> getLgacList(){
+        return listLgac;
+    }
+    
+    public String getLgacDescriptionByTitle(String lgacTitle){
+        String description = null;
+        for(Lgac lgac : listLgac){
+            if(lgac.getTitle().equalsIgnoreCase(lgacTitle)){
+                description = lgac.getDescription();
+            }            
+        }
+        return description;
+    }
+    
+    public void addMembers(List<Member> members){
+        for(Member member : members){
+            this.listMembers.add(member);
+        }
+    }
+    
+    public List<Integrant> getIntegrants(String status){
+        List<Integrant> integrants = new ArrayList<>();
+        for(Member member : this.listMembers){
+            if(!member.getParticipationType().equalsIgnoreCase("Colaborador") && member.getParticipationStatus().equalsIgnoreCase(status)){
+                integrants.add((Integrant) member);
+            }            
+        }
+        return integrants;
+    }
+    
+    public List<Collaborator> getCollaborators(String status){
+        List<Collaborator> collaborators = new ArrayList<>();
+        for(Member member : this.listMembers){
+            if(member.getParticipationType().equalsIgnoreCase("Colaborador") && member.getParticipationStatus().equalsIgnoreCase(status)){
+                collaborators.add((Collaborator) member);
+            }            
+        }
+        return collaborators;
     }
     
     @Override

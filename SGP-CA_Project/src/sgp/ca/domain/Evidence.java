@@ -43,6 +43,19 @@ public abstract class Evidence {
         this.collaborators = new ArrayList<>();
     }
     
+    public Evidence(String evidenceType, String evidenceTitle, 
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile){
+        this.evidenceType = evidenceType;
+        this.evidenceTitle = evidenceTitle;
+        this.impactAB = impactAB;
+        this.registrationResponsible = registrationResponsible;
+        this.registrationDate = registrationDate;
+        this.urlFile = urlFile;
+        this.students = new ArrayList<>();
+        this.integrants = new ArrayList<>();
+        this.collaborators = new ArrayList<>();
+    }
+    
     public Evidence(){
         this.students = new ArrayList<>();
         this.integrants = new ArrayList<>();
@@ -152,10 +165,11 @@ public abstract class Evidence {
     public void setCollaborators(List<Collaborator> collaborators) {
         this.collaborators = collaborators;
     }
-
+    
     @Override
-    public String toString() {
-        return evidenceTitle + " - ";
-    }
-}
+    public abstract String toString();
+    public abstract Evidence getSpecificEvidenceInstance(String evidenceType, String evidenceTitle, 
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile);
+    public abstract Evidence getSpecificEvidenceInstance(String evidenceType);
 
+}

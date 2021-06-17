@@ -15,6 +15,7 @@ CREATE TABLE `GeneralResume` (
 CREATE TABLE `LGAK` (
 	`identifierLGAC` int(2) auto_increment,
     `bodyAcademyKey` varchar(10) DEFAULT NULL,
+    `title` varchar(1000) DEFAULT NULL,
     `description` varchar(5000) DEFAULT NULL,
     PRIMARY KEY (`IdentifierLGAC`),
     KEY `fk_lgac_1` (`bodyAcademyKey`),
@@ -516,10 +517,10 @@ CREATE TABLE `Action` (
 );
 
 CREATE VIEW `Evidences` AS 
-SELECT Prototype.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, Integrant.emailUV FROM `Prototype`, `IntegrantPrototype`, `Integrant` WHERE Prototype.urlFile = IntegrantPrototype.urlFile AND IntegrantPrototype.rfc = Integrant.rfc
-UNION ALL SELECT Article.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, Integrant.emailUV FROM `Article`, `IntegrantArticle`, `Integrant` WHERE Article.urlFile = IntegrantArticle.urlFile AND IntegrantArticle.rfc = Integrant.rfc
-UNION ALL SELECT Book.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, Integrant.emailUV FROM `Book`, `IntegrantBook`, `Integrant` WHERE Book.urlFile = IntegrantBook.urlFile AND IntegrantBook.rfc = Integrant.rfc
-UNION ALL SELECT ReceptionWork.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, Integrant.emailUV FROM `ReceptionWork`, `IntegrantReceptionWork`, `Integrant` WHERE ReceptionWork.urlFile = IntegrantReceptionWork.urlFile AND IntegrantReceptionWork.rfc = Integrant.rfc;
+SELECT Prototype.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, projectName, Integrant.emailUV FROM `Prototype`, `IntegrantPrototype`, `Integrant` WHERE Prototype.urlFile = IntegrantPrototype.urlFile AND IntegrantPrototype.rfc = Integrant.rfc
+UNION ALL SELECT Article.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, projectName, Integrant.emailUV FROM `Article`, `IntegrantArticle`, `Integrant` WHERE Article.urlFile = IntegrantArticle.urlFile AND IntegrantArticle.rfc = Integrant.rfc
+UNION ALL SELECT Book.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, projectName, Integrant.emailUV FROM `Book`, `IntegrantBook`, `Integrant` WHERE Book.urlFile = IntegrantBook.urlFile AND IntegrantBook.rfc = Integrant.rfc
+UNION ALL SELECT ReceptionWork.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, projectName, Integrant.emailUV FROM `ReceptionWork`, `IntegrantReceptionWork`, `Integrant` WHERE ReceptionWork.urlFile = IntegrantReceptionWork.urlFile AND IntegrantReceptionWork.rfc = Integrant.rfc;
 
 CREATE VIEW `Students` AS
 SELECT * FROM ArticleStudent UNION ALL SELECT * FROM PrototypeStudent UNION ALL SELECT * FROM BookStudent UNION ALL SELECT * FROM ReceptionWorkStudent;

@@ -5,25 +5,19 @@
  */
 package sgp.ca.demodao;
 
-import java.io.IOException;
+import com.jfoenix.controls.JFXDatePicker;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
@@ -33,11 +27,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Schooling;
@@ -54,35 +45,11 @@ public class PersonalResumeEditableController implements Initializable {
     @FXML
     private Button btnCancel;
     @FXML
-    private DatePicker datePickerRegistrationDate;
-    @FXML
     private Button btnAddSchooling;
     @FXML
     private Button btnRemoveSchooling;
     @FXML
-    private TableView<Schooling> tableViewSchooling;
-    @FXML
-    private TableColumn<Schooling, String> columnSchoolingDegree;
-    @FXML
-    private TableColumn<Schooling, String> columnSchoolingName;
-    @FXML
-    private TableColumn<Schooling, String> columnRegistrationStudyDate;
-    @FXML
-    private TableColumn<Schooling, String> columnInstitution;
-    @FXML
-    private TableColumn<Schooling, String> columnState;
-    @FXML
-    private TableColumn<Schooling, String> columnCeduleNumber;
-    @FXML
-    private TableColumn<Schooling, String> columnSchoolingArea;
-    @FXML
-    private TableColumn<Schooling, String> columnDiscipline;
-    @FXML
     private HBox hboxNewSchooling;
-    @FXML
-    private DatePicker datePickerDateStudy;
-    @FXML
-    private Label lblUserName;
     @FXML
     private TextField txtFieldRfc;
     @FXML
@@ -129,39 +96,55 @@ public class PersonalResumeEditableController implements Initializable {
     private TextField txtFieldStudyArea;
     @FXML
     private TextField txtFieldDiscipline;
+    @FXML
+    private Label lbUserName;
+    @FXML
+    private JFXDatePicker dtpStudyDegreeDate;
+    @FXML
+    private TableView<Schooling> tvSchooling;
+    @FXML
+    private TableColumn<Schooling, String> colSchoolingDegree;
+    @FXML
+    private TableColumn<Schooling, String> colSchoolingName;
+    @FXML
+    private TableColumn<Schooling, String> colRegistrationStudyDate;
+    @FXML
+    private TableColumn<Schooling, String> colInstitution;
+    @FXML
+    private TableColumn<Schooling, String> colState;
+    @FXML
+    private TableColumn<Schooling, String> colCeduleNumber;
+    @FXML
+    private TableColumn<Schooling, String> colSchoolingArea;
+    @FXML
+    private TableColumn<Schooling, String> colDiscipline;
+    @FXML
+    private JFXDatePicker dtpRegistrationDate;
     
-    private Integrant integrantToken;
+    private Integrant token;
     private Integrant integrantUpdated;
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
-    private List<TextField> schoolingFields;
-    private List<TextField> personalResumeFields;
+    private List<TextField> listSchoolingFields;
+    private List<TextField> listPersonalResumeFields;
     
-    /**
-     * Initializes the controller class.
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.preprareSchoolingTable();
-        this.btnRemoveSchooling.setDisable(true);
-        schoolingFields = Arrays.asList(
-            txtFieldStudyDegree, txtFieldStudyName, txtFieldInstitutionSchooling,
-            txtFieldState, txtFieldCeduleNumber, txtFieldStudyArea, txtFieldDiscipline
+        listSchoolingFields = Arrays.asList(
+            txtFieldStudyDegree, txtFieldStudyName, 
+            txtFieldInstitutionSchooling, txtFieldState, 
+            txtFieldStudyArea, txtFieldDiscipline
         );
-        personalResumeFields = Arrays.asList(
-            txtFieldRfc, txtFieldFullName, txtFieldEmailUv,
-            txtFieldStatus, txtFieldCurp, txtFieldNationality,
-            txtFieldEducationalProgram, txtFieldStaffNumber,
-            txtFieldCellPhone, txtFieldWorkPhone, txtFieldHomePhone,
-            txtFieldBodyAcademyKey, txtFieldAppoinment, txtFieldParticipationType,
-            txtFieldAditionalMail, passFieldIntegrantPassword
+        listPersonalResumeFields = Arrays.asList(
+            txtFieldFullName, txtFieldEmailUv,
+            txtFieldNationality, txtFieldEducationalProgram,
+            txtFieldAditionalMail
         );
     }
 
     public void receiveIntegrantToken(Integrant integrant){
-        this.integrantToken = integrant;
-        this.lblUserName.setText(this.integrantToken.getFullName());
+        this.token = integrant;
+        this.lbUserName.setText(this.token.getFullName());
         this.setIntegrantDataIntoInterface();
     }
 
@@ -170,25 +153,23 @@ public class PersonalResumeEditableController implements Initializable {
         try {
             this.checkPersonalResumeForm();
             this.getOutIntegrantData();
-            if(INTEGRANT_DAO.updateMember(this.integrantUpdated, integrantToken.getRfc())){
-                AlertGenerator.showInfoAlert(event, "Currículum personal actualizado exitosamente");
-                FXMLLoader loader = changeWindow("Start.fxml", event);
-                StartController controller = loader.getController();
-                controller.receiveIntegrantToken(this.integrantUpdated);
+            if(INTEGRANT_DAO.updateMember(this.integrantUpdated, token.getRfc())){
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Currículum personal actualizado exitosamente");
             }else{
-                AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con soporte técnico");
-                FXMLLoader loader = changeWindow("Start.fxml", event);
-                StartController controller = loader.getController();
-                controller.receiveIntegrantToken(integrantToken);
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con soporte técnico");
+                this.integrantUpdated = this.token;
             }
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("PersonalResumeRequest.fxml", btnCancel);
+            PersonalResumeRequestController controller = loader.getController();
+            controller.receiveIntegrantToken(this.integrantUpdated);
         } catch (InvalidFormException ex) {
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
     
     @FXML
     private void selectSchooling(MouseEvent event) {
-        if(tableViewSchooling.getSelectionModel().getSelectedItem() != null){
+        if(tvSchooling.getSelectionModel().getSelectedItem() != null){
             this.btnRemoveSchooling.setDisable(false);
         }else{
             this.btnRemoveSchooling.setDisable(true);
@@ -197,11 +178,11 @@ public class PersonalResumeEditableController implements Initializable {
     
     @FXML
     private void cancelUpdate(ActionEvent event) {
-        Optional<ButtonType> action = AlertGenerator.showConfirmacionAlert(event, "¿Seguro que deseas cancelar la operción?");
+        Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event, "¿Seguro que deseas cancelar la operción?");
         if(action.get() == ButtonType.OK){
-            FXMLLoader loader = changeWindow("Start.fxml", event);
-            StartController controller = loader.getController();
-            controller.receiveIntegrantToken(this.integrantToken);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("PersonalResumeRequest.fxml", btnCancel);
+            PersonalResumeRequestController controller = loader.getController();
+            controller.receiveIntegrantToken(this.token);
         }
     }
 
@@ -209,61 +190,35 @@ public class PersonalResumeEditableController implements Initializable {
     private void addSchooling(ActionEvent event) {
         try {
             this.checkShooling();
-            tableViewSchooling.getItems().add(this.getOutSchooling());
+            tvSchooling.getItems().add(this.getOutSchooling());
         } catch (InvalidFormException ex) {
-            AlertGenerator.showErrorAlert(event, "No hay elementos suficientes para llenar un estudio");
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
     private void removeSchooling(ActionEvent event) {
-        tableViewSchooling.getItems().remove(
-            tableViewSchooling.getSelectionModel().getSelectedItem()
+        tvSchooling.getItems().remove(
+            tvSchooling.getSelectionModel().getSelectedItem()
         );
     }
     
-    private void checkPersonalResumeForm() throws InvalidFormException{
-        ValidatorForm.checkAlaphabeticalFields(personalResumeFields, 5, 100);
-        ValidatorForm.isIntegerNumberData(txtFieldRfc, 0);
-        ValidatorForm.checkNotEmptyDateField(datePickerRegistrationDate);
-    }
-    
-    private void checkShooling() throws InvalidFormException{
-        ValidatorForm.checkAlaphabeticalFields(schoolingFields, 5, 50);
-        ValidatorForm.checkNotEmptyDateField(datePickerDateStudy);
-    }
-    
     private void preprareSchoolingTable(){
-        columnSchoolingDegree.setCellValueFactory(new PropertyValueFactory<>("levelOfStudy"));
-        columnSchoolingName.setCellValueFactory(new PropertyValueFactory<>("studyName"));
-        columnRegistrationStudyDate.setCellValueFactory(new PropertyValueFactory<>("dateOfObteiningStudies"));
-        columnInstitution.setCellValueFactory(new PropertyValueFactory<>("studiesInstitution"));
-        columnState.setCellValueFactory(new PropertyValueFactory<>("studiesSatate"));
-        columnCeduleNumber.setCellValueFactory(new PropertyValueFactory<>("idProfessionalStudies"));
-        columnSchoolingArea.setCellValueFactory(new PropertyValueFactory<>("studyArea"));
-        columnDiscipline.setCellValueFactory(new PropertyValueFactory<>("studiesDiscipline"));
-    }
-    
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show(); 
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
+        colSchoolingDegree.setCellValueFactory(new PropertyValueFactory<>("levelOfStudy"));
+        colSchoolingName.setCellValueFactory(new PropertyValueFactory<>("studyName"));
+        colRegistrationStudyDate.setCellValueFactory(new PropertyValueFactory<>("dateOfObteiningStudies"));
+        colInstitution.setCellValueFactory(new PropertyValueFactory<>("studiesInstitution"));
+        colState.setCellValueFactory(new PropertyValueFactory<>("studiesSatate"));
+        colCeduleNumber.setCellValueFactory(new PropertyValueFactory<>("idProfessionalStudies"));
+        colSchoolingArea.setCellValueFactory(new PropertyValueFactory<>("studyArea"));
+        colDiscipline.setCellValueFactory(new PropertyValueFactory<>("studiesDiscipline"));
     }
     
     private void setIntegrantDataIntoInterface(){
-        Integrant integrant = (Integrant) INTEGRANT_DAO.getMemberByUVmail(integrantToken.getEmailUV());
+        Integrant integrant = (Integrant) INTEGRANT_DAO.getMemberByUVmail(token.getEmailUV());
         if(integrant != null){
             this.txtFieldAditionalMail.setText(integrant.getAditionalMail());
+            this.txtFieldBodyAcademyKey.setText(integrant.getBodyAcademyKey());
             this.txtFieldAppoinment.setText(integrant.getAppointmentMember());
             this.txtFieldBodyAcademyKey.setText(integrant.getBodyAcademyKey());
             this.txtFieldCellPhone.setText(integrant.getCellphone());
@@ -276,18 +231,18 @@ public class PersonalResumeEditableController implements Initializable {
             this.txtFieldParticipationType.setText(integrant.getParticipationType());
             this.passFieldIntegrantPassword.setText(integrant.getPassword());
             this.txtFieldRfc.setText(integrant.getRfc());
-            this.txtFieldStaffNumber.setText( String.valueOf(integrant.getStaffNumber()));
+            this.txtFieldStaffNumber.setText(String.valueOf(integrant.getStaffNumber()));
             this.txtFieldStatus.setText(integrant.getParticipationStatus());
             this.txtFieldWorkPhone.setText(integrant.getWorkPhone());
-            this.datePickerRegistrationDate.setValue(LocalDate.parse(integrant.getDateOfAdmission()));
+            this.dtpRegistrationDate.setValue(LocalDate.parse(integrant.getDateOfAdmission()));
             ObservableList<Schooling> list = FXCollections.observableArrayList();
             list.addAll(integrant.getSchooling());
-            tableViewSchooling.setItems(list);
+            tvSchooling.setItems(list);
         }else{
-            AlertGenerator.showErrorAlert(new ActionEvent(), "Error en el sistema, favor de contactar con soportr técnico");
-            FXMLLoader loader = changeWindow("Start.fxml", new ActionEvent());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), "Error en el sistema, favor de contactar con soporte técnico");
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnCancel);
             StartController controller = loader.getController();
-            controller.receiveIntegrantToken(this.integrantToken);
+            controller.receiveIntegrantToken(this.token);
         }
     }
     
@@ -301,7 +256,7 @@ public class PersonalResumeEditableController implements Initializable {
             this.txtFieldCurp.getText(), 
             this.txtFieldParticipationType.getText(), 
             this.txtFieldNationality.getText(), 
-            this.datePickerRegistrationDate.getValue().toString(), 
+            this.dtpRegistrationDate.getValue().toString(), 
             this.txtFieldEducationalProgram.getText(), 
             Integer.parseInt(this.txtFieldStaffNumber.getText()), 
             this.txtFieldCellPhone.getText(), 
@@ -311,21 +266,49 @@ public class PersonalResumeEditableController implements Initializable {
             this.txtFieldHomePhone.getText(), 
             this.txtFieldWorkPhone.getText()
         );
-        this.integrantUpdated.setSchooling(tableViewSchooling.getItems());
+        this.integrantUpdated.setSchooling(tvSchooling.getItems());
     }
     
     private Schooling getOutSchooling(){
         Schooling schooling = new Schooling(
             this.txtFieldStudyDegree.getText(), 
             this.txtFieldStudyName.getText(), 
-            this.datePickerDateStudy.getValue().toString(), 
-            ValidatorForm.convertJavaDateToSQlDate(datePickerDateStudy), 
+            this.dtpStudyDegreeDate.getValue().toString(), 
+            ValidatorForm.convertJavaDateToSQlDate(dtpStudyDegreeDate), 
             this.txtFieldState.getText(), 
             this.txtFieldCeduleNumber.getText(), 
             this.txtFieldStudyArea.getText(), 
             this.txtFieldDiscipline.getText()
         );
         return schooling;
+    }
+    
+    private void checkPersonalResumeForm() throws InvalidFormException{
+        int smallestCharacterSize = 3;
+        int largestCharacterSize = 100;
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldRfc, smallestCharacterSize, 18);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldCurp, smallestCharacterSize, 19);
+        ValidatorForm.checkAlaphabeticalFields(this.listPersonalResumeFields, smallestCharacterSize, largestCharacterSize);
+        ValidatorForm.isNumberData(this.txtFieldCellPhone, 10);
+        ValidatorForm.isIntegerNumberData(this.txtFieldStaffNumber, smallestCharacterSize);
+        ValidatorForm.checkNotEmptyDateField(this.dtpRegistrationDate);
+        ValidatorForm.chechkPasswordField(passFieldIntegrantPassword, smallestCharacterSize, 50);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldAppoinment, smallestCharacterSize, 50);
+        ValidatorForm.isNumberData(this.txtFieldWorkPhone, 20);
+        ValidatorForm.isNumberData(this.txtFieldHomePhone, 10);
+    }
+    
+    private void checkShooling() throws InvalidFormException{
+        int smallestCharacterSize = 5;
+        int largestCharacterSize = 100;
+        ValidatorForm.chechkAlphabeticalField(txtFieldCeduleNumber, smallestCharacterSize, 9);
+        ValidatorForm.checkAlaphabeticalFields(listSchoolingFields, smallestCharacterSize, largestCharacterSize);
+        ValidatorForm.checkNotEmptyDateField(dtpStudyDegreeDate);
+        for(Schooling schooling : tvSchooling.getItems()){
+            if(schooling.getIdProfessionalStudies().equalsIgnoreCase(txtFieldCeduleNumber.getText())){
+                throw new InvalidFormException("El número de cédula ya existe");
+            }
+        }
     }
     
 }

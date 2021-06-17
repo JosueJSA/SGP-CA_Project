@@ -5,49 +5,40 @@
  */
 package sgp.ca.demodao;
 
-import java.io.IOException;
+import com.jfoenix.controls.JFXTextArea;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.CollaboratorDAO;
 import sgp.ca.businesslogic.GeneralResumeDAO;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.GeneralResume;
 import sgp.ca.domain.Integrant;
-import sgp.ca.domain.Lgac;
+import sgp.ca.domain.Member;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
+
 public class GeneralResumeRequestController implements Initializable {
 
-    @FXML
-    private HBox hboxGeneralResumeOptions;
     @FXML
     private Button brtnProduction;
     @FXML
@@ -79,113 +70,125 @@ public class GeneralResumeRequestController implements Initializable {
     @FXML
     private TextField txtFieldMemberNameForSearch;
     @FXML
-    private TableView<Lgac> textFieldLhac;
-    @FXML
-    private TableColumn<Lgac, String> lgacIdentified;
-    @FXML
-    private TableColumn<Lgac, String> lgacDescription;
-    @FXML
     private Button btnAddNewMember;
-    @FXML
-    private RadioButton chckBoxAvailables;
-    @FXML
-    private RadioButton chckBoxUnavailables;
     @FXML
     private Button btnSearchMember;
     @FXML
-    private TableView<Integrant> tebleViewIntegrants;
+    private ListView<String> lvLgac;
     @FXML
-    private TableColumn<Integrant, String> columnParticipationTypeIntegrant;
+    private HBox hbGeneralResumeOptions;
     @FXML
-    private TableColumn<Integrant, String> columnFullNameIntegrant;
+    private JFXTextArea txtAreaLgacDescription;
     @FXML
-    private TableColumn<Integrant, String> columnEmailUVIntegrant;
+    private RadioButton rdoBtnSubscribeMembers;
     @FXML
-    private TableColumn<Integrant, String> columnCellPhoneIntegrant;
+    private RadioButton rdoBtnUnsubscribeMembers;
     @FXML
-    private TableView<Collaborator> tableViewCollaborators;
+    private TableColumn<Member, String> colParticipationTypeIntegrant;
     @FXML
-    private TableColumn<Collaborator, String> columnParticipationTypeColllaborator;
+    private TableColumn<Member, String> colFullNameIntegrant;
     @FXML
-    private TableColumn<Collaborator, String> columnFullNameCollaborator;
+    private TableColumn<Member, String> colEmailUVIntegrant;
     @FXML
-    private TableColumn<Collaborator, String> columnEmailUVCollaborator;
+    private TableColumn<Member, String> colCellPhoneIntegrant;
     @FXML
-    private TableColumn<Collaborator, String> columnPhoneCollaborator;
+    private TableView<Member> tvIntegrants;
+    @FXML
+    private TableView<Member> tvCollaborators;
+    @FXML
+    private TableColumn<Member, String> colParticipationTypeColllaborator;
+    @FXML
+    private TableColumn<Member, String> colFullNameCollaborator;
+    @FXML
+    private TableColumn<Member, String> colEmailUVCollaborator;
+    @FXML
+    private TableColumn<Member, String> colPhoneCollaborator;
+    private final ToggleGroup rbGroup = new ToggleGroup();
+    @FXML
+    private HBox hbMembersOptions;
     
-    private  Integrant token;
+    private Integrant token;
+    private GeneralResume generalResume;
     private final GeneralResumeDAO GENERAL_RESUME_DAO = new GeneralResumeDAO();
-    private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
-    private final CollaboratorDAO COLLABORATOR_DAO = new CollaboratorDAO();
-    private List<TextArea> textAreas;
+    private final String errorMessage = "El sistema no está funcionando correctamente, "
+    + "favor de ponerse en contacto con soporte técnico si es que el problema persiste.";
     
-    
-    /**
-     * Initializes the controller class.
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.prepareCollaboratorTable();
         this.prepareIntegratsTable();
-        textAreas = Arrays.asList(txtAreaGeneralTarget, txtAreaMission, txtAreaVision);
+        this.rdoBtnSubscribeMembers.setToggleGroup(rbGroup);
+        this.rdoBtnUnsubscribeMembers.setToggleGroup(rbGroup);
     }
 
     public void showGeneralResume(Integrant integrantToken){
         this.token = integrantToken;
         this.lblUserName.setText(this.token.getFullName());
-        GeneralResume generalResume = GENERAL_RESUME_DAO.getGeneralResumeByKey(integrantToken.getBodyAcademyKey());
-        this.setGeneralResumeDataIntoInterface(generalResume);
-        this.tableViewCollaborators.getItems().addAll(COLLABORATOR_DAO.getMembers(this.token.getBodyAcademyKey()));
-        this.tebleViewIntegrants.getItems().addAll(INTEGRANT_DAO.getMembers(this.token.getBodyAcademyKey()));
+        this.generalResume = GENERAL_RESUME_DAO.getGeneralResumeByKey(integrantToken.getBodyAcademyKey());
+        this.generalResume.addMembers(new IntegrantDAO().getMembers(this.token.getBodyAcademyKey()));
+        this.generalResume.addMembers(new CollaboratorDAO().getMembers(this.token.getBodyAcademyKey()));
+        this.setGeneralResumeDataIntoInterface();
+        if(!this.token.getParticipationType().equalsIgnoreCase("Responsable")){
+            hbGeneralResumeOptions.getChildren().remove(this.btnEdit);
+            hbMembersOptions.getChildren().remove(this.btnAddNewMember);
+        }
     }    
     
-    private void setGeneralResumeDataIntoInterface(GeneralResume generalResume){
-        if(generalResume != null){
-            lbBodyAcademyKey.setText(generalResume.getBodyAcademyKey());
-            lbBodyAcademyName.setText(generalResume.getBodyAcademyName());
-            lbAdscriptionUnit.setText(generalResume.getAscriptionUnit());
-            lbConsolidationDegree.setText(generalResume.getConsolidationDegree());
-            lbRegistrationDate.setText(generalResume.getRegistrationDate());
-            lbSubscriptionArea.setText(generalResume.getAscriptionArea());
-            lbLastEvaluationDate.setText(generalResume.getLastEvaluation());
-            txtAreaGeneralTarget.setText(generalResume.getGeneralTarjet());
-            txtAreaMission.setText(generalResume.getMission());
-            txtAreaVision.setText(generalResume.getVision());
+    private void setGeneralResumeDataIntoInterface(){
+        if(this.generalResume != null){
+            lbBodyAcademyKey.setText(this.generalResume.getBodyAcademyKey());
+            lbBodyAcademyName.setText(this.generalResume.getBodyAcademyName());
+            lbAdscriptionUnit.setText(this.generalResume.getAscriptionUnit());
+            lbConsolidationDegree.setText(this.generalResume.getConsolidationDegree());
+            lbRegistrationDate.setText(this.generalResume.getRegistrationDate());
+            lbSubscriptionArea.setText(this.generalResume.getAscriptionArea());
+            lbLastEvaluationDate.setText(this.generalResume.getLastEvaluation());
+            txtAreaGeneralTarget.setText(this.generalResume.getGeneralTarjet());
+            txtAreaMission.setText(this.generalResume.getMission());
+            txtAreaVision.setText(this.generalResume.getVision());
+            this.filterSubscribeMembersInTable();
+            this.generalResume.getLgacList().forEach(lgac -> this.lvLgac.getItems().add(lgac.getTitle()));
+        }else{
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), errorMessage);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnExit);
+            StartController controller = loader.getController();
+            controller.receiveIntegrantToken(token);
         }
     }
 
     @FXML
     private void requestEvidencesList(ActionEvent event) {
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnExit);
+        EvidenceListController controller = loader.getController();
+        controller.showGeneralResumeEvidences(token);
     }
 
     @FXML
     private void editGeneralResume(ActionEvent event) {
-        FXMLLoader loader = changeWindow("GeneralResumeEditable.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeEditable.fxml", btnExit);
         GeneralResumeEditableController controller = loader.getController();
         controller.showGeneralResumeUpdateForm(this.token);
     }
 
     @FXML
     private void exit(ActionEvent event) {
-        FXMLLoader loader = changeWindow("Start.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnExit);
         StartController controller = loader.getController();
         controller.receiveIntegrantToken(this.token);
     }
 
     @FXML
     private void addMember(ActionEvent event) {
-        FXMLLoader loader = changeWindow("MemberSelection.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MemberSelection.fxml", btnExit);
         MemberSelectionController controller = loader.getController();
         controller.receiveResponsibeleToken(token);
     }
     
     @FXML
     private void showIntegrant(MouseEvent event) {
-        Integrant integrant = tebleViewIntegrants.getSelectionModel().getSelectedItem();
+        Integrant integrant = (Integrant) tvIntegrants.getSelectionModel().getSelectedItem();
         if(integrant != null){
-            FXMLLoader loader = changeWindow("IntegrantRequest.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("IntegrantRequest.fxml", btnExit);
             IntegrantRequestController controller = loader.getController();
             controller.showIntegrantByEmail(this.token, integrant.getEmailUV());
         }
@@ -193,9 +196,9 @@ public class GeneralResumeRequestController implements Initializable {
 
     @FXML
     private void showCollaborator(MouseEvent event) {
-        Collaborator collaborator = tableViewCollaborators.getSelectionModel().getSelectedItem();
+        Collaborator collaborator = (Collaborator) tvCollaborators.getSelectionModel().getSelectedItem();
         if(collaborator != null){
-            FXMLLoader loader = changeWindow("CollaboratorRequest.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("CollaboratorRequest.fxml", btnExit);
             CollaboratorRequestController controller = loader.getController();
             controller.showCollaboratorByEmail(this.token, collaborator.getEmailUV());
         }
@@ -203,36 +206,54 @@ public class GeneralResumeRequestController implements Initializable {
 
     @FXML
     private void searchMember(ActionEvent event) {
-    }
-    
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show(); 
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
+        List<Member> members = new ArrayList<>();
+        if(rdoBtnSubscribeMembers.isSelected()){
+            tvIntegrants.getItems().clear();
+        }else{
+            
         }
+    }
+
+    @FXML
+    private void showSubscribeMembers(ActionEvent event) {
+        this.filterSubscribeMembersInTable();
+    }
+
+    @FXML
+    private void showUnsubscribeMembers(ActionEvent event) {
+        this.filterUnsubscribeMembersInTable();
+    }
+
+    @FXML
+    private void showLgacDescription(MouseEvent event) {
+        this.txtAreaLgacDescription.setText(this.generalResume.getLgacDescriptionByTitle(lvLgac.getSelectionModel().getSelectedItem()));
     }
     
     private void prepareIntegratsTable(){
-        columnParticipationTypeIntegrant.setCellValueFactory(new PropertyValueFactory<>("participationType"));
-        columnFullNameIntegrant.setCellValueFactory(new PropertyValueFactory<>("fullName"));
-        columnEmailUVIntegrant.setCellValueFactory(new PropertyValueFactory<>("emailUV"));
-        columnCellPhoneIntegrant.setCellValueFactory(new PropertyValueFactory<>("cellphone"));
+        colParticipationTypeIntegrant.setCellValueFactory(new PropertyValueFactory<>("participationType"));
+        colFullNameIntegrant.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        colEmailUVIntegrant.setCellValueFactory(new PropertyValueFactory<>("emailUV"));
+        colCellPhoneIntegrant.setCellValueFactory(new PropertyValueFactory<>("cellphone"));
     }
     
     private void prepareCollaboratorTable(){
-        columnParticipationTypeColllaborator.setCellValueFactory(new PropertyValueFactory<>("participationType"));
-        columnFullNameCollaborator.setCellValueFactory(new PropertyValueFactory<>("fullName"));
-        columnEmailUVCollaborator.setCellValueFactory(new PropertyValueFactory<>("emailUV"));
-        columnPhoneCollaborator.setCellValueFactory(new PropertyValueFactory<>("cellphone"));
+        colParticipationTypeColllaborator.setCellValueFactory(new PropertyValueFactory<>("participationType"));
+        colFullNameCollaborator.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        colEmailUVCollaborator.setCellValueFactory(new PropertyValueFactory<>("emailUV"));
+        colPhoneCollaborator.setCellValueFactory(new PropertyValueFactory<>("cellphone"));
     }
     
+    private void filterSubscribeMembersInTable(){
+        tvCollaborators.getItems().clear();
+        tvIntegrants.getItems().clear();
+        tvCollaborators.getItems().addAll(this.generalResume.getCollaborators("Activo"));
+        tvIntegrants.getItems().addAll(this.generalResume.getIntegrants("Activo"));
+    }
+    
+    private void filterUnsubscribeMembersInTable(){
+        tvCollaborators.getItems().clear();
+        tvIntegrants.getItems().clear();
+        tvCollaborators.getItems().addAll(this.generalResume.getCollaborators("Dado de baja"));
+        tvIntegrants.getItems().addAll(this.generalResume.getIntegrants("Dado de baja"));
+    }    
 }

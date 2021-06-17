@@ -46,6 +46,7 @@ import sgp.ca.businesslogic.ProjectDAO;
 import sgp.ca.businesslogic.ReceptionWorkDAO;
 import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Integrant;
+import sgp.ca.domain.Member;
 import sgp.ca.domain.Project;
 import sgp.ca.domain.ReceptionWork;
 
@@ -126,10 +127,10 @@ public class ReceptionWorkFormController implements Initializable {
     public void initialize(URL url, ResourceBundle rb){
         colIntegrantName.setCellValueFactory(new PropertyValueFactory<IntegrantTable, String>("integrantName"));
         colIntegrantParticipation.setCellValueFactory(new PropertyValueFactory<IntegrantTable, RadioButton>("participation"));
-        tvIntegrant.setItems(makeitemsIntegrant());
+        //tvIntegrant.setItems(makeitemsIntegrant());
         colCollaboratorName.setCellValueFactory(new PropertyValueFactory<CollaboratorTable, String>("collaboratorName"));
         colCollaboratorParticipation.setCellValueFactory(new PropertyValueFactory<CollaboratorTable, RadioButton>("participation"));
-        tvCollaborator.setItems(makeitemsCollaborator());
+        //tvCollaborator.setItems(makeitemsCollaborator());
         cboxProject.setItems(makeitemsProject());
         cboBoxModality.setItems(MODALITYLIST);
         optionButtons = Arrays.asList(
@@ -169,7 +170,7 @@ public class ReceptionWorkFormController implements Initializable {
             receptionWork.setIntegrants(IntegrantList());
             receptionWork.setCollaborators(CollaboratorList());
             RECEPTIONWORK_DAO.addNewEvidence(receptionWork);
-            AlertGenerator.showInfoAlert(event, "Proyecto registrado correctamente");
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Proyecto registrado correctamente");
 //        }catch(InvalidFormException ie){
 //            AlertGenerator.showErrorAlert(event, ie.getMessage());
 //        }
@@ -196,25 +197,25 @@ public class ReceptionWorkFormController implements Initializable {
 //        ValidatorForm.chechkAlphabeticalArea(txtAreaDescription, 500);
 //    }
     
-    private ObservableList<IntegrantTable> makeitemsIntegrant(){
-        ObservableList<IntegrantTable> itemsIntegrant = FXCollections.observableArrayList();
-        List<Integrant> integrantsRfcName = INTEGRANT_DAO.getAllIntegrantsRfcName();
-        for(int i = 0; i < integrantsRfcName.size(); i++){
-            IntegrantTable participationIntegrantTable = new IntegrantTable(integrantsRfcName.get(i).getRfc(), integrantsRfcName.get(i).getFullName());
-            itemsIntegrant.add(participationIntegrantTable);
-        }
-        return itemsIntegrant;
-    }
+//    private ObservableList<IntegrantTable> makeitemsIntegrant(){
+//        ObservableList<IntegrantTable> itemsIntegrant = FXCollections.observableArrayList();
+//        //List<Integrant> integrantsRfcName = INTEGRANT_DAO.getAllIntegrantsRfcName();
+//        for(int i = 0; i < integrantsRfcName.size(); i++){
+//            IntegrantTable participationIntegrantTable = new IntegrantTable(integrantsRfcName.get(i).getRfc(), integrantsRfcName.get(i).getFullName());
+//            itemsIntegrant.add(participationIntegrantTable);
+//        }
+//        return itemsIntegrant;
+//    }
     
-    private ObservableList<CollaboratorTable> makeitemsCollaborator(){
-        ObservableList<CollaboratorTable> itemsCollaborator = FXCollections.observableArrayList();
-        List<Collaborator> collaboratorRfcName = COLLABORATOR_DAO.getAllCollaboratorsRfcName();
-        for(int i = 0; i < collaboratorRfcName.size(); i++){
-            CollaboratorTable participationCollaboratorTable = new CollaboratorTable(collaboratorRfcName.get(i).getRfc(), collaboratorRfcName.get(i).getFullName());
-            itemsCollaborator.add(participationCollaboratorTable);
-        }
-        return itemsCollaborator;
-    }
+//    private ObservableList<CollaboratorTable> makeitemsCollaborator(){
+////        ObservableList<CollaboratorTable> itemsCollaborator = FXCollections.observableArrayList();
+////        //List<Member> collaboratorRfcName = COLLABORATOR_DAO.getAllCollaboratorsRfcName();
+////        for(int i = 0; i < collaboratorRfcName.size(); i++){
+////            CollaboratorTable participationCollaboratorTable = new CollaboratorTable(collaboratorRfcName.get(i).getRfc(), collaboratorRfcName.get(i).getFullName());
+////            itemsCollaborator.add(participationCollaboratorTable);
+////        }
+////        return itemsCollaborator;
+//    }
 
     private ObservableList<String> makeitemsProject(){
         ObservableList<String> itemsProject = FXCollections.observableArrayList();
@@ -261,7 +262,7 @@ public class ReceptionWorkFormController implements Initializable {
         List<Integrant> itemsIntegrantSelected = new ArrayList<>();
         for(IntegrantTable integrantTable : tvIntegrant.getItems()){
             if(integrantTable.getParticipation().isSelected()){
-               itemsIntegrantSelected.add(new Integrant(integrantTable.getIntegrantRfc(), integrantTable.getIntegrantName()));
+               //itemsIntegrantSelected.add(new Integrant(integrantTable.getIntegrantRfc(), integrantTable.getIntegrantName()));
                //System.out.println(integrantTable.getIntegrantRfc());
             }
         }
@@ -272,7 +273,7 @@ public class ReceptionWorkFormController implements Initializable {
         List<Collaborator> itemsCollaboratorSelected = new ArrayList<>();
         for(CollaboratorTable collaboratorTable : tvCollaborator.getItems()){
             if(collaboratorTable.getParticipation().isSelected()){
-               itemsCollaboratorSelected.add(new Collaborator(collaboratorTable.getCollaboratorRfc(), collaboratorTable.getCollaboratorName()));
+               //itemsCollaboratorSelected.add(new Collaborator(collaboratorTable.getCollaboratorRfc(), collaboratorTable.getCollaboratorName()));
                //System.out.println(collaboratorTable.getCollaboratorName());
             }
         }

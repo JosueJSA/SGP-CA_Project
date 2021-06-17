@@ -17,5 +17,6 @@ public interface IMemberDAO {
     public boolean updateMember(Member member, String oldRFC);
     public boolean unsubscribeMemberByEmailUV(String emailUV);
     public boolean subscribeMemberByEmailUV(String emailUV);
+    public List<Member> getMembers(String bodyAcademyKey);
     
 }

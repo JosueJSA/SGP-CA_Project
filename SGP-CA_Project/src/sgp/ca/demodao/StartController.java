@@ -5,29 +5,16 @@
  */
 package sgp.ca.demodao;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.domain.Integrant;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
 public class StartController implements Initializable {
 
     @FXML
@@ -40,8 +27,6 @@ public class StartController implements Initializable {
     private Button btnExit;
     @FXML
     private Label lblUserName;
-    
-    private Integrant integrant;
     @FXML
     private Button btnAcademyProduction;
     @FXML
@@ -49,81 +34,64 @@ public class StartController implements Initializable {
     @FXML
     private Button btnProject;
     
+    
+    private Integrant token;
 
-    /**
-     * Initializes the controller class.
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        integrant = new Integrant();
+        token = new Integrant();
     }  
     
     public void receiveIntegrantToken(Integrant integrant){
-        this.integrant = integrant;
-        this.lblUserName.setText(this.integrant.getFullName());
+        this.token = integrant;
+        this.lblUserName.setText(this.token.getFullName());
     }
 
     @FXML
     private void consultGeneralResume(ActionEvent event) {
-        FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnExit);
         GeneralResumeRequestController controller = loader.getController();
-        controller.showGeneralResume(integrant);
+        controller.showGeneralResume(token);
     }
 
     @FXML
     private void consultPersonalResume(ActionEvent event) {
-        FXMLLoader loader = changeWindow("PersonalResumeRequest.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("PersonalResumeRequest.fxml", btnExit);
         PersonalResumeRequestController controller = loader.getController();
-        controller.receiveIntegrantToken(integrant);
+        controller.receiveIntegrantToken(token);
     }
 
     @FXML
     private void consultWorkPlan(ActionEvent event) {
-        FXMLLoader loader = changeWindow("WorkPlanRequest.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("WorkPlanRequest.fxml", btnExit);
         WorkPlanRequestController controller = loader.getController();
-        controller.receiveIntegrantToken(integrant);
+        controller.receiveToken(token);
     }
     
     @FXML
     private void consultProject(ActionEvent event) {
-        FXMLLoader loader = changeWindow("ProjectList.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ProjectList.fxml", btnExit);
         ProjectListController controller = loader.getController();
-        controller.receiveToken(integrant);
+        controller.receiveToken(token);
     }
     
     @FXML
     private void consultEvidencesList(ActionEvent event) {
-        
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnExit);
+        EvidenceListController controller = loader.getController();
+        controller.showGeneralResumeEvidences(token);
     }
 
     @FXML
     private void consultMeetings(ActionEvent event) {
-        FXMLLoader loader = changeWindow("MeetingHistory.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingHistory.fxml", btnExit);
         MeetingHistoryController controller = loader.getController();
-        controller.receiveToken(integrant);
+        controller.receiveToken(token);
     }
 
     @FXML
     private void exit(ActionEvent event) {
-        changeWindow("Login.fxml", event);
-    }
-
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show(); 
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
+        GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnExit);
     }
     
 }

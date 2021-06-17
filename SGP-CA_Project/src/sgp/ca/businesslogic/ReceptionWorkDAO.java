@@ -609,4 +609,18 @@ public class ReceptionWorkDAO extends EvidenceDAO{
             return students;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Trabajo Recepcional";
+    }
+
+    @Override
+    public EvidenceDAO getEvidenceDaoInstance(String evidenceType){
+        EvidenceDAO evidenceDao = null;
+        if(this.toString().equalsIgnoreCase(evidenceType)){
+            evidenceDao = new ReceptionWorkDAO();
+        }
+        return evidenceDao;
+    }
 }

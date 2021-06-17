@@ -5,28 +5,21 @@
  */
 package sgp.ca.demodao;
 
-import java.io.IOException;
+import com.jfoenix.controls.JFXDatePicker;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.CollaboratorDAO;
 import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Integrant;
@@ -44,8 +37,6 @@ public class CollaboratorEditableController implements Initializable {
     private Button btnCancel;
     @FXML
     private Button btnCollaboratorUpdate;
-    @FXML
-    private HBox hboxCollaboratorOptions;
     @FXML
     private Label lbParticipationType;
     @FXML
@@ -65,46 +56,41 @@ public class CollaboratorEditableController implements Initializable {
     @FXML
     private TextField txtFieldStaffNumber;
     @FXML
-    private DatePicker datePickerAdmisionDate;
-    @FXML
     private TextField txtFieldStudyArea;
     @FXML
     private TextField txtFieldBodyAcademyName;
     @FXML
     private TextField txtFieldLevelStudy;
+    @FXML
+    private HBox hbCollaboratorOptions;
+    @FXML
+    private JFXDatePicker dtpAdmissionDate;
     
     private Integrant token;
     private Collaborator collaborator;
     private String oldRFC;
-    private List<Button> optionButtons;
     private List<TextField> fields;
     private final CollaboratorDAO COLLABORATOR_DAO = new CollaboratorDAO();
     
-    /**
-     * Initializes the controller class.
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         collaborator = new Collaborator();
         this.fields = Arrays.asList(
-            txtFieldBodyAcademyName, txtFieldCurp, txtFieldEducationalProgram,
+            txtFieldBodyAcademyName, txtFieldEducationalProgram,
             txtFieldEmailUv, txtFieldFullName, txtFieldLevelStudy, txtFieldNationality, 
-            txtFieldRfcMember, txtFieldStudyArea
+            txtFieldStudyArea
         );
-        optionButtons = Arrays.asList(btnCancel, btnCollaboratorUpdate, btnRegistrerColaborator);
-        hboxCollaboratorOptions.getChildren().removeAll(optionButtons);
+        hbCollaboratorOptions.getChildren().removeAll(btnCancel, btnCollaboratorUpdate, btnRegistrerColaborator);
     }  
     
     public void showCollaboratorRegistrationForm(Integrant integrantToken){
         this.token = integrantToken;
-        hboxCollaboratorOptions.getChildren().addAll(btnRegistrerColaborator, btnCancel);
+        hbCollaboratorOptions.getChildren().addAll(btnRegistrerColaborator, btnCancel);
     }
     
     public void showCollaboratorUpdateForm(Integrant integrantToken, String emailUV){
         this.token = integrantToken;
-        hboxCollaboratorOptions.getChildren().addAll(btnCollaboratorUpdate, btnCancel);
+        hbCollaboratorOptions.getChildren().addAll(btnCollaboratorUpdate, btnCancel);
         this.collaborator = (Collaborator) COLLABORATOR_DAO.getMemberByUVmail(emailUV);
         this.oldRFC = collaborator.getRfc();
         this.setIntegrantDataIntoInterface();
@@ -113,43 +99,43 @@ public class CollaboratorEditableController implements Initializable {
     @FXML
     private void addNewCollaborator(ActionEvent event) {
         try {
-            this.checkCollabortorForm();
+            this.validateForm();
             this.getOutIntegrantDataFromInterface();
             collaborator.setParticipationStatus("Activo");
             if(COLLABORATOR_DAO.addMember(this.collaborator)){
-                AlertGenerator.showInfoAlert(event, "El colaborador ha sido registrado en el sistema");
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El colaborador ha sido registrado en el sistema");
             }else{
-                AlertGenerator.showErrorAlert(event, "Ocurrió un error en el sistema, favor de ponerse en contacto con soporte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Ocurrió un error en el sistema, favor de ponerse en contacto con soporte técnico");
             }
-            FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancel);
             GeneralResumeRequestController controller = loader.getController();
             controller.showGeneralResume(token);
         } catch (InvalidFormException ex) {
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
     private void updateCollaborator(ActionEvent event) {
         try {
-            this.checkCollabortorForm();
+            this.validateForm();
             this.getOutIntegrantDataFromInterface();
             if(COLLABORATOR_DAO.updateMember(this.collaborator, this.oldRFC)){
-                AlertGenerator.showInfoAlert(event, "El colaborador ha sido registrado en el sistema");
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El colaborador ha sido registrado en el sistema");
             }else{
-                AlertGenerator.showErrorAlert(event, "Ocurrió un error en el sistema, favor de ponerse en contacto con soporte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Ocurrió un error en el sistema, favor de ponerse en contacto con soporte técnico");
             }
-            FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancel);
             GeneralResumeRequestController controller = loader.getController();
             controller.showGeneralResume(token);
         } catch (InvalidFormException ex) {
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
     private void cancelCollaboratorChanges(ActionEvent event) {
-        FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancel);
         GeneralResumeRequestController controller = loader.getController();
         controller.showGeneralResume(token);
     }
@@ -162,7 +148,7 @@ public class CollaboratorEditableController implements Initializable {
         this.txtFieldFullName.setText(collaborator.getFullName());
         this.txtFieldNationality.setText(collaborator.getNationality());
         this.txtFieldRfcMember.setText(collaborator.getRfc());
-        this.datePickerAdmisionDate.setValue(LocalDate.parse(collaborator.getDateOfAdmission()));
+        this.dtpAdmissionDate.setValue(LocalDate.parse(collaborator.getDateOfAdmission()));
         this.txtFieldStaffNumber.setText(String.valueOf(collaborator.getStaffNumber()));
         this.lbParticipationType.setText(collaborator.getParticipationType());
         this.txtFieldBodyAcademyName.setText(collaborator.getNameBACollaborator());
@@ -182,33 +168,22 @@ public class CollaboratorEditableController implements Initializable {
         collaborator.setParticipationStatus("Activo");
         collaborator.setEducationalProgram(this.txtFieldEducationalProgram.getText());
         collaborator.setStaffNumber(Integer.parseInt(this.txtFieldStaffNumber.getText()));
-        collaborator.setDateOfAdmission(ValidatorForm.convertJavaDateToSQlDate(this.datePickerAdmisionDate));
+        collaborator.setDateOfAdmission(ValidatorForm.convertJavaDateToSQlDate(this.dtpAdmissionDate));
         collaborator.setStudyArea(this.txtFieldStudyArea.getText());
         collaborator.setNameBACollaborator(this.txtFieldBodyAcademyName.getText());
         collaborator.setHighestDegreeStudies(this.txtFieldLevelStudy.getText());
+        collaborator.setBodyAcademyKey(this.token.getBodyAcademyKey());
+        collaborator.setParticipationType("Colaborador");
     }
     
-    public void checkCollabortorForm() throws InvalidFormException{
-        ValidatorForm.checkAlaphabeticalFields(fields, 5, 50);
-        ValidatorForm.checkNotEmptyDateField(datePickerAdmisionDate);
-        ValidatorForm.isNumberData(txtFieldCellNumber, 11);
-        ValidatorForm.isIntegerNumberData(txtFieldStaffNumber, 8);
-    }
-    
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show(); 
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
-    }
-    
+    private void validateForm() throws InvalidFormException{
+        int smallestCharacterSize = 5;
+        int largestCharacterSize = 100;
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldRfcMember, smallestCharacterSize, 18);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldCurp, smallestCharacterSize, 19);
+        ValidatorForm.checkAlaphabeticalFields(this.fields, smallestCharacterSize, largestCharacterSize);
+        ValidatorForm.isNumberData(this.txtFieldCellNumber, 10);
+        ValidatorForm.isIntegerNumberData(this.txtFieldStaffNumber, smallestCharacterSize);
+        ValidatorForm.checkNotEmptyDateField(this.dtpAdmissionDate);
+    }  
 }

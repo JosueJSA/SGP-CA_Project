@@ -16,19 +16,16 @@ import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Member;
 
-/**
- *
- * @author Josue Alarcon
- */
 public class CollaboratorDAO implements IMemberDAO{
     
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
-    public List<Collaborator> getMembers(String bodyAcademyKey){
-        List<Collaborator> collaborators = new ArrayList<>();
+    @Override
+    public List<Member> getMembers(String bodyAcademyKey){
+        List<Member> collaborators = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT fullName, participationType, emailUV, cellPhone FROM `Collaborator` WHERE bodyAcademyKey = ?;"
+                "SELECT fullName, participationType, emailUV, cellPhone, participationStatus FROM `Collaborator` WHERE bodyAcademyKey = ?;"
             );
             sentenceQuery.setString(1, bodyAcademyKey);
             ResultSet result = sentenceQuery.executeQuery();
@@ -38,28 +35,7 @@ public class CollaboratorDAO implements IMemberDAO{
                 collaborator.setParticipationType(result.getString("participationType"));
                 collaborator.setEmailUV(result.getString("emailUV"));
                 collaborator.setCellphone(result.getString("cellPhone"));
-                collaborators.add(collaborator);
-            }
-        }catch(SQLException sqlException){
-            Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
-        }finally{
-            CONNECTION.closeConnection();
-            return collaborators;
-        }
-    }
-    
-    public List<Collaborator> getCollaboratorsForEvidence(String bodyAcademyKey){
-        List<Collaborator> collaborators = new ArrayList<>();
-        try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT fullName, rfc FROM `Collaborator` WHERE bodyAcademyKey = ? AND participationStatus = 'Activo';"
-            );
-            sentenceQuery.setString(1, bodyAcademyKey);
-            ResultSet result = sentenceQuery.executeQuery();
-            while(result.next()){
-                Collaborator collaborator = new Collaborator();
-                collaborator.setFullName(result.getString("fullName"));
-                collaborator.setRfc(result.getString("rfc"));
+                collaborator.setParticipationStatus(result.getString("participationStatus"));
                 collaborators.add(collaborator);
             }
         }catch(SQLException sqlException){
@@ -97,6 +73,7 @@ public class CollaboratorDAO implements IMemberDAO{
                 queryResult.getString("highestDegreeStudies")
             );}
         }catch(SQLException sqlException){
+            collaborator = null;
             Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             CONNECTION.closeConnection();
@@ -209,44 +186,4 @@ public class CollaboratorDAO implements IMemberDAO{
         }
     }
     
-public List<String> getAllCollaboratorsName() {
-        List<String> CollaboratorsNameList = new ArrayList();
-        try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Collaborator;"
-            );
-            ResultSet queryResult = sentenceQuery.executeQuery();
-            while(queryResult.next()){
-                String integrantName = queryResult.getString("fullName");
-                CollaboratorsNameList.add(integrantName);
-            }
-        }catch(SQLException sqlException){
-            Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
-        }finally{
-            CONNECTION.closeConnection();
-            return CollaboratorsNameList;
-        }
-    }
-    
-    public List<Collaborator> getAllCollaboratorsRfcName() {
-        List<Collaborator> CollaboratorsRfcNameList = new ArrayList();
-        try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Collaborator;"
-            );
-            ResultSet queryResult = sentenceQuery.executeQuery();
-            while(queryResult.next()){
-                String integrantRfc = queryResult.getString("rfc");
-                String integrantName = queryResult.getString("fullName");
-                CollaboratorsRfcNameList.add(new Collaborator(integrantRfc, integrantName));
-            }
-        }catch(SQLException sqlException){
-            Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
-        }finally{
-            CONNECTION.closeConnection();
-            return CollaboratorsRfcNameList;
-        }
-    }
-}
-
 }

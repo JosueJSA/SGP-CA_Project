@@ -31,10 +31,6 @@ public class Collaborator extends Member{
         super(participationType, fullName, emailUV, cellphone);
     }
     
-    public Collaborator(String rfc, String fullName){
-        super(rfc, fullName);
-    }
-
     public Collaborator(){
         
     }
@@ -63,17 +59,12 @@ public class Collaborator extends Member{
         this.highestDegreeStudies = highestDegreeStudies;
     }
     
-//    @Override
-//    public boolean equals(Object obj){
-//        boolean isEqual = false;
-//        if(super.getRfc().equals(((Collaborator)obj).getRfc())){
-//            isEqual = true;
-//        }
-//        return isEqual;
-//    }
-
     @Override
-    public String toString() {
-        return super.toString();
+    public boolean equals(Object obj){
+        boolean isEqual = false;
+        if(super.getRfc().equals(((Collaborator)obj).getRfc())){
+            isEqual = true;
+        }
+        return isEqual;
     }
 }

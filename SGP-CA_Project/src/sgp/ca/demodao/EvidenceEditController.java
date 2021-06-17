@@ -53,6 +53,7 @@ import sgp.ca.domain.Book;
 import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
+import sgp.ca.domain.Member;
 import sgp.ca.domain.Prototype;
 
 public class EvidenceEditController implements Initializable {
@@ -86,7 +87,7 @@ public class EvidenceEditController implements Initializable {
     @FXML
     private Button btnRemoveRowIntegrantTable;
     @FXML
-    private ComboBox<Integrant> cboBoxIntegrantsName;
+    private ComboBox<Member> cboBoxIntegrantsName;
     @FXML
     private TableView<Integrant> tvIntegrant;
     @FXML
@@ -96,7 +97,7 @@ public class EvidenceEditController implements Initializable {
     @FXML
     private Button btnRemoveRowCollaboratorTable;
     @FXML
-    private ComboBox<Collaborator> cboBoxCollaboratorsName;
+    private ComboBox<Member> cboBoxCollaboratorsName;
     @FXML
     private TableView<Collaborator> tvCollaborators;
     @FXML
@@ -342,41 +343,41 @@ public class EvidenceEditController implements Initializable {
                 ((Prototype)this.evidence).setFeatures(this.txtAreaFeatures.getText());
             }
             if(EVIDENCE_DAO.addNewEvidence(this.evidence)){
-                AlertGenerator.showInfoAlert(event, "Evidencia registrada con éxito");
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Evidencia registrada con éxito");
             }else{
-                AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
             }
 //            FXMLLoader loader = changeWindow("MeetingHistory.fxml", event); Informacion de la ventana lista de evidencias
 //            MeetingHistoryController controller = loader.getController();
 //            controller.receiveToken(token);
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
     private void addRowCollaboratorTable(ActionEvent event) {
         try{
-            ValidatorForm.isComboBoxSelectedCollaborator(cboBoxCollaboratorsName);
-            Collaborator collaborator = this.cboBoxCollaboratorsName.getValue();
-            this.evidence.getCollaborators().add(collaborator);
+            ValidatorForm.isComboBoxSelected(cboBoxCollaboratorsName);
+            Member collaborator = this.cboBoxCollaboratorsName.getValue();
+            this.evidence.getCollaborators().add((Collaborator) collaborator);
             this.tvCollaborators.setItems(makeitemsCollaboratorsListForTable());
             this.cboBoxCollaboratorsName.setValue(null);
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
     private void addRowIntegrantTable(ActionEvent event) {
         try{
-            ValidatorForm.isComboBoxSelectedIntegrant(cboBoxIntegrantsName);
-            Integrant integrant = this.cboBoxIntegrantsName.getValue();
-            this.evidence.getIntegrants().add(integrant);
+            ValidatorForm.isComboBoxSelected(cboBoxIntegrantsName);
+            Member integrant = this.cboBoxIntegrantsName.getValue();
+            this.evidence.getIntegrants().add((Integrant) integrant);
             this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
             this.cboBoxIntegrantsName.setValue(null);
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
@@ -389,13 +390,13 @@ public class EvidenceEditController implements Initializable {
             this.lvStudent.setItems(makeitemsStudentsListForTable());
             this.txtFieldStudentName.clear();
         }catch(InvalidFormException ex){
-             AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
     private void closeWindow(ActionEvent event) {
-        Optional<ButtonType> action = AlertGenerator.showConfirmacionAlert(event,
+        Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
             "¿Seguro que desea salir? No se guardará la información");
         if(action.get() == ButtonType.OK){
             if(this.urlFileEvidence == null){
@@ -456,9 +457,9 @@ public class EvidenceEditController implements Initializable {
                 ((Prototype)this.evidence).setFeatures(this.txtAreaFeatures.getText());
             }
             if(EVIDENCE_DAO.updateEvidence(this.evidence, this.urlFileEvidence)){
-                AlertGenerator.showInfoAlert(event, "Evidencia modificada con éxito");
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Evidencia modificada con éxito");
             }else{
-                AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
             }
             
             FXMLLoader loader = changeWindow("EvidenceRequest.fxml", event);
@@ -466,7 +467,7 @@ public class EvidenceEditController implements Initializable {
             controller.receiveEvidence(this.evidence);
             controller.receiveToken(token);
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
         
     }
@@ -506,16 +507,16 @@ public class EvidenceEditController implements Initializable {
         return itemsStudentNames;
     }
     
-    private ObservableList<Integrant> makeitemsIntegrantsListForComboBox(){
-        ObservableList<Integrant> itemsIntegrantNames = FXCollections.observableArrayList();
-        List<Integrant> integrantsList = INTEGRANT_DAO.getIntegrantsForEvidence("UV-CA-127");
+    private ObservableList<Member> makeitemsIntegrantsListForComboBox(){
+        ObservableList<Member> itemsIntegrantNames = FXCollections.observableArrayList();
+        List<Member> integrantsList = INTEGRANT_DAO.getMembers("UV-CA-127");
         itemsIntegrantNames.addAll(integrantsList);
         return itemsIntegrantNames;
     }
     
-    private ObservableList<Collaborator> makeitemsCollaboratorsListForComboBox(){
-        ObservableList<Collaborator> itemsCollaboratorNames = FXCollections.observableArrayList();
-        List<Collaborator> collaboratorsList = COLLABORATOR_DAO.getCollaboratorsForEvidence("UV-CA-127");
+    private ObservableList<Member> makeitemsCollaboratorsListForComboBox(){
+        ObservableList<Member> itemsCollaboratorNames = FXCollections.observableArrayList();
+        List<Member> collaboratorsList = COLLABORATOR_DAO.getMembers("UV-CA-127");
         itemsCollaboratorNames.addAll(collaboratorsList);
         return itemsCollaboratorNames;
     }

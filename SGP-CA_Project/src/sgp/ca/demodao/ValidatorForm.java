@@ -6,14 +6,12 @@
 package sgp.ca.demodao;
 
 import java.util.List;
-import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import sgp.ca.domain.Book;
-import sgp.ca.domain.Collaborator;
-import sgp.ca.domain.Integrant;
+import sgp.ca.domain.Member;
 
 /**
  *
@@ -32,6 +30,20 @@ public class ValidatorForm{
             chechkAlphabeticalArea(area, characterSizeMinimun, characterSizeLimit);
         }
     }
+    
+    public static void chechkPasswordField(PasswordField field, int characterSizeMinimun, int characterSizeLimit) throws InvalidFormException{
+        boolean correctField = false;
+        if(!field.getText().isEmpty() && field.getText().length() >= characterSizeMinimun && field.getText().length() <= characterSizeLimit){
+            field.setStyle("-fx-border-color: green;");
+            correctField = true;
+        }else{
+            field.setStyle("-fx-border-color: red;");
+        }
+        if(!correctField){
+            throw new InvalidFormException("El campo: " + field.getAccessibleHelp() + ", es inválido");
+        }
+    }
+    
     
     public static void chechkAlphabeticalField(TextField field, int characterSizeMinimun, int characterSizeLimit) throws InvalidFormException{
         boolean correctField = false;
@@ -62,6 +74,7 @@ public class ValidatorForm{
     public static void isNumberData(TextField textForCheck, int characterLimit) throws InvalidFormException{
         boolean isNumber = false;
         try{
+            chechkAlphabeticalField(textForCheck, 1, characterLimit);
             double number = Double.parseDouble(textForCheck.getText());
             isNumber = true;
             textForCheck.setStyle("-fx-border-color: green;");
@@ -96,34 +109,7 @@ public class ValidatorForm{
         }
     }
     
-    public static void isComboBoxSelected(ComboBox<String> comboBox) throws InvalidFormException{
-        if(comboBox.getValue() == null){
-            comboBox.setStyle("-fx-border-color: red;");
-            throw new InvalidFormException("Campos sin seleccionar");
-        }else{
-            comboBox.setStyle("-fx-border-color: green;");
-        }
-    }
-    
-    public static void isComboBoxSelectedIntegrant(ComboBox<Integrant> comboBox) throws InvalidFormException{
-        if(comboBox.getValue() == null){
-            comboBox.setStyle("-fx-border-color: red;");
-            throw new InvalidFormException("Campos sin seleccionar");
-        }else{
-            comboBox.setStyle("-fx-border-color: green;");
-        }
-    }
-    
-    public static void isComboBoxSelectedCollaborator(ComboBox<Collaborator> comboBox) throws InvalidFormException{
-        if(comboBox.getValue() == null){
-            comboBox.setStyle("-fx-border-color: red;");
-            throw new InvalidFormException("Campos sin seleccionar");
-        }else{
-            comboBox.setStyle("-fx-border-color: green;");
-        }
-    }
-    
-    public static void isComboBoxSelectedBook(ComboBox<Book> comboBox) throws InvalidFormException{
+    public static void isComboBoxSelected(ComboBox<?> comboBox) throws InvalidFormException{
         if(comboBox.getValue() == null){
             comboBox.setStyle("-fx-border-color: red;");
             throw new InvalidFormException("Campos sin seleccionar");

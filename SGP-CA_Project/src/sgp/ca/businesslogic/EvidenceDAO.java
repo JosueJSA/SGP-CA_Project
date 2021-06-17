@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
+import sgp.ca.demodao.EvidenceFactory;
 import sgp.ca.domain.Evidence;
 
 /**
@@ -25,24 +26,26 @@ public abstract class EvidenceDAO {
     
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
-    public List<Map> getAllBodyAcademyEvidences(){
-        List<Map> evidences = new ArrayList<>();
+    public List<Evidence> getAllEvidences(){
+        List<Evidence> evidences = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Evidences WHERE impactBA=TRUE GROUP BY urlFile ORDER BY registrationDate DESC;"
+                "SELECT * FROM Evidences GROUP BY urlFile ORDER BY registrationDate DESC;"
             );
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
-                Map<String,Object> evidence = new HashMap<>();
-                evidence.put("urlFile", resultQuery.getString("urlFile"));
-                evidence.put("evidenceType", resultQuery.getString("evidenceType"));
-                evidence.put("evidenceTitle", resultQuery.getString("evidenceTitle"));
-                evidence.put("impactBA", resultQuery.getBoolean("impactBA"));
-                evidence.put("registrationResponsible", resultQuery.getString("registrationResponsible"));
-                evidence.put("registrationDate", resultQuery.getString("registrationDate"));
+                Evidence evidence = EvidenceFactory.getEvidence(resultQuery.getString("evidenceType"));
+                evidence.setUrlFile(resultQuery.getString("urlFile"));
+                evidence.setEvidenceType(resultQuery.getString("evidenceType"));
+                evidence.setEvidenceTitle(resultQuery.getString("evidenceTitle"));
+                evidence.setImpactAB(resultQuery.getBoolean("impactBA"));
+                evidence.setRegistrationResponsible(resultQuery.getString("registrationResponsible"));
+                evidence.setRegistrationDate(resultQuery.getString("registrationDate"));
+                evidence.setProjectName(resultQuery.getString("projectName"));
                 evidences.add(evidence);
             }
         }catch(SQLException ex){
+            evidences = null;
             Logger.getLogger(EvidenceDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             CONNECTION.closeConnection();
@@ -50,22 +53,23 @@ public abstract class EvidenceDAO {
         }
     }
     
-    public List<Map> getAllEvidencesByIntegrantMailUv(String mailUv){
-        List<Map> evidences = new ArrayList<>();
+    public List<Evidence> getAllEvidencesByIntegrantMailUv(String mailUv){
+        List<Evidence> evidences = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Evidences WHERE emailUV = ? ORDER BY registrationDate DESC;"
+                "SELECT * FROM Evidences WHERE emailUv = ? GROUP BY urlFile ORDER BY registrationDate DESC;"
             );
             sentenceQuery.setString(1, mailUv);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
-                Map<String,Object> evidence = new HashMap<>();
-                evidence.put("urlFile", resultQuery.getString("urlFile"));
-                evidence.put("evidenceType", resultQuery.getString("evidenceType"));
-                evidence.put("evidenceTitle", resultQuery.getString("evidenceTitle"));
-                evidence.put("impactBA", resultQuery.getBoolean("impactBA"));
-                evidence.put("registrationResponsible", resultQuery.getString("registrationResponsible"));
-                evidence.put("registrationDate", resultQuery.getString("registrationDate"));
+                Evidence evidence = EvidenceFactory.getEvidence(resultQuery.getString("evidenceType"));
+                evidence.setUrlFile(resultQuery.getString("urlFile"));
+                evidence.setEvidenceType(resultQuery.getString("evidenceType"));
+                evidence.setEvidenceTitle(resultQuery.getString("evidenceTitle"));
+                evidence.setImpactAB(resultQuery.getBoolean("impactBA"));
+                evidence.setRegistrationResponsible(resultQuery.getString("registrationResponsible"));
+                evidence.setRegistrationDate(resultQuery.getString("registrationDate"));
+                evidence.setProjectName(resultQuery.getString("projectName"));
                 evidences.add(evidence);
             }
         }catch(SQLException ex){
@@ -76,22 +80,23 @@ public abstract class EvidenceDAO {
         }
     }
     
-    public List<Map> getEvidencesByRegistrationDate(String date){
-        List<Map> evidences = new ArrayList<>();
+    public List<Evidence> getEvidencesByProjectName(String projectName){
+        List<Evidence> evidences = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Evidences WHERE cast(registrationDate as date) < CAST( ? as DATE) GROUP BY urlFile ORDER BY registrationDate DESC;"
+                "SELECT * FROM Evidences WHERE projectName = ? GROUP BY urlFile ORDER BY registrationDate DESC;"
             );
-            sentenceQuery.setString(1, date);
+            sentenceQuery.setString(1, projectName);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
-                Map<String,Object> evidence = new HashMap<>();
-                evidence.put("urlFile", resultQuery.getString("urlFile"));
-                evidence.put("evidenceType", resultQuery.getString("evidenceType"));
-                evidence.put("evidenceTitle", resultQuery.getString("evidenceTitle"));
-                evidence.put("impactBA", resultQuery.getBoolean("impactBA"));
-                evidence.put("registrationResponsible", resultQuery.getString("registrationResponsible"));
-                evidence.put("registrationDate", resultQuery.getString("registrationDate"));
+                Evidence evidence = EvidenceFactory.getEvidence(resultQuery.getString("evidenceType"));
+                evidence.setUrlFile(resultQuery.getString("urlFile"));
+                evidence.setEvidenceType(resultQuery.getString("evidenceType"));
+                evidence.setEvidenceTitle(resultQuery.getString("evidenceTitle"));
+                evidence.setImpactAB(resultQuery.getBoolean("impactBA"));
+                evidence.setRegistrationResponsible(resultQuery.getString("registrationResponsible"));
+                evidence.setRegistrationDate(resultQuery.getString("registrationDate"));
+                evidence.setProjectName(resultQuery.getString("projectName"));
                 evidences.add(evidence);
             }
         }catch(SQLException ex){
@@ -128,10 +133,12 @@ public abstract class EvidenceDAO {
         }
     }
     
+    @Override
+    public abstract String toString();
     public abstract Evidence getEvidenceByUrl(String urlEvidenceFile);
     public abstract boolean addNewEvidence(Evidence evidence);
     public abstract boolean updateEvidence(Evidence evidence, String oldUrlFile);
     public abstract boolean deleteEvidenceByUrl(String urlEvidenceFile);
-    
+    public abstract EvidenceDAO getEvidenceDaoInstance(String evidenceType);
     
 }

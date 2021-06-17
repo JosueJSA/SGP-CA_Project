@@ -43,6 +43,7 @@ import sgp.ca.domain.Book;
 import sgp.ca.domain.ChapterBook;
 import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Integrant;
+import sgp.ca.domain.Member;
 
 public class ChapterBookEditController implements Initializable {
 
@@ -80,13 +81,13 @@ public class ChapterBookEditController implements Initializable {
     private Button btnRemoveRowIntegrantTable;
 
     @FXML
-    private ComboBox<Integrant> cboBoxIntegrantsName;
+    private ComboBox<Member> cboBoxIntegrantsName;
 
     @FXML
-    private TableView<Integrant> tvIntegrant;
+    private TableView<Member> tvIntegrant;
 
     @FXML
-    private TableColumn<Integrant, String> colIntegrantName;
+    private TableColumn<Member, String> colIntegrantName;
 
     @FXML
     private Button btnAddRowCollaboratorTable;
@@ -95,13 +96,13 @@ public class ChapterBookEditController implements Initializable {
     private Button btnRemoveRowCollaboratorTable;
 
     @FXML
-    private ComboBox<Collaborator> cboBoxCollaboratorsName;
+    private ComboBox<Member> cboBoxCollaboratorsName;
 
     @FXML
-    private TableView<Collaborator> tvCollaborators;
+    private TableView<Member> tvCollaborators;
 
     @FXML
-    private TableColumn<Collaborator, String> colCollaboratorName;
+    private TableColumn<Member, String> colCollaboratorName;
 
     @FXML
     private Button btnAddRowStudentsTable;
@@ -192,7 +193,7 @@ public class ChapterBookEditController implements Initializable {
     private void validateChapterInformation() throws InvalidFormException{
         ValidatorForm.chechkAlphabeticalField(this.txtFieldChapterBookTittle, 3, 80);
         ValidatorForm.chechkAlphabeticalField(this.txtFieldNumerPagesRange, 3, 10);
-        ValidatorForm.isComboBoxSelectedBook(this.cboBoxBook);
+        ValidatorForm.isComboBoxSelected(this.cboBoxBook);
     }
     
     private void getOutChapterBookInformation(){
@@ -224,42 +225,42 @@ public class ChapterBookEditController implements Initializable {
             );
             Book relatedBook = this.cboBoxBook.getSelectionModel().getSelectedItem();
             if(CHAPTERBOOK_DAO.addChapterBook(chapterBook, relatedBook)){
-                AlertGenerator.showInfoAlert(event, "Capítulo de libro registrado con éxito");
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Capítulo de libro registrado con éxito");
             }else{
-                AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
             }
             FXMLLoader loader = changeWindow("EvidenceRequest.fxml", event);
             EvidenceRequestController controller = loader.getController();
             controller.receiveEvidence(relatedBook);
             controller.receiveToken(token);
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
     private void addRowCollaboratorTable(ActionEvent event) {
         try{
-            ValidatorForm.isComboBoxSelectedCollaborator(cboBoxCollaboratorsName);
-            Collaborator collaborator = this.cboBoxCollaboratorsName.getValue();
-            this.chapterBook.getCollaborators().add(collaborator);
+            ValidatorForm.isComboBoxSelected(cboBoxCollaboratorsName);
+            Member collaborator = this.cboBoxCollaboratorsName.getValue();
+            this.chapterBook.getCollaborators().add((Collaborator) collaborator);
             this.tvCollaborators.setItems(makeitemsCollaboratorsListForTable());
             this.cboBoxCollaboratorsName.setValue(null);
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
     private void addRowIntegrantTable(ActionEvent event) {
         try{
-            ValidatorForm.isComboBoxSelectedIntegrant(cboBoxIntegrantsName);
-            Integrant integrant = this.cboBoxIntegrantsName.getValue();
-            this.chapterBook.getIntegrants().add(integrant);
+            ValidatorForm.isComboBoxSelected(cboBoxIntegrantsName);
+            Member integrant = this.cboBoxIntegrantsName.getValue();
+            this.chapterBook.getIntegrants().add((Integrant) integrant);
             this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
             this.cboBoxIntegrantsName.setValue(null);
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
@@ -272,14 +273,14 @@ public class ChapterBookEditController implements Initializable {
             this.lvStudent.setItems(makeitemsStudentsListForView());
             this.txtFieldStudentName.clear();
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
 
     }
 
     @FXML
     private void closeWindow(ActionEvent event) {
-        Optional<ButtonType> action = AlertGenerator.showConfirmacionAlert(event,
+        Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
             "¿Seguro que desea salir? No se guardará la información");
         if(action.get() == ButtonType.OK){
             if(this.addNewChapterBook){
@@ -302,14 +303,14 @@ public class ChapterBookEditController implements Initializable {
 
     @FXML
     private void removeRowCollaboratorTable(ActionEvent event) {
-        Collaborator collaboratorRemove = this.tvCollaborators.getSelectionModel().getSelectedItem();
+        Member collaboratorRemove = this.tvCollaborators.getSelectionModel().getSelectedItem();
         this.chapterBook.getCollaborators().remove(collaboratorRemove);
         this.tvCollaborators.setItems(makeitemsCollaboratorsListForTable());
     }
 
     @FXML
     private void removeRowIntegrantTable(ActionEvent event) {
-        Integrant integrantRemove = this.tvIntegrant.getSelectionModel().getSelectedItem();
+        Member integrantRemove = this.tvIntegrant.getSelectionModel().getSelectedItem();
         this.chapterBook.getIntegrants().remove(integrantRemove);
          this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
     }
@@ -333,9 +334,9 @@ public class ChapterBookEditController implements Initializable {
             this.getOutChapterBookInformation();
             Book relatedBook = this.cboBoxBook.getSelectionModel().getSelectedItem();
             if(CHAPTERBOOK_DAO.addChapterBook(chapterBook, relatedBook)){
-                AlertGenerator.showInfoAlert(event, "Capítulo de libro modificado con éxito");
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Capítulo de libro modificado con éxito");
             }else{
-                AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
             }
             FXMLLoader loader = changeWindow("ChapterBookRequest.fxml", event);
             ChapterBookRequestController controller = loader.getController();
@@ -343,17 +344,17 @@ public class ChapterBookEditController implements Initializable {
             controller.receiveBook(relatedBook);
             controller.receiveToken(this.token);
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
     
     private void prepareIntegrantTable(){
-        this.colIntegrantName.setCellValueFactory(new PropertyValueFactory<Integrant, String>("fullName"));
+        this.colIntegrantName.setCellValueFactory(new PropertyValueFactory<Member, String>("fullName"));
         this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
     }
     
     private void prepareCollaboratorTable(){
-        this.colCollaboratorName.setCellValueFactory(new PropertyValueFactory<Collaborator, String>("fullName"));
+        this.colCollaboratorName.setCellValueFactory(new PropertyValueFactory<Member, String>("fullName"));
         this.tvCollaborators.setItems(makeitemsCollaboratorsListForTable());
     }
     
@@ -361,15 +362,15 @@ public class ChapterBookEditController implements Initializable {
         this.lvStudent.setItems(makeitemsStudentsListForView());
     }
     
-    private ObservableList<Integrant> makeitemsIntegrantsListForTable(){
-        ObservableList<Integrant> itemsIntegrants = FXCollections.observableArrayList();
+    private ObservableList<Member> makeitemsIntegrantsListForTable(){
+        ObservableList<Member> itemsIntegrants = FXCollections.observableArrayList();
         List<Integrant> integrantList = chapterBook.getIntegrants();
         itemsIntegrants.addAll(integrantList);
         return itemsIntegrants;
     }
     
-    private ObservableList<Collaborator> makeitemsCollaboratorsListForTable(){
-        ObservableList<Collaborator> itemsCollaborator = FXCollections.observableArrayList();
+    private ObservableList<Member> makeitemsCollaboratorsListForTable(){
+        ObservableList<Member> itemsCollaborator = FXCollections.observableArrayList();
         List<Collaborator> collaboratorList = chapterBook.getCollaborators();
         itemsCollaborator.addAll(collaboratorList);
         return itemsCollaborator;
@@ -382,16 +383,16 @@ public class ChapterBookEditController implements Initializable {
         return itemsStudentNames;
     }
     
-    private ObservableList<Integrant> makeitemsIntegrantsListForComboBox(){
-        ObservableList<Integrant> itemsIntegrantNames = FXCollections.observableArrayList();
-        List<Integrant> integrantsList = INTEGRANT_DAO.getIntegrantsForEvidence(token.getBodyAcademyKey());
+    private ObservableList<Member> makeitemsIntegrantsListForComboBox(){
+        ObservableList<Member> itemsIntegrantNames = FXCollections.observableArrayList();
+        List<Member> integrantsList = INTEGRANT_DAO.getMembers(token.getBodyAcademyKey());
         itemsIntegrantNames.addAll(integrantsList);
         return itemsIntegrantNames;
     }
     
-    private ObservableList<Collaborator> makeitemsCollaboratorsListForComboBox(){
-        ObservableList<Collaborator> itemsCollaboratorNames = FXCollections.observableArrayList();
-        List<Collaborator> collaboratorsList = COLLABORATOR_DAO.getCollaboratorsForEvidence(token.getBodyAcademyKey());
+    private ObservableList<Member> makeitemsCollaboratorsListForComboBox(){
+        ObservableList<Member> itemsCollaboratorNames = FXCollections.observableArrayList();
+        List<Member> collaboratorsList = COLLABORATOR_DAO.getMembers(token.getBodyAcademyKey());
         itemsCollaboratorNames.addAll(collaboratorsList);
         return itemsCollaboratorNames;
     }

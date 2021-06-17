@@ -69,9 +69,8 @@ public class ProjectFormController implements Initializable {
     private final ProjectDAO PROJECT_DAO = new ProjectDAO();
     private List<Button> optionButtons;
     private Project oldProject  = new Project();
-    /**
-     * Initializes the controller class.
-     */
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb){
          optionButtons = Arrays.asList(
@@ -113,7 +112,7 @@ public class ProjectFormController implements Initializable {
                 txtAreaDescription.getText()
             );
             PROJECT_DAO.addProject(project);
-            AlertGenerator.showInfoAlert(event, "Proyecto registrado correctamente");
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Proyecto registrado correctamente");
 //        }catch(InvalidFormException ie){
 //            AlertGenerator.showErrorAlert(event, ie.getMessage());
 //        }
@@ -171,7 +170,7 @@ public class ProjectFormController implements Initializable {
                 txtAreaDescription.getText()
             );
             PROJECT_DAO.updateProject(project, oldProject.getProjectName());
-            AlertGenerator.showInfoAlert(event, "Proyecto actualizado correctamente");
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Proyecto actualizado correctamente");
 //        }catch(InvalidFormException ie){
 //            AlertGenerator.showErrorAlert(event, ie.getMessage());
 //        }

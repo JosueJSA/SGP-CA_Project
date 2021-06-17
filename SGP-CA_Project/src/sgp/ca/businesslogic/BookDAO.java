@@ -393,4 +393,18 @@ public class BookDAO extends EvidenceDAO {
             return students;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Libro";
+    }
+
+    @Override
+    public EvidenceDAO getEvidenceDaoInstance(String evidenceType){
+        EvidenceDAO evidenceDao = null;
+        if(this.toString().equalsIgnoreCase(evidenceType)){
+            evidenceDao = new BookDAO();
+        }
+        return evidenceDao;
+    }
 }

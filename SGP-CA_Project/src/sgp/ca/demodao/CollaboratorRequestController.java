@@ -1,43 +1,27 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Josué Sangabriel Alarcón
+ * @version v0.7
+ * Last modification: dd-mm-yy
  */
+
 package sgp.ca.demodao;
 
-import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.CollaboratorDAO;
 import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Integrant;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
 public class CollaboratorRequestController implements Initializable {
 
-    @FXML
-    private HBox hboxIntegrantOptions;
     @FXML
     private Button btnUnsubscribe;
     @FXML
@@ -65,78 +49,81 @@ public class CollaboratorRequestController implements Initializable {
     @FXML
     private TextField txtFieldStaffNumber;
     @FXML
-    private DatePicker datePickerAdmisionDate;
-    @FXML
     private TextField txtFieldStudyArea;
     @FXML
     private TextField txtFieldBodyAcademyName;
     @FXML
     private TextField txtFieldLevelStudy;
     @FXML
+    private TextField txtFieldRegistrationDate;
+    @FXML
     private Label lbParticipationType;
-
+    @FXML
+    private HBox hbCollaboratorOptions;
+    
     private Collaborator collaborator;
-    private Integrant integrantToken;
+    private Integrant token;
     private final CollaboratorDAO COLLABORATOR_DAO = new CollaboratorDAO();
     
     
-    /**
-     * Initializes the controller class.
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        hbCollaboratorOptions.getChildren().removeAll(btnCollaboratorEdit, btnExit, btnSubscribe, btnUnsubscribe);
     }
 
-    public void showCollaboratorByEmail(Integrant integrantToken, String collaboratorEmailUV){
-        this.integrantToken = integrantToken;
+    public void showCollaboratorByEmail(Integrant token, String collaboratorEmailUV){
+        this.token = token;
         this.collaborator = (Collaborator) COLLABORATOR_DAO.getMemberByUVmail(collaboratorEmailUV);
         if(this.collaborator != null){
-            this.setIntegrantDataIntoInterface();
+            this.setCollaboratorInformationInInterface();
+            this.checkPrivileges();
+        }else{
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), "Lo sentimos, parece que el sistema no se encuentra disponible por el momento");
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnExit);
+            GeneralResumeRequestController controller = loader.getController();
+            controller.showGeneralResume(token);
         }
     }
 
     @FXML
     private void unsubscribeCollaborator(ActionEvent event) {
         if(COLLABORATOR_DAO.unsubscribeMemberByEmailUV(this.collaborator.getEmailUV())){
-            AlertGenerator.showInfoAlert(event, "Colaborador dado de baja");
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Colaborador dado de baja");
         }else{
-            AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de comunicarse con soporte técnico");
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de comunicarse con soporte técnico");
         }
-        FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnExit);
         GeneralResumeRequestController controller = loader.getController();
-        controller.showGeneralResume(integrantToken);
+        controller.showGeneralResume(token);
     }
 
     @FXML
     private void subscribeCollaborator(ActionEvent event) {
         if(COLLABORATOR_DAO.subscribeMemberByEmailUV(this.collaborator.getEmailUV())){
-            AlertGenerator.showInfoAlert(event, "Colaborador dado de alta");
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Colaborador dado de alta");
         }else{
-            AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de comunicarse con soporte técnico");
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de comunicarse con soporte técnico");
         }
-        FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnExit);
         GeneralResumeRequestController controller = loader.getController();
-        controller.showGeneralResume(integrantToken);
+        controller.showGeneralResume(token);
     }
 
     @FXML
     private void editCollaborator(ActionEvent event) {
-        FXMLLoader loader = changeWindow("CollaboratorEditable.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("CollaboratorEditable.fxml", btnExit);
         CollaboratorEditableController controller = loader.getController();
-        controller.showCollaboratorUpdateForm(integrantToken, this.collaborator.getEmailUV());
+        controller.showCollaboratorUpdateForm(token, this.collaborator.getEmailUV());
     }
 
     @FXML
     private void exit(ActionEvent event) {
-        FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnExit);
         GeneralResumeRequestController controller = loader.getController();
-        controller.showGeneralResume(integrantToken);
+        controller.showGeneralResume(token);
     }
     
-    private void setIntegrantDataIntoInterface(){
+    private void setCollaboratorInformationInInterface(){
         this.txtFieldCellNumber.setText(collaborator.getCellphone());
         this.txtFieldCurp.setText(collaborator.getCurp());
         this.txtFieldEducationalProgram.setText(collaborator.getEducationalProgram());
@@ -144,29 +131,25 @@ public class CollaboratorRequestController implements Initializable {
         this.txtFieldFullName.setText(collaborator.getFullName());
         this.txtFieldNationality.setText(collaborator.getNationality());
         this.txtFieldRfcMember.setText(collaborator.getRfc());
-        this.datePickerAdmisionDate.setValue(LocalDate.parse(collaborator.getDateOfAdmission()));
+        this.txtFieldRegistrationDate.setText(collaborator.getDateOfAdmission());
         this.txtFieldStaffNumber.setText(String.valueOf(collaborator.getStaffNumber()));
         this.lbParticipationType.setText(collaborator.getParticipationType());
         this.txtFieldBodyAcademyName.setText(collaborator.getNameBACollaborator());
         this.txtFieldLevelStudy.setText(collaborator.getHighestDegreeStudies());
         this.txtFieldStudyArea.setText(collaborator.getStudyArea());
         this.txtFieldStatus.setText(collaborator.getParticipationStatus());
-    }
+    }    
     
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show(); 
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
+    private void checkPrivileges(){
+        if(this.token.getParticipationType().equalsIgnoreCase("Responsable")){
+            hbCollaboratorOptions.getChildren().addAll(btnCollaboratorEdit, btnUnsubscribe, btnSubscribe, btnExit);
+            if(this.collaborator.getParticipationStatus().equalsIgnoreCase("Activo")){
+                hbCollaboratorOptions.getChildren().remove(btnSubscribe);
+            }else{
+                hbCollaboratorOptions.getChildren().remove(btnUnsubscribe);
+            }
+        }else{
+            hbCollaboratorOptions.getChildren().addAll(btnExit);
         }
     }
-    
 }

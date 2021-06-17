@@ -16,6 +16,5 @@ public interface IIntegrantDAO {
     
     public Integrant getIntegrantTocken(Integrant usuario);
     public Integrant getIntegrantToken(String email, String password);
-    public List<Integrant> getMembers(String bodyAcademyKey);
     
 }

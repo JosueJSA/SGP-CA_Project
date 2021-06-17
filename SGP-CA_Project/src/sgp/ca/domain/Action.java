@@ -5,6 +5,9 @@
 
 package sgp.ca.domain;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 
 public class Action{
     
@@ -15,7 +18,7 @@ public class Action{
     private String descriptionAction;
     private String responsibleAction;
     private String resource;
-    private boolean statusAction;
+    private Boolean statusAction = false;
 
     public Action(int actionKey, String startDate, String endDate, 
     String estimatedEndDate, String descriptionAction, 
@@ -30,12 +33,13 @@ public class Action{
         this.statusAction = statusAction;
     }
     
-    public Action(String descriptionAction, String estimatedEndDate, String responsibleAction, String startDate, String resource){
+    public Action(String descriptionAction, String estimatedEndDate, String responsibleAction, String startDate, String resource, Boolean statusAction){
         this.startDate = startDate;
         this.estimatedEndDate = estimatedEndDate;
         this.descriptionAction = descriptionAction;
         this.responsibleAction = responsibleAction;
         this.resource = resource;
+        this.statusAction = statusAction;
     }
     
     public Action(String descriptionAction, String estimatedEndDate, String endDate, String responsibleAction, String startDate, String resource){
@@ -113,6 +117,18 @@ public class Action{
 
     public void setResource(String resource){
         this.resource = resource;
+    }
+    
+    public void updateEndDate(){
+        Calendar currentDate = new GregorianCalendar();
+        int year = currentDate.get(Calendar.YEAR);
+        int month = currentDate.get(Calendar.MONTH);
+        int day = currentDate.get(Calendar.DAY_OF_MONTH);
+        if(this.statusAction){
+            this.endDate = year + "-" + (month+1) + "-" + day;
+        }else{
+            this.endDate = this.estimatedEndDate;
+        }
     }
     
     @Override

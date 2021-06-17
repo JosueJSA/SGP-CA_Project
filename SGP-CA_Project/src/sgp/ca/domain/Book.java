@@ -5,10 +5,14 @@
 
 package sgp.ca.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Book extends Evidence {
     private String publisher;
     private int editionsNumber;
     private double isbn;
+    private List<ChapterBook> chapterBooks;
 
     public Book(String urlFile, String projectName, boolean impactAB, String evidenceType, 
     String evidenceTitle, String registrationResponsible, String registrationDate, 
@@ -22,10 +26,16 @@ public class Book extends Evidence {
         this.publisher = publisher;
         this.editionsNumber = editionsNumber;
         this.isbn = isbn;
+        this.chapterBooks = new ArrayList<>();
+    }
+
+    public Book(String evidenceType, String evidenceTitle, 
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+        super(evidenceType, evidenceTitle, impactAB, registrationResponsible, registrationDate, urlFile);
     }
 
     public Book() {
-        
+        this.chapterBooks = new ArrayList<>();
     }
 
     public String getPublisher() {
@@ -38,6 +48,20 @@ public class Book extends Evidence {
 
     public double getIsbn() {
         return isbn;
+    }
+    
+    public ChapterBook getChapterBookByURLFile(String urlFile){
+        ChapterBook chapterBookReturn = null;
+        for(ChapterBook chapterBook : this.chapterBooks){
+            if(chapterBook.getUrlFile() == urlFile){
+                chapterBookReturn = chapterBook;
+            }
+        }
+        return chapterBookReturn;
+    }
+
+    public List<ChapterBook> getChapterBooks() {
+        return chapterBooks;
     }
 
     public void setPublisher(String publisher) {
@@ -52,8 +76,39 @@ public class Book extends Evidence {
         this.isbn = isbn;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + "Edición: " + editionsNumber;
+    public void setChapterBooks(List<ChapterBook> chapterBooks) {
+        this.chapterBooks = chapterBooks;
     }
+    
+    @Override
+    public String toString(){
+        return "Libro";
+    }
+
+    @Override
+    public Evidence getSpecificEvidenceInstance(String evidenceType) {
+        Evidence evidence = null;
+        if(this.toString().equalsIgnoreCase(evidenceType)){
+            evidence = new Book();
+        }
+        return evidence;
+    }
+
+    @Override
+    public Evidence getSpecificEvidenceInstance(String evidenceType, String evidenceTitle, 
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+        Evidence evidence = null;
+        if(this.toString().equalsIgnoreCase(evidenceType)){
+            evidence = new Book(
+                evidenceType,
+                evidenceTitle,
+                impactAB,
+                registrationResponsible,
+                registrationDate,
+                urlFile
+            );
+        }
+        return evidence;
+    }
+    
 }

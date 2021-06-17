@@ -8,16 +8,20 @@ package sgp.ca.domain;
 
 public class Lgac {
     
-    private String identifierLgac, description;
+    private String identifierLgac;
+    private String title;
+    private String description;
     private GeneralResume bodyAcademyRelated;
 
-    public Lgac(String identifierLgac, String description) {
+    public Lgac(String identifierLgac, String title, String description, GeneralResume bodyAcademyRelated) {
         this.identifierLgac = identifierLgac;
+        this.title = title;
         this.description = description;
+        this.bodyAcademyRelated = bodyAcademyRelated;
     }
 
-    public Lgac(String identifierLgac, String description, GeneralResume bodyAcademyRelated) {
-        this.identifierLgac = identifierLgac;
+    public Lgac(String title, String description, GeneralResume bodyAcademyRelated) {
+        this.title = title;
         this.description = description;
         this.bodyAcademyRelated = bodyAcademyRelated;
     }
@@ -47,6 +51,14 @@ public class Lgac {
 
     public void setBodyAcademyRelated(GeneralResume bodyAcademyRelated) {
         this.bodyAcademyRelated = bodyAcademyRelated;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

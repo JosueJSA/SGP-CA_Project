@@ -5,6 +5,7 @@
 
 package sgp.ca.domain;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +107,28 @@ public class Goal{
             }
         }
         return actionReturn;
+    }
+    
+    public void updateEndDate(){
+        this.endDate = "1000-01-01";
+        for(Action action : this.actions){
+            LocalDate dateTimeOne = LocalDate.parse(action.getEndDate());
+            LocalDate dateTimeTwo = LocalDate.parse(this.endDate);
+            if(dateTimeOne.isAfter(dateTimeTwo)){
+                this.endDate = action.getEndDate();
+            }
+        }
+    }
+    
+    public void updateStatus(){
+        boolean goalStatus = true;
+        for(Action action : this.actions){
+            if(!action.isStatusAction()){
+                goalStatus = false;
+                break;
+            }
+        }
+        this.statusGoal = goalStatus;
     }
     
     @Override

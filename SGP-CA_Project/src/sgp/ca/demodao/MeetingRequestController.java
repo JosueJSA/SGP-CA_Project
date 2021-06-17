@@ -227,7 +227,7 @@ public class MeetingRequestController implements Initializable {
     @FXML
     private void CancelMeeting(ActionEvent event) {
         if(meeting.getStatusMeeting().compareTo("Pendiente") == 0){
-            Optional<ButtonType> action = AlertGenerator.showConfirmacionAlert(event,
+            Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
             "¿Seguro que deseas cancelar la reunión? Ya no se podrá iniciar.");
             if(action.get() == ButtonType.OK){
                 meeting.setStatusMeeting("Cancelada");
@@ -235,7 +235,7 @@ public class MeetingRequestController implements Initializable {
                 this.lbCanceledMetting.setVisible(true);
             }
         }else{
-            AlertGenerator.showInfoAlert(event, "Esta reunión no se puede cancelar");
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Esta reunión no se puede cancelar");
         }
     }
     
@@ -251,7 +251,7 @@ public class MeetingRequestController implements Initializable {
             this.preparedCommentTable();
             this.txtAreaComment.clear();
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
         
     }
@@ -281,7 +281,7 @@ public class MeetingRequestController implements Initializable {
 
     @FXML
     private void downloadMinute(ActionEvent event) {
-        AlertGenerator.showInfoAlert(event, "Lo sentimos. La minuta no esta disponible por el momento");
+        GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Lo sentimos. La minuta no esta disponible por el momento");
     }
 
     @FXML
@@ -289,7 +289,7 @@ public class MeetingRequestController implements Initializable {
         if(meeting.getStatusMeeting().compareTo("Pendiente") == 0){
             
         }else{
-            AlertGenerator.showInfoAlert(event, "Esta reunión ya no se puede iniciar");
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Esta reunión ya no se puede iniciar");
         }
     }
 
@@ -388,7 +388,7 @@ public class MeetingRequestController implements Initializable {
     
     private void comproveMeetingDifferentNull(Meeting meeting){ //Si seleccionan una reunion que no este en la BD. Falta
         if (meeting == null){
-            AlertGenerator.showErrorAlert(new ActionEvent(), "Lo sentimos,no se pudo encontrar la información de la reunión");
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), "Lo sentimos,no se pudo encontrar la información de la reunión");
             FXMLLoader loader = changeWindow("MeetingHistory.fxml", new ActionEvent());
             MeetingHistoryController controller = loader.getController();
             controller.receiveToken(token);

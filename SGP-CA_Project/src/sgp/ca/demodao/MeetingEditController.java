@@ -182,15 +182,15 @@ public class MeetingEditController implements Initializable{
             this.setIntoMeetingAgendaInformation();
             this.meeting.getMeetingAgenda().setMeetingAgendaKey(0);
             if(MEETING_DAO.addMeeting(this.meeting)){
-                AlertGenerator.showInfoAlert(event, "Reunión agendada con éxito");
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Reunión agendada con éxito");
             }else{
-                AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
             }
-            FXMLLoader loader = changeWindow("MeetingHistory.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingHistory.fxml", btnClose);
             MeetingHistoryController controller = loader.getController();
             controller.receiveToken(token);
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
     
@@ -244,7 +244,7 @@ public class MeetingEditController implements Initializable{
             meetingAgendaTableView.setItems(makeTopicItems());
             clearCampsOfTopic();
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
     
@@ -281,7 +281,7 @@ public class MeetingEditController implements Initializable{
             prerequisiteTableView.setItems(makePrerequisiteItems());
             clearCampsOfPrerequisite();
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
     
@@ -301,15 +301,15 @@ public class MeetingEditController implements Initializable{
 
     @FXML
     private void closeMeetingFormWindow(ActionEvent event) {
-        Optional<ButtonType> action = AlertGenerator.showConfirmacionAlert(event,
+        Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
         "¿Seguro que deseas salir del registro de reunión? Los cambios no se guardarán");
         if(action.get() == ButtonType.OK){
             if(this.addNewMeeting){
-                FXMLLoader loader = changeWindow("MeetingHistory.fxml", event);
+                FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingHistory.fxml", btnClose);
                 MeetingHistoryController controller = loader.getController();
                 controller.receiveToken(token);
             }else{
-                FXMLLoader loader = changeWindow("MeetingRequest.fxml", event);
+                FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingRequest.fxml", btnClose);
                 MeetingRequestController controller = loader.getController();
                 controller.reciveMeeting(meeting.getMeetingKey());
                 controller.receiveToken(token);
@@ -338,16 +338,16 @@ public class MeetingEditController implements Initializable{
             this.getOutMeetingInformation();
             this.setIntoMeetingAgendaInformation();
             if(MEETING_DAO.updateMeeting(meeting, meeting)){
-                AlertGenerator.showInfoAlert(event, "Reunión modificada con éxito");
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Reunión modificada con éxito");
             }else{
-                AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con soporte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con soporte técnico");
             }
-            FXMLLoader loader = changeWindow("MeetingRequest.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingRequest.fxml", btnClose);
             MeetingRequestController controller = loader.getController();
             controller.receiveToken(token);
             controller.reciveMeeting(meeting.getMeetingKey());
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
 
     } 
@@ -461,26 +461,10 @@ public class MeetingEditController implements Initializable{
     
     private void comproveMeetingDifferentNull(Meeting meeting){
         if (meeting == null){
-            AlertGenerator.showErrorAlert(null, "Lo sentimos,no se pudo encontrar la información de la reunión");
-            FXMLLoader loader = changeWindow("MeetingHistory.fxml", null);
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(null, "Lo sentimos,no se pudo encontrar la información de la reunión");
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingHistory.fxml", null);
             MeetingHistoryController controller = loader.getController();
             controller.receiveToken(token);
-        }
-    }
-    
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show();
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
         }
     }
     

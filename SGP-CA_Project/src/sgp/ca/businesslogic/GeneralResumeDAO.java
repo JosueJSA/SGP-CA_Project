@@ -5,6 +5,7 @@
 
 package sgp.ca.businesslogic;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.domain.GeneralResume;
 import sgp.ca.domain.Integrant;
+import sgp.ca.domain.Lgac;
 
 public class GeneralResumeDAO implements IGeneralResumeDAO{
 
@@ -63,12 +65,14 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
     @Override
     public GeneralResume getGeneralResumeByKey(String bodyAcademyKey) {
         GeneralResume generalResume = new GeneralResume();
+        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+            PreparedStatement sentenceQuery = connection.prepareStatement(
                 "select * from GeneralResume where bodyAcademyKey = ?;"
             );
             sentenceQuery.setString(1, bodyAcademyKey);
             ResultSet queryResult = sentenceQuery.executeQuery();
+            connection.commit();
             if(queryResult.next()){
                 generalResume = new GeneralResume(
                     queryResult.getString("bodyAcademyKey"), 
@@ -83,8 +87,10 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
                     queryResult.getDate("lastEvaluationDate").toString()
                 );
             }
+            generalResume.addLgacList(this.getAllBodyAcademyListLgac(connection, generalResume));
         }catch(SQLException sqlException){
             generalResume = null;
+            connection.rollback();
             Logger.getLogger(GeneralResume.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             CONNECTION.closeConnection();
@@ -95,8 +101,9 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
     @Override
     public boolean addGeneralResume(GeneralResume newGeneralResume){
         boolean correctInsertion = false;
+        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+            PreparedStatement sentenceQuery = connection.prepareStatement(
                 "INSERT INTO GeneralResume VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
             );
             sentenceQuery.setString(1, newGeneralResume.getBodyAcademyKey());
@@ -110,8 +117,12 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
             sentenceQuery.setString(9, newGeneralResume.getMission());
             sentenceQuery.setString(10, newGeneralResume.getGeneralTarjet());
             sentenceQuery.executeUpdate();
+            this.addLgacList(connection, newGeneralResume.getLgacList());
+            connection.commit();
+            connection.setAutoCommit(true);
             correctInsertion = true;
         }catch(SQLException sqlException){
+            connection.rollback();
             Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             CONNECTION.closeConnection();
@@ -122,8 +133,10 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
     @Override
     public boolean updateGeneralResume(GeneralResume generalResume, String oldBodyAcademyKey){
         boolean correctUpdate = false;
+        Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+            this.deleteAllLgacList(connection, oldBodyAcademyKey);
+            PreparedStatement sentenceQuery = connection.prepareStatement(
                 "UPDATE GeneralResume SET bodyAcademyKey = ?, nameBA = ?, areaAscription = ?, ascriptionUnit = ?,"
                 + " consolidationDegree = ?, registrationDate = ?, lastEvaluationDate = ?, vision = ?, mission = ?, "
                 + "generalTarjet = ? WHERE bodyAcademyKey = ?;"
@@ -140,14 +153,82 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
             sentenceQuery.setString(10, generalResume.getGeneralTarjet());
             sentenceQuery.setString(11, oldBodyAcademyKey);
             sentenceQuery.executeUpdate();
+            this.addLgacList(connection, generalResume.getLgacList());
+            connection.commit();
+            connection.setAutoCommit(true);
             correctUpdate = true;
         }catch(SQLException sqlException){
+            connection.rollback();
             Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             CONNECTION.closeConnection();
             return correctUpdate;
         }
     }
+    
+    private List<Lgac> getAllBodyAcademyListLgac(Connection connection, GeneralResume bodyAcadmyKey){
+        List<Lgac> listLgac = new ArrayList<>();
+        try {
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "SELECT * FROM `LGAK` WHERE bodyAcademyKey = ?;"
+            );
+            sentenceQuery.setString(1, bodyAcadmyKey.getBodyAcademyKey());
+            ResultSet result = sentenceQuery.executeQuery();
+            connection.commit();
+            while(result.next()){
+                listLgac.add(new Lgac(
+                    result.getString("title"),
+                    result.getString("description"), 
+                    bodyAcadmyKey
+                ));
+            }
+        } catch (SQLException ex) {
+            listLgac = null;
+            connection.rollback();
+            Logger.getLogger(GeneralResumeDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            return listLgac;
+        }
+    }
+    
+    private void addLgacList(Connection connection, List<Lgac> listLgac){
+        listLgac.forEach(lgac -> {
+            try{
+                PreparedStatement sentenceQuery = connection.prepareStatement(
+                    "INSERT INTO `LGAK` (bodyAcademyKey, title, description) VALUES (?,?,?);"
+                );
+                sentenceQuery.setString(1, lgac.getBodyAcademyRelated().getBodyAcademyKey());
+                sentenceQuery.setString(2, lgac.getTitle());
+                sentenceQuery.setString(3, lgac.getDescription());
+                sentenceQuery.executeUpdate();
+            }catch(SQLException sqlException){
+                try{
+                    connection.rollback();
+                    connection.close();
+                    Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
+                }catch(SQLException ex){
+                    Logger.getLogger(IntegrantDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
 
+    private void deleteAllLgacList(Connection connection, String bodyAcademyKey){
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "DELETE FROM `LGAK` WHERE bodyAcademyKey = ?;"
+            );
+            sentenceQuery.setString(1, bodyAcademyKey);
+            sentenceQuery.executeUpdate();
+        }catch(SQLException sqlException){
+            try{
+                connection.rollback();
+                connection.close();
+                Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
+            }catch(SQLException ex){
+                Logger.getLogger(IntegrantDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
     
 }

@@ -294,7 +294,7 @@ public class EvidenceRequestController implements Initializable {
 
     @FXML
     private void removeEvidence(ActionEvent event) {
-        Optional<ButtonType> action = AlertGenerator.showConfirmacionAlert(event,
+        Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
             "¿Seguro que desea eliminar esta evidencia? Ya no se podrá recuperar.");
         if(action.get() == ButtonType.OK){
 

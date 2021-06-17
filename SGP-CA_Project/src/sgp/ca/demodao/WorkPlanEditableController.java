@@ -5,7 +5,7 @@
  */
 package sgp.ca.demodao;
 
-import java.io.IOException;
+import com.jfoenix.controls.JFXDatePicker;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -13,14 +13,12 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -31,8 +29,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.WorkPlanDAO;
 import sgp.ca.domain.Action;
 import sgp.ca.domain.Goal;
@@ -47,8 +43,6 @@ import sgp.ca.domain.WorkPlan;
 public class WorkPlanEditableController implements Initializable {
 
     @FXML
-    private Label lblUserName;
-    @FXML
     private HBox hboxWorkPlanOptions;
     @FXML
     private Button btnSaveWorkplan;
@@ -57,45 +51,17 @@ public class WorkPlanEditableController implements Initializable {
     @FXML
     private Button btnCancelChanges;
     @FXML
-    private DatePicker datePickerWorkplanStartDate;
-    @FXML
-    private DatePicker datePickerWorkplanEndDate;
-    @FXML
-    private DatePicker datePickerGoalStartDate;
-    @FXML
-    private DatePicker datePickerGoalEndDate;
-    @FXML
     private HBox hboxActionOptions;
     @FXML
     private Button btnAddAction;
     @FXML
     private Button btnDeleteAction;
     @FXML
-    private TableView<Action> tableViewWorkplanActions;
-    @FXML
-    private TableColumn<Action, String> columnActionDescription;
-    @FXML
-    private TableColumn<Action, String> columnActionEndDateEstimated;
-    @FXML
-    private TableColumn<Action, String> columnActionResponsible;
-    @FXML
-    private TableColumn<Action, String> columnActionStartDate;
-    @FXML
-    private TableColumn<Action, String> columnResourceAction;
-    @FXML
-    private DatePicker datePickerStartDate;
-    @FXML
-    private DatePicker datePickerStimatedEndDate;
-    @FXML
     private Button btnAddGoal;
     @FXML
     private Button btnSaveGoalChanges;
     @FXML
     private Button btnDeleteGoal;
-    @FXML
-    private Button btnUpdateAction;
-    @FXML
-    private ListView<String> listViewGoals;
     @FXML
     private TextArea txtAreaWorkPlanGeneralTarget;
     @FXML
@@ -105,18 +71,45 @@ public class WorkPlanEditableController implements Initializable {
     @FXML
     private TextArea txtAreaActionDescriptionDetail;
     @FXML
-    private TextArea txtAreaActionResources;
+    private TextArea txtAreaActionResources;  
+    @FXML
+    private Label lbUserName;
+    @FXML
+    private JFXDatePicker dtpWorkplanStartDate;
+    @FXML
+    private JFXDatePicker dtpWorkplanEndDate;
+    @FXML
+    private ListView<String> lvGoals;
+    @FXML
+    private JFXDatePicker dtpGoalStartDate;
+    @FXML
+    private TextField txtFieldGoalEndDate;
+    @FXML
+    private JFXDatePicker dtpStimatedEndDate;
+    @FXML
+    private JFXDatePicker dtpStartDate;
+    @FXML
+    private CheckBox chBoxActionStatus;
+    @FXML
+    private TableView<Action> tvWorkplanActions;
+    @FXML
+    private TableColumn<Action, String> colActionDescription;
+    @FXML
+    private TableColumn<Action, String> colActionEndDateEstimated;
+    @FXML
+    private TableColumn<Action, String> colActionResponsible;
+    @FXML
+    private TableColumn<Action, String> colActionStartDate;
+    @FXML
+    private TableColumn<Action, String> colResourceAction;
+    @FXML
+    private TableColumn<Action, Boolean> colActionStatus;
     
     private Integrant token;
     private WorkPlan workplan; 
-    private WorkPlan oldWorkPlanCone;
-    private final WorkPlanDAO WORKPLAN_DAO = new WorkPlanDAO();    
+    private WorkPlan oldWorkPlanClone;
+    private final WorkPlanDAO WORKPLAN_DAO = new WorkPlanDAO();
     
-    /**
-     * Initializes the controller class.
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.hboxWorkPlanOptions.getChildren().removeAll(btnSaveWorkplan, btnUpdateWorkplan, btnCancelChanges);
@@ -127,162 +120,166 @@ public class WorkPlanEditableController implements Initializable {
     public void showWorkPlanInsertionForm(Integrant token){
         this.token = token;
         this.hboxWorkPlanOptions.getChildren().addAll(btnSaveWorkplan, btnCancelChanges);
-        this.lblUserName.setText(this.token.getFullName());
+        this.lbUserName.setText(this.token.getFullName());
     }
     
     public void showWorkPlanUpdateForm(Integrant token, String workPlanEndDate){
         this.token = token;
-        this.lblUserName.setText(this.token.getFullName());
+        this.lbUserName.setText(this.token.getFullName());
         this.hboxWorkPlanOptions.getChildren().addAll(btnUpdateWorkplan, btnCancelChanges);
         this.workplan = WORKPLAN_DAO.getWorkPlan(workPlanEndDate, this.token.getBodyAcademyKey());
-        this.oldWorkPlanCone = WORKPLAN_DAO.getWorkPlan(workPlanEndDate, this.token.getBodyAcademyKey());
+        this.oldWorkPlanClone = WORKPLAN_DAO.getWorkPlan(workPlanEndDate, this.token.getBodyAcademyKey());
         this.setWorkPlanDataIntoInterface();
     }
     
     @FXML
     private void saveWorkPlan(ActionEvent event) {
-        this.getOutWorkPlanDataFromInterface();
-        this.workplan.getGoals().forEach(goal -> goal.setEndDate(this.workplan.getEndDatePlan()));
-        this.workplan.getGoals().forEach(goal -> goal.getActions().forEach(action -> action.setEndDate(this.workplan.getEndDatePlan())));
-        if(WORKPLAN_DAO.addWorkPlan(this.workplan)){
-            AlertGenerator.showInfoAlert(event, "El plan de trabajo ha sido registrado exitosamente");
-        }else{
-            AlertGenerator.showErrorAlert(event, "El sistema ha presentado un error, favor de ponerse en contacto con soporte técnico");
+        try {
+            this.getOutWorkPlanDataFromInterface();
+            if(WORKPLAN_DAO.addWorkPlan(this.workplan)){
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El plan de trabajo ha sido registrado exitosamente");
+            }else{
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "El sistema ha presentado un error, favor de ponerse en contacto con soporte técnico");
+            }
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("WorkPlanRequest.fxml", btnCancelChanges);
+            WorkPlanRequestController controller = loader.getController();
+            controller.receiveToken(token);
+        } catch (InvalidFormException ex) {
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
-        FXMLLoader loader = changeWindow("WorkPlanRequest.fxml", event);
-        WorkPlanRequestController controller = loader.getController();
-        controller.receiveIntegrantToken(token);
     }
 
     @FXML
     private void updateWorkPlan(ActionEvent event) {
-        this.getOutWorkPlanDataFromInterface();
-        this.workplan.getGoals().forEach(goal -> goal.setEndDate(this.workplan.getEndDatePlan()));
-        this.workplan.getGoals().forEach(goal -> goal.getActions().forEach(action -> action.setEndDate(this.workplan.getEndDatePlan())));
-        if(WORKPLAN_DAO.updateWorkPlan(this.workplan, this.oldWorkPlanCone)){
-            AlertGenerator.showInfoAlert(event, "El plan de trabajo ha sido actualizado exitosamente");
-        }else{
-            AlertGenerator.showErrorAlert(event, "El sistema ha presentado un error, favor de ponerse en contacto con soporte técnico");
+        try {
+            this.getOutWorkPlanDataFromInterface();
+            if(WORKPLAN_DAO.updateWorkPlan(this.workplan, this.oldWorkPlanClone)){
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El plan de trabajo ha sido actualizado exitosamente");
+            }else{
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "El sistema ha presentado un error, favor de ponerse en contacto con soporte técnico");
+            }
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("WorkPlanRequest.fxml", btnCancelChanges);
+            WorkPlanRequestController controller = loader.getController();
+            controller.receiveToken(token);
+        } catch (InvalidFormException ex) {
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
-        FXMLLoader loader = changeWindow("WorkPlanRequest.fxml", event);
-        WorkPlanRequestController controller = loader.getController();
-        controller.receiveIntegrantToken(token);
     }
 
     @FXML
     private void cancelChanges(ActionEvent event) {
-        Optional<ButtonType> action = AlertGenerator.showConfirmacionAlert(event, "¿Seguro que deseas cancelar los cambios?");
+        Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event, "¿Seguro que deseas cancelar los cambios?");
         if(action.get() == ButtonType.OK){
-            FXMLLoader loader = changeWindow("WorkPlanRequest.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("WorkPlanRequest.fxml", btnCancelChanges);
             WorkPlanRequestController controller = loader.getController();
-            controller.receiveIntegrantToken(token);
+            controller.receiveToken(token);
         }
     }
 
     @FXML
     private void addAction(ActionEvent event) {
-        tableViewWorkplanActions.getItems().add(new Action(
-            this.txtAreaActionDescriptionDetail.getText(), 
-            ValidatorForm.convertJavaDateToSQlDate(this.datePickerStimatedEndDate),
-            this.txtFieldActionResponsible.getText(), 
-            ValidatorForm.convertJavaDateToSQlDate(this.datePickerStartDate),
-            this.txtAreaActionResources.getText()
-        ));
+        Action newAction = this.getActionDataFromInterface();
+        if(newAction != null){
+            Action oldAction = this.searchActionByDescription(txtAreaActionDescriptionDetail.getText());
+            if(oldAction != null){
+                tvWorkplanActions.getItems().remove(oldAction);
+            }
+            tvWorkplanActions.getItems().add(newAction);
+            tvWorkplanActions.refresh();
+        }
     }
+    
+    private Action getActionDataFromInterface(){
+        Action action = null;
+        try {
+            this.checkActionForm();
+            action = new Action(
+                    this.txtAreaActionDescriptionDetail.getText(),
+                    this.dtpStimatedEndDate.getValue().toString(),
+                    this.txtFieldActionResponsible.getText(),
+                    this.dtpStartDate.getValue().toString(),
+                    this.txtAreaActionResources.getText(),
+                    this.chBoxActionStatus.isSelected()
+            );
+            action.updateEndDate();
+        }catch(InvalidFormException ex){
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), ex.getMessage());
+        }finally{
+            return action;
+        } 
+    }
+    
 
     @FXML
     private void deleteAction(ActionEvent event) {
-        tableViewWorkplanActions.getItems().remove(
-            tableViewWorkplanActions.getSelectionModel().getSelectedItem()
+        tvWorkplanActions.getItems().remove(
+            tvWorkplanActions.getSelectionModel().getSelectedItem()
         );
     }
 
     @FXML
     private void selectAction(MouseEvent event) {
-        if(tableViewWorkplanActions.getSelectionModel().getSelectedItem() != null){
-            Action action = tableViewWorkplanActions.getSelectionModel().getSelectedItem();
+        if(tvWorkplanActions.getSelectionModel().getSelectedItem() != null){
+            Action action = tvWorkplanActions.getSelectionModel().getSelectedItem();
             this.txtFieldActionResponsible.setText(action.getResponsibleAction());
             this.txtAreaActionResources.setText(action.getResource());
             this.txtAreaActionDescriptionDetail.setText(action.getDescriptionAction());
-            this.datePickerStartDate.setValue(LocalDate.parse(action.getStartDate()));
-            this.datePickerStimatedEndDate.setValue(LocalDate.parse(action.getEstimatedEndDate()));
+            this.dtpStartDate.setValue(LocalDate.parse(action.getStartDate()));
+            this.dtpStimatedEndDate.setValue(LocalDate.parse(action.getEstimatedEndDate()));
+            this.chBoxActionStatus.setSelected(action.isStatusAction());
+            this.btnDeleteAction.setDisable(false);
         }
     }
 
     @FXML
     private void addGoal(ActionEvent event) {
-        this.listViewGoals.getItems().add("[Sin guardar]");
+        this.lvGoals.getItems().add("[Sin guardar]");
     }
 
     @FXML
     private void saveGoalChanges(ActionEvent event) {
-        Goal goal = new Goal(
-            0, 
-            datePickerGoalStartDate.getValue().toString(), 
-            "0000-00-00", 
-            true, 
-            txtAreaGoalDescripctionDetail.getText()
-        );
-        for(Action action : tableViewWorkplanActions.getItems()){
-            action.setEndDate("0000-00-00");
-            goal.addAction(action);
+        Goal goal = saveGoalDataFromInterface();
+        if(goal != null){
+            if(workplan.searchGoalByDescription(this.lvGoals.getSelectionModel().getSelectedItem()) == null){
+                this.workplan.addGoal(goal);
+            }else{
+                this.workplan.updateGoal(goal, this.lvGoals.getSelectionModel().getSelectedItem());
+            }
+            this.clearGoalForm();
+            this.refreshGoalsList();
         }
-        if(workplan.searchGoalByDescription(this.listViewGoals.getSelectionModel().getSelectedItem()) == null){
-            this.workplan.addGoal(goal);
-        }else{
-            this.workplan.updateGoal(goal, this.listViewGoals.getSelectionModel().getSelectedItem());
-        }
-        this.cleanGoalForm();
-        this.refreshGoalsList();
     }
 
     @FXML
     private void deleteGoal(ActionEvent event) {
-        this.workplan.deleteGoal(this.listViewGoals.getSelectionModel().getSelectedItem());
-        this.refreshGoalsList();
+        if(this.lvGoals.getSelectionModel().getSelectedItem() != null){
+            this.workplan.deleteGoal(this.lvGoals.getSelectionModel().getSelectedItem());
+            this.refreshGoalsList();
+        }
     }
     
     @FXML
     private void selectGoal(MouseEvent event) {
-        this.cleanGoalForm();
-        if(this.listViewGoals.getSelectionModel().getSelectedItem() != null){
-            this.setGoalDataInInterface(this.workplan.searchGoalByDescription(this.listViewGoals.getSelectionModel().getSelectedItem()));
+        this.clearGoalForm();
+        if(this.lvGoals.getSelectionModel().getSelectedItem() != null){
+            this.setGoalDataInInterface(this.workplan.searchGoalByDescription(this.lvGoals.getSelectionModel().getSelectedItem()));
+            this.btnAddAction.setDisable(false);
+            this.btnSaveGoalChanges.setDisable(false);
+            this.btnDeleteGoal.setDisable(false);
         }
-    }
-    
-    @FXML
-    private void updateAction(ActionEvent event) {
-        if(tableViewWorkplanActions.getSelectionModel().getSelectedItem() != null){
-            tableViewWorkplanActions.getItems().remove(tableViewWorkplanActions.getSelectionModel().getSelectedItem());
-            tableViewWorkplanActions.getItems().add(new Action(
-                this.txtAreaActionDescriptionDetail.getText(), 
-                this.datePickerStimatedEndDate.getValue().toString(),
-                this.txtFieldActionResponsible.getText(), 
-                this.datePickerStartDate.getValue().toString(),
-                this.txtAreaActionResources.getText()
-            ));
-        }
-        
     }
     
     private void setWorkPlanDataIntoInterface(){
-        this.datePickerWorkplanStartDate.setValue(LocalDate.parse(this.workplan.getStartDatePlan()));
-        this.datePickerWorkplanEndDate.setValue(LocalDate.parse(this.workplan.getEndDatePlan()));
+        this.dtpWorkplanStartDate.setValue(LocalDate.parse(this.workplan.getStartDatePlan()));
+        this.dtpWorkplanEndDate.setValue(LocalDate.parse(this.workplan.getEndDatePlan()));
         this.txtAreaWorkPlanGeneralTarget.setText(this.workplan.getGeneralTarget());
         this.refreshGoalsList();
     }
     
-    private void refreshGoalsList(){
-        this.listViewGoals.getItems().clear();
-        this.workplan.getGoals().forEach(goalElement -> {
-            this.listViewGoals.getItems().add(goalElement.getDescription());
-        });
-    }
-    
-    private void getOutWorkPlanDataFromInterface(){
-        this.workplan.setDurationInYears(this.datePickerWorkplanEndDate.getValue().getYear() - this.datePickerWorkplanStartDate.getValue().getYear());
-        this.workplan.setEndDatePlan(ValidatorForm.convertJavaDateToSQlDate(datePickerWorkplanEndDate));
-        this.workplan.setStartDatePlan(ValidatorForm.convertJavaDateToSQlDate(datePickerWorkplanStartDate));
+    private void getOutWorkPlanDataFromInterface() throws InvalidFormException{
+        this.checkWorkPlanForm();
+        this.workplan.setEndDatePlan(ValidatorForm.convertJavaDateToSQlDate(dtpWorkplanEndDate));
+        this.workplan.setStartDatePlan(ValidatorForm.convertJavaDateToSQlDate(dtpWorkplanStartDate));
         this.workplan.setGeneralTarget(this.txtAreaWorkPlanGeneralTarget.getText());
         this.workplan.setBodyAcademyKey(this.token.getBodyAcademyKey());
     }
@@ -290,56 +287,120 @@ public class WorkPlanEditableController implements Initializable {
     private void setGoalDataInInterface(Goal goal){
         if(goal != null){
             this.txtAreaGoalDescripctionDetail.setText(goal.getDescription());
-            this.datePickerGoalStartDate.setValue(LocalDate.parse(goal.getStartDate()));
-            this.tableViewWorkplanActions.getItems().addAll(goal.getActions());
+            this.dtpGoalStartDate.setValue(LocalDate.parse(goal.getStartDate()));
+            this.txtFieldGoalEndDate.setText(goal.getEndDate());
+            this.tvWorkplanActions.getItems().addAll(goal.getActions());
         }
     }
                 
     private void preprareActionsTable(){
-        columnActionDescription.setCellValueFactory(new PropertyValueFactory<>("descriptionAction"));
-        columnActionEndDateEstimated.setCellValueFactory(new PropertyValueFactory<>("estimatedEndDate"));
-        columnActionResponsible.setCellValueFactory(new PropertyValueFactory<>("responsibleAction"));
-        columnActionStartDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-        columnResourceAction.setCellValueFactory(new PropertyValueFactory<>("resource"));
+        colActionDescription.setCellValueFactory(new PropertyValueFactory<>("descriptionAction"));
+        colActionEndDateEstimated.setCellValueFactory(new PropertyValueFactory<>("estimatedEndDate"));
+        colActionResponsible.setCellValueFactory(new PropertyValueFactory<>("responsibleAction"));
+        colActionStartDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        colResourceAction.setCellValueFactory(new PropertyValueFactory<>("resource"));
+        colActionStatus.setCellValueFactory(new PropertyValueFactory<>("statusAction"));
     }
     
-    private void cleanGoalForm(){
-        this.tableViewWorkplanActions.getItems().removeAll(tableViewWorkplanActions.getItems());
+    private void clearGoalForm(){
+        this.tvWorkplanActions.getItems().removeAll(tvWorkplanActions.getItems());
         this.txtAreaGoalDescripctionDetail.setText("");
-        this.datePickerGoalEndDate.setValue(null);
-        this.datePickerGoalStartDate.setValue(null);
+        this.txtFieldGoalEndDate.setText(null);
+        this.dtpGoalStartDate.setValue(null);
         this.txtFieldActionResponsible.setText("");
-        this.datePickerStimatedEndDate.setValue(null);
-        this.datePickerStartDate.setValue(null);
+        this.dtpStimatedEndDate.setValue(null);
+        this.dtpStartDate.setValue(null);
         this.txtAreaActionDescriptionDetail.setText("");
         this.txtAreaActionResources.setText("");
+        this.btnAddAction.setDisable(true);
+        this.btnDeleteAction.setDisable(true);
     }
     
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show(); 
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
+    private Goal saveGoalDataFromInterface(){
+        Goal goal = null;
+        try {
+            this.checkGoalForm();
+            goal = new Goal();
+            goal.setDescription(txtAreaGoalDescripctionDetail.getText());
+            goal.setStartDate(ValidatorForm.convertJavaDateToSQlDate(dtpGoalStartDate));
+            for(Action action : tvWorkplanActions.getItems()){
+                action.updateEndDate();
+                goal.addAction(action);
+            }
+            goal.updateEndDate();
+            goal.updateStatus();
+        } catch (InvalidFormException ex) {
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), ex.getMessage());
+        }finally{
+            return goal;
         }
     }
     
+    private void refreshGoalsList(){
+        this.lvGoals.getItems().clear();
+        this.workplan.getGoals().forEach(goalElement -> {
+            this.lvGoals.getItems().add(goalElement.getDescription());
+        });
+    }
+    
+    private Action searchActionByDescription(String description){
+        Action actionReturn = null;
+        for(Action action : tvWorkplanActions.getItems()){
+            if(action.getDescriptionAction().equalsIgnoreCase(description)){
+                actionReturn = action;
+                break;
+            }
+        }
+        return actionReturn;
+    }
+    
     private void checkActionForm() throws InvalidFormException{
-        ValidatorForm.checkNotEmptyDateField(datePickerStartDate);
-        ValidatorForm.checkNotEmptyDateField(datePickerStimatedEndDate);
+        ValidatorForm.checkNotEmptyDateField(dtpWorkplanStartDate);
+        ValidatorForm.checkNotEmptyDateField(this.dtpStartDate);
+        ValidatorForm.checkNotEmptyDateField(this.dtpStimatedEndDate);
         ValidatorForm.chechkAlphabeticalField(txtFieldActionResponsible, 3, 50);
         ValidatorForm.chechkAlphabeticalArea(txtAreaActionResources, 0, 450);
-        ValidatorForm.chechkAlphabeticalArea(txtAreaActionDescriptionDetail, 20, 450);
+        ValidatorForm.chechkAlphabeticalArea(txtAreaActionDescriptionDetail, 5, 450);
+        if(dtpStimatedEndDate.getValue().isBefore(dtpStartDate.getValue())){
+            dtpStartDate.setStyle("-fx-border-color: red;");
+            throw new InvalidFormException("La fecha de inicio no puede ser despues del supuesto final");
+        }
+        this.checkIntervalDate(dtpStartDate, dtpWorkplanStartDate, dtpStimatedEndDate);
+    }
+    
+    private void checkGoalForm() throws InvalidFormException{
+        ValidatorForm.checkNotEmptyDateField(dtpWorkplanStartDate);
+        ValidatorForm.chechkAlphabeticalArea(txtAreaGoalDescripctionDetail, 5, 450);
+        ValidatorForm.checkNotEmptyDateField(dtpGoalStartDate);
+        if(tvWorkplanActions.getItems().isEmpty()){
+            throw new InvalidFormException("No puede haber una meta sin acciones");
+        }
+        if(dtpGoalStartDate.getValue().isBefore(dtpWorkplanStartDate.getValue())){
+            dtpGoalStartDate.setStyle("-fx-border-color: red;");
+            throw new InvalidFormException("La fecha de inicio no puede ser antes del inicio del plan de trabajo");
+        }
     }
     
     private void checkWorkPlanForm() throws InvalidFormException{
+        ValidatorForm.checkNotEmptyDateField(dtpWorkplanStartDate);
+        ValidatorForm.checkNotEmptyDateField(dtpWorkplanEndDate);
+        ValidatorForm.chechkAlphabeticalArea(txtAreaWorkPlanGeneralTarget, 5, 450);
+        this.workplan.setStartDatePlan(ValidatorForm.convertJavaDateToSQlDate(this.dtpWorkplanStartDate));
+        this.workplan.setEndDatePlan(ValidatorForm.convertJavaDateToSQlDate(this.dtpWorkplanEndDate));
+        this.workplan.calculateDurationInYears();
+        if(this.workplan.getDurationInYears() < 1){
+            throw new InvalidFormException("El plan de trabajo debe durar almenos 1 año");
+        }
+        if(this.workplan.getGoals().isEmpty()){
+            throw new InvalidFormException("Un plan de trabajo debe tener almenos 1 meta");
+        }
+    }
+    
+    private void checkIntervalDate(JFXDatePicker evaluationDate, JFXDatePicker initDate, JFXDatePicker endDate) throws InvalidFormException{
+        if(evaluationDate.getValue().isBefore(initDate.getValue()) || evaluationDate.getValue().isAfter(endDate.getValue())){
+            evaluationDate.setStyle("-fx-border-color: red;");
+            throw new InvalidFormException("fecha fuera del límite");
+        }
     }
     
 }

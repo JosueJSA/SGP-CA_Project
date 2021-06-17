@@ -5,6 +5,7 @@
  */
 package sgp.ca.demodao;
 
+import com.jfoenix.controls.JFXDatePicker;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -27,6 +28,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -49,8 +51,6 @@ import sgp.ca.domain.Lgac;
 public class GeneralResumeEditableController implements Initializable {
     
     @FXML
-    private TableView<Lgac> tableViewLgac;
-    @FXML
     private Button btnAddLgac;
     @FXML
     private Button btnDeleteLgac;
@@ -61,14 +61,6 @@ public class GeneralResumeEditableController implements Initializable {
     @FXML
     private TextArea txtAreaVision;
     @FXML
-    private TableColumn<Lgac, String> coloumnLgacKey;
-    @FXML
-    private TableColumn<Lgac, String> coloumnLgacDescription;
-    @FXML
-    private HBox hboxGeneralResumeOptions;
-    @FXML
-    private HBox hboxLgacTable;
-    @FXML
     private Button btnUpdate;
     @FXML
     private Button btnSignUpBodyAcademy;
@@ -76,8 +68,6 @@ public class GeneralResumeEditableController implements Initializable {
     private Button btnCancelChanges;
     @FXML
     private Button btnCancelRegistration;
-    @FXML
-    private Label lblUserName;
     @FXML
     private TextField txtFieldBodyAcademyName;
     @FXML
@@ -87,43 +77,53 @@ public class GeneralResumeEditableController implements Initializable {
     @FXML
     private TextField txtFieldAdsciptionUnit;
     @FXML
-    private DatePicker datePickerRegistrationDate;
-    @FXML
-    private DatePicker datePickerLastEvaluationDate;
-    @FXML
     private ComboBox<String> cboBoxConsolidationDegree;
-
+    @FXML
+    private Label lbUserName;
+    @FXML
+    private HBox hbGeneralResumeOptions;
+    @FXML
+    private JFXDatePicker dtpRegistrationDate;
+    @FXML
+    private JFXDatePicker dtpLastEvaluationDate;
+    @FXML
+    private ListView<String> lvLgac;
+    @FXML
+    private TextArea txtAreaLgacTitle;
+    @FXML
+    private TextArea txtAreaLgacDescription;
+    @FXML
+    private HBox hbLgacTable;
+    
     private final GeneralResumeDAO GENERAL_RESUME_DAO = new GeneralResumeDAO();
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
-    private Integrant responsibleToken;
-    private ObservableList<Lgac> lgacList;
-    private List<TextField> fields;
-    private List<TextArea> textAreas;
-    private List<Button> optionButtons;
+    private Integrant token;
+    private List<TextField> listFields;
+    private List<TextArea> listTextAreas;
+    private GeneralResume generalResume;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.btnDeleteLgac.setDisable(true);
-        optionButtons = Arrays.asList(btnCancelChanges, btnSignUpBodyAcademy, btnUpdate, btnCancelRegistration);
-        this.hboxGeneralResumeOptions.getChildren().removeAll(optionButtons);
+        this.hbGeneralResumeOptions.getChildren().removeAll(btnCancelChanges, btnSignUpBodyAcademy, btnUpdate, btnCancelRegistration);
         cboBoxConsolidationDegree.getItems().addAll("En formación", "En consolidación", "Consolidado");
-        textAreas = Arrays.asList(txtAreaGeneralTarget, txtAreaMission, txtAreaVision);
-        fields = Arrays.asList(txtFieldAdsciptionUnit, txtFieldAdscriptionArea, txtFieldBodyAcademyKey, txtFieldBodyAcademyName);
-        textAreas.forEach(txtArea -> txtArea.setWrapText(true));
+        listTextAreas = Arrays.asList(txtAreaGeneralTarget, txtAreaMission, txtAreaVision);
+        listFields = Arrays.asList(txtFieldAdsciptionUnit, txtFieldAdscriptionArea, txtFieldBodyAcademyName);
+        listTextAreas.forEach(txtArea -> txtArea.setWrapText(true));
     }
     
     public void showGeneralResumeInsertForm(Integrant responsible){
-        this.hboxGeneralResumeOptions.getChildren().addAll(btnSignUpBodyAcademy, btnCancelRegistration);
-        this.responsibleToken = responsible;
-        this.lblUserName.setText(this.responsibleToken.getFullName());
+        this.hbGeneralResumeOptions.getChildren().addAll(btnSignUpBodyAcademy, btnCancelRegistration);
+        this.token = responsible;
+        this.lbUserName.setText(this.token.getFullName());
+        this.generalResume = new GeneralResume();
     }
     
     public void showGeneralResumeUpdateForm(Integrant responsible) {
-        this.hboxGeneralResumeOptions.getChildren().addAll(btnUpdate, btnCancelChanges);
-        this.responsibleToken = responsible;
-        this.lblUserName.setText(this.responsibleToken.getFullName());
-        GeneralResume generalResume = GENERAL_RESUME_DAO.getGeneralResumeByKey(this.responsibleToken.getBodyAcademyKey());
-        this.setGeneralResumeDataIntoInterface(generalResume);
+        this.hbGeneralResumeOptions.getChildren().addAll(btnUpdate, btnCancelChanges);
+        this.token = responsible;
+        this.lbUserName.setText(this.token.getFullName());
+        this.generalResume = GENERAL_RESUME_DAO.getGeneralResumeByKey(this.token.getBodyAcademyKey());
+        this.setGeneralResumeDataIntoInterface();
     }
 
     @FXML
@@ -131,28 +131,28 @@ public class GeneralResumeEditableController implements Initializable {
         try {
             checkGeneralResumeForm();
             checkExistBodyAcademyKey();
-            GeneralResume generalResume = this.getOutGeneralResumeFormData();
+            this.getOutGeneralResumeFormData();
             if(GENERAL_RESUME_DAO.addGeneralResume(generalResume)){
                 this.addResponsibleInGeneralResumeRegistered(generalResume, event);
             }else{
-                AlertGenerator.showErrorAlert(event, "Error del sistema, favor de contactar a soporte técnico");
-                FXMLLoader loader = changeWindow("Login.fxml", event);
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error del sistema, favor de contactar a soporte técnico");
+                FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnCancelChanges);
             }
         } catch (InvalidFormException ex) {
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
     
     private void addResponsibleInGeneralResumeRegistered(GeneralResume generalResume, Event event){
-        this.responsibleToken = (Integrant) INTEGRANT_DAO.getMemberByUVmail(responsibleToken.getEmailUV());
-        this.responsibleToken.setBodyAcademyKey(generalResume.getBodyAcademyKey());
-        if(INTEGRANT_DAO.updateMember(responsibleToken, responsibleToken.getRfc())){
-            AlertGenerator.showInfoAlert(event, "El currículum general ha sido registrado con éxito");
-            FXMLLoader loader = changeWindow("Start.fxml", event);
+        this.token = (Integrant) INTEGRANT_DAO.getMemberByUVmail(token.getEmailUV());
+        this.token.setBodyAcademyKey(generalResume.getBodyAcademyKey());
+        if(INTEGRANT_DAO.updateMember(token, token.getRfc())){
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El currículum general ha sido registrado con éxito");
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnCancelChanges);
             StartController controller = loader.getController();
-            controller.receiveIntegrantToken(responsibleToken);
+            controller.receiveIntegrantToken(token);
         }else{
-            FXMLLoader loader = changeWindow("Login.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnCancelChanges);
         }
         
     }
@@ -161,73 +161,84 @@ public class GeneralResumeEditableController implements Initializable {
     private void updateGeneralResume(ActionEvent event){
         try {
             checkGeneralResumeForm();
-            GeneralResume generalResume = this.getOutGeneralResumeFormData();
-            if(GENERAL_RESUME_DAO.updateGeneralResume(generalResume, this.responsibleToken.getBodyAcademyKey())){
-                this.responsibleToken.setBodyAcademyKey(generalResume.getBodyAcademyKey());
-                AlertGenerator.showInfoAlert(event, "El currículum ha sido actualizado exitosamente");
+            this.getOutGeneralResumeFormData();
+            if(GENERAL_RESUME_DAO.updateGeneralResume(generalResume, this.token.getBodyAcademyKey())){
+                this.token.setBodyAcademyKey(generalResume.getBodyAcademyKey());
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El currículum ha sido actualizado exitosamente");
             }else{
-                AlertGenerator.showErrorAlert(event, "Error del sistema, favor de contactar a soporte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error del sistema, favor de contactar a soporte técnico");
             }
-            FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancelChanges);
             GeneralResumeRequestController controller = loader.getController();
-            controller.showGeneralResume(this.responsibleToken);
+            controller.showGeneralResume(this.token);
         } catch (InvalidFormException ex) {
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
     
     @FXML
     private void cancelChanges(ActionEvent event) {
-        Optional<ButtonType> action = AlertGenerator.showConfirmacionAlert(event, "¿Seguro que deseas cancelar la actualización?");
+        Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event, "¿Seguro que deseas cancelar la actualización?");
         if(action.get() == ButtonType.OK){
-            FXMLLoader loader = changeWindow("Start.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnCancelChanges);
             StartController controller = loader.getController();
-            controller.receiveIntegrantToken(this.responsibleToken);
+            controller.receiveIntegrantToken(this.token);
         }
     }
     
     @FXML
     private void cancelSignUpBodyAcademy(ActionEvent event) {
-        Optional<ButtonType> action = AlertGenerator.showConfirmacionAlert(event, "¿Seguro que deseas cancelar el registro?");
+        Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event, "¿Seguro que deseas cancelar el registro?");
         if(action.get() == ButtonType.OK){
-            FXMLLoader loader = changeWindow("Login.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Login.fxml", btnCancelChanges);
         }
     }
     
     @FXML
     private void addLgac(ActionEvent event) {
+        try {
+            this.checkLgaFrom();
+            GeneralResume bodyAcademy = new GeneralResume();
+            bodyAcademy.setBodyAcademyKey(this.token.getBodyAcademyKey());
+            this.generalResume.addLgac(new Lgac(
+                txtAreaLgacTitle.getText(), 
+                txtAreaLgacDescription.getText(), 
+                bodyAcademy
+            ));
+            this.lvLgac.getItems().clear();
+            this.generalResume.getLgacList().forEach(lgac -> this.lvLgac.getItems().add(lgac.getTitle()));
+        } catch (InvalidFormException ex) {
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
+        }
     }
 
     @FXML
     private void removeLgac(ActionEvent event) {
-    }
-    
-    @FXML
-    private void selectLgasRow(MouseEvent event) {
-    }
-    
-    private GeneralResume getOutGeneralResumeFormData() {
-        GeneralResume generalResume = new GeneralResume(
-            txtFieldBodyAcademyKey.getText(), 
-            txtFieldBodyAcademyName.getText(), 
-            txtFieldAdscriptionArea.getText(), 
-            txtFieldAdsciptionUnit.getText(),
-            cboBoxConsolidationDegree.getValue(),
-            txtAreaVision.getText(), 
-            txtAreaMission.getText(), 
-            txtAreaGeneralTarget.getText(), 
-            ValidatorForm.convertJavaDateToSQlDate(datePickerRegistrationDate), 
-            ValidatorForm.convertJavaDateToSQlDate(datePickerLastEvaluationDate)
-        );
-        return generalResume;
+        if(this.lvLgac.getSelectionModel().getSelectedItem() != null){
+            this.generalResume.removeLgac(this.lvLgac.getSelectionModel().getSelectedItem());
+            this.lvLgac.getItems().remove(this.lvLgac.getSelectionModel().getSelectedItem());
+            this.lvLgac.getItems().clear();
+            this.generalResume.getLgacList().forEach(lgac -> this.lvLgac.getItems().add(lgac.getTitle()));
+        }
     }
     
     private void checkGeneralResumeForm() throws InvalidFormException{
-        ValidatorForm.checkAlaphabeticalFields(fields, 5, 100);
-        ValidatorForm.checkAlaphabeticalTextAreas(textAreas, 50, 5000);
-        ValidatorForm.checkNotEmptyDateField(datePickerRegistrationDate);
-        ValidatorForm.checkNotEmptyDateField(datePickerLastEvaluationDate);
+        ValidatorForm.checkAlaphabeticalFields(listFields, 5, 100);
+        ValidatorForm.chechkAlphabeticalField(txtFieldBodyAcademyKey, 6, 15);
+        ValidatorForm.checkAlaphabeticalTextAreas(listTextAreas, 5, 450);
+        ValidatorForm.checkNotEmptyDateField(dtpRegistrationDate);
+        ValidatorForm.checkNotEmptyDateField(dtpLastEvaluationDate);
         ValidatorForm.isComboBoxSelected(cboBoxConsolidationDegree);
+    }
+    
+    private void checkLgaFrom() throws InvalidFormException{
+        ValidatorForm.chechkAlphabeticalArea(txtAreaLgacTitle, 5, 100);
+        ValidatorForm.chechkAlphabeticalArea(txtAreaLgacDescription, 5, 450);
+        for(String lgacDescription : this.lvLgac.getItems()){
+            if(lgacDescription.equalsIgnoreCase(this.txtAreaLgacTitle.getText())){
+                throw new InvalidFormException("Esta Lgac ya existe");
+            }
+        }
     }
     
     private void checkExistBodyAcademyKey() throws InvalidFormException{
@@ -237,37 +248,42 @@ public class GeneralResumeEditableController implements Initializable {
         }
     }
     
-    
-    
-    private void setGeneralResumeDataIntoInterface(GeneralResume generalResume){
-        if(generalResume != null){
-            this.txtFieldBodyAcademyKey.setText(generalResume.getBodyAcademyKey());
-            this.txtFieldBodyAcademyName.setText(generalResume.getBodyAcademyName());
-            this.txtFieldAdsciptionUnit.setText(generalResume.getAscriptionUnit());
-            this.cboBoxConsolidationDegree.setValue(generalResume.getConsolidationDegree());
-            this.datePickerRegistrationDate.setValue(LocalDate.parse(generalResume.getRegistrationDate()));
-            this.txtFieldAdscriptionArea.setText(generalResume.getAscriptionArea());
-            this.datePickerLastEvaluationDate.setValue(LocalDate.parse(generalResume.getLastEvaluation()));
-            this.txtAreaGeneralTarget.setText(generalResume.getGeneralTarjet());
-            this.txtAreaMission.setText(generalResume.getMission());
-            this.txtAreaVision.setText(generalResume.getVision());
+    private void setGeneralResumeDataIntoInterface(){
+        if(this.generalResume != null){
+            this.txtFieldBodyAcademyKey.setText(this.generalResume.getBodyAcademyKey());
+            this.txtFieldBodyAcademyName.setText(this.generalResume.getBodyAcademyName());
+            this.txtFieldAdsciptionUnit.setText(this.generalResume.getAscriptionUnit());
+            this.cboBoxConsolidationDegree.setValue(this.generalResume.getConsolidationDegree());
+            this.dtpRegistrationDate.setValue(LocalDate.parse(this.generalResume.getRegistrationDate()));
+            this.txtFieldAdscriptionArea.setText(this.generalResume.getAscriptionArea());
+            this.dtpLastEvaluationDate.setValue(LocalDate.parse(this.generalResume.getLastEvaluation()));
+            this.txtAreaGeneralTarget.setText(this.generalResume.getGeneralTarjet());
+            this.txtAreaMission.setText(this.generalResume.getMission());
+            this.txtAreaVision.setText(this.generalResume.getVision());
         }
+        this.generalResume.getLgacList().forEach(lgac -> this.lvLgac.getItems().add(lgac.getTitle()));
     }
     
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show(); 
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
+    private void getOutGeneralResumeFormData() {
+        this.generalResume.setBodyAcademyKey(txtFieldBodyAcademyKey.getText());
+        this.generalResume.setBodyAcademyName(txtFieldBodyAcademyName.getText()); 
+        this.generalResume.setAscriptionArea(txtFieldAdscriptionArea.getText());
+        this.generalResume.setAscriptionUnit(txtFieldAdsciptionUnit.getText());
+        this.generalResume.setConsolidationDegree(cboBoxConsolidationDegree.getValue());
+        this.generalResume.setVision(txtAreaVision.getText());
+        this.generalResume.setMission(txtAreaMission.getText());
+        this.generalResume.setGeneralTarjet(txtAreaGeneralTarget.getText());
+        this.generalResume.setRegistrationDate(ValidatorForm.convertJavaDateToSQlDate(dtpRegistrationDate));
+        this.generalResume.setLastEvaluation(ValidatorForm.convertJavaDateToSQlDate(dtpLastEvaluationDate));
+    }
+
+    @FXML
+    private void selectLgac(MouseEvent event) {
+        String lgacTitle = this.lvLgac.getSelectionModel().getSelectedItem();
+        if(lgacTitle != null){
+            this.txtAreaLgacTitle.setText(lgacTitle);
+            this.txtAreaLgacDescription.setText(this.generalResume.getLgacDescriptionByTitle(lgacTitle));
+            this.btnDeleteLgac.setDisable(false);
         }
     }
-    
 }

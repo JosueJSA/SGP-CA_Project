@@ -47,7 +47,7 @@ import sgp.ca.domain.Schooling;
         Integrant integrantVerified = new Integrant();
         try {
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT emailUV, fullName, bodyAcademyKey, participationType, rfc FROM Integrant WHERE  emailUV = ? AND password = ? AND bodyAcademyKey = ?;"
+                "SELECT emailUV, fullName, bodyAcademyKey, participationType, rfc, participationStatus FROM Integrant WHERE  emailUV = ? AND password = ? AND bodyAcademyKey = ?;"
             );
             sentenceQuery.setString(1, usuario.getEmailUV());
             sentenceQuery.setString(2, usuario.getPassword());
@@ -59,6 +59,7 @@ import sgp.ca.domain.Schooling;
                 integrantVerified.setBodyAcademyKey(result.getString("bodyAcademyKey"));
                 integrantVerified.setParticipationType(result.getString("participationType"));
                 integrantVerified.setRfc(result.getString("rfc"));
+                integrantVerified.setParticipationStatus(result.getString("participationStatus"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(IntegrantDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -94,11 +95,11 @@ import sgp.ca.domain.Schooling;
     }
     
     @Override
-    public List<Integrant> getMembers(String bodyAcademyKey){
-        List<Integrant> integrants = new ArrayList<>();
+    public List<Member> getMembers(String bodyAcademyKey){
+        List<Member> integrants = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT fullName, participationType, emailUV, cellPhone FROM `Integrant` WHERE bodyAcademyKey = ?;"
+                "SELECT fullName, participationType, emailUV, cellPhone, participationStatus FROM `Integrant` WHERE bodyAcademyKey = ?;"
             );
             sentenceQuery.setString(1, bodyAcademyKey);
             ResultSet result = sentenceQuery.executeQuery();
@@ -108,32 +109,11 @@ import sgp.ca.domain.Schooling;
                 integrant.setParticipationType(result.getString("participationType"));
                 integrant.setEmailUV(result.getString("emailUV"));
                 integrant.setCellphone(result.getString("cellPhone"));
+                integrant.setParticipationStatus(result.getString("participationStatus"));
                 integrants.add(integrant);
             }
         }catch(SQLException sqlException){
             Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
-        }finally{
-            CONNECTION.closeConnection();
-            return integrants;
-        }
-    }
-    
-    public List<Integrant> getIntegrantsForEvidence(String bodyAcademyKey){
-        List<Integrant> integrants = new ArrayList<>();
-        try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT fullName, rfc FROM `Integrant` WHERE bodyAcademyKey = ? AND participationStatus = 'Activo';"
-            );
-            sentenceQuery.setString(1, bodyAcademyKey);
-            ResultSet result = sentenceQuery.executeQuery();
-            while(result.next()){
-                Integrant integrant = new Integrant();
-                integrant.setFullName(result.getString("fullName"));
-                integrant.setRfc(result.getString("rfc"));
-                integrants.add(integrant);
-            }
-        }catch(SQLException sqlException){
-            Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
             CONNECTION.closeConnection();
             return integrants;
@@ -382,23 +362,4 @@ import sgp.ca.domain.Schooling;
         }
     }
 
-     public List<Integrant> getAllIntegrantsRfcName() {
-        List<Integrant> integrantsRfcNameList = new ArrayList();
-        try{
-            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Integrant;"
-            );
-            ResultSet queryResult = sentenceQuery.executeQuery();
-            while(queryResult.next()){
-                String integrantRfc = queryResult.getString("rfc");
-                String integrantName = queryResult.getString("fullName");
-                integrantsRfcNameList.add(new Integrant(integrantRfc, integrantName));
-            }
-        }catch(SQLException sqlException){
-            Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
-        }finally{
-            CONNECTION.closeConnection();
-            return integrantsRfcNameList;
-        }
-    }
 }

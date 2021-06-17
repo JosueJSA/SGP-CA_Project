@@ -126,7 +126,7 @@ public class MeetingRealizedEditController implements Initializable {
             this.prepareAgreementTable();
             clearAgreementCamps();
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
 
     }
@@ -147,10 +147,10 @@ public class MeetingRealizedEditController implements Initializable {
 
     @FXML
     private void closeUpdateMeetingWindow(ActionEvent event) {
-        Optional<ButtonType> action = AlertGenerator.showConfirmacionAlert(event,
+        Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
         "¿Seguro que deseas salir del registro de reunión? Los cambios no se guardarán");
         if(action.get() == ButtonType.OK){
-            FXMLLoader loader = changeWindow("MeetingRequest.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingRequest.fxml", btnCloseUpdateMeetingWindow);
             MeetingRequestController controller = loader.getController();
             controller.reciveMeeting(meeting.getMeetingKey());
             controller.receiveToken(token);
@@ -185,16 +185,16 @@ public class MeetingRealizedEditController implements Initializable {
             meeting.setMeetingNote(this.txtAreaNoteMeeting.getText());
             meeting.setMeetingPending(this.txtAreaPendingMeeting.getText());
             if(MEETING_DAO.updateMeeting(meeting, meeting)){
-                AlertGenerator.showInfoAlert(event, "Reunión modificada con éxito");
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Reunión modificada con éxito");
             }else{
-                AlertGenerator.showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");
             }
-            FXMLLoader loader = changeWindow("MeetingRequest.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingRequest.fxml", btnCloseUpdateMeetingWindow);
             MeetingRequestController controller = loader.getController();
             controller.receiveToken(token);
             controller.reciveMeeting(meeting.getMeetingKey());
         }catch(InvalidFormException ex){
-            AlertGenerator.showErrorAlert(event, ex.getMessage());
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
     
@@ -222,22 +222,6 @@ public class MeetingRealizedEditController implements Initializable {
         List<String> integrantsName = INTEGRANT_DAO.getAllIntegrantsName();
         itemsIntegrant.addAll(integrantsName);
         return itemsIntegrant;
-    }
-    
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show();
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
     }
     
 }

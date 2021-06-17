@@ -428,5 +428,19 @@ public class ArticleDAO extends EvidenceDAO {
             return magazine;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Artículo";
+    }
+
+    @Override
+    public EvidenceDAO getEvidenceDaoInstance(String evidenceType){
+        EvidenceDAO evidenceDao = null;
+        if(this.toString().equalsIgnoreCase(evidenceType)){
+            evidenceDao = new ArticleDAO();
+        }
+        return evidenceDao;
+    }
     
 }

@@ -38,14 +38,9 @@ public class MemberSelectionController implements Initializable {
     private Button btnCollaboratorRegistrer;
 
     private Integrant token;
-    /**
-     * Initializes the controller class.
-     * @param url
-     * @param rb
-     */
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
     }    
     
     public void receiveResponsibeleToken(Integrant integrantToken){
@@ -54,39 +49,23 @@ public class MemberSelectionController implements Initializable {
 
     @FXML
     private void cancelRegistrerSelection(ActionEvent event) {
-        FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancel);
         GeneralResumeRequestController controller = loader.getController();
         controller.showGeneralResume(token);
     }
 
     @FXML
     private void addNewIntegrant(ActionEvent event) {
-        FXMLLoader loader = changeWindow("IntegrantEditable.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("IntegrantEditable.fxml", btnCancel);
         IntegrantEditableController controller = loader.getController();
         controller.showIntegrantInscriptionForm(token);
     }
 
     @FXML
     private void addNewCollaborator(ActionEvent event) {
-        FXMLLoader loader = changeWindow("CollaboratorEditable.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("CollaboratorEditable.fxml", btnCancel);
         CollaboratorEditableController controller = loader.getController();
         controller.showCollaboratorRegistrationForm(token);
-    }
-    
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show(); 
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
     }
     
 }

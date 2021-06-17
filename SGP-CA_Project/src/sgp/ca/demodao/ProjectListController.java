@@ -7,7 +7,6 @@ package sgp.ca.demodao;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -29,8 +28,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.ProjectDAO;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Project;
@@ -65,41 +62,41 @@ public class ProjectListController implements Initializable {
     @FXML
     private TableColumn<Project, String> colEndDate;
     @FXML
-    private Label lblUserName;
+    private Label lbUserName;
     
     private Integrant token;
-    private final ProjectDAO PROJECT = new ProjectDAO();
-    
+    private final ProjectDAO PROJECT = new ProjectDAO();    
    
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Project initializeProject = new Project();
-        
-        this.colNameProject.setCellValueFactory(new PropertyValueFactory ("projectName"));
-        this.colDuration.setCellValueFactory(new PropertyValueFactory ("durationProjectInMonths"));
-        this.colStatus.setCellValueFactory(new PropertyValueFactory ("status"));
-        this.colStartDate.setCellValueFactory(new PropertyValueFactory ("startDate"));
-        this.colEndDate.setCellValueFactory(new PropertyValueFactory ("endDate"));
-        tvProjects.setItems(FXCollections.observableArrayList(PROJECT.getProjectList()));
     }    
+    
     public void receiveToken(Integrant integrantToken){
         this.token = integrantToken;
-        this.lblUserName.setText(integrantToken.getFullName());
+        this.lbUserName.setText(integrantToken.getFullName());
+        List<Project> projects = PROJECT.getProjectList();
+        if(projects != null){
+            this.prepareTableFormat();
+            tvProjects.setItems(FXCollections.observableArrayList(projects));
+        }else{
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), "Lo sentimos, el sistema no está disponible, favor de contactar a soporte técnico");
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnExit);
+            StartController controller = loader.getController();
+            controller.receiveIntegrantToken(token);
+        }
     }
 
     @FXML
     private void addProject(ActionEvent event) {
-        FXMLLoader loader = changeWindow("ProjectForm.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ProjectForm.fxml", btnExit);
         ProjectFormController controller = loader.getController();
         controller.receiveProjectSave();
     }
 
     @FXML
     private void exit(ActionEvent event) {
-        FXMLLoader loader = changeWindow("Start.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnExit);
         StartController controller = loader.getController();
         controller.receiveIntegrantToken(token);
     }
@@ -118,28 +115,18 @@ public class ProjectListController implements Initializable {
     private void selectProject(MouseEvent event) {
         Project projectSelected = this.tvProjects.getSelectionModel().getSelectedItem();
         if (projectSelected != null){
-            FXMLLoader loader = changeWindow("Project.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Project.fxml", btnExit);
             ProjectController controller = loader.getController();
-            controller.receiveProject(projectSelected);
+            controller.showProject(projectSelected, this.token);
         }
     }
     
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show();
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
+    private void prepareTableFormat(){
+        this.colNameProject.setCellValueFactory(new PropertyValueFactory ("projectName"));
+        this.colDuration.setCellValueFactory(new PropertyValueFactory ("durationProjectInMonths"));
+        this.colStatus.setCellValueFactory(new PropertyValueFactory ("status"));
+        this.colStartDate.setCellValueFactory(new PropertyValueFactory ("startDate"));
+        this.colEndDate.setCellValueFactory(new PropertyValueFactory ("endDate"));
     }
-    
-
     
 }

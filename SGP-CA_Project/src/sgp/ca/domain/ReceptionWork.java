@@ -14,7 +14,7 @@ public class ReceptionWork extends Evidence{
     private String modality;
     private int actualDurationInMonths;
     private int estimatedDurationInMonths;
-    private List<String>requirements;
+    private List<String> requirements;
     private List<Lgac> lgac;
     
     public ReceptionWork(String urlFile, String projectName, boolean impactAB, String evidenceType, String evidenceTitle, 
@@ -34,6 +34,11 @@ public class ReceptionWork extends Evidence{
         this.requirements = new ArrayList();
         this.lgac = new ArrayList();
         
+    }
+
+    public ReceptionWork(String evidenceType, String evidenceTitle, 
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+        super(evidenceType, evidenceTitle, impactAB, registrationResponsible, registrationDate, urlFile);
     }
     
     public ReceptionWork(String urlFile, String projectName, boolean impactAB, String evidenceType, String evidenceTitle, 
@@ -108,5 +113,36 @@ public class ReceptionWork extends Evidence{
 
     public void setLgac(List<Lgac> lgac) {
         this.lgac = lgac;
+    }
+    
+    @Override
+    public String toString(){
+        return "Trabajo recepcional";
+    }
+
+    @Override
+    public Evidence getSpecificEvidenceInstance(String evidenceType) {
+        Evidence evidence = null;
+        if(this.toString().equalsIgnoreCase(evidenceType)){
+            evidence = new ReceptionWork();
+        }
+        return evidence;
+    }
+
+    @Override
+    public Evidence getSpecificEvidenceInstance(String evidenceType, String evidenceTitle, 
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+        Evidence evidence = null;
+        if(this.toString().equalsIgnoreCase(evidenceType)){
+            evidence = new ReceptionWork(
+                evidenceType,
+                evidenceTitle,
+                impactAB,
+                registrationResponsible,
+                registrationDate,
+                urlFile
+            );
+        }
+        return evidence;
     }
 }

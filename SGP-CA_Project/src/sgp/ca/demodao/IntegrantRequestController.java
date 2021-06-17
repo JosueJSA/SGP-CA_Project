@@ -5,29 +5,21 @@
  */
 package sgp.ca.demodao;
 
-import java.io.IOException;
+import com.jfoenix.controls.JFXDatePicker;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.IntegrantDAO;
-import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Integrant;
 
 /**
@@ -38,8 +30,6 @@ import sgp.ca.domain.Integrant;
 public class IntegrantRequestController implements Initializable {
 
     @FXML
-    private HBox hboxIntegrantOptions;
-    @FXML
     private Button btnUnsubscribe;
     @FXML
     private Button btnSubscribe;
@@ -48,42 +38,39 @@ public class IntegrantRequestController implements Initializable {
     @FXML
     private Button btnExit;
     @FXML
-    private Label lblParticipationType;
+    private HBox hbIntegrantOptions;
     @FXML
-    private TextField memberRFCField;
+    private Label lbParticipationType;
     @FXML
-    private TextField memberFullNameField;
+    private TextField txtFieldMemberRfc;
     @FXML
-    private TextField memberEmailUVField;
+    private TextField txtFieldMemberFullName;
     @FXML
-    private TextField memberCurpField;
+    private TextField txtFieldMemberEmailUv;
     @FXML
-    private TextField memberNationalityField;
+    private TextField txtFieldMemberCurp;
     @FXML
-    private TextField memberEducationalProgramField;
+    private TextField txtFieldMemberNationality;
     @FXML
-    private TextField memberCellNumberField;
+    private TextField txtFieldMemberEducationalProgram;
     @FXML
-    private TextField memberStaffNumberField;
+    private TextField txtFieldMemberCellNumber;
     @FXML
-    private DatePicker memberRegistrationDateField;
+    private TextField txtFieldMemberStaffNumber;
     @FXML
-    private PasswordField passwordField;
+    private PasswordField passFieldMemberPassword;
     @FXML
-    private TextField fieldParticipationStatus;
-
+    private TextField txtFieldParticipationStatus;
+    @FXML
+    private JFXDatePicker dtpMemberRegistration;
+    
     private Integrant token;
     private Integrant integrant;
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
     
-    /**
-     * Initializes the controller class.
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        hbIntegrantOptions.getChildren().removeAll(btnUnsubscribe, btnSubscribe, btnIntegrantUpdate, btnExit);
     }
     
     public void showIntegrantByEmail(Integrant integrantToken, String emailUV){
@@ -91,17 +78,23 @@ public class IntegrantRequestController implements Initializable {
         this.integrant = (Integrant) INTEGRANT_DAO.getMemberByUVmail(emailUV);
         if(integrant != null){
             setIntegrantDataIntoInterface();
+            this.checkPrivileges();
+        }else{
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), "Lo sentimos, parece que el sistema no está disponible por el momento");
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnExit);
+            GeneralResumeRequestController controller = loader.getController();
+            controller.showGeneralResume(token);
         }
     }
 
     @FXML
     private void unsubscribeIntegrant(ActionEvent event) {
         if(INTEGRANT_DAO.unsubscribeMemberByEmailUV(integrant.getEmailUV())){
-            AlertGenerator.showInfoAlert(event, "El integrante ha sido dado de baja");
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El integrante ha sido dado de baja");
         }else{
-            AlertGenerator.showErrorAlert(event, "Error del sistema, favor de contactas a soporte técnico");
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error del sistema, favor de contactas a soporte técnico");
         }
-        FXMLLoader loader = changeWindow("Start.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnExit);
         StartController controller = loader.getController();
         controller.receiveIntegrantToken(this.token);
     }
@@ -109,58 +102,54 @@ public class IntegrantRequestController implements Initializable {
     @FXML
     private void subscribeIntegrant(ActionEvent event) {
         if(INTEGRANT_DAO.subscribeMemberByEmailUV(integrant.getEmailUV())){
-            AlertGenerator.showInfoAlert(event, "El integrante ha sido dado de alta");
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El integrante ha sido dado de alta");
         }else{
-            AlertGenerator.showErrorAlert(event, "Error del sistema, favor de contactas a soporte técnico");
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error del sistema, favor de contactas a soporte técnico");
         }
-        FXMLLoader loader = changeWindow("Start.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnExit);
         StartController controller = loader.getController();
         controller.receiveIntegrantToken(this.token);
     }
 
     @FXML
     private void updateIntegrant(ActionEvent event) {
-        FXMLLoader loader = changeWindow("IntegrantEditable.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("IntegrantEditable.fxml", btnExit);
         IntegrantEditableController controller = loader.getController();
         controller.showIntegrantUpdateForm(this.token, integrant.getEmailUV());
     }
 
     @FXML
     private void exit(ActionEvent event) {
-        FXMLLoader loader = changeWindow("GeneralResumeRequest.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnExit);
         GeneralResumeRequestController controller = loader.getController();
         controller.showGeneralResume(this.token);
     }
     
     private void setIntegrantDataIntoInterface(){
-        this.passwordField.setText(this.integrant.getPassword());
-        this.memberCellNumberField.setText(this.integrant.getCellphone());
-        this.memberCurpField.setText(this.integrant.getCurp());
-        this.memberEducationalProgramField.setText(this.integrant.getEducationalProgram());
-        this.memberEmailUVField.setText(this.integrant.getEmailUV());
-        this.memberFullNameField.setText(this.integrant.getFullName());
-        this.memberNationalityField.setText(this.integrant.getNationality());
-        this.memberRFCField.setText(this.integrant.getRfc());
-        this.memberRegistrationDateField.setValue(LocalDate.parse(this.integrant.getDateOfAdmission()));
-        this.memberStaffNumberField.setText(String.valueOf(this.integrant.getStaffNumber()));
-        this.lblParticipationType.setText(this.integrant.getParticipationType());
-        this.fieldParticipationStatus.setText(this.integrant.getParticipationStatus());
-    }
+        this.passFieldMemberPassword.setText(this.integrant.getPassword());
+        this.txtFieldMemberCellNumber.setText(this.integrant.getCellphone());
+        this.txtFieldMemberCurp.setText(this.integrant.getCurp());
+        this.txtFieldMemberEducationalProgram.setText(this.integrant.getEducationalProgram());
+        this.txtFieldMemberEmailUv.setText(this.integrant.getEmailUV());
+        this.txtFieldMemberFullName.setText(this.integrant.getFullName());
+        this.txtFieldMemberNationality.setText(this.integrant.getNationality());
+        this.txtFieldMemberRfc.setText(this.integrant.getRfc());
+        this.dtpMemberRegistration.setValue(LocalDate.parse(this.integrant.getDateOfAdmission()));
+        this.txtFieldMemberStaffNumber.setText(String.valueOf(this.integrant.getStaffNumber()));
+        this.lbParticipationType.setText(this.integrant.getParticipationType());
+        this.txtFieldParticipationStatus.setText(this.integrant.getParticipationStatus());
+    }    
     
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show(); 
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
+    private void checkPrivileges(){
+        if(this.token.getParticipationType().equalsIgnoreCase("Responsable")){
+            hbIntegrantOptions.getChildren().addAll(btnUnsubscribe, btnSubscribe, btnIntegrantUpdate, btnExit);
+            if(this.integrant.getParticipationStatus().equalsIgnoreCase("Activo")){
+                hbIntegrantOptions.getChildren().remove(btnSubscribe);
+            }else{
+                hbIntegrantOptions.getChildren().remove(btnUnsubscribe);
+            }
+        }else{
+            hbIntegrantOptions.getChildren().addAll(btnExit);
         }
     }
-    
 }

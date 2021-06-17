@@ -5,38 +5,25 @@
  */
 package sgp.ca.demodao;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.ProjectDAO;
-import sgp.ca.businesslogic.EvidenceDAO;
-import sgp.ca.businesslogic.PrototypeDAO;
 import sgp.ca.businesslogic.ReceptionWorkDAO;
 import sgp.ca.domain.Evidence;
+import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Project;
-import sgp.ca.domain.Prototype;
-import sgp.ca.domain.ReceptionWork;
 
 /**
  * FXML Controller class
@@ -49,11 +36,8 @@ public class ProjectController implements Initializable {
     private Button btnModify;
     @FXML
     private Button btnExit;
-    
     @FXML
     private TextField txtFieldProjectName;
-    @FXML
-    private TextField txtFieldLgacAssociate;
     @FXML
     private TextField txtFieldDuration;
     @FXML
@@ -69,36 +53,39 @@ public class ProjectController implements Initializable {
     @FXML
     private TableView<Evidence> tvEvidence;
     @FXML
+    private TableColumn<Evidence, String> colEvidenceType;
+    @FXML
     private TableColumn<Evidence, String> colEvidenceName;
     @FXML
     private TableColumn<Evidence, String> colPublicationDate;
     @FXML
-    private TableColumn<Evidence, String> colImpactBA;
+    private TableColumn<Evidence, Boolean> colImpactBA;
+    @FXML
+    private Label lbUserName;
+    @FXML
+    private ComboBox<String> cboBoxLgac;
     
     private final ProjectDAO PROJECT_DAO = new ProjectDAO();
     private final ReceptionWorkDAO RECEPTIONWORK_DAO = new ReceptionWorkDAO();
-    private  Project PROJECT = new Project();
-    private final PrototypeDAO PROTOTYPE_DAO = new PrototypeDAO();
+    private Project PROJECT = new Project();
+    private Integrant token;
+    
      
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.colEvidenceName.setCellValueFactory(new PropertyValueFactory ("evidenceTitle"));
-        this.colPublicationDate.setCellValueFactory(new PropertyValueFactory ("registrationDate"));
-        this.colImpactBA.setCellValueFactory(new PropertyValueFactory ("impactBA"));
-        tvEvidence.setItems(makeItemsEvidence());
+        this.prepareTableFormat();
     }    
     
-    public void receiveProject(Project projectSelected){
+    public void showProject(Project projectSelected, Integrant token){
+        this.token = token;
         setProjectInformation(projectSelected.getProjectName());
+        this.lbUserName.setText(this.token.getFullName());
+        tvEvidence.getItems().addAll(RECEPTIONWORK_DAO.getEvidencesByProjectName(projectSelected.getProjectName()));
     }
     
     private void setProjectInformation(String projectName){
         PROJECT = PROJECT_DAO.getProjectbyName(projectName);
         this.txtFieldProjectName.setText(PROJECT.getProjectName());
-        this.txtFieldLgacAssociate.setText(PROJECT.getBodyAcademyKey());
         this.txtFieldDuration.setText(Integer.toString(PROJECT.getDurationProjectInMonths()));
         this.txtFieldStartDate.setText(PROJECT.getStartDate());
         this.txtFieldEstimatedEndDate.setText(PROJECT.getEstimatedEndDate());
@@ -106,44 +93,26 @@ public class ProjectController implements Initializable {
         this.txtFieldStatus.setText(PROJECT.getStatus());
         this.txtAreaDescription.setText(PROJECT.getDescription());
     }
-    
-    private ObservableList<Evidence> makeItemsEvidence(){
-        ObservableList<Evidence> itemsEvidence = FXCollections.observableArrayList();
-        List<ReceptionWork> receptionWork = RECEPTIONWORK_DAO.getReceptionWorkListForEvidence();
-        //List<Prototype> prototype = PROTOTYPE_DAO.getPrototypeForEvidence();                          /*Esto moudulo se encuentra en construcción */                 
-        for(int i = 0; i < receptionWork.size(); i++){
-            Evidence evidenceTable = receptionWork.get(i);
-            itemsEvidence.add(evidenceTable);
-        }
-        return itemsEvidence;
-    }
 
     @FXML
     private void modiftyProject(ActionEvent event) {
-        FXMLLoader loader = changeWindow("ProjectForm.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ProjectForm.fxml", btnExit);
         ProjectFormController controller = loader.getController();
         controller.receiveProjectUpdate(PROJECT);
     }
 
      @FXML
     private void exit(ActionEvent event) {
-        FXMLLoader loader = changeWindow("ProjectList.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ProjectList.fxml", btnExit);
+        ProjectListController controller = loader.getController();
+        controller.receiveToken(this.token);
     }
     
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show();
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
+    private void prepareTableFormat(){
+        this.colEvidenceType.setCellValueFactory(new PropertyValueFactory ("evidenceType"));
+        this.colEvidenceName.setCellValueFactory(new PropertyValueFactory ("evidenceTitle"));
+        this.colPublicationDate.setCellValueFactory(new PropertyValueFactory ("registrationDate"));
+        this.colImpactBA.setCellValueFactory(new PropertyValueFactory ("impactAB"));
     }
     
 }
