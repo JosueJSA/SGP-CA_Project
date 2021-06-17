@@ -63,21 +63,24 @@ public class EvidenceSelectionController implements Initializable {
     private void selectArticle(ActionEvent event) {
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceEdit.fxml", btnCancel);
         EvidenceEditController controller = loader.getController();
-        controller.receiveArticleAndToken(new Article(),token);
+        Article article = new Article();
+        controller.receiveArticleAndToken(article,token);
     }
 
     @FXML
     private void selectPrototype(ActionEvent event) {
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceEdit.fxml", btnCancel);
         EvidenceEditController controller = loader.getController();
-        controller.receivePrototypeAndToken(new Prototype(),token);
+        Prototype prototype = new Prototype();
+        controller.receivePrototypeAndToken(prototype,token);
     }
 
     @FXML
     private void selectBook(ActionEvent event) {
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceEdit.fxml", btnCancel);
         EvidenceEditController controller = loader.getController();
-        controller.receiveBookAndToken(new Book(),token);
+        Book book = new Book();
+        controller.receiveBookAndToken(book,token);
     }
     
 }

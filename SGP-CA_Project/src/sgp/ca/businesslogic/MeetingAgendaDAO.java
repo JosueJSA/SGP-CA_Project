@@ -82,6 +82,7 @@ public class MeetingAgendaDAO implements IMeetingAgendaDAO{
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
+                connection.close();
                 Logger.getLogger(MeetingAgendaDAO.class.getName()).log(Level.SEVERE, null, sqlException);
             }catch(SQLException ex){
                 Logger.getLogger(MeetingAgendaDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,6 +101,7 @@ public class MeetingAgendaDAO implements IMeetingAgendaDAO{
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
+                connection.close();
                 Logger.getLogger(MeetingAgendaDAO.class.getName()).log(Level.SEVERE, null, sqlException);
             }catch(SQLException ex){
                 Logger.getLogger(MeetingAgendaDAO.class.getName()).log(Level.SEVERE, null, ex);

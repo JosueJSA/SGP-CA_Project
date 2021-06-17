@@ -100,12 +100,13 @@ import sgp.ca.domain.Schooling;
         List<Member> integrants = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT fullName, participationType, emailUV, cellPhone, participationStatus FROM `Integrant` WHERE bodyAcademyKey = ?;"
+                "SELECT rfc, fullName, participationType, emailUV, cellPhone, participationStatus FROM `Integrant` WHERE bodyAcademyKey = ?;"
             );
             sentenceQuery.setString(1, bodyAcademyKey);
             ResultSet result = sentenceQuery.executeQuery();
             while(result.next()){
                 Integrant integrant = new Integrant();
+                integrant.setRfc(result.getString("rfc"));
                 integrant.setFullName(result.getString("fullName"));
                 integrant.setParticipationType(result.getString("participationType"));
                 integrant.setEmailUV(result.getString("emailUV"));

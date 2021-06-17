@@ -82,6 +82,7 @@ public class ArticleController implements Initializable, EvidenceWindow {
     
     public void showArticleByUrl(String url, Integrant token){
         this.token = token;
+        this.lbUsername.setText(token.getFullName());
         this.article = (Article) ARTICLE_DAO.getEvidenceByUrl(url);
         if(this.article != null){
             this.setArticleDataIntoInterface();
@@ -133,8 +134,8 @@ public class ArticleController implements Initializable, EvidenceWindow {
     }
     
     private void grantPermissions(){
-        if(this.token.getFullName().equalsIgnoreCase(this.article.getRegistrationResponsible())){
-            hbOptions.getChildren().addAll(btnUpdateEvidence, btnRemoveEvidence);
+        if(this.token.getRfc().equalsIgnoreCase(this.article.getRegistrationResponsible())){
+            hbOptions.getChildren().addAll(btnUpdateEvidence);
         }
     }
     

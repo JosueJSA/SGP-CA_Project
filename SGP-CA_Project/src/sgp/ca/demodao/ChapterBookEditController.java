@@ -45,86 +45,60 @@ import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Member;
 
-public class ChapterBookEditController implements Initializable {
+public class ChapterBookEditController implements Initializable{
 
     @FXML
     private Label lbWindowTitle;
-
     @FXML
     private Label lbUsername;
-
     @FXML
     private Button btnAddEvidence;
-
     @FXML
     private Button btnUpdateEvidence;
-
     @FXML
     private Button btnCloseWindow;
-
     @FXML
     private TextField txtFieldChapterBookTittle;
-
     @FXML
     private DatePicker dtpPublicationDate;
-
     @FXML
     private TextField txtFieldNumerPagesRange;
-
     @FXML
     private ComboBox<Book> cboBoxBook;
-
     @FXML
     private Button btnAddRowIntegrantTable;
-
     @FXML
     private Button btnRemoveRowIntegrantTable;
-
     @FXML
     private ComboBox<Member> cboBoxIntegrantsName;
-
     @FXML
     private TableView<Member> tvIntegrant;
-
     @FXML
     private TableColumn<Member, String> colIntegrantName;
-
     @FXML
     private Button btnAddRowCollaboratorTable;
-
     @FXML
     private Button btnRemoveRowCollaboratorTable;
-
     @FXML
     private ComboBox<Member> cboBoxCollaboratorsName;
-
     @FXML
     private TableView<Member> tvCollaborators;
-
     @FXML
     private TableColumn<Member, String> colCollaboratorName;
-
     @FXML
     private Button btnAddRowStudentsTable;
-
     @FXML
     private Button btnRemoveRowStudentsTable;
-
     @FXML
     private TextField txtFieldStudentName;
-
     @FXML
     private ListView<String> lvStudent;
-
     @FXML
     private Button btnAddDocument;
-
     @FXML
     private Button btnReplaceDocument;
-    
     @FXML
     private ImageView imgViewPDFEvidence;
-
     @FXML
     private Label lbDocumentName;
     
@@ -141,15 +115,13 @@ public class ChapterBookEditController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        setWindowInformationCamps();
-        prepareIntegrantTable();
-        prepareCollaboratorTable();
-        prepareStudentTable();
+        
     }
     
     public void receiveToken(Integrant token){
         this.token = token;
         this.lbUsername.setText(this.token.getFullName());
+        setWindowInformationCamps();
     }
     
     public void receiveBook(Book book){
@@ -177,6 +149,7 @@ public class ChapterBookEditController implements Initializable {
         this.btnUpdateEvidence.setVisible(true);
         this.btnAddEvidence.setDisable(true);
         this.btnAddEvidence.setVisible(false);
+        this.btnAddDocument.setVisible(false);
         prepareIntegrantTable();
         prepareCollaboratorTable();
         prepareStudentTable();
@@ -207,6 +180,7 @@ public class ChapterBookEditController implements Initializable {
     private void addDocument(ActionEvent event) {
         DialogBox dialogBox = new DialogBox();
         this.lbDocumentName.setText(dialogBox.openDialogFileSelector());
+        this.chapterBook.setUrlFile(this.lbDocumentName.getText());
         this.lbDocumentName.setVisible(true);
         this.imgViewPDFEvidence.setVisible(true);
         this.btnAddDocument.setVisible(false);
@@ -328,7 +302,7 @@ public class ChapterBookEditController implements Initializable {
             this.validateChapterInformation();
             this.getOutChapterBookInformation();
             Book relatedBook = this.cboBoxBook.getSelectionModel().getSelectedItem();
-            if(CHAPTERBOOK_DAO.addChapterBook(chapterBook, relatedBook)){
+            if(CHAPTERBOOK_DAO.updateChepterBook(chapterBook, chapterBook.getUrlFile())){
                 GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Capítulo de libro modificado con éxito");
             }else{
                 GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con sopoerte técnico");

@@ -82,6 +82,10 @@ public class EvidenceEditController implements Initializable{
     private ComboBox<Member> cboBoxIntegrantsName;
     @FXML
     private TableView<Integrant> tvIntegrant;
+
+    @FXML
+    private TableColumn<Integrant, String> colRFCIntegrant;
+
     @FXML
     private TableColumn<Integrant, String> colIntegrantName;
     @FXML
@@ -91,7 +95,11 @@ public class EvidenceEditController implements Initializable{
     @FXML
     private ComboBox<Member> cboBoxCollaboratorsName;
     @FXML
-    private TableView<Collaborator> tvCollaborators;
+    private TableView<Collaborator> tvCollaborador;
+
+    @FXML
+    private TableColumn<Collaborator, String> colRFCCollaborator;
+
     @FXML
     private TableColumn<Collaborator, String> colCollaboratorName;
     @FXML
@@ -145,9 +153,6 @@ public class EvidenceEditController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb){
         setWindowInformationCamps();
-        prepareIntegrantTable();
-        prepareCollaboratorTable();
-        prepareStudentTable();
     }    
     
     public void receiveBookAndToken(Book book, Integrant token){
@@ -225,6 +230,9 @@ public class EvidenceEditController implements Initializable{
     private void determineTypeOperationArticle(Article article){
         if(article.getUrlFile() == null){
             this.btnAddEvidence.setVisible(true);
+            prepareIntegrantTable();
+            prepareCollaboratorTable();
+            prepareStudentTable();
         }else{
             this.evidence = article;
             this.btnUpdateEvidence.setVisible(true);
@@ -290,6 +298,7 @@ public class EvidenceEditController implements Initializable{
     private void addDocument(ActionEvent event) {
         DialogBox dialogBox = new DialogBox();
         this.lbDocumentName.setText(dialogBox.openDialogFileSelector());
+        this.evidence.setUrlFile(this.lbDocumentName.getText());
         this.lbDocumentName.setVisible(true);
         this.imgViewPDFEvidence.setVisible(true);
         this.btnAddDocument.setVisible(false);
@@ -307,20 +316,20 @@ public class EvidenceEditController implements Initializable{
     public void validateBookInformation() throws InvalidFormException{
         ValidatorForm.chechkAlphabeticalField(this.txtFieldPublisher, 2, 30);
         ValidatorForm.isIntegerNumberData(this.txtFieldEditionsNumber, 3);
-        ValidatorForm.isNumberData(this.txtFieldISBN, 13);
+        ValidatorForm.isNumberData(this.txtFieldISBN, 15);
     }
     
     public void validateArticleInformation() throws InvalidFormException{
         ValidatorForm.chechkAlphabeticalField(this.txtFieldMagazineName, 1, 100);
         ValidatorForm.chechkAlphabeticalField(this.txtFieldMagazineEditorial, 1, 100);
-        ValidatorForm.isNumberData(this.txtFieldISNN, 13);
+        ValidatorForm.isNumberData(this.txtFieldISNN, 15);
         ValidatorForm.isIntegerNumberData(this.txtFieldIndex, 11);
     }
     
     private void getOutEvidenceInformation(){
         this.evidence.setEvidenceTitle(this.txtFieldEvidenceTittle.getText());
         this.evidence.setCountry(this.txtFieldPublicationCountry.getText());
-        this.evidence.setPublicationDate(this.dtpPublicationDate.toString());
+        this.evidence.setPublicationDate(this.dtpPublicationDate.getValue().toString());
         
         if(this.chBoxImpactAB.isSelected()){
             this.evidence.setImpactAB(true);
@@ -396,7 +405,7 @@ public class EvidenceEditController implements Initializable{
             ValidatorForm.isComboBoxSelected(cboBoxCollaboratorsName);
             Member collaborator = this.cboBoxCollaboratorsName.getValue();
             this.evidence.getCollaborators().add((Collaborator) collaborator);
-            this.tvCollaborators.setItems(makeitemsCollaboratorsListForTable());
+            this.tvCollaborador.setItems(makeitemsCollaboratorsListForTable());
             this.cboBoxCollaboratorsName.setValue(null);
         }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
@@ -409,6 +418,7 @@ public class EvidenceEditController implements Initializable{
             ValidatorForm.isComboBoxSelected(cboBoxIntegrantsName);
             Member integrant = this.cboBoxIntegrantsName.getValue();
             this.evidence.getIntegrants().add((Integrant) integrant);
+            System.out.print(evidence.getIntegrants().size());
             this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
             this.cboBoxIntegrantsName.setValue(null);
         }catch(InvalidFormException ex){
@@ -419,7 +429,7 @@ public class EvidenceEditController implements Initializable{
     @FXML
     private void addRowStudentsTable(ActionEvent event) {
         try{
-            ValidatorForm.chechkAlphabeticalField(this.txtFieldStudentName, 7, 50);
+            ValidatorForm.chechkAlphabeticalField(this.txtFieldStudentName, 3, 50);
             String studentName = this.txtFieldStudentName.getText();
             this.evidence.getStudents().add(studentName);
             this.lvStudent.setItems(makeitemsStudentsListForTable());
@@ -442,9 +452,9 @@ public class EvidenceEditController implements Initializable{
 
     @FXML
     private void removeRowCollaboratorTable(ActionEvent event) {
-        Collaborator collaboratorRemove = this.tvCollaborators.getSelectionModel().getSelectedItem();
+        Collaborator collaboratorRemove = this.tvCollaborador.getSelectionModel().getSelectedItem();
         this.evidence.getCollaborators().remove(collaboratorRemove);
-        this.tvCollaborators.setItems(makeitemsCollaboratorsListForTable());
+        this.tvCollaborador.setItems(makeitemsCollaboratorsListForTable());
     }
 
     @FXML
@@ -500,13 +510,15 @@ public class EvidenceEditController implements Initializable{
     }
     
     private void prepareIntegrantTable(){
+        this.colRFCIntegrant.setCellValueFactory(new PropertyValueFactory<Integrant, String>("rfc"));
         this.colIntegrantName.setCellValueFactory(new PropertyValueFactory<Integrant, String>("fullName"));
         this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
     }
     
     private void prepareCollaboratorTable(){
+        this.colRFCCollaborator.setCellValueFactory(new PropertyValueFactory<Collaborator, String>("rfc"));
         this.colCollaboratorName.setCellValueFactory(new PropertyValueFactory<Collaborator, String>("fullName"));
-        this.tvCollaborators.setItems(makeitemsCollaboratorsListForTable());
+        this.tvCollaborador.setItems(makeitemsCollaboratorsListForTable());
     }
     
     private void prepareStudentTable(){

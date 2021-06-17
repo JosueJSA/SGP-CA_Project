@@ -60,4 +60,9 @@ public class Collaborator extends Member{
     public void setHighestDegreeStudies(String highestDegreeStudies){
         this.highestDegreeStudies = highestDegreeStudies;
     }
+    
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

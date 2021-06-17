@@ -17,11 +17,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1246.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MeetingHistoryController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1246.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MeetingHistoryController">
    <top>
       <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
-            <Label maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="163.0" text="REUNIONES" textFill="WHITE" HBox.hgrow="ALWAYS">
+            <Label maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="163.0" text="REUNIONES" textFill="#919494" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -29,7 +29,7 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </Label>
-            <Label fx:id="lblUserName" alignment="CENTER_RIGHT" prefHeight="23.0" prefWidth="347.0" text="..." />
+            <Label fx:id="lbUserName" alignment="CENTER_RIGHT" prefHeight="23.0" prefWidth="347.0" text="..." textFill="#919494" />
             <Avatar>
                <image>
                   <Image url="@../../../../img/userIcon.png" />
@@ -44,7 +44,7 @@
       </HBox>
    </top>
    <bottom>
-      <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="200.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="200.0" style="-fx-background-color: #300050;" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeMeetingHistoryWindow" prefHeight="42.0" prefWidth="77.0" text="SALIR" />
          </children>
@@ -72,7 +72,7 @@
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </Button>
-                  <TextField fx:id="meetingIssueField" prefHeight="31.0" prefWidth="561.0" promptText="Ingresa el asunto de la reunión" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtFieldMeetingIssue" prefHeight="31.0" prefWidth="561.0" promptText="Ingresa el asunto de la reunión" GridPane.columnIndex="1" />
                   <Button fx:id="btnAddMeting" mnemonicParsing="false" onAction="#addMeeting" prefHeight="69.0" prefWidth="169.0" text="AGENDAR REUNIÓN" GridPane.columnIndex="3">
                      <GridPane.margin>
                         <Insets right="20.0" />
@@ -81,21 +81,21 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Button>
-                  <DatePicker fx:id="meetingDateField" prefHeight="31.0" prefWidth="160.0" GridPane.columnIndex="2">
+                  <DatePicker fx:id="dtpMeetingDate" prefHeight="31.0" prefWidth="160.0" GridPane.columnIndex="2">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </DatePicker>
                </children>
             </GridPane>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="572.0" prefWidth="1207.0" style="-fx-background-color: gray;" VBox.vgrow="ALWAYS">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="572.0" prefWidth="1207.0" style="-fx-background-color: #EFE1F8;" VBox.vgrow="ALWAYS">
                <children>
-                  <TableView fx:id="meetingHistoryTableView" onMouseClicked="#observeMeetingInformation" prefHeight="520.0" prefWidth="1147.0" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="tvMeetingHistory" onMouseClicked="#observeMeetingInformation" prefHeight="520.0" prefWidth="1147.0" VBox.vgrow="ALWAYS">
                     <columns>
-                      <TableColumn fx:id="columnIssueMeeting" editable="false" prefWidth="553.0" resizable="false" sortable="false" text="Asunto" />
-                      <TableColumn fx:id="columnMeetingDate" editable="false" prefWidth="156.0" resizable="false" sortable="false" text="Fecha de reunión" />
-                        <TableColumn fx:id="columnMeetingTime" editable="false" prefWidth="140.0" resizable="false" sortable="false" text="Hora de reunión" />
-                        <TableColumn fx:id="columnIntegrantResponsibleMeeting" editable="false" prefWidth="336.0" resizable="false" sortable="false" text="Responsable" />
+                      <TableColumn fx:id="colIssueMeeting" editable="false" prefWidth="553.0" resizable="false" sortable="false" text="Asunto" />
+                      <TableColumn fx:id="colMeetingDate" editable="false" prefWidth="156.0" resizable="false" sortable="false" text="Fecha de reunión" />
+                        <TableColumn fx:id="colMeetingTime" editable="false" prefWidth="140.0" resizable="false" sortable="false" text="Hora de reunión" />
+                        <TableColumn fx:id="colIntegrantResponsibleMeeting" editable="false" prefWidth="336.0" resizable="false" sortable="false" text="Responsable" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

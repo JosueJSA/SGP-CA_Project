@@ -26,12 +26,13 @@ public class CollaboratorDAO implements IMemberDAO{
         List<Member> collaborators = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT fullName, participationType, emailUV, cellPhone, participationStatus FROM `Collaborator` WHERE bodyAcademyKey = ?;"
+                "SELECT rfc, fullName, participationType, emailUV, cellPhone, participationStatus FROM `Collaborator` WHERE bodyAcademyKey = ?;"
             );
             sentenceQuery.setString(1, bodyAcademyKey);
             ResultSet result = sentenceQuery.executeQuery();
             while(result.next()){
                 Collaborator collaborator = new Collaborator();
+                collaborator.setRfc(result.getString("rfc"));
                 collaborator.setFullName(result.getString("fullName"));
                 collaborator.setParticipationType(result.getString("participationType"));
                 collaborator.setEmailUV(result.getString("emailUV"));

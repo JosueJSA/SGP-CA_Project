@@ -16,15 +16,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import sgp.ca.businesslogic.PrototypeDAO;
-import sgp.ca.domain.Book;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Prototype;
@@ -80,14 +75,16 @@ public class PrototypeController implements Initializable, EvidenceWindow {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        hbOptions.getChildren().removeAll(btnRemoveEvidence, btnUpdateEvidence);
     }    
     
     public void showPrototypeByUrl(String url, Integrant token){
         this.token = token;
+        this.lbUsername.setText(token.getFullName());
         this.prototype = (Prototype) PROTOTYPE_DAO.getEvidenceByUrl(url);
         if(this.prototype != null){
             this.setPrototypeDataIntoInterface();
+            this.grantPermissions();
         }
     }
 
@@ -128,6 +125,12 @@ public class PrototypeController implements Initializable, EvidenceWindow {
         this.txtFieldInvestigationProject.setText(this.prototype.getProjectName());
         this.txtFieldStudyDegree.setText(this.prototype.getStudyDegree());
         this.lbDocumentName.setText(this.prototype.getUrlFile());
+    }
+    
+    private void grantPermissions(){
+        if(this.token.getRfc().equalsIgnoreCase(this.prototype.getRegistrationResponsible())){
+            hbOptions.getChildren().addAll(btnUpdateEvidence);
+        }
     }
     
     @Override

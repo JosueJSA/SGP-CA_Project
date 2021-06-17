@@ -6,7 +6,11 @@
 package sgp.ca.demodao;
 
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,15 +20,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import sgp.ca.businesslogic.BookDAO;
+import sgp.ca.businesslogic.ChapterBookDAO;
 import sgp.ca.domain.Book;
 import sgp.ca.domain.ChapterBook;
 import sgp.ca.domain.Evidence;
@@ -36,7 +40,9 @@ import sgp.ca.domain.Integrant;
  * @author josue
  */
 public class BookController implements Initializable, EvidenceWindow {
-
+    
+    @FXML
+    private HBox hbOptions;
     @FXML
     private Label lbUsername;
     @FXML
@@ -78,8 +84,6 @@ public class BookController implements Initializable, EvidenceWindow {
     @FXML
     private TableColumn<ChapterBook, String> colTitleChapterBook;
     @FXML
-    private TableColumn<ChapterBook, String> colRegistrationDateChapterBook;
-    @FXML
     private TableColumn<ChapterBook, String> colRangePagesChapterBook;
     @FXML
     private ListView<String> lvIntegrants;
@@ -90,21 +94,26 @@ public class BookController implements Initializable, EvidenceWindow {
     
     private Integrant token;
     private final BookDAO BOOK_DAO= new BookDAO();
+    private final ChapterBookDAO CHAPTERBOOK_DAO = new ChapterBookDAO();
     private Book book;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        hbOptions.getChildren().removeAll(btnRemoveEvidence, btnUpdateEvidence, btnAddChapterBook);
         book = new Book();
         this.prepareChapterBookTable();
     }
     
     public void showBook(String url, Integrant token){
         this.token = token;
+        this.lbUsername.setText(token.getFullName());
         this.book = (Book) BOOK_DAO.getEvidenceByUrl(url);
         if(book == null){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), "Lo sentimos, el sistema no está funcionando correctamente");
         }else{
             this.setDataIntoBookInterface();
+            this.prepareChapterBookTable();
+            this.grantPermissions();
         }
     }
 
@@ -117,10 +126,15 @@ public class BookController implements Initializable, EvidenceWindow {
 
     @FXML
     private void addChapterBook(ActionEvent event) {
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ChapterBookEdit.fxml", btnCloseWindowEvidenceRequest);
+        ChapterBookEditController controller = loader.getController();
+        controller.receiveToken(token);
+        controller.receiveBook(book);
     }
 
     @FXML
     private void removeEvidence(ActionEvent event) {
+        
     }
 
     @FXML
@@ -169,6 +183,12 @@ public class BookController implements Initializable, EvidenceWindow {
         this.txtFieldStudyDegree.setText(this.book.getStudyDegree());
         this.lbDocumentName.setText(this.book.getUrlFile());
     }
+    
+    private void grantPermissions(){
+        if(this.token.getRfc().equalsIgnoreCase(this.book.getRegistrationResponsible())){
+            hbOptions.getChildren().addAll(btnUpdateEvidence, btnAddChapterBook);
+        }
+    }
 
     @Override
     public String toString(){
@@ -186,8 +206,15 @@ public class BookController implements Initializable, EvidenceWindow {
     
     private void prepareChapterBookTable(){
         this.colTitleChapterBook.setCellValueFactory(new PropertyValueFactory<ChapterBook, String>("chapterBookTitle"));
-        this.colRegistrationDateChapterBook.setCellValueFactory(new PropertyValueFactory<ChapterBook, String>("registrationDate"));
         this.colRangePagesChapterBook.setCellValueFactory(new PropertyValueFactory<ChapterBook, String>("pageNumberRange"));
+        this.tvChapterBook.setItems(makeitemsChapterBooksForTable());
+    }
+    
+    private ObservableList<ChapterBook> makeitemsChapterBooksForTable(){
+        ObservableList<ChapterBook> itemsChapterBooks = FXCollections.observableArrayList();
+        List<ChapterBook> chapterBooksList = CHAPTERBOOK_DAO.getChapterBooksListByBook(book.getUrlFile());
+        itemsChapterBooks.addAll(chapterBooksList);
+        return itemsChapterBooks;
     }
     
 }

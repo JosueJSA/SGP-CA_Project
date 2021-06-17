@@ -48,7 +48,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1022.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button fx:id="btnUpdateChapterBook" mnemonicParsing="false" onAction="#updateChapterBook" prefHeight="42.0" prefWidth="87.0" text="MODIFICAR" visible="false" />
+                        <Button fx:id="btnUpdateChapterBook" mnemonicParsing="false" onAction="#updateChapterBook" prefHeight="42.0" prefWidth="156.0" text="MODIFICAR" visible="false" />
                      </children>
                      <padding>
                         <Insets left="20.0" />

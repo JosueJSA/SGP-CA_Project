@@ -43,7 +43,7 @@
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
                   <Button fx:id="btnDownloadMinute" disable="true" mnemonicParsing="false" onAction="#downloadMinute" text="DESCARGAR MINUTA" />
-                  <Button fx:id="btnCancelMeeting" mnemonicParsing="false" onAction="#CancelMeeting" text="CANCELAR REUNIÓN" />
+                  <Button fx:id="btnCancelMeeting" mnemonicParsing="false" onAction="#cancelMeeting" text="CANCELAR REUNIÓN" />
                </children>
                <padding>
                   <Insets right="5.0" />
@@ -75,9 +75,9 @@
                   <Insets left="20.0" />
                </padding>
             </HBox>
-            <HBox prefHeight="154.0" prefWidth="1246.0" style="-fx-background-color: #EFE1F8;">
+            <HBox prefHeight="154.0" prefWidth="1246.0" spacing="25.0" style="-fx-background-color: #EFE1F8;">
                <children>
-                  <GridPane prefHeight="164.0" prefWidth="318.0" HBox.hgrow="ALWAYS">
+                  <GridPane prefHeight="118.0" prefWidth="417.0" HBox.hgrow="ALWAYS">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.0" minWidth="10.0" prefWidth="225.0" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="70.0" />
@@ -95,7 +95,7 @@
                               <Insets left="20.0" />
                            </GridPane.margin>
                            <font>
-                              <Font name="System Bold" size="15.0" />
+                              <Font name="System Bold" size="13.0" />
                            </font>
                         </Label>
                         <Label text="Asunto:" GridPane.rowIndex="1">
@@ -103,7 +103,7 @@
                               <Insets left="20.0" />
                            </GridPane.margin>
                            <font>
-                              <Font name="System Bold" size="15.0" />
+                              <Font name="System Bold" size="13.0" />
                            </font>
                         </Label>
                         <Label text="Lugar de reunión:" GridPane.rowIndex="2">
@@ -111,7 +111,7 @@
                               <Insets left="20.0" />
                            </GridPane.margin>
                            <font>
-                              <Font name="System Bold" size="15.0" />
+                              <Font name="System Bold" size="13.0" />
                            </font>
                         </Label>
                         <Label text="Total de duración estimada:" GridPane.rowIndex="4">
@@ -119,16 +119,16 @@
                               <Insets left="20.0" />
                            </GridPane.margin>
                            <font>
-                              <Font name="System Bold" size="15.0" />
+                              <Font name="System Bold" size="13.0" />
                            </font>
                         </Label>
                         <TextField fx:id="txtFieldMeetingProject" editable="false" GridPane.columnIndex="1" />
                         <TextField fx:id="txtFieldMeetingIssue" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="txtFieldMeetingPlace" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtFieldMeetingPlace" editable="false" prefHeight="28.0" prefWidth="393.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="txtFieldEstimatedTotalTime" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
-                  <GridPane prefHeight="134.0" prefWidth="358.0" HBox.hgrow="ALWAYS">
+                  <GridPane prefHeight="118.0" prefWidth="326.0" HBox.hgrow="ALWAYS">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="136.0" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="303.0" />
@@ -142,7 +142,7 @@
                      <children>
                         <Label text="Fecha de reunión:">
                            <font>
-                              <Font name="System Bold" size="15.0" />
+                              <Font name="System Bold" size="13.0" />
                            </font>
                            <GridPane.margin>
                               <Insets left="5.0" />
@@ -150,7 +150,7 @@
                         </Label>
                         <Label text="Hora de reunión:" GridPane.rowIndex="1">
                            <font>
-                              <Font name="System Bold" size="15.0" />
+                              <Font name="System Bold" size="13.0" />
                            </font>
                            <GridPane.margin>
                               <Insets left="5.0" />
@@ -158,7 +158,7 @@
                         </Label>
                         <Label text="Total de duración:" GridPane.rowIndex="3">
                            <font>
-                              <Font name="System Bold" size="15.0" />
+                              <Font name="System Bold" size="13.0" />
                            </font>
                            <GridPane.margin>
                               <Insets left="5.0" />
@@ -193,7 +193,7 @@
                            <children>
                               <Button fx:id="btnStartMeeting" mnemonicParsing="false" onAction="#startMeeting" prefHeight="31.0" prefWidth="164.0" text="INICIAR REUNIÓN">
                                  <font>
-                                    <Font name="System Bold" size="15.0" />
+                                    <Font name="System Bold" size="12.0" />
                                  </font>
                               </Button>
                            </children>

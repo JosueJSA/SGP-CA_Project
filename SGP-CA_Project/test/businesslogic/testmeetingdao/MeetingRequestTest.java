@@ -15,9 +15,9 @@ public class MeetingRequestTest {
     public final MeetingDAO MEETING_DAO = new MeetingDAO();
     
     @Test
-    public void testGetExistMeetingByMeetingDateandMeetingTime(){
+    public void testGetExistMeetingByMeetingKey(){
         INITIALIZER.preparedRequestMeetingTestCase();
-        Meeting meetingRetrieved = MEETING_DAO.getMeeting(2);
+        Meeting meetingRetrieved = MEETING_DAO.getMeeting(28);
         String meetingProjectExpected = "Plan de Estudios de ISOF";
         INITIALIZER.cleanMeetingTestCaseData();
         Assert.assertEquals(meetingProjectExpected, meetingRetrieved.getMeetingProject());
@@ -25,7 +25,7 @@ public class MeetingRequestTest {
     
     @Test
     public void testGetNotExistMeetingByMeetingDateandMeetingTime(){
-        Meeting meetingRetrieved = MEETING_DAO.getMeeting(1);
+        Meeting meetingRetrieved = MEETING_DAO.getMeeting(32);
         Assert.assertNull(meetingRetrieved.getMeetingProject());
     }
 }

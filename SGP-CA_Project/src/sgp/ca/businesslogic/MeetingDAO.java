@@ -1,5 +1,6 @@
 /**
  * @author estef
+ * @versión v1.0
  * Last modification date format: 06-05-2021
  */
 
@@ -218,6 +219,7 @@ public class MeetingDAO implements IMeetingDAO{
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
+                connection.close();
                 Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, sqlException);
             }catch(SQLException ex){
                 Logger.getLogger(MeetingDAO.class.getName()).log(Level.SEVERE, null, ex);

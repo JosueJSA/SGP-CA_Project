@@ -136,7 +136,7 @@ public class MeetingUpdate {
     @Test
     public void testCorrectMeetingUpdateWithoutAgendaMeetingAndAgreementsAndComments(){
         INITIALIZER.preparedRequestMeetingTestCase();
-        Meeting oldMeeting = MEETING_DAO.getMeeting(1);
+        Meeting oldMeeting = MEETING_DAO.getMeeting(29);
         String meetingProject = "Eventos de Semestre Julio-Diciembre 2021";
         Meeting newMeeting = new Meeting(0, "2021-05-02", "17:00:00", meetingProject, "2021-04-30", "Pendiente", "Teams", "Asunto de la reunión","1. Se necesita un plan de trabajo", "1. Realizar plan de trabajo", "OFIJO3IJ3OIDJ3O");
         MEETING_DAO.updateMeeting(newMeeting, oldMeeting);

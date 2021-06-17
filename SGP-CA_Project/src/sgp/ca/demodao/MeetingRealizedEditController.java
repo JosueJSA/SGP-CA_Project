@@ -1,27 +1,22 @@
 /**
  * @author estef
+ * @versión v1.0
  * Last modification date format: 20-05-2021
  */
 
 package sgp.ca.demodao;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -32,8 +27,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.businesslogic.MeetingDAO;
 import sgp.ca.domain.Agreement;
@@ -41,54 +34,41 @@ import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Meeting;
 
 public class MeetingRealizedEditController implements Initializable {
+    
+    @FXML
+    private Label lbUserName;
+    @FXML
+    private Button btnUpdateMeeting;
+    @FXML
+    private Button btnCloseUpdateMeetingWindow;
+    @FXML
+    private Button btnAddAgreementFile;
+    @FXML
+    private Button btnUpdateAgreementFile;
+    @FXML
+    private Button btnDeleteAgreementFile;
+    @FXML
+    private TextField txtFieldDescriptionAgreement;
+    @FXML
+    private DatePicker dtpDeliveryDate;
+    @FXML
+    private ComboBox<String> cboBoxResponsibleAgreement;
+    @FXML
+    private TableView<Agreement> tvAgreement;
+    @FXML
+    private TableColumn<Agreement, String> colDescriptionAgreement;
+    @FXML
+    private TableColumn<Agreement, String> colDeliveryDate;
+    @FXML
+    private TableColumn<Agreement, String> colResponsibleAgreement;
+    @FXML
+    private TextArea txtAreaNoteMeeting;
+    @FXML
+    private TextArea txtAreaPendingMeeting;
+    
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
     private final MeetingDAO MEETING_DAO = new MeetingDAO();
     private Meeting meeting = new Meeting();
-    
-    @FXML
-    private Button btnUpdateMeeting;
-
-    @FXML
-    private Button btnCloseUpdateMeetingWindow;
-
-    @FXML
-    private Button btnAddAgreementFile;
-
-    @FXML
-    private Button btnUpdateAgreementFile;
-
-    @FXML
-    private Button btnDeleteAgreementFile;
-
-    @FXML
-    private TextField descriptionAgreementField;
-
-    @FXML
-    private DatePicker deliveryDateField;
-
-    @FXML
-    private ComboBox<String> cboBoxResponsibleAgreement;
-
-    @FXML
-    private TableView<Agreement> agreementTableView;
-
-    @FXML
-    private TableColumn<Agreement, String> descriptionAgreementColumn;
-
-    @FXML
-    private TableColumn<Agreement, String> deliveryDateColumn;
-
-    @FXML
-    private TableColumn<Agreement, String> responsibleAgreementColumn;
-
-    @FXML
-    private TextArea txtAreaNoteMeeting;
-
-    @FXML
-    private TextArea txtAreaPendingMeeting;
-    @FXML
-    private Label lblUserName;
-    
     private Integrant token;
     
     @Override
@@ -104,7 +84,7 @@ public class MeetingRealizedEditController implements Initializable {
     
     public void receiveToken(Integrant integrantToken){
         this.token = integrantToken;
-        this.lblUserName.setText(token.getFullName());
+        this.lbUserName.setText(token.getFullName());
     }
     
     private void setMeetingInformation(){
@@ -113,8 +93,8 @@ public class MeetingRealizedEditController implements Initializable {
     }
     
     private void validateAgreementCamps() throws InvalidFormException{
-        ValidatorForm.chechkAlphabeticalField(this.descriptionAgreementField, 5 , 200);
-        ValidatorForm.checkNotEmptyDateField(this.deliveryDateField);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldDescriptionAgreement, 1 , 200);
+        ValidatorForm.checkNotEmptyDateField(this.dtpDeliveryDate);
         ValidatorForm.isComboBoxSelected(this.cboBoxResponsibleAgreement);
     }
 
@@ -132,16 +112,16 @@ public class MeetingRealizedEditController implements Initializable {
     }
     
     private Agreement getOutCommentInformation(){
-        String agreementDescription = this.descriptionAgreementField.getText();
-        String agreementDeliveyDate = this.deliveryDateField.getValue().toString();
+        String agreementDescription = this.txtFieldDescriptionAgreement.getText();
+        String agreementDeliveyDate = this.dtpDeliveryDate.getValue().toString();
         String agreementIntegrantResponsible = this.cboBoxResponsibleAgreement.getValue();
         Agreement newAgreement = new Agreement(0, agreementDescription, agreementIntegrantResponsible, agreementDeliveyDate);
         return newAgreement;
     }
     
     private void clearAgreementCamps(){
-        this.descriptionAgreementField.clear();
-        this.deliveryDateField.setValue(null);
+        this.txtFieldDescriptionAgreement.clear();
+        this.dtpDeliveryDate.setValue(null);
         this.cboBoxResponsibleAgreement.setValue(null);
     }
 
@@ -159,22 +139,22 @@ public class MeetingRealizedEditController implements Initializable {
 
     @FXML
     private void deleteAgreementFile(ActionEvent event) {
-        Agreement agreementForDelete = this.agreementTableView.getSelectionModel().getSelectedItem();
+        Agreement agreementForDelete = this.tvAgreement.getSelectionModel().getSelectedItem();
         meeting.getAgreements().remove(agreementForDelete);
-        this.agreementTableView.setItems(makeItemsAgreementTable());
+        this.tvAgreement.setItems(makeItemsAgreementTable());
     }
 
     @FXML
     private void updateAgreementFile(ActionEvent event) {
-        Agreement agreementForUpdate = this.agreementTableView.getSelectionModel().getSelectedItem();
+        Agreement agreementForUpdate = this.tvAgreement.getSelectionModel().getSelectedItem();
         setAgreementInformationsCamps(agreementForUpdate);
         meeting.getAgreements().remove(agreementForUpdate);
     }
     
     private void setAgreementInformationsCamps(Agreement agreement){
-        this.descriptionAgreementField.setText(agreement.getDescriptionAgreement());
+        this.txtFieldDescriptionAgreement.setText(agreement.getDescriptionAgreement());
         LocalDate deliveryDate = LocalDate.parse(agreement.getDeliveryDate());
-        this.deliveryDateField.setValue(deliveryDate);
+        this.dtpDeliveryDate.setValue(deliveryDate);
         this.cboBoxResponsibleAgreement.setValue(agreement.getResponsibleAgreement());
     }
 
@@ -204,10 +184,10 @@ public class MeetingRealizedEditController implements Initializable {
     }
     
     private void prepareAgreementTable(){
-        this.descriptionAgreementColumn.setCellValueFactory(new PropertyValueFactory<Agreement, String>("descriptionAgreement"));
-        this.deliveryDateColumn.setCellValueFactory(new PropertyValueFactory<Agreement, String>("deliveryDate"));
-        this.responsibleAgreementColumn.setCellValueFactory(new PropertyValueFactory<Agreement, String>("responsibleAgreement"));
-        this.agreementTableView.setItems(makeItemsAgreementTable());
+        this.colDescriptionAgreement.setCellValueFactory(new PropertyValueFactory<Agreement, String>("descriptionAgreement"));
+        this.colDeliveryDate.setCellValueFactory(new PropertyValueFactory<Agreement, String>("deliveryDate"));
+        this.colResponsibleAgreement.setCellValueFactory(new PropertyValueFactory<Agreement, String>("responsibleAgreement"));
+        this.tvAgreement.setItems(makeItemsAgreementTable());
     }
     
     private ObservableList<Agreement> makeItemsAgreementTable(){
@@ -223,5 +203,7 @@ public class MeetingRealizedEditController implements Initializable {
         itemsIntegrant.addAll(integrantsName);
         return itemsIntegrant;
     }
+    
+    
     
 }

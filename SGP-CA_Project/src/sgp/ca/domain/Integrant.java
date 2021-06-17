@@ -102,6 +102,11 @@ public class Integrant extends Member{
     public Integrant(String rfc,String fullName){
         super(rfc, fullName);
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
     
     @Override
     public int hashCode(){

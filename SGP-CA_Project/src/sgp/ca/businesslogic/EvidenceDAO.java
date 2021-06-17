@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
-import sgp.ca.demodao.EvidenceFactory;
+import sgp.ca.domain.EvidenceFactory;
 import sgp.ca.domain.Evidence;
 
 public abstract class EvidenceDAO{

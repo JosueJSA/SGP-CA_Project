@@ -94,8 +94,8 @@ public class ChapterBookDAO implements IChapterBookDAO{
             sentenceQuery.setString(2, chapterBook.getChapterBookTitle());
             sentenceQuery.setString(3, chapterBook.getRegistrationDate());
             sentenceQuery.setString(4, chapterBook.getRegistrationResponsible());
-            sentenceQuery.setString(6, chapterBook.getPageNumberRange());
-            sentenceQuery.setString(7, book.getUrlFile());
+            sentenceQuery.setString(5, chapterBook.getPageNumberRange());
+            sentenceQuery.setString(6, book.getUrlFile());
             sentenceQuery.executeUpdate();
             this.insertIntoChapterbookStudent(connection, chapterBook);
             this.insertIntoIntegrantChapterbook(connection, chapterBook);
@@ -125,7 +125,7 @@ public class ChapterBookDAO implements IChapterBookDAO{
             this.deleteIntegrantsFromChapterBook(connection, oldUrlFile);
             this.deleteCollaboratorsFromChapterBook(connection, oldUrlFile);
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "UPDATE BChapterBookook SET urlFile = ?, chapterBookTitle = ?, registrationDate = ?, "
+                "UPDATE ChapterBook SET urlFile = ?, chapterBookTitle = ?, registrationDate = ?, "
                 + "registrationResponsible = ?, pages-number = ?, urlFileBook = ?"
                 + "WHERE urlFile = ?;"
             );
@@ -134,7 +134,8 @@ public class ChapterBookDAO implements IChapterBookDAO{
             sentenceQuery.setString(3, newChapterBook.getRegistrationDate());
             sentenceQuery.setString(4, newChapterBook.getRegistrationResponsible());
             sentenceQuery.setString(5, newChapterBook.getPageNumberRange());
-            sentenceQuery.setString(7, newChapterBook.getUrlFileBook());
+            sentenceQuery.setString(6, newChapterBook.getUrlFileBook());
+            sentenceQuery.setString(7, oldUrlFile);
             sentenceQuery.executeUpdate();
             this.insertIntoChapterbookStudent(connection, newChapterBook);
             this.insertIntoIntegrantChapterbook(connection, newChapterBook);

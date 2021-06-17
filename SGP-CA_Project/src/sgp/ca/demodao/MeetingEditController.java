@@ -6,7 +6,7 @@
 package sgp.ca.demodao;
 
 
-import java.io.IOException;
+
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -14,17 +14,12 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -35,8 +30,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.businesslogic.MeetingDAO;
 import sgp.ca.domain.Integrant;
@@ -47,47 +40,53 @@ import sgp.ca.domain.Topic;
 public class MeetingEditController implements Initializable{
     
     @FXML
+    private Label lbWindowName;
+    @FXML
+    private Label lblUserName;
+    @FXML
+    private Button btnUpdateMeeting;
+    @FXML
     private Button btnRegisterMeeting;
     @FXML
     private Button btnClose;
     @FXML
-    private TextField meetingProjectField;
+    private TextField txtFieldMeetingProject;
     @FXML
-    private TextField placeMeetingField;
+    private TextField txtFieldPlaceMeeting;
     @FXML
-    private DatePicker meetingDateField;
+    private DatePicker dtpMeetingDate;
     @FXML
     private ComboBox<String> cboBoxMeetingHour;
     @FXML
     private ComboBox<String> cboBoxMeetingMinute;
     @FXML
-    private TextField issueMeetingField;
+    private TextField txtFieldIssueMeeting;
     @FXML
-    private TableView<AssistantTable> assistansTableView;
+    private TableView<AssistantTable> tvAssistans;
     @FXML
-    private TableColumn<AssistantTable, String> columnIntegrantName;
+    private TableColumn<AssistantTable, String> colIntegrantName;
     @FXML
-    private TableColumn<AssistantTable, RadioButton> columnSelectAssistant;
+    private TableColumn<AssistantTable, RadioButton> colSelectAssistant;
     @FXML
-    private TableColumn<AssistantTable, RadioButton> columnDiscussionLeader;
+    private TableColumn<AssistantTable, RadioButton> colDiscussionLeader;
     @FXML
-    private TableColumn<AssistantTable, RadioButton> columnSecretary;
+    private TableColumn<AssistantTable, RadioButton> colSecretary;
     @FXML
-    private TableColumn<AssistantTable, RadioButton> columnTimeTaker;
+    private TableColumn<AssistantTable, RadioButton> colTimeTaker;
     @FXML
     private Button btnAddRowPrerequisiteTable;
     @FXML
     private Button btnRemoveRowPrerequisiteTable;
     @FXML
-    private TextField descriptionPrerequisiteField;
+    private TextField txtFieldDescriptionPrerequisite;
     @FXML
     private ComboBox<String> cboBoxResponsiblePrerequisite;
     @FXML
-    private TableView <Prerequisite> prerequisiteTableView;
+    private TableView<Prerequisite> tvPrerequisite;
     @FXML
-    private TableColumn<Prerequisite, String> descriptionPrerequisiteColumn;
+    private TableColumn<Prerequisite, String> colDescriptionPrerequisite;
     @FXML
-    private TableColumn<Prerequisite, String> responsiblePrerequisiteColumn;
+    private TableColumn<Prerequisite, String> colResponsiblePrerequisite;
     @FXML
     private Button btnAddRowMeetingAgendaTable;
     @FXML
@@ -97,23 +96,19 @@ public class MeetingEditController implements Initializable{
     @FXML
     private ComboBox<String> cboBoxMinuteTopic;
     @FXML
-    private TextField descriptionTopicField;
+    private TextField txtFieldDescriptionTopic;
     @FXML
     private ComboBox<String> cboBoxDiscissionLeaderTopic;
     @FXML
-    private TableView <Topic> meetingAgendaTableView;
+    private TableView<Topic> tvMeetingAgenda;
     @FXML
-    private TableColumn<Topic, String> estimatedTimeColumn;
+    private TableColumn<Topic, String> colEstimatedTime;
     @FXML
-    private TableColumn<Topic, String> descriptionTopicColumn;
+    private TableColumn<Topic, String> colDescriptionTopic;
     @FXML
-    private TableColumn<Topic, String> discussionLeaderCoumn;
+    private TableColumn<Topic, String> colDiscussionLeaderTopic;
     @FXML
-    private Label lbWindowName;
-    @FXML
-    private Label lblUserName;
-    @FXML
-    private Button btnUpdateMeeting;
+    private Label lbUserName;
     
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
     private final MeetingDAO MEETING_DAO = new MeetingDAO();
@@ -132,10 +127,10 @@ public class MeetingEditController implements Initializable{
     
     public void receiveToken(Integrant integrantToken){
         this.token = integrantToken;
-        this.lblUserName.setText(token.getFullName());
+        this.lbUserName.setText(token.getFullName());
     }
     
-    public void reciveMeeting (Meeting meeting){ //Caso de modificacion
+    public void reciveMeeting (Meeting meeting){ 
         this.meeting = meeting;
         setMeetingInformation();
         prepareAssistantTable();
@@ -145,12 +140,12 @@ public class MeetingEditController implements Initializable{
     
     private void setMeetingInformation(){
         LocalDate meetingDate = LocalDate.parse(meeting.getMeetingDate());
-        this.meetingDateField.setValue(meetingDate);
+        this.dtpMeetingDate.setValue(meetingDate);
         this.cboBoxMeetingHour.setValue(meeting.getMeetingTime().substring(0, 2));
         this.cboBoxMeetingMinute.setValue(meeting.getMeetingTime().substring(3, 5));
-        this.meetingProjectField.setText(meeting.getMeetingProject());
-        this.placeMeetingField.setText(meeting.getPlaceMeeting());
-        this.issueMeetingField.setText(meeting.getIssueMeeting());
+        this.txtFieldMeetingProject.setText(meeting.getMeetingProject());
+        this.txtFieldPlaceMeeting.setText(meeting.getPlaceMeeting());
+        this.txtFieldIssueMeeting.setText(meeting.getIssueMeeting());
     }
     
     public void addNewMeeting(Boolean addedNewMeeting){
@@ -171,7 +166,6 @@ public class MeetingEditController implements Initializable{
         this.cboBoxMinuteTopic.setItems(makeitemsMinutesListForTopic());
         this.cboBoxDiscissionLeaderTopic.setItems(makeitemsIntegrantForComboBox());
     }
-    
     
     @FXML
     private void addNewMeeting(ActionEvent event){
@@ -195,27 +189,27 @@ public class MeetingEditController implements Initializable{
     }
     
     private void validateMeetingInformation() throws InvalidFormException{
-        ValidatorForm.checkNotEmptyDateField(meetingDateField);
-        ValidatorForm.chechkAlphabeticalField(meetingProjectField, 5, 80);
-        ValidatorForm.isComboBoxSelected(cboBoxMeetingHour);
-        ValidatorForm.isComboBoxSelected(cboBoxMeetingMinute);
-        ValidatorForm.chechkAlphabeticalField(placeMeetingField, 4 ,  80);
-        ValidatorForm.chechkAlphabeticalField(issueMeetingField,1, 200);
+        ValidatorForm.checkNotEmptyDateField(this.dtpMeetingDate);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldMeetingProject, 1, 80);
+        ValidatorForm.isComboBoxSelected(this.cboBoxMeetingHour);
+        ValidatorForm.isComboBoxSelected(this.cboBoxMeetingMinute);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldPlaceMeeting, 1 ,  80);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldIssueMeeting,1, 200);
         
     }
     
     private void getOutMeetingInformation(){
-        String hourMeeting = cboBoxMeetingHour.getValue();
-        String minuteMeting = cboBoxMeetingMinute.getValue();
-        this.meeting.setMeetingDate(meetingDateField.getValue().toString());
+        String hourMeeting = this.cboBoxMeetingHour.getValue();
+        String minuteMeting = this.cboBoxMeetingMinute.getValue();
+        this.meeting.setMeetingDate(this.dtpMeetingDate.getValue().toString());
         this.meeting.setMeetingTime(hourMeeting + ":" + minuteMeting + ":00");
-        this.meeting.setMeetingProject(meetingProjectField.getText());
+        this.meeting.setMeetingProject(this.txtFieldMeetingProject.getText());
         this.meeting.setMeetingRegistrationDate(
             date.get(Calendar.YEAR) + "-" + (date.get(Calendar.MONTH) + 1) + "-" + date.get(Calendar.DAY_OF_MONTH)
         );
         this.meeting.setStatusMeeting("Pendiente");
-        this.meeting.setPlaceMeeting(placeMeetingField.getText());
-        this.meeting.setIssueMeeting(issueMeetingField.getText());
+        this.meeting.setPlaceMeeting(this.txtFieldPlaceMeeting.getText());
+        this.meeting.setIssueMeeting(this.txtFieldIssueMeeting.getText());
         this.meeting.setIntegrantResponsible(token.getRfc());
         this.meeting.setMeetingNote("");
         this.meeting.setMeetingPending("");
@@ -225,15 +219,15 @@ public class MeetingEditController implements Initializable{
     
     private void setIntoMeetingAgendaInformation(){
         this.meeting.getMeetingAgenda().setTotalTime("00:00:00");
-        this.meeting.getMeetingAgenda().setEstimatedTotalTime("00:00:00"); //Calcular
+        this.meeting.getMeetingAgenda().setEstimatedTotalTime("00:00:00");
         this.meeting.getMeetingAgenda().setTotaltopics(meeting.getMeetingAgenda().getTopics().size());
     }
     
     private void validateTopicInformation() throws InvalidFormException{
-        ValidatorForm.isComboBoxSelected(cboBoxHourTopic);
-        ValidatorForm.isComboBoxSelected(cboBoxMinuteTopic);
-        ValidatorForm.chechkAlphabeticalField(descriptionTopicField, 5 , 200);
-        ValidatorForm.isComboBoxSelected(cboBoxDiscissionLeaderTopic);
+        ValidatorForm.isComboBoxSelected(this.cboBoxHourTopic);
+        ValidatorForm.isComboBoxSelected(this.cboBoxMinuteTopic);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldDescriptionTopic, 3 , 200);
+        ValidatorForm.isComboBoxSelected(this.cboBoxDiscissionLeaderTopic);
     }
 
     @FXML
@@ -241,7 +235,7 @@ public class MeetingEditController implements Initializable{
         try{
             validateTopicInformation();
             this.meeting.getMeetingAgenda().getTopics().add(getOutTopicInformtation());
-            meetingAgendaTableView.setItems(makeTopicItems());
+            tvMeetingAgenda.setItems(makeTopicItems());
             clearCampsOfTopic();
         }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
@@ -249,11 +243,11 @@ public class MeetingEditController implements Initializable{
     }
     
     private Topic getOutTopicInformtation(){
-        String hourTopic = cboBoxHourTopic.getValue();
-        String minuteTopic = cboBoxMinuteTopic.getValue();
+        String hourTopic = this.cboBoxHourTopic.getValue();
+        String minuteTopic = this.cboBoxMinuteTopic.getValue();
         String planedTimeTopic = hourTopic + ":" + minuteTopic + ":00";
-        String descriptionTopic = descriptionTopicField.getText();
-        String discissionLeader = cboBoxDiscissionLeaderTopic.getValue();
+        String descriptionTopic = this.txtFieldDescriptionTopic.getText();
+        String discissionLeader = this.cboBoxDiscissionLeaderTopic.getValue();
         
         Topic newTopic = new Topic(
             0, "00:00:00", "00:00:00", planedTimeTopic, "00:00:00", descriptionTopic, discissionLeader, "Pendiente"
@@ -262,15 +256,15 @@ public class MeetingEditController implements Initializable{
     }
     
     private void clearCampsOfTopic(){
-        cboBoxHourTopic.setValue(null);
-        cboBoxMinuteTopic.setValue(null);
-        descriptionTopicField.clear();
-        cboBoxDiscissionLeaderTopic.setValue(null);
+        this.cboBoxHourTopic.setValue(null);
+        this.cboBoxMinuteTopic.setValue(null);
+        this.txtFieldDescriptionTopic.clear();
+        this.cboBoxDiscissionLeaderTopic.setValue(null);
     }
     
     private void validatePrerequisiteInformation() throws InvalidFormException{
-        ValidatorForm.chechkAlphabeticalField(descriptionPrerequisiteField, 5 ,  200);
-        ValidatorForm.isComboBoxSelected(cboBoxResponsiblePrerequisite);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldDescriptionPrerequisite, 1 ,  200);
+        ValidatorForm.isComboBoxSelected(this.cboBoxResponsiblePrerequisite);
     }
 
     @FXML
@@ -278,7 +272,7 @@ public class MeetingEditController implements Initializable{
         try{
             validatePrerequisiteInformation();
             meeting.getMeetingAgenda().getPrerequisites().add(getOutPrerequisiteInformation());
-            prerequisiteTableView.setItems(makePrerequisiteItems());
+            tvPrerequisite.setItems(makePrerequisiteItems());
             clearCampsOfPrerequisite();
         }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
@@ -286,8 +280,8 @@ public class MeetingEditController implements Initializable{
     }
     
     private Prerequisite getOutPrerequisiteInformation(){
-        String descriptionPrerequisite = descriptionPrerequisiteField.getText();
-        String responsiblePrerequisite = cboBoxResponsiblePrerequisite.getValue();
+        String descriptionPrerequisite = this.txtFieldDescriptionPrerequisite.getText();
+        String responsiblePrerequisite = this.cboBoxResponsiblePrerequisite.getValue();
         Prerequisite newPrerequisite = new Prerequisite(
             0, responsiblePrerequisite, descriptionPrerequisite
         );
@@ -295,8 +289,8 @@ public class MeetingEditController implements Initializable{
     }
     
     private void clearCampsOfPrerequisite(){
-        descriptionPrerequisiteField.clear();
-        cboBoxResponsiblePrerequisite.setValue(null);
+        this.txtFieldDescriptionPrerequisite.clear();
+        this.cboBoxResponsiblePrerequisite.setValue(null);
     }
 
     @FXML
@@ -319,16 +313,16 @@ public class MeetingEditController implements Initializable{
 
     @FXML
     private void removeRowMeetingAgendaTable(ActionEvent event) {
-        Topic topicToRemove = meetingAgendaTableView.getSelectionModel().getSelectedItem();
+        Topic topicToRemove = tvMeetingAgenda.getSelectionModel().getSelectedItem();
         meeting.getMeetingAgenda().getTopics().remove(topicToRemove);
-        meetingAgendaTableView.setItems(makeTopicItems());
+        tvMeetingAgenda.setItems(makeTopicItems());
     }
 
     @FXML
     private void removeRowPrerequisiteTable(ActionEvent event) {
-        Prerequisite prerequisiteToRemove = prerequisiteTableView.getSelectionModel().getSelectedItem();
+        Prerequisite prerequisiteToRemove = tvPrerequisite.getSelectionModel().getSelectedItem();
         meeting.getMeetingAgenda().getPrerequisites().remove(prerequisiteToRemove);
-        prerequisiteTableView.setItems(makePrerequisiteItems());
+        tvPrerequisite.setItems(makePrerequisiteItems());
     }
     
     @FXML
@@ -353,25 +347,25 @@ public class MeetingEditController implements Initializable{
     } 
     
     private void prepareAssistantTable(){
-        columnIntegrantName.setCellValueFactory(new PropertyValueFactory<AssistantTable, String>("integrantName"));
-        columnSelectAssistant.setCellValueFactory(new PropertyValueFactory<AssistantTable, RadioButton>("assistant"));
-        columnDiscussionLeader.setCellValueFactory(new PropertyValueFactory<AssistantTable, RadioButton>("discussionLeader"));
-        columnSecretary.setCellValueFactory(new PropertyValueFactory<AssistantTable, RadioButton>("secretary"));
-        columnTimeTaker.setCellValueFactory(new PropertyValueFactory<AssistantTable, RadioButton>("takerTime"));
-        assistansTableView.setItems(makeitemsIntegrant());
+        colIntegrantName.setCellValueFactory(new PropertyValueFactory<AssistantTable, String>("integrantName"));
+        colSelectAssistant.setCellValueFactory(new PropertyValueFactory<AssistantTable, RadioButton>("assistant"));
+        colDiscussionLeader.setCellValueFactory(new PropertyValueFactory<AssistantTable, RadioButton>("discussionLeader"));
+        colSecretary.setCellValueFactory(new PropertyValueFactory<AssistantTable, RadioButton>("secretary"));
+        colTimeTaker.setCellValueFactory(new PropertyValueFactory<AssistantTable, RadioButton>("takerTime"));
+        tvAssistans.setItems(makeitemsIntegrant());
     }
     
     private void preparePrerequisiteTable(){
-        descriptionPrerequisiteColumn.setCellValueFactory(new PropertyValueFactory<Prerequisite, String>("descrptionPrerequisite"));
-        responsiblePrerequisiteColumn.setCellValueFactory(new PropertyValueFactory<Prerequisite, String>("responsiblePrerequisite"));
-        prerequisiteTableView.setItems(makePrerequisiteItems());
+        colDescriptionPrerequisite.setCellValueFactory(new PropertyValueFactory<Prerequisite, String>("descrptionPrerequisite"));
+        colResponsiblePrerequisite.setCellValueFactory(new PropertyValueFactory<Prerequisite, String>("responsiblePrerequisite"));
+        tvPrerequisite.setItems(makePrerequisiteItems());
     }
     
     private void prepareMeetingAgendaTable(){
-        estimatedTimeColumn.setCellValueFactory(new PropertyValueFactory<Topic, String>("plannedTime"));
-        descriptionTopicColumn.setCellValueFactory(new PropertyValueFactory<Topic, String>("descriptionTopic"));
-        discussionLeaderCoumn.setCellValueFactory(new PropertyValueFactory<Topic, String>("discissionLeader"));
-        meetingAgendaTableView.setItems(makeTopicItems());
+        colEstimatedTime.setCellValueFactory(new PropertyValueFactory<Topic, String>("plannedTime"));
+        colDescriptionTopic.setCellValueFactory(new PropertyValueFactory<Topic, String>("descriptionTopic"));
+        colDiscussionLeaderTopic.setCellValueFactory(new PropertyValueFactory<Topic, String>("discissionLeader"));
+        tvMeetingAgenda.setItems(makeTopicItems());
     }
     
     private ObservableList<Topic> makeTopicItems(){

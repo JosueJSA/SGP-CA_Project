@@ -20,11 +20,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1246.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.BookController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1246.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.BookController">
    <top>
       <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="1207.0" spacing="10.0" style="-fx-background-color: WHITE;" BorderPane.alignment="CENTER">
          <children>
-            <Label maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="137.0" text="PRODUCCIÓN" textFill="#919494" HBox.hgrow="ALWAYS">
+            <Label maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="743.0" text="PRODUCCIÓN" textFill="#919494" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -32,7 +32,7 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <Label fx:id="lbUsername" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="467.0" text="..." textFill="#919494">
+            <Label fx:id="lbUsername" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="552.0" text="..." textFill="#919494">
                <padding>
                   <Insets right="15.0" />
                </padding>
@@ -270,7 +270,7 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <VBox fx:id="vbChapterBook" prefHeight="325.0" prefWidth="1205.0" spacing="10.0" visible="false">
+                              <VBox fx:id="vbChapterBook" prefHeight="325.0" prefWidth="1205.0" spacing="10.0">
                                  <children>
                                     <Label text="CAPÍTULOS DEL LIBRO">
                                        <font>
@@ -279,9 +279,8 @@
                                     </Label>
                                     <TableView fx:id="tvChapterBook" onMouseClicked="#observeChapterBookInformation" prefHeight="258.0" prefWidth="1205.0">
                                        <columns>
-                                          <TableColumn fx:id="colTitleChapterBook" editable="false" prefWidth="614.1332725286484" resizable="false" sortable="false" text="Título" />
-                                          <TableColumn fx:id="colRegistrationDateChapterBook" editable="false" prefWidth="134.66668701171875" resizable="false" sortable="false" text="Fecha de registro" />
-                                          <TableColumn fx:id="colRangePagesChapterBook" editable="false" prefWidth="436.533203125" resizable="false" sortable="false" text="Rango de páginas" />
+                                          <TableColumn fx:id="colTitleChapterBook" editable="false" prefWidth="765.5999740362167" resizable="false" sortable="false" text="Título" />
+                                          <TableColumn fx:id="colRangePagesChapterBook" editable="false" prefWidth="417.60003662109375" resizable="false" sortable="false" text="Rango de páginas" />
                                        </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

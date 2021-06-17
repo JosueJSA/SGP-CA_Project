@@ -37,34 +37,34 @@ import sgp.ca.domain.Meeting;
 
 public class MeetingHistoryController implements Initializable {
     
-    private final MeetingDAO MEETING_DAO = new MeetingDAO();
-    private List<Meeting> meetingsList = new ArrayList<>();
-    
+    @FXML
+    private Label lbUserName;
     @FXML
     private Button btnClose;
     @FXML
     private Button btnSearchMeeting;
     @FXML
+    private TextField txtFieldMeetingIssue;
+    @FXML
     private Button btnAddMeting;
     @FXML
-    private TextField meetingIssueField;
+    private DatePicker dtpMeetingDate;
     @FXML
-    private DatePicker meetingDateField;
+    private TableView<Meeting> tvMeetingHistory;
     @FXML
-    private TableView<Meeting> meetingHistoryTableView;
+    private TableColumn<Meeting, String> colIssueMeeting;
     @FXML
-    private TableColumn<Meeting, String> columnIssueMeeting;
+    private TableColumn<Meeting, String> colMeetingDate;
     @FXML
-    private TableColumn<Meeting, String> columnMeetingDate;
+    private TableColumn<Meeting, String> colMeetingTime;
     @FXML
-    private TableColumn<Meeting, String> columnMeetingTime;
-    @FXML
-    private TableColumn<Meeting, String> columnIntegrantResponsibleMeeting;
+    private TableColumn<Meeting, String> colIntegrantResponsibleMeeting;
     @FXML
     private Button btnRefreshTable;
-    @FXML
-    private Label lblUserName;
     
+    
+    private final MeetingDAO MEETING_DAO = new MeetingDAO();
+    private List<Meeting> meetingsList = new ArrayList<>();
     private Integrant token;
     
     @Override
@@ -74,7 +74,7 @@ public class MeetingHistoryController implements Initializable {
     
     public void receiveToken(Integrant integrantToken){
         this.token = integrantToken;
-        this.lblUserName.setText(token.getFullName());
+        this.lbUserName.setText(token.getFullName());
     }
     
     @FXML
@@ -95,42 +95,42 @@ public class MeetingHistoryController implements Initializable {
 
     @FXML
     private void refreshMeetingHistoryMeeting(ActionEvent event) {
-        meetingHistoryTableView.getItems().clear();
+        tvMeetingHistory.getItems().clear();
         setAllMeetingInformationIntoTable();
         
     }
     
     @FXML
     private void observeMeetingInformation(MouseEvent event) {
-        if(meetingHistoryTableView.getSelectionModel().getSelectedItem() != null){
+        if(tvMeetingHistory.getSelectionModel().getSelectedItem() != null){
             FXMLLoader loader = changeWindow("MeetingRequest.fxml", event);
             MeetingRequestController controller = loader.getController();
             controller.receiveToken(token);
             controller.reciveMeeting(
-                meetingHistoryTableView.getSelectionModel().getSelectedItem().getMeetingKey()
+                tvMeetingHistory.getSelectionModel().getSelectedItem().getMeetingKey()
             );
         }
     }
 
     @FXML
     private void searchMeeting(ActionEvent event) {
-        System.out.print(meetingIssueField.getText());
-        if((meetingIssueField.getText()).equals(null)){
-            if((meetingDateField.getValue())!=null){
-                meetingHistoryTableView.getItems().clear();
+        System.out.print(this.txtFieldMeetingIssue.getText());
+        if((txtFieldMeetingIssue.getText()).equals(null)){
+            if((this.dtpMeetingDate.getValue())!=null){
+                tvMeetingHistory.getItems().clear();
                 setMeetingInformationByDate();
             }    
         }else {
-            if((meetingDateField.getValue())!=null){
-                meetingHistoryTableView.getItems().clear();
+            if((this.dtpMeetingDate.getValue())!=null){
+                tvMeetingHistory.getItems().clear();
                 setMeetingInformationByDateAndIssueIntoTable();
             }else{
-                meetingHistoryTableView.getItems().clear();
+                tvMeetingHistory.getItems().clear();
                 setMeetingInformationByIssue();
             }  
         }
-        this.meetingIssueField.clear();
-        this.meetingDateField.setValue(null);
+        this.txtFieldMeetingIssue.clear();
+        this.dtpMeetingDate.setValue(null);
     }
     
     private ObservableList<Meeting> makeitemsAllMeetings(){
@@ -147,45 +147,45 @@ public class MeetingHistoryController implements Initializable {
     }
     
     private void preparedMeetingTable(){
-        columnIssueMeeting.setCellValueFactory(new PropertyValueFactory<Meeting, String>("issueMeeting"));
-        columnMeetingDate.setCellValueFactory(new PropertyValueFactory<Meeting, String>("meetingDate"));
-        columnMeetingTime.setCellValueFactory(new PropertyValueFactory<Meeting, String>("meetingTime"));
-        columnIntegrantResponsibleMeeting.setCellValueFactory(new PropertyValueFactory<Meeting,String>("integrantResponsible"));
-        meetingHistoryTableView.setItems(makeitemsAllMeetings());
+        colIssueMeeting.setCellValueFactory(new PropertyValueFactory<Meeting, String>("issueMeeting"));
+        colMeetingDate.setCellValueFactory(new PropertyValueFactory<Meeting, String>("meetingDate"));
+        colMeetingTime.setCellValueFactory(new PropertyValueFactory<Meeting, String>("meetingTime"));
+        colIntegrantResponsibleMeeting.setCellValueFactory(new PropertyValueFactory<Meeting,String>("integrantResponsible"));
+        tvMeetingHistory.setItems(makeitemsAllMeetings());
     }
     
     private void setAllMeetingInformationIntoTable(){
         List meetingslist = this.meetingsList;
-        meetingHistoryTableView.setItems(makeitemsMeetings(meetingslist));
+        tvMeetingHistory.setItems(makeitemsMeetings(meetingslist));
     }
     
     private void setMeetingInformationByDateAndIssueIntoTable(){
-        String dateMeeting = meetingDateField.getValue().toString();
-        String meetingIssue = (meetingIssueField.getText());
+        String dateMeeting = this.dtpMeetingDate.getValue().toString();
+        String meetingIssue = (this.txtFieldMeetingIssue.getText());
         List meetingslist = new ArrayList<>();
         
-        for(int i=0; i< this.meetingsList.size(); i++){ //Cambiar el for
+        for(int i=0; i< this.meetingsList.size(); i++){
             if((this.meetingsList.get(i).getMeetingDate().equals(dateMeeting)) && 
             (this.meetingsList.get(i).getIssueMeeting().contains(meetingIssue))){
                 meetingslist.add(this.meetingsList.get(i));
             }
         }
-       meetingHistoryTableView.setItems(makeitemsMeetings(meetingslist));
+       tvMeetingHistory.setItems(makeitemsMeetings(meetingslist));
     }
     
-    private void setMeetingInformationByIssue(){  //Cambiar el for
-        String meetingIssue = (meetingIssueField.getText());
+    private void setMeetingInformationByIssue(){ 
+        String meetingIssue = (this.txtFieldMeetingIssue.getText());
         List meetingslist = new ArrayList<>();
         for(int i=0; i< this.meetingsList.size(); i++){
             if(this.meetingsList.get(i).getIssueMeeting().contains(meetingIssue)){
                 meetingslist.add(this.meetingsList.get(i));
             }
         }
-        meetingHistoryTableView.setItems(makeitemsMeetings(meetingslist));
+        tvMeetingHistory.setItems(makeitemsMeetings(meetingslist));
     }
     
-    private void setMeetingInformationByDate(){  //Cambiar el for
-        String meetingDate = meetingDateField.getValue().toString();
+    private void setMeetingInformationByDate(){
+        String meetingDate = this.dtpMeetingDate.getValue().toString();
         System.out.print(meetingDate);
         List meetingslist = new ArrayList<>();
         for(int i=0; i<this.meetingsList.size(); i++){
@@ -193,7 +193,7 @@ public class MeetingHistoryController implements Initializable {
                 meetingslist.add(this.meetingsList.get(i));
             }
         }
-        meetingHistoryTableView.setItems(makeitemsMeetings(meetingslist));
+        tvMeetingHistory.setItems(makeitemsMeetings(meetingslist));
         
     }
     

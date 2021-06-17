@@ -9,7 +9,7 @@ package sgp.ca.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Evidence {
+public abstract class Evidence{
     private String urlFile;
     private String evidenceTitle;
     private String country; 
@@ -62,107 +62,107 @@ public abstract class Evidence {
         this.collaborators = new ArrayList<>();
     }
 
-    public String getUrlFile() {
+    public String getUrlFile(){
         return urlFile;
     }
 
-    public void setUrlFile(String urlFile) {
+    public void setUrlFile(String urlFile){
         this.urlFile = urlFile;
     }
 
-    public String getEvidenceTitle() {
+    public String getEvidenceTitle(){
         return evidenceTitle;
     }
 
-    public void setEvidenceTitle(String evidenceTitle) {
+    public void setEvidenceTitle(String evidenceTitle){
         this.evidenceTitle = evidenceTitle;
     }
 
-    public String getCountry() {
+    public String getCountry(){
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(String country){
         this.country = country;
     }
 
-    public String getPublicationDate() {
+    public String getPublicationDate(){
         return publicationDate;
     }
 
-    public void setPublicationDate(String publicationDate) {
+    public void setPublicationDate(String publicationDate){
         this.publicationDate = publicationDate;
     }
 
-    public boolean getImpactAB() {
+    public boolean getImpactAB(){
         return impactAB;
     }
 
-    public void setImpactAB(boolean impactAB) {
+    public void setImpactAB(boolean impactAB){
         this.impactAB = impactAB;
     }
 
-    public String getRegistrationDate() {
+    public String getRegistrationDate(){
         return registrationDate;
     }
 
-    public void setRegistrationDate(String registrationDate) {
+    public void setRegistrationDate(String registrationDate){
         this.registrationDate = registrationDate;
     }
 
-    public String getRegistrationResponsible() {
+    public String getRegistrationResponsible(){
         return registrationResponsible;
     }
 
-    public void setRegistrationResponsible(String registrationResponsible) {
+    public void setRegistrationResponsible(String registrationResponsible){
         this.registrationResponsible = registrationResponsible;
     }
 
-    public String getStudyDegree() {
+    public String getStudyDegree(){
         return studyDegree;
     }
 
-    public void setStudyDegree(String studyDegree) {
+    public void setStudyDegree(String studyDegree){
         this.studyDegree = studyDegree;
     }
 
-    public String getProjectName() {
+    public String getProjectName(){
         return projectName;
     }
 
-    public void setProjectName(String projectName) {
+    public void setProjectName(String projectName){
         this.projectName = projectName;
     }
 
-    public String getEvidenceType() {
+    public String getEvidenceType(){
         return evidenceType;
     }
 
-    public void setEvidenceType(String evidenceType) {
+    public void setEvidenceType(String evidenceType){
         this.evidenceType = evidenceType;
     }
 
-    public List<String> getStudents() {
+    public List<String> getStudents(){
         return students;
     }
 
-    public void setStudents(List<String> students) {
+    public void setStudents(List<String> students){
         this.students = students;
     }
 
-    public List<Integrant> getIntegrants() {
+    public List<Integrant> getIntegrants(){
         return integrants;
     }
 
-    public void setIntegrants(List<Integrant> integrants) {
+    public void setIntegrants(List<Integrant> integrants){
         this.integrants = integrants;
     }
 
-    public List<Collaborator> getCollaborators() {
+    public List<Collaborator> getCollaborators(){
         return collaborators;
     }
 
-    public void setCollaborators(List<Collaborator> collaborators) {
+    public void setCollaborators(List<Collaborator> collaborators){
         this.collaborators = collaborators;
     }
     

@@ -1,28 +1,23 @@
 /**
  * @author estef
+ * @versión v1.0
  * Last modification date format: 20-05-2021
  */
 
 package sgp.ca.demodao;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -31,8 +26,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.domain.Agreement;
 import sgp.ca.domain.AssistantRol;
 import sgp.ca.domain.Comment;
@@ -43,133 +36,93 @@ import sgp.ca.businesslogic.MeetingDAO;
 import sgp.ca.domain.Integrant;
 
 public class MeetingRequestController implements Initializable {
-    private final MeetingDAO MEETING_DAO = new MeetingDAO();
-    private Meeting meeting;
-    Calendar date = new GregorianCalendar();
     
-        @FXML
+    @FXML
     private Label lbUserName;
-
     @FXML
     private Button btnCloseMeetingWindow;
-
     @FXML
     private Button btnDownloadMinute;
-
     @FXML
     private Button btnCancelMeeting;
-
     @FXML
     private Label lbCanceledMetting;
-
     @FXML
     private TextField txtFieldMeetingRecordDate;
-
     @FXML
     private TextField txtFieldMeetingProject;
-
     @FXML
     private TextField txtFieldMeetingIssue;
-
     @FXML
     private TextField txtFieldMeetingPlace;
-
     @FXML
     private TextField txtFieldEstimatedTotalTime;
-
     @FXML
     private TextField txtFieldMeetingDate;
-
     @FXML
     private TextField txtFieldMeetingTime;
-
     @FXML
     private TextField txtFieldTotalTime;
-
     @FXML
     private Button btnUpdateMeeting;
-
     @FXML
     private Button btnStartMeeting;
-
     @FXML
     private TableView<Comment> tvComments;
-
     @FXML
     private TableColumn<Comment, String> colCommentator;
-
     @FXML
     private TableColumn<Comment, String> colCommentDescription;
-
     @FXML
     private TextArea txtAreaComment;
-
     @FXML
     private Button btnDeleteComment;
-
     @FXML
     private Button btnAddNewComment;
-
     @FXML
     private TableView<AssistantRol> tvAssistantRol;
-
     @FXML
     private TableColumn<AssistantRol, String> colAssistantName;
-
     @FXML
     private TableColumn<AssistantRol, String> colRolAssistant;
-
     @FXML
     private TableColumn<AssistantRol, String> colInitialsAssistants;
-
     @FXML
     private TableView<Prerequisite> tvPrerequisite;
-
     @FXML
     private TableColumn<Prerequisite, String> colDescriptionPrerequisite;
-
     @FXML
     private TableColumn<Prerequisite, String> colResponsiblePrerequisite;
-
     @FXML
     private TableView<Topic> tvMeetingAgenda;
-
     @FXML
     private TableColumn<Topic, String> colStartTime;
-
     @FXML
     private TableColumn<Topic, String> colEndTime;
-
     @FXML
     private TableColumn<Topic, String> colPlannedTime;
-
     @FXML
     private TableColumn<Topic, String> colRealTime;
-
     @FXML
     private TableColumn<Topic, String> colDescriptionTopic;
-
     @FXML
     private TableColumn<Topic, String> colDiscussionLeader;
-
     @FXML
     private TableView<Agreement> tvAgreement;
-
     @FXML
     private TableColumn<Agreement, String> colDescriptionAgreement;
-
     @FXML
     private TableColumn<Agreement, String> colDeliveryDate;
-
     @FXML
     private TableColumn<Agreement, String> colResponsibleAgreement;
-
     @FXML
     private TextArea txtAreaNoteMeeting;
-
     @FXML
     private TextArea txtAreaPendingMeeting;
     
+    private final MeetingDAO MEETING_DAO = new MeetingDAO();
+    private Meeting meeting;
+    Calendar date = new GregorianCalendar();
     private Integrant token;
 
     public void reciveMeeting (int meetingKey){
@@ -225,7 +178,7 @@ public class MeetingRequestController implements Initializable {
     }
 
     @FXML
-    private void CancelMeeting(ActionEvent event) {
+    private void cancelMeeting(ActionEvent event) {
         if(meeting.getStatusMeeting().compareTo("Pendiente") == 0){
             Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
             "¿Seguro que deseas cancelar la reunión? Ya no se podrá iniciar.");
@@ -267,7 +220,7 @@ public class MeetingRequestController implements Initializable {
     @FXML
     private void closeMeetingWindow(ActionEvent event) {
         MEETING_DAO.updateMeeting(meeting, meeting);
-        FXMLLoader loader = this.changeWindow("MeetingHistory.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingHistory.fxml", this.btnCloseMeetingWindow);
         MeetingHistoryController controller = loader.getController();
         controller.receiveToken(token);
     }
@@ -275,8 +228,12 @@ public class MeetingRequestController implements Initializable {
     @FXML
     private void deleteComment(ActionEvent event) {
         Comment commentDeleted =  tvComments.getSelectionModel().getSelectedItem();
-        meeting.removeComment(commentDeleted);
-        this.preparedCommentTable();
+        if(this.token.getFullName().equals(commentDeleted.getCommentator())){
+            meeting.removeComment(commentDeleted);
+            this.preparedCommentTable();
+        }else{
+            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "No puede eliminar los comentarios de otros integrantes.");
+        }
     }
 
     @FXML
@@ -298,7 +255,7 @@ public class MeetingRequestController implements Initializable {
         String statusMeeting = meeting.getStatusMeeting();
         if((statusMeeting.compareTo("Pendiente") == 0) || (statusMeeting.compareTo("Cancelada") == 0)){
             MEETING_DAO.updateMeeting(meeting, meeting);
-            FXMLLoader loader = this.changeWindow("MeetingEdit.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingEdit.fxml", this.btnCloseMeetingWindow); 
             MeetingEditController controller = loader.getController();
             controller.reciveMeeting(meeting);
             controller.receiveToken(token);
@@ -306,7 +263,7 @@ public class MeetingRequestController implements Initializable {
         }
         if(statusMeeting.compareTo("Realizada") == 0){
             MEETING_DAO.updateMeeting(meeting, meeting);
-            FXMLLoader loader = this.changeWindow("MeetingRealizedEdit.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingRealizedEdit.fxml", this.btnCloseMeetingWindow);
             MeetingRealizedEditController controller = loader.getController();
             controller.reciveMeeting(meeting);
             controller.receiveToken(token);
@@ -386,29 +343,12 @@ public class MeetingRequestController implements Initializable {
         return itemsAgreement;
     }
     
-    private void comproveMeetingDifferentNull(Meeting meeting){ //Si seleccionan una reunion que no este en la BD. Falta
+    private void comproveMeetingDifferentNull(Meeting meeting){ 
         if (meeting == null){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), "Lo sentimos,no se pudo encontrar la información de la reunión");
-            FXMLLoader loader = changeWindow("MeetingHistory.fxml", new ActionEvent());
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingHistory.fxml", this.btnCloseMeetingWindow);
             MeetingHistoryController controller = loader.getController();
             controller.receiveToken(token);
         }
     }
-    
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show();
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(MeetingRealizedEditController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
-    }
-    
 }

@@ -56,8 +56,8 @@
                         <Insets left="20.0" />
                      </padding>
                   </HBox>
-                  <Button fx:id="btnUpdateEvidence" disable="true" mnemonicParsing="false" onAction="#updateEvidence" prefHeight="42.0" prefWidth="126.0" text="MODIFICAR" visible="false" />
-                  <Button fx:id="btnCloseWindow" mnemonicParsing="false" onAction="#closeWindow" prefHeight="42.0" prefWidth="94.0" text="SALIR" />
+                  <Button fx:id="btnUpdateEvidence" disable="true" mnemonicParsing="false" onAction="#updateEvidence" prefHeight="42.0" prefWidth="171.0" text="MODIFICAR" visible="false" />
+                  <Button fx:id="btnCloseWindow" mnemonicParsing="false" onAction="#closeWindow" prefHeight="42.0" prefWidth="151.0" text="SALIR" />
                </children>
                <padding>
                   <Insets right="20.0" />
