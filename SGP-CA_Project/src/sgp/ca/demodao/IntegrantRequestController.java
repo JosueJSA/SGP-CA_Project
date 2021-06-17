@@ -136,7 +136,8 @@ public class IntegrantRequestController implements Initializable {
     }    
     
     private void checkPrivileges(){
-        if(this.token.getParticipationType().equalsIgnoreCase("Responsable")){
+        if(this.token.getParticipationType().equalsIgnoreCase("Responsable") && 
+        (!this.token.getEmailUV().equalsIgnoreCase(this.integrant.getEmailUV()))){
             hbIntegrantOptions.getChildren().addAll(btnUnsubscribe, btnSubscribe, btnIntegrantUpdate, btnExit);
             if(this.integrant.getParticipationStatus().equalsIgnoreCase("Activo")){
                 hbIntegrantOptions.getChildren().remove(btnSubscribe);

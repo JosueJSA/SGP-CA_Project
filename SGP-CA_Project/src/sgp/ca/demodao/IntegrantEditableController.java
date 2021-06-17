@@ -27,6 +27,7 @@ import javafx.scene.layout.HBox;
 import sgp.ca.businesslogic.GeneralResumeDAO;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.Integrant;
+import sgp.ca.domain.Member;
 
 public class IntegrantEditableController implements Initializable{
 
@@ -127,6 +128,7 @@ public class IntegrantEditableController implements Initializable{
     private void addNewIntegrant(ActionEvent event){
         try{
             validateForm();
+            checkExistEmailUser();
             this.integrant.setBodyAcademyKey(this.token.getBodyAcademyKey());
             this.getOutIntegrantDataFromInterface();
             if(INTEGRANT_DAO.addMember(this.integrant)){
@@ -146,6 +148,7 @@ public class IntegrantEditableController implements Initializable{
     private void updateIntegrant(ActionEvent event){
         try{
             validateForm();
+            checkExistEmailUser();
             this.getOutIntegrantDataFromInterface();
             this.integrant.setBodyAcademyKey(this.token.getBodyAcademyKey());
             if(INTEGRANT_DAO.updateMember(this.integrant, oldRfcForUpdate)){
@@ -165,6 +168,7 @@ public class IntegrantEditableController implements Initializable{
     private void addNewResponsible(ActionEvent event){
         try{
             validateForm();
+            checkExistEmailUser();
             this.getOutIntegrantDataFromInterface();
             if(INTEGRANT_DAO.addMember(this.integrant)){
                 GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Integrante registrado con éxito");
@@ -242,6 +246,22 @@ public class IntegrantEditableController implements Initializable{
         this.integrant.setStaffNumber(Integer.parseInt(this.txtFieldMemberStaffNumber.getText()));
         this.integrant.setDateOfAdmission(ValidatorForm.convertJavaDateToSQlDate(this.dtpAdmisionDate));
         this.integrant.setPassword(this.passFieldMemberPassword.getText());
+    }
+    
+    private void checkExistEmailUser() throws InvalidFormException{
+        boolean isRegistred = false;
+        List<Member> integrants = INTEGRANT_DAO.getMembers(this.token.getBodyAcademyKey());
+        if(integrants != null){
+            for(Member integrant : integrants){
+                if(integrant.getEmailUV().equalsIgnoreCase(txtFieldMemberEmailUv.getText())){
+                    isRegistred = true;
+                    break;
+                }
+            }
+        }
+        if(isRegistred){
+            throw new InvalidFormException("Usuario repetido en el sistema");
+        }
     }
     
 }
