@@ -45,8 +45,6 @@ public class GeneralResumeRequestController implements Initializable{
     @FXML
     private Button btnExit;
     @FXML
-    private Label lblUserName;
-    @FXML
     private Label lbBodyAcademyName;
     @FXML
     private Label lbBodyAcademyKey;
@@ -60,6 +58,8 @@ public class GeneralResumeRequestController implements Initializable{
     private Label lbRegistrationDate;
     @FXML
     private Label lbLastEvaluationDate;
+    @FXML
+    private Label lbUserName;
     @FXML
     private TextArea txtAreaGeneralTarget;
     @FXML
@@ -122,7 +122,7 @@ public class GeneralResumeRequestController implements Initializable{
 
     public void showGeneralResume(Integrant integrantToken){
         this.token = integrantToken;
-        this.lblUserName.setText(this.token.getFullName());
+        this.lbUserName.setText(this.token.getFullName());
         this.generalResume = GENERAL_RESUME_DAO.getGeneralResumeByKey(integrantToken.getBodyAcademyKey());
         this.generalResume.addMembers(new IntegrantDAO().getMembers(this.token.getBodyAcademyKey()));
         this.generalResume.addMembers(new CollaboratorDAO().getMembers(this.token.getBodyAcademyKey()));

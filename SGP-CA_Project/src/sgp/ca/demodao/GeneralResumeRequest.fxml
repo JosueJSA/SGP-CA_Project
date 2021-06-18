@@ -193,7 +193,7 @@
       <HBox alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="1157.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Label maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="158.0" text="CURRÍCULUM GENERAL" HBox.hgrow="ALWAYS" />
-            <Label fx:id="lblUserName" alignment="CENTER_RIGHT" prefHeight="24.0" prefWidth="366.0" text="..." />
+            <Label fx:id="lbUserName" alignment="CENTER_RIGHT" prefHeight="24.0" prefWidth="366.0" text="..." />
             <Avatar>
                <image>
                   <Image url="@../../../../img/userIcon.png" />

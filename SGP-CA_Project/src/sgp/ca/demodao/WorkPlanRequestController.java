@@ -37,8 +37,6 @@ public class WorkPlanRequestController implements Initializable{
     @FXML
     private Button btnAddNewWorkplan;
     @FXML
-    private Button btnDeleteWorkplan;
-    @FXML
     private Label lbUserName;
     @FXML
     private Label lbDuration;
@@ -90,9 +88,6 @@ public class WorkPlanRequestController implements Initializable{
     public void receiveToken(Integrant token){
         this.token = token;
         this.lbUserName.setText(this.token.getFullName());
-        if(!this.token.getParticipationType().equalsIgnoreCase("Responsable")){
-            this.hbSelectionPane.getChildren().remove(this.btnDeleteWorkplan);
-        }
         this.setDataInWorkPlanInterface();
     }
 
@@ -137,9 +132,6 @@ public class WorkPlanRequestController implements Initializable{
         this.setWorkPlanSelectedDataIntoInterface();
     }
 
-    @FXML
-    private void deleteWorkplan(ActionEvent event){
-    }
     
     private void setDataInWorkPlanInterface(){
         List<WorkPlan> workplanPeriots = WORKPLAN_DAO.getWorkPlanPeriots(token.getBodyAcademyKey());
