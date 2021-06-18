@@ -253,15 +253,6 @@ CREATE TABLE `CollaboratePrototype` (
     ON UPDATE CASCADE
 );
 
-CREATE TABLE `Magazine` (
-	`magazineName` varchar(100) NOT NULL,
-    `editorialName` varchar(100) DEFAULT NULL,
-    `magazineCountry` varchar (100) DEFAULT NULL,
-    `index` int DEFAULT NULL,
-    PRIMARY KEY (`magazineName`)
-
-);
-
 CREATE TABLE `Article` (
 	`urlFile`  varchar(100) NOT NULL,
 	`projectName` varchar(80) DEFAULT NULL,
@@ -274,18 +265,10 @@ CREATE TABLE `Article` (
     `publicationDate` date DEFAULT NULL,
     `country` varchar(90) DEFAULT NULL,
     `isnn` int(13) DEFAULT NULL,
+    `editorialName` varchar(200) DEFAULT NULL,
+    `magazineName` varchar(200) DEFAULT NULL,
     PRIMARY KEY (`urlFile`),
     CONSTRAINT `fk_article_52` FOREIGN KEY (`projectName`) REFERENCES `Project` (`projectName`)
-    ON UPDATE CASCADE
-);
-
-CREATE TABLE `ArticleMagazine`(
-	`urlFile` varchar(100) NOT NULL,
-    `magazineName` varchar(100) NOT NULL,
-    PRIMARY KEY (`magazineName`,`urlFile`),
-    CONSTRAINT `fk_magazineArticle_1` FOREIGN KEY (`urlFile`) REFERENCES `Article` (`urlFile`)
-    ON UPDATE CASCADE,
-    CONSTRAINT `fk_magazineArticle_2` FOREIGN KEY (`magazineName`) REFERENCES `Magazine` (`magazineName`)
     ON UPDATE CASCADE
 );
 
@@ -333,7 +316,7 @@ CREATE TABLE `ReceptionWork` (
     `status` varchar(10) DEFAULT NULL,
     `actualDurationInMonths` int(2) DEFAULT NULL,
     `estimatedDurationInMonths` int(2) DEFAULT NULL,
-    `modality` varchar(15) DEFAULT NULL,
+    `modality` varchar(200) DEFAULT NULL,
 	PRIMARY KEY (`urlFile`),
     KEY `fk_receptionwork_1` (`projectName`),
     CONSTRAINT `fk_receptionwork_1` FOREIGN KEY (`projectName`) REFERENCES `Project` (`projectName`)
@@ -517,10 +500,10 @@ CREATE TABLE `Action` (
 );
 
 CREATE VIEW `Evidences` AS 
-SELECT Prototype.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, projectName, Integrant.emailUV FROM `Prototype`, `IntegrantPrototype`, `Integrant` WHERE Prototype.urlFile = IntegrantPrototype.urlFile AND IntegrantPrototype.rfc = Integrant.rfc
-UNION ALL SELECT Article.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, projectName, Integrant.emailUV FROM `Article`, `IntegrantArticle`, `Integrant` WHERE Article.urlFile = IntegrantArticle.urlFile AND IntegrantArticle.rfc = Integrant.rfc
-UNION ALL SELECT Book.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, projectName, Integrant.emailUV FROM `Book`, `IntegrantBook`, `Integrant` WHERE Book.urlFile = IntegrantBook.urlFile AND IntegrantBook.rfc = Integrant.rfc
-UNION ALL SELECT ReceptionWork.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, projectName, Integrant.emailUV FROM `ReceptionWork`, `IntegrantReceptionWork`, `Integrant` WHERE ReceptionWork.urlFile = IntegrantReceptionWork.urlFile AND IntegrantReceptionWork.rfc = Integrant.rfc;
+SELECT Prototype.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, projectName, Integrant.emailUV, Integrant.bodyAcademyKey FROM `Prototype`, `IntegrantPrototype`, `Integrant` WHERE Prototype.urlFile = IntegrantPrototype.urlFile AND IntegrantPrototype.rfc = Integrant.rfc
+UNION ALL SELECT Article.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, projectName, Integrant.emailUV, Integrant.bodyAcademyKey FROM `Article`, `IntegrantArticle`, `Integrant` WHERE Article.urlFile = IntegrantArticle.urlFile AND IntegrantArticle.rfc = Integrant.rfc
+UNION ALL SELECT Book.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, projectName, Integrant.emailUV, Integrant.bodyAcademyKey FROM `Book`, `IntegrantBook`, `Integrant` WHERE Book.urlFile = IntegrantBook.urlFile AND IntegrantBook.rfc = Integrant.rfc
+UNION ALL SELECT ReceptionWork.urlFile, evidenceType, evidenceTitle, impactBA, registrationResponsible, registrationDate, projectName, Integrant.emailUV, Integrant.bodyAcademyKey FROM `ReceptionWork`, `IntegrantReceptionWork`, `Integrant` WHERE ReceptionWork.urlFile = IntegrantReceptionWork.urlFile AND IntegrantReceptionWork.rfc = Integrant.rfc;
 
 CREATE VIEW `Students` AS
 SELECT * FROM ArticleStudent UNION ALL SELECT * FROM PrototypeStudent UNION ALL SELECT * FROM BookStudent UNION ALL SELECT * FROM ReceptionWorkStudent;

@@ -62,14 +62,14 @@ public class EvidenceListController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        listEvidences = RECEPTION_WORK_DAO.getAllEvidences();
         preprareSchoolingTable();
-        tvEvidences.getItems().addAll(listEvidences);
     }
     
     public void showGeneralResumeEvidences(Integrant token){
         this.token = token;
         lbUserName.setText(this.token.getFullName());
+        listEvidences = RECEPTION_WORK_DAO.getAllEvidences(this.token.getBodyAcademyKey());
+        tvEvidences.getItems().addAll(listEvidences);
     }
 
     @FXML

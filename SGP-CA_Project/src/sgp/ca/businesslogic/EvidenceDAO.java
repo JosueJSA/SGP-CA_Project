@@ -21,12 +21,13 @@ public abstract class EvidenceDAO{
     
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
-    public List<Evidence> getAllEvidences(){
+    public List<Evidence> getAllEvidences(String bodyAcademyKey){
         List<Evidence> evidences = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Evidences GROUP BY urlFile ORDER BY registrationDate DESC;"
+                "SELECT * FROM Evidences WHERE bodyAcademyKey = ? GROUP BY urlFile ORDER BY registrationDate DESC;"
             );
+            sentenceQuery.setString(1, bodyAcademyKey);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
                 Evidence evidence = EvidenceFactory.getEvidence(resultQuery.getString("evidenceType"));

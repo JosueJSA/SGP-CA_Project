@@ -150,7 +150,7 @@ public class WorkPlanRequestController implements Initializable{
     @FXML
     private void selectGoal(ActionEvent event){
         String goalDescriptionSelected = this.cboBoxGoals.getSelectionModel().getSelectedItem(); 
-        if(!goalDescriptionSelected.isEmpty()){
+        if(goalDescriptionSelected != null){
             Goal goal = this.workplan.searchGoalByDescription(goalDescriptionSelected);
             this.lbGoalStatus.setText(String.valueOf(goal.isStatusGoal()));
             this.lbGoalStartDate.setText(goal.getStartDate());
@@ -175,7 +175,7 @@ public class WorkPlanRequestController implements Initializable{
     private void setWorkPlanSelectedDataIntoInterface(){
         this.lbDuration.setText(String.valueOf(this.workplan.getDurationInYears()) + " Años");
         this.txtAreaGeneralTarget.setText(this.workplan.getGeneralTarget());
-        this.cboBoxGoals.getItems().clear();
+        this.cboBoxGoals.setValue(null);
         this.workplan.getGoals().forEach(goal -> {
             cboBoxGoals.getItems().add(goal.getDescription());
         });
