@@ -87,7 +87,7 @@
                   <Label text="Correo adicional:" GridPane.columnIndex="2" GridPane.rowIndex="7" />
                   <TextField fx:id="txtFieldRfc" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
                   <TextField fx:id="txtFieldFullName" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="txtFieldEmailUv" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtFieldEmailUv" disable="true" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <TextField fx:id="txtFieldStatus" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <TextField fx:id="txtFieldCurp" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <TextField fx:id="txtFieldNationality" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="5" />
