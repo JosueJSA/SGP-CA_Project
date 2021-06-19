@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 package sgp.ca.demodao;
 
@@ -17,12 +17,7 @@ import sgp.ca.domain.Book;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Prototype;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
-public class EvidenceSelectionController implements Initializable {
+public class EvidenceSelectionController implements Initializable{
 
     @FXML
     private Button btnCancel;
@@ -38,7 +33,7 @@ public class EvidenceSelectionController implements Initializable {
     private Integrant token;
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
     }    
     
     public void receiveToken(Integrant token){
@@ -46,21 +41,21 @@ public class EvidenceSelectionController implements Initializable {
     }
 
     @FXML
-    private void selectCancel(ActionEvent event) {
+    private void selectCancel(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnCancel);
         EvidenceListController controller = loader.getController();
         controller.showGeneralResumeEvidences(token);
     }
 
     @FXML
-    private void selectReceptionWork(ActionEvent event) {
+    private void selectReceptionWork(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ReceptionWorkForm.fxml", btnCancel);
         ReceptionWorkFormController controller = loader.getController();
         controller.receiveReceptionWorkSaveToken(token);
     }
 
     @FXML
-    private void selectArticle(ActionEvent event) {
+    private void selectArticle(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceEdit.fxml", btnCancel);
         EvidenceEditController controller = loader.getController();
         Article article = new Article();
@@ -68,7 +63,7 @@ public class EvidenceSelectionController implements Initializable {
     }
 
     @FXML
-    private void selectPrototype(ActionEvent event) {
+    private void selectPrototype(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceEdit.fxml", btnCancel);
         EvidenceEditController controller = loader.getController();
         Prototype prototype = new Prototype();
@@ -76,7 +71,7 @@ public class EvidenceSelectionController implements Initializable {
     }
 
     @FXML
-    private void selectBook(ActionEvent event) {
+    private void selectBook(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceEdit.fxml", btnCancel);
         EvidenceEditController controller = loader.getController();
         Book book = new Book();

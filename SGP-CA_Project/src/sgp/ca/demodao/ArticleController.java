@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 package sgp.ca.demodao;
 
@@ -16,8 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -26,7 +24,7 @@ import sgp.ca.domain.Article;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 
-public class ArticleController implements Initializable, EvidenceWindow {
+public class ArticleController implements Initializable, EvidenceWindow{
 
     @FXML
     private Label lbUsername;
@@ -98,18 +96,18 @@ public class ArticleController implements Initializable, EvidenceWindow {
     }
 
     @FXML
-    private void removeEvidence(ActionEvent event) {
+    private void removeEvidence(ActionEvent event){
     }
 
     @FXML
-    private void closeWindowEvidenceRequest(ActionEvent event) {
+    private void closeWindowEvidenceRequest(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnCloseWindowEvidenceRequest);
         EvidenceListController controller = loader.getController();
         controller.showGeneralResumeEvidences(token);
     }
 
     @FXML
-    private void downloadDocument(ActionEvent event) {
+    private void downloadDocument(ActionEvent event){
     }
 
     
@@ -123,7 +121,6 @@ public class ArticleController implements Initializable, EvidenceWindow {
         this.txtFieldMagazineName.setText(this.article.getMagazineName());
         this.txtFieldMagazineEditorial.setText(this.article.getMagazineEditorial());
         this.txtFieldISnn.setText(this.article.getIsnn() + "");
-        this.txtAreaIndex.setText(this.article.getIndex() + "");
         this.lbTypeEvidence.setText(this.article.getEvidenceType());
         this.txtFieldEvidenceTittle.setText(this.article.getEvidenceTitle());
         this.txtFieldPublisherDate.setText(this.article.getPublicationDate());
@@ -145,7 +142,7 @@ public class ArticleController implements Initializable, EvidenceWindow {
     }
 
     @Override
-    public void createWindowAccordingEvidenceType(Evidence evidence, Node graphicElement, Integrant token) {
+    public void createWindowAccordingEvidenceType(Evidence evidence, Node graphicElement, Integrant token){
         if(this.toString().equalsIgnoreCase(evidence.getEvidenceType())){
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Article.fxml", graphicElement);
             ArticleController controller = loader.getController();

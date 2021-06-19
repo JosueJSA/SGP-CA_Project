@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 06-05-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.businesslogic;
@@ -21,7 +22,7 @@ public class MeetingAgendaDAO implements IMeetingAgendaDAO{
     private PrerequisiteDAO prerequisiteDAO = new PrerequisiteDAO();
 
     @Override
-    public void addMeetingAgenda(Connection connection, Meeting meeting) {
+    public void addMeetingAgenda(Connection connection, Meeting meeting){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "INSERT INTO MeetingAgenda (meetingKey, totalTime, "
@@ -48,7 +49,7 @@ public class MeetingAgendaDAO implements IMeetingAgendaDAO{
     }
 
     @Override
-    public MeetingAgenda getMeetingAgendaByMeeting(int meetingKey) {
+    public MeetingAgenda getMeetingAgendaByMeeting(int meetingKey){
         MeetingAgenda newMeetingAgenda = new MeetingAgenda();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
@@ -72,7 +73,7 @@ public class MeetingAgendaDAO implements IMeetingAgendaDAO{
     }
 
     @Override
-    public void deleteTopic(Connection connection, MeetingAgenda meetingAgenda) {
+    public void deleteTopic(Connection connection, MeetingAgenda meetingAgenda){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM Topic WHERE meetingAgendaKey = ?;"
@@ -91,7 +92,7 @@ public class MeetingAgendaDAO implements IMeetingAgendaDAO{
     }
 
     @Override
-    public void deletePrerequisite(Connection connection, MeetingAgenda meetingAgenda) {
+    public void deletePrerequisite(Connection connection, MeetingAgenda meetingAgenda){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM Prerequisite WHERE meetingAgendaKey = ?;"

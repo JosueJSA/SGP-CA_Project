@@ -1,25 +1,20 @@
 /**
- * @author estef
- * Last modification date format: 03-06-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 package sgp.ca.demodao;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -28,15 +23,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.ChapterBookDAO;
 import sgp.ca.domain.Book;
 import sgp.ca.domain.ChapterBook;
 import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Integrant;
 
-public class ChapterBookRequestController implements Initializable {
+public class ChapterBookRequestController implements Initializable{
     @FXML
     private Label lbUsername;
 
@@ -85,7 +78,7 @@ public class ChapterBookRequestController implements Initializable {
     private final ChapterBookDAO CHAPTERBOOK_DAO = new ChapterBookDAO();
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         // TODO
     }
 
@@ -124,21 +117,21 @@ public class ChapterBookRequestController implements Initializable {
     
     
     @FXML
-    private void closeWindow(ActionEvent event) {
+    private void closeWindow(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnCloseWindow);
         EvidenceListController controller = loader.getController();
         controller.showGeneralResumeEvidences(token);
     }
 
     @FXML
-    private void downloadDocument(ActionEvent event) {
+    private void downloadDocument(ActionEvent event){
         DialogBox dialogBox = new DialogBox();
         dialogBox.setFileNameSelected(chapterBook.getUrlFile());
         dialogBox.openDialogDirectorySelector();
     }
 
     @FXML
-    private void removeChapterBook(ActionEvent event) {
+    private void removeChapterBook(ActionEvent event){
         Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(new ActionEvent(),
             "¿Seguro que desea eliminar este capítulo? Ya no se podrá recuperar.");
         if(action.get() == ButtonType.OK){
@@ -147,7 +140,7 @@ public class ChapterBookRequestController implements Initializable {
     }
 
     @FXML
-    private void updateChapterBook(ActionEvent event) {
+    private void updateChapterBook(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ChapterBookEdit.fxml", btnCloseWindow);
         ChapterBookEditController controller = loader.getController();
         controller.receiveChapterBook(this.chapterBook);

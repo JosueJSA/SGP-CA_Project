@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 16-05-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.businesslogic;
@@ -23,7 +24,7 @@ public class BookDAO extends EvidenceDAO {
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
 
     @Override
-    public Evidence getEvidenceByUrl(String urlEvidenceFile) {
+    public Evidence getEvidenceByUrl(String urlEvidenceFile){
         Evidence book = new Book();
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
@@ -73,7 +74,7 @@ public class BookDAO extends EvidenceDAO {
     }
 
     @Override
-    public boolean addNewEvidence(Evidence evidence) {
+    public boolean addNewEvidence(Evidence evidence){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         boolean correctInsertion = false;
         try{
@@ -92,7 +93,7 @@ public class BookDAO extends EvidenceDAO {
             sentenceQuery.setString(10, evidence.getCountry());
             sentenceQuery.setString(11, ((Book)evidence).getPublisher());
             sentenceQuery.setInt(12, ((Book)evidence).getEditionsNumber());
-            sentenceQuery.setDouble(13, ((Book)evidence).getIsbn());
+            sentenceQuery.setString(13, ((Book)evidence).getIsbn());
             sentenceQuery.executeUpdate();
             this.insertIntoStudentBook(connection, (Book)evidence);
             this.insertIntoIntegrantBook(connection, (Book)evidence);
@@ -114,7 +115,7 @@ public class BookDAO extends EvidenceDAO {
     }
 
     @Override
-    public boolean updateEvidence(Evidence evidence, String oldUrlFile) {
+    public boolean updateEvidence(Evidence evidence, String oldUrlFile){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         boolean correctUpdate = false;
         try{
@@ -140,7 +141,7 @@ public class BookDAO extends EvidenceDAO {
             sentenceQuery.setString(10, evidence.getCountry());
             sentenceQuery.setString(11, ((Book)evidence).getPublisher());
             sentenceQuery.setInt(12, ((Book)evidence).getEditionsNumber());
-            sentenceQuery.setDouble(13, ((Book)evidence).getIsbn());
+            sentenceQuery.setString(13, ((Book)evidence).getIsbn());
             sentenceQuery.setString(14, oldUrlFile);
             sentenceQuery.executeUpdate();
             this.insertIntoStudentBook(connection, (Book)evidence);
@@ -163,7 +164,7 @@ public class BookDAO extends EvidenceDAO {
     }
 
     @Override
-    public boolean deleteEvidenceByUrl(String urlEvidenceFile) {
+    public boolean deleteEvidenceByUrl(String urlEvidenceFile){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         boolean correctDelete = false;
         try{
@@ -327,7 +328,7 @@ public class BookDAO extends EvidenceDAO {
                 resultBookQuery.getString("country"),
                 resultBookQuery.getString("publisher"),
                 resultBookQuery.getInt("editionsNumber"),
-                resultBookQuery.getInt("isbn")
+                resultBookQuery.getString("isbn")
             );
         }catch(SQLException sqlException){
             Logger.getLogger(BookDAO.class.getName()).log(Level.SEVERE, null, sqlException);
@@ -340,13 +341,14 @@ public class BookDAO extends EvidenceDAO {
         List<Integrant> integrants = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT i.fullName FROM Integrant i, IntegrantBook ia WHERE ia.rfc = i.rfc AND urlFile = ?;"
+                "SELECT i.fullName, i.rfc FROM Integrant i, IntegrantBook ia WHERE ia.rfc = i.rfc AND urlFile = ?;"
             );
             sentenceQuery.setString(1, urlFileBook);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
                 Integrant integrant = new Integrant();
                 integrant.setFullName(resultQuery.getString("fullName"));
+                integrant.setRfc(resultQuery.getString("rfc"));
                 integrants.add(integrant);
             }
         }catch(SQLException ex){
@@ -360,13 +362,14 @@ public class BookDAO extends EvidenceDAO {
         List<Collaborator> collaborators = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT c.fullName FROM CollaborateBook ca, Collaborator c WHERE ca.rfc = c.rfc AND urlFile = ?;"
+                "SELECT c.fullName, c.rfc FROM CollaborateBook ca, Collaborator c WHERE ca.rfc = c.rfc AND urlFile = ?;"
             );
             sentenceQuery.setString(1, urlFileBook);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
                 Collaborator collaborator = new Collaborator();
                 collaborator.setFullName(resultQuery.getString("fullName"));
+                collaborator.setRfc(resultQuery.getString("rfc"));
                 collaborators.add(collaborator);
             }
         }catch(SQLException ex){

@@ -1,7 +1,8 @@
 
 /**
- * @author estef
- * Last modification date format: 19-04-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.domain;

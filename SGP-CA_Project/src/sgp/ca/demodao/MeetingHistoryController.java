@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 20-05-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.demodao;
@@ -35,7 +36,7 @@ import sgp.ca.businesslogic.MeetingDAO;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Meeting;
 
-public class MeetingHistoryController implements Initializable {
+public class MeetingHistoryController implements Initializable{
     
     @FXML
     private Label lbUserName;
@@ -78,7 +79,7 @@ public class MeetingHistoryController implements Initializable {
     }
     
     @FXML
-    private void addMeeting(ActionEvent event) {
+    private void addMeeting(ActionEvent event){
         FXMLLoader loader = this.changeWindow("MeetingEdit.fxml", event);
         MeetingEditController controller = loader.getController();
         controller.receiveToken(token);
@@ -87,21 +88,21 @@ public class MeetingHistoryController implements Initializable {
     }
 
     @FXML
-    private void closeMeetingHistoryWindow(ActionEvent event) {
+    private void closeMeetingHistoryWindow(ActionEvent event){
         FXMLLoader loader = changeWindow("Start.fxml", event);
         StartController controller = loader.getController();
         controller.receiveIntegrantToken(token);
     }
 
     @FXML
-    private void refreshMeetingHistoryMeeting(ActionEvent event) {
+    private void refreshMeetingHistoryMeeting(ActionEvent event){
         tvMeetingHistory.getItems().clear();
         setAllMeetingInformationIntoTable();
         
     }
     
     @FXML
-    private void observeMeetingInformation(MouseEvent event) {
+    private void observeMeetingInformation(MouseEvent event){
         if(tvMeetingHistory.getSelectionModel().getSelectedItem() != null){
             FXMLLoader loader = changeWindow("MeetingRequest.fxml", event);
             MeetingRequestController controller = loader.getController();
@@ -113,7 +114,7 @@ public class MeetingHistoryController implements Initializable {
     }
 
     @FXML
-    private void searchMeeting(ActionEvent event) {
+    private void searchMeeting(ActionEvent event){
         System.out.print(this.txtFieldMeetingIssue.getText());
         if((txtFieldMeetingIssue.getText()).equals(null)){
             if((this.dtpMeetingDate.getValue())!=null){

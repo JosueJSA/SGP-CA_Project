@@ -1,6 +1,7 @@
 /**
- * @author Josue
- * Last modification date format: 23-04-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.businesslogic;
@@ -24,7 +25,7 @@ public class PrototypeDAO extends EvidenceDAO{
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
     @Override
-    public Evidence getEvidenceByUrl(String urlEvidenceFile) {
+    public Evidence getEvidenceByUrl(String urlEvidenceFile){
         Evidence prototype = new Prototype();
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
@@ -308,13 +309,14 @@ public class PrototypeDAO extends EvidenceDAO{
         List<Integrant> integrants = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT i.fullName FROM Integrant i, IntegrantPrototype ia WHERE ia.rfc = i.rfc AND urlFile = ?;"
+                "SELECT i.fullName, i.rfc FROM Integrant i, IntegrantPrototype ia WHERE ia.rfc = i.rfc AND urlFile = ?;"
             );
             sentenceQuery.setString(1, urlFilePrototype);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
                 Integrant integrant = new Integrant();
                 integrant.setFullName(resultQuery.getString("fullName"));
+                integrant.setRfc(resultQuery.getString("rfc"));
                 integrants.add(integrant);
             }
         }catch(SQLException ex){
@@ -328,13 +330,14 @@ public class PrototypeDAO extends EvidenceDAO{
         List<Collaborator> collaborators = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT c.fullName FROM CollaboratePrototype ca, Collaborator c WHERE ca.rfc = c.rfc AND urlFile = ?;"
+                "SELECT c.fullName, c.rfc FROM CollaboratePrototype ca, Collaborator c WHERE ca.rfc = c.rfc AND urlFile = ?;"
             );
             sentenceQuery.setString(1, urlFilePrototype);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
                 Collaborator collaborator = new Collaborator();
                 collaborator.setFullName(resultQuery.getString("fullName"));
+                collaborator.setRfc(resultQuery.getString("rfc"));
                 collaborators.add(collaborator);
             }
         }catch(SQLException ex){
@@ -363,7 +366,7 @@ public class PrototypeDAO extends EvidenceDAO{
     }
     
     @Override
-    public String toString() {
+    public String toString(){
         return "Libro";
     }
 

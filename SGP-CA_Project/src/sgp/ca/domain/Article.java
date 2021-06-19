@@ -1,28 +1,29 @@
 /**
- * @author estef
- * Last modification date format: 19-04-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.domain;
 
 public class Article extends Evidence{
-    private double isnn;
-    private String magazineName;
-    private int index;
-    private String magazineEditorial;
-    private Magazine magazine;
+    private String isnn = "";
+    private String magazineName = "";
+    private String magazineEditorial = "";
 
-    public Article(double isnn, String urlFile, String projectName, 
-    String evidenceTitle, String country, String publicationDate, 
-    boolean impactAB, String registrationDate, String registrationResponsible, 
-    String studyDegree, String evidenceType){
+    public Article(String urlFile, String projectName, boolean impactAB, String evidenceType, 
+    String evidenceTitle, String registrationResponsible, String registrationDate, 
+    String studyDegree, String publicationDate, String country, String isnn, 
+    String magazineName, String magazineEditorial){
         super(
             urlFile, projectName, evidenceTitle, country, 
             publicationDate, impactAB, registrationDate, 
             registrationResponsible, studyDegree, evidenceType
         );
-        this.isnn = isnn; 
-        magazine = new Magazine();
+        this.isnn = isnn;
+        this.magazineName = magazineName;
+        this.magazineEditorial = magazineEditorial;
+        
     }
 
     public Article(String evidenceType, String evidenceTitle, 
@@ -31,47 +32,30 @@ public class Article extends Evidence{
     }
 
     public Article(){
-        magazine = new Magazine();
     }
 
-    public double getIsnn() {
+    public String getIsnn(){
         return isnn;
     }
 
-    public void setIsnn(double isnn) {
+    public void setIsnn(String isnn){
         this.isnn = isnn;
     }
 
-    public String getMagazineName() {
+    public String getMagazineName(){
         return magazineName;
     }
 
-    public void setMagazineName(String magazineName) {
+    public void setMagazineName(String magazineName){
         this.magazineName = magazineName;
     }
 
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public String getMagazineEditorial() {
+    public String getMagazineEditorial(){
         return magazineEditorial;
     }
 
-    public void setMagazineEditorial(String magazineEditorial) {
+    public void setMagazineEditorial(String magazineEditorial){
         this.magazineEditorial = magazineEditorial;
-    }
-
-    public Magazine getMagazine() {
-        return magazine;
-    }  
-    
-    public void setMagazine(Magazine magazine){
-        this.magazine = magazine;
     }
     
     @Override
@@ -80,7 +64,7 @@ public class Article extends Evidence{
     }
 
     @Override
-    public Evidence getSpecificEvidenceInstance(String evidenceType) {
+    public Evidence getSpecificEvidenceInstance(String evidenceType){
         Evidence evidence = null;
         if(this.toString().equalsIgnoreCase(evidenceType)){
             evidence = new Article();
@@ -90,7 +74,7 @@ public class Article extends Evidence{
 
     @Override
     public Evidence getSpecificEvidenceInstance(String evidenceType, String evidenceTitle, 
-    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile){
         Evidence evidence = null;
         if(this.toString().equalsIgnoreCase(evidenceType)){
             evidence = new Article(

@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 06-05-2021
+ * @author Estefanía
+ * @versión v1.0
+ * Last modification date format: 17-06-2021
  */
 
 package sgp.ca.businesslogic;
@@ -17,7 +18,7 @@ import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.domain.Comment;
 import sgp.ca.domain.Meeting;
 
-public class CommentDAO implements ICommentDAO {
+public class CommentDAO implements ICommentDAO{
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
 
     @Override

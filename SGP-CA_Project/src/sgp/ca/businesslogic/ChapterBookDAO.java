@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 16-05-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.businesslogic;
@@ -35,7 +36,7 @@ public class ChapterBookDAO implements IChapterBookDAO{
                 ChapterBook chapterBook = new ChapterBook();
                 chapterBook.setUrlFile(resultQuery.getString("urlFile"));
                 chapterBook.setChapterBookTitle(resultQuery.getString("chapterBookTitle"));
-                chapterBook.setPageNumberRange(resultQuery.getString("pages-number"));
+                chapterBook.setPageNumberRange(resultQuery.getString("pagesNumber"));
                 chapterBook.setUrlFileBook(resultQuery.getString("urlFileBook"));
                 chapterBooksList.add(chapterBook);
             }
@@ -48,7 +49,7 @@ public class ChapterBookDAO implements IChapterBookDAO{
     }
     
     @Override
-    public ChapterBook getChapterBookByURLFile(String urlFileChapterBook) {
+    public ChapterBook getChapterBookByURLFile(String urlFileChapterBook){
         ChapterBook chapterBook = new ChapterBook();
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
@@ -63,7 +64,7 @@ public class ChapterBookDAO implements IChapterBookDAO{
                     resultQuery.getString("chapterBookTitle"),
                     resultQuery.getString("registrationDate"),
                     resultQuery.getString("registrationResponsible"),
-                    resultQuery.getString("pages-number"),
+                    resultQuery.getString("pagesNumber"),
                     resultQuery.getString("urlFileBook")
                 );
                 chapterBook.setStudents(this.getStudentNamesChapterBookParticipation(connection, urlFileChapterBook));
@@ -83,7 +84,7 @@ public class ChapterBookDAO implements IChapterBookDAO{
     }
     
     @Override
-    public boolean addChapterBook(ChapterBook chapterBook, Book book) {
+    public boolean addChapterBook(ChapterBook chapterBook, Book book){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         boolean correctInsertion = false;
         try{
@@ -117,7 +118,7 @@ public class ChapterBookDAO implements IChapterBookDAO{
     }
 
     @Override
-    public boolean updateChepterBook(ChapterBook newChapterBook, String oldUrlFile) {
+    public boolean updateChepterBook(ChapterBook newChapterBook, String oldUrlFile){
          Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         boolean correctUpdate = false;
         try{
@@ -126,7 +127,7 @@ public class ChapterBookDAO implements IChapterBookDAO{
             this.deleteCollaboratorsFromChapterBook(connection, oldUrlFile);
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "UPDATE ChapterBook SET urlFile = ?, chapterBookTitle = ?, registrationDate = ?, "
-                + "registrationResponsible = ?, pages-number = ?, urlFileBook = ?"
+                + "registrationResponsible = ?, pagesNumber = ?, urlFileBook = ?"
                 + "WHERE urlFile = ?;"
             );
             sentenceQuery.setString(1, newChapterBook.getUrlFile());
@@ -157,7 +158,7 @@ public class ChapterBookDAO implements IChapterBookDAO{
     }
 
     @Override
-    public boolean deleteChapterBook(String urlFileChapterBook) {
+    public boolean deleteChapterBook(String urlFileChapterBook){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         boolean correctDelete = false;
         try{
@@ -186,7 +187,7 @@ public class ChapterBookDAO implements IChapterBookDAO{
         }
     }
 
-    private void deleteStudentsFromChapterBook(Connection connection, String urlFileChapterBook) {
+    private void deleteStudentsFromChapterBook(Connection connection, String urlFileChapterBook){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM ChapterbookStudent WHERE urlFile = ?;"
@@ -204,7 +205,7 @@ public class ChapterBookDAO implements IChapterBookDAO{
         }
     }
 
-    private void deleteIntegrantsFromChapterBook(Connection connection, String urlFileChapterBook) {
+    private void deleteIntegrantsFromChapterBook(Connection connection, String urlFileChapterBook){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM IntegrantChapterbook WHERE urlFile = ?;"
@@ -222,7 +223,7 @@ public class ChapterBookDAO implements IChapterBookDAO{
         }
     }
 
-    private void deleteCollaboratorsFromChapterBook(Connection connection, String urlFileChapterBook) {
+    private void deleteCollaboratorsFromChapterBook(Connection connection, String urlFileChapterBook){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM CollaborateChapterbook WHERE urlFile = ?;"
@@ -325,13 +326,14 @@ public class ChapterBookDAO implements IChapterBookDAO{
         List<Integrant> integrants = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT i.fullName FROM Integrant i, IntegrantChapterbook ia WHERE ia.rfc = i.rfc AND urlFile = ?;"
+                "SELECT i.fullName, i.rfc FROM Integrant i, IntegrantChapterbook ia WHERE ia.rfc = i.rfc AND urlFile = ?;"
             );
             sentenceQuery.setString(1, urlFileChapterBook);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
                 Integrant integrant = new Integrant();
                 integrant.setFullName(resultQuery.getString("fullName"));
+                integrant.setRfc(resultQuery.getString("rfc"));
                 integrants.add(integrant);
             }
         }catch(SQLException ex){
@@ -345,13 +347,14 @@ public class ChapterBookDAO implements IChapterBookDAO{
         List<Collaborator> collaborators = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT c.fullName FROM CollaborateChapterbook ca, Collaborator c WHERE ca.rfc = c.rfc AND urlFile = ?;"
+                "SELECT c.fullName, c.rfc FROM CollaborateChapterbook ca, Collaborator c WHERE ca.rfc = c.rfc AND urlFile = ?;"
             );
             sentenceQuery.setString(1, urlFileChapterBook);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
                 Collaborator collaborator = new Collaborator();
                 collaborator.setFullName(resultQuery.getString("fullName"));
+                collaborator.setRfc(resultQuery.getString("rfc"));
                 collaborators.add(collaborator);
             }
         }catch(SQLException ex){

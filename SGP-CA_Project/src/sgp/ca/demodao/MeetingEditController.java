@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 13-05-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.demodao;
@@ -231,7 +232,7 @@ public class MeetingEditController implements Initializable{
     }
 
     @FXML
-    private void addRowMeetingAgendaTable(ActionEvent event) {
+    private void addRowMeetingAgendaTable(ActionEvent event){
         try{
             validateTopicInformation();
             this.meeting.getMeetingAgenda().getTopics().add(getOutTopicInformtation());
@@ -268,7 +269,7 @@ public class MeetingEditController implements Initializable{
     }
 
     @FXML
-    private void addRowPrerequisiteTable(ActionEvent event) {
+    private void addRowPrerequisiteTable(ActionEvent event){
         try{
             validatePrerequisiteInformation();
             meeting.getMeetingAgenda().getPrerequisites().add(getOutPrerequisiteInformation());
@@ -294,7 +295,7 @@ public class MeetingEditController implements Initializable{
     }
 
     @FXML
-    private void closeMeetingFormWindow(ActionEvent event) {
+    private void closeMeetingFormWindow(ActionEvent event){
         Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
         "¿Seguro que deseas salir del registro de reunión? Los cambios no se guardarán");
         if(action.get() == ButtonType.OK){
@@ -312,21 +313,21 @@ public class MeetingEditController implements Initializable{
     }
 
     @FXML
-    private void removeRowMeetingAgendaTable(ActionEvent event) {
+    private void removeRowMeetingAgendaTable(ActionEvent event){
         Topic topicToRemove = tvMeetingAgenda.getSelectionModel().getSelectedItem();
         meeting.getMeetingAgenda().getTopics().remove(topicToRemove);
         tvMeetingAgenda.setItems(makeTopicItems());
     }
 
     @FXML
-    private void removeRowPrerequisiteTable(ActionEvent event) {
+    private void removeRowPrerequisiteTable(ActionEvent event){
         Prerequisite prerequisiteToRemove = tvPrerequisite.getSelectionModel().getSelectedItem();
         meeting.getMeetingAgenda().getPrerequisites().remove(prerequisiteToRemove);
         tvPrerequisite.setItems(makePrerequisiteItems());
     }
     
     @FXML
-    private void updateMeeting(ActionEvent event) {
+    private void updateMeeting(ActionEvent event){
         try{
             validateMeetingInformation();
             this.getOutMeetingInformation();

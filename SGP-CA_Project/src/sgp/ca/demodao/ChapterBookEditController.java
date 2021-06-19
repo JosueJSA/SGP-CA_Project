@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 03-06-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 package sgp.ca.demodao;
 
@@ -114,7 +115,7 @@ public class ChapterBookEditController implements Initializable{
     
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         
     }
     
@@ -177,7 +178,7 @@ public class ChapterBookEditController implements Initializable{
     }
     
     @FXML
-    private void addDocument(ActionEvent event) {
+    private void addDocument(ActionEvent event){
         DialogBox dialogBox = new DialogBox();
         this.lbDocumentName.setText(dialogBox.openDialogFileSelector());
         this.chapterBook.setUrlFile(this.lbDocumentName.getText());
@@ -190,7 +191,7 @@ public class ChapterBookEditController implements Initializable{
     }
 
     @FXML
-    private void addEvidence(ActionEvent event) {
+    private void addEvidence(ActionEvent event){
         try{
             this.validateChapterInformation();
             this.getOutChapterBookInformation();
@@ -212,7 +213,7 @@ public class ChapterBookEditController implements Initializable{
     }
 
     @FXML
-    private void addRowCollaboratorTable(ActionEvent event) {
+    private void addRowCollaboratorTable(ActionEvent event){
         try{
             ValidatorForm.isComboBoxSelected(cboBoxCollaboratorsName);
             Member collaborator = this.cboBoxCollaboratorsName.getValue();
@@ -225,7 +226,7 @@ public class ChapterBookEditController implements Initializable{
     }
 
     @FXML
-    private void addRowIntegrantTable(ActionEvent event) {
+    private void addRowIntegrantTable(ActionEvent event){
         try{
             ValidatorForm.isComboBoxSelected(cboBoxIntegrantsName);
             Member integrant = this.cboBoxIntegrantsName.getValue();
@@ -238,7 +239,7 @@ public class ChapterBookEditController implements Initializable{
     }
 
     @FXML
-    private void addRowStudentsTable(ActionEvent event) {
+    private void addRowStudentsTable(ActionEvent event){
         try{
             ValidatorForm.chechkAlphabeticalField(this.txtFieldStudentName, 7, 50);
             String studentName = this.txtFieldStudentName.getText();
@@ -252,7 +253,7 @@ public class ChapterBookEditController implements Initializable{
     }
 
     @FXML
-    private void closeWindow(ActionEvent event) {
+    private void closeWindow(ActionEvent event){
         Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
             "¿Seguro que desea salir? No se guardará la información");
         if(action.get() == ButtonType.OK){
@@ -271,33 +272,33 @@ public class ChapterBookEditController implements Initializable{
     }
 
     @FXML
-    private void removeRowCollaboratorTable(ActionEvent event) {
+    private void removeRowCollaboratorTable(ActionEvent event){
         Member collaboratorRemove = this.tvCollaborators.getSelectionModel().getSelectedItem();
         this.chapterBook.getCollaborators().remove(collaboratorRemove);
         this.tvCollaborators.setItems(makeitemsCollaboratorsListForTable());
     }
 
     @FXML
-    private void removeRowIntegrantTable(ActionEvent event) {
+    private void removeRowIntegrantTable(ActionEvent event){
         Member integrantRemove = this.tvIntegrant.getSelectionModel().getSelectedItem();
         this.chapterBook.getIntegrants().remove(integrantRemove);
         this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
     }
 
     @FXML
-    private void removeRowStudentsTable(ActionEvent event) {
+    private void removeRowStudentsTable(ActionEvent event){
         String studentRemove = this.lvStudent.getSelectionModel().getSelectedItem();
         this.chapterBook.getStudents().remove(studentRemove);
         this.lvStudent.setItems(makeitemsStudentsListForView());
     }
 
     @FXML
-    private void replaceDocument(ActionEvent event) {
+    private void replaceDocument(ActionEvent event){
 
     }
 
     @FXML
-    private void updateEvidence(ActionEvent event) {
+    private void updateEvidence(ActionEvent event){
         try{
             this.validateChapterInformation();
             this.getOutChapterBookInformation();

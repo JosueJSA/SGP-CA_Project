@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 23-04-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.businesslogic;
@@ -18,15 +19,13 @@ import sgp.ca.domain.Article;
 import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
-import sgp.ca.domain.Magazine;
 
-public class ArticleDAO extends EvidenceDAO {
+public class ArticleDAO extends EvidenceDAO{
     
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
-    private final MagazineDAO MAGAZINE_DAO = new MagazineDAO();
     
     @Override
-    public Evidence getEvidenceByUrl(String urlEvidenceFile) {
+    public Evidence getEvidenceByUrl(String urlEvidenceFile){
         Article article = new Article();
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         try{
@@ -37,7 +36,6 @@ public class ArticleDAO extends EvidenceDAO {
             ResultSet resultQuery = senenceQuery.executeQuery();
             if(resultQuery.next()){
                 article = this.getOutArticleDataFromQuery(resultQuery);
-                article.setMagazine(this.getMagazineArticleParticipation(connection, article.getUrlFile()));
                 article.setIntegrants(this.getIntegrantArticleParticipation(connection, urlEvidenceFile));
                 article.setCollaborators(this.getCollaboratorArticleParticipation(connection, urlEvidenceFile));
                 article.setStudents(this.getStudentsArticleParticipation(connection, urlEvidenceFile));
@@ -59,7 +57,7 @@ public class ArticleDAO extends EvidenceDAO {
         boolean correctInsertion = false;
         try{
             PreparedStatement sentence = connection.prepareStatement(
-                "INSERT INTO Article VALUES (?,?,?,?,?,?,?,?,?,?,?);"
+                "INSERT INTO Article VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);"
             );
             sentence.setString(1, evidence.getUrlFile());
             sentence.setString(2, evidence.getProjectName());
@@ -71,9 +69,10 @@ public class ArticleDAO extends EvidenceDAO {
             sentence.setString(8, evidence.getStudyDegree());
             sentence.setString(9, evidence.getPublicationDate());
             sentence.setString(10, evidence.getCountry());
-            sentence.setDouble(11, ((Article)evidence).getIsnn());
+            sentence.setString(11, ((Article)evidence).getIsnn());
+            sentence.setString(12, ((Article)evidence).getMagazineEditorial());
+            sentence.setString(13, ((Article)evidence).getMagazineName());
             sentence.executeUpdate();
-            this.insertIntoArticleMagazine(connection, (Article)evidence);
             this.insertIntoStudentArticle(connection, (Article)evidence);
             this.insertIntoIntegrantArticle(connection, (Article)evidence);
             this.insertIntoCollaboratorArticle(connection, (Article)evidence);
@@ -94,18 +93,17 @@ public class ArticleDAO extends EvidenceDAO {
     }
 
     @Override
-    public boolean updateEvidence(Evidence evidence, String oldUrlFile) {
+    public boolean updateEvidence(Evidence evidence, String oldUrlFile){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         boolean correctUpdate = false;
         try{
             this.deleteCollaboratorsFromURLFileArticle(connection, oldUrlFile);
             this.deleteIntegrantsFromURLFileArticle(connection, oldUrlFile);
-            this.deleteMagazineFromURLFileArticle(connection, oldUrlFile);
             this.deleteStudensFromURLFileArticle(connection, oldUrlFile);
             PreparedStatement sentence = connection.prepareStatement(
                 "UPDATE Article SET urlFile = ?, projectName = ?, impactBA = ?, evidenceType = ?,"
                 + " evidenceTitle = ?, registrationResponsible = ?, registrationDate = ?, "
-                + "studyDegree = ?, publicationDate = ?, country = ?, isnn = ?"
+                + "studyDegree = ?, publicationDate = ?, country = ?, isnn = ?, editorialName = ?, magazineName = ?"
                 + " WHERE urlFile = ?;"
             );
             sentence.setString(1, evidence.getUrlFile());
@@ -118,10 +116,11 @@ public class ArticleDAO extends EvidenceDAO {
             sentence.setString(8, evidence.getStudyDegree());
             sentence.setString(9, evidence.getPublicationDate());
             sentence.setString(10, evidence.getCountry());
-            sentence.setDouble(11, ((Article)evidence).getIsnn());
-            sentence.setString(12, oldUrlFile);
+            sentence.setString(11, ((Article)evidence).getIsnn());
+            sentence.setString(12, ((Article)evidence).getMagazineEditorial());
+            sentence.setString(13, ((Article)evidence).getMagazineName());
+            sentence.setString(14, oldUrlFile);
             sentence.executeUpdate();
-            this.insertIntoArticleMagazine(connection, (Article)evidence);
             this.insertIntoCollaboratorArticle(connection, (Article)evidence);
             this.insertIntoIntegrantArticle(connection, (Article)evidence);
             this.insertIntoStudentArticle(connection, (Article)evidence);
@@ -149,7 +148,6 @@ public class ArticleDAO extends EvidenceDAO {
             this.deleteStudensFromURLFileArticle(connection, urlEvidenceFile);
             this.deleteIntegrantsFromURLFileArticle(connection, urlEvidenceFile);
             this.deleteCollaboratorsFromURLFileArticle(connection, urlEvidenceFile);
-            this.deleteMagazineFromURLFileArticle(connection, urlEvidenceFile);
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "DELETE FROM Article WHERE urlFile = ?;"
             );
@@ -215,43 +213,6 @@ public class ArticleDAO extends EvidenceDAO {
             );
             sentenceQuery.setString(1, urlFileArticle);
             sentenceQuery.executeUpdate();
-        }catch(SQLException sqlException){
-            try{
-                connection.rollback();
-                connection.close();
-                Logger.getLogger(Article.class.getName()).log(Level.SEVERE, null, sqlException);
-            }catch(SQLException ex){
-                Logger.getLogger(GoalDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-    
-    private void deleteMagazineFromURLFileArticle(Connection connection, String urlFile){
-        try{
-            PreparedStatement sentenceQuery = connection.prepareStatement(
-                "DELETE FROM ArticleMagazine WHERE urlFile = ?;"
-            );
-            sentenceQuery.setString(1, urlFile);
-            sentenceQuery.executeUpdate();
-        }catch(SQLException sqlException){
-            try{
-                connection.rollback();
-                connection.close();
-                Logger.getLogger(Article.class.getName()).log(Level.SEVERE, null, sqlException);
-            }catch(SQLException ex){
-                Logger.getLogger(GoalDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-    
-    private void insertIntoArticleMagazine(Connection connection, Article article){
-        try{
-            PreparedStatement sentence = connection.prepareStatement(
-                "INSERT INTO ArticleMagazine VALUES(?,?);"
-            );
-            sentence.setString(1, article.getUrlFile());
-            sentence.setString(2, article.getMagazine().getMagazineName());
-            sentence.executeUpdate();
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
@@ -330,17 +291,19 @@ public class ArticleDAO extends EvidenceDAO {
         Article article = new Article();
         try{
             article = new Article(
-                resultArticleQuery.getDouble("isnn"),
                 resultArticleQuery.getString("urlFile"),
                 resultArticleQuery.getString("projectName"),
-                resultArticleQuery.getString("evidenceTitle"),
-                resultArticleQuery.getString("country"),
-                resultArticleQuery.getString("publicationDate"),
                 resultArticleQuery.getBoolean("impactBA"),
-                resultArticleQuery.getString("registrationDate"),
+                resultArticleQuery.getString("evidenceType"),
+                resultArticleQuery.getString("evidenceTitle"),
                 resultArticleQuery.getString("registrationResponsible"),
+                resultArticleQuery.getString("registrationDate"),
                 resultArticleQuery.getString("studyDegree"),
-                resultArticleQuery.getString("evidenceType")
+                resultArticleQuery.getString("publicationDate"),
+                resultArticleQuery.getString("country"),
+                resultArticleQuery.getString("isnn"),
+                resultArticleQuery.getString("editorialName"),
+                resultArticleQuery.getString("magazineName")
             );
         }catch(SQLException ex){
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -353,13 +316,14 @@ public class ArticleDAO extends EvidenceDAO {
         List<Integrant> integrants = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT i.fullName FROM Integrant i, IntegrantArticle ia WHERE ia.rfc = i.rfc AND urlFile = ?;"
+                "SELECT i.fullName, i.rfc FROM Integrant i, IntegrantArticle ia WHERE ia.rfc = i.rfc AND urlFile = ?;"
             );
             sentenceQuery.setString(1, urlFileArticle);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
                 Integrant integrant = new Integrant();
                 integrant.setFullName(resultQuery.getString("fullName"));
+                integrant.setRfc(resultQuery.getString("rfc"));
                 integrants.add(integrant);
             }
         }catch(SQLException ex){
@@ -373,13 +337,14 @@ public class ArticleDAO extends EvidenceDAO {
         List<Collaborator> collaborators = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT c.fullName FROM CollaborateArticle ca, Collaborator c WHERE ca.rfc = c.rfc AND urlFile = ?;"
+                "SELECT c.fullName, c.rfc FROM CollaborateArticle ca, Collaborator c WHERE ca.rfc = c.rfc AND urlFile = ?;"
             );
             sentenceQuery.setString(1, urlFileArticle);
             ResultSet resultQuery = sentenceQuery.executeQuery();
             while(resultQuery.next()){
                 Collaborator collaborator = new Collaborator();
                 collaborator.setFullName(resultQuery.getString("fullName"));
+                collaborator.setRfc(resultQuery.getString("rfc"));
                 collaborators.add(collaborator);
             }
         }catch(SQLException ex){
@@ -406,27 +371,9 @@ public class ArticleDAO extends EvidenceDAO {
             return students;
         }
     }
-    
-    private Magazine getMagazineArticleParticipation(Connection connection, String urlFileArticle){
-        Magazine magazine = new Magazine();
-        try{
-            PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT * FROM ArticleMagazine WHERE urlFile = ?;"
-            );
-            sentenceQuery.setString(1, urlFileArticle);
-            ResultSet resultQuery = sentenceQuery.executeQuery();
-            while(resultQuery.next()){
-                magazine = MAGAZINE_DAO.getMagazineByName(resultQuery.getString("magazineName"));
-            }
-        }catch(SQLException ex){
-            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            return magazine;
-        }
-    }
 
     @Override
-    public String toString() {
+    public String toString(){
         return "Artículo";
     }
 

@@ -1,12 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 package sgp.ca.demodao;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -39,7 +38,7 @@ import sgp.ca.domain.Integrant;
  *
  * @author josue
  */
-public class BookController implements Initializable, EvidenceWindow {
+public class BookController implements Initializable, EvidenceWindow{
     
     @FXML
     private HBox hbOptions;
@@ -98,7 +97,7 @@ public class BookController implements Initializable, EvidenceWindow {
     private Book book;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         hbOptions.getChildren().removeAll(btnRemoveEvidence, btnUpdateEvidence, btnAddChapterBook);
         book = new Book();
         this.prepareChapterBookTable();
@@ -118,14 +117,14 @@ public class BookController implements Initializable, EvidenceWindow {
     }
 
     @FXML
-    private void updateEvidence(ActionEvent event) {
+    private void updateEvidence(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceEdit.fxml", btnCloseWindowEvidenceRequest);
         EvidenceEditController controller = loader.getController();
         controller.receiveBookAndToken(this.book,token);
     }
 
     @FXML
-    private void addChapterBook(ActionEvent event) {
+    private void addChapterBook(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ChapterBookEdit.fxml", btnCloseWindowEvidenceRequest);
         ChapterBookEditController controller = loader.getController();
         controller.receiveToken(token);
@@ -133,23 +132,23 @@ public class BookController implements Initializable, EvidenceWindow {
     }
 
     @FXML
-    private void removeEvidence(ActionEvent event) {
+    private void removeEvidence(ActionEvent event){
         
     }
 
     @FXML
-    private void closeWindowEvidenceRequest(ActionEvent event) {
+    private void closeWindowEvidenceRequest(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", btnCloseWindowEvidenceRequest);
         EvidenceListController controller = loader.getController();
         controller.showGeneralResumeEvidences(token);
     }
 
     @FXML
-    private void downloadDocument(ActionEvent event) {
+    private void downloadDocument(ActionEvent event){
     }
 
     @FXML
-    private void observeChapterBookInformation(MouseEvent event) {
+    private void observeChapterBookInformation(MouseEvent event){
         if(this.tvChapterBook.getSelectionModel().getSelectedItem() != null){
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ChapterBookRequest.fxml", btnCloseWindowEvidenceRequest);
             ChapterBookRequestController controller = loader.getController();
@@ -196,7 +195,7 @@ public class BookController implements Initializable, EvidenceWindow {
     }
 
     @Override
-    public void createWindowAccordingEvidenceType(Evidence evidence, Node graphicElement, Integrant token) {
+    public void createWindowAccordingEvidenceType(Evidence evidence, Node graphicElement, Integrant token){
         if(this.toString().equalsIgnoreCase(evidence.getEvidenceType())){
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Book.fxml", graphicElement);
             BookController controller = loader.getController();

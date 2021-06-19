@@ -1,7 +1,7 @@
 /**
- * @author estef
+ * @author Estefanía 
  * @versión v1.0
- * Last modification date format: 20-05-2021
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.demodao;
@@ -35,7 +35,7 @@ import sgp.ca.domain.Topic;
 import sgp.ca.businesslogic.MeetingDAO;
 import sgp.ca.domain.Integrant;
 
-public class MeetingRequestController implements Initializable {
+public class MeetingRequestController implements Initializable{
     
     @FXML
     private Label lbUserName;
@@ -138,7 +138,7 @@ public class MeetingRequestController implements Initializable {
     }
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         
     }
     
@@ -178,7 +178,7 @@ public class MeetingRequestController implements Initializable {
     }
 
     @FXML
-    private void cancelMeeting(ActionEvent event) {
+    private void cancelMeeting(ActionEvent event){
         if(meeting.getStatusMeeting().compareTo("Pendiente") == 0){
             Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
             "¿Seguro que deseas cancelar la reunión? Ya no se podrá iniciar.");
@@ -197,7 +197,7 @@ public class MeetingRequestController implements Initializable {
     }
 
     @FXML
-    private void addNewComment(ActionEvent event) {
+    private void addNewComment(ActionEvent event){
         try{
             validateFieldComments();
             meeting.getComments().add(getOutCommentInformation());
@@ -218,7 +218,7 @@ public class MeetingRequestController implements Initializable {
     }
 
     @FXML
-    private void closeMeetingWindow(ActionEvent event) {
+    private void closeMeetingWindow(ActionEvent event){
         MEETING_DAO.updateMeeting(meeting, meeting);
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingHistory.fxml", this.btnCloseMeetingWindow);
         MeetingHistoryController controller = loader.getController();
@@ -226,7 +226,7 @@ public class MeetingRequestController implements Initializable {
     }
 
     @FXML
-    private void deleteComment(ActionEvent event) {
+    private void deleteComment(ActionEvent event){
         Comment commentDeleted =  tvComments.getSelectionModel().getSelectedItem();
         if(this.token.getFullName().equals(commentDeleted.getCommentator())){
             meeting.removeComment(commentDeleted);
@@ -237,7 +237,7 @@ public class MeetingRequestController implements Initializable {
     }
 
     @FXML
-    private void downloadMinute(ActionEvent event) {
+    private void downloadMinute(ActionEvent event){
         GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Lo sentimos. La minuta no esta disponible por el momento");
     }
 
@@ -251,7 +251,7 @@ public class MeetingRequestController implements Initializable {
     }
 
     @FXML
-    private void updateMeeting(ActionEvent event) {
+    private void updateMeeting(ActionEvent event){
         String statusMeeting = meeting.getStatusMeeting();
         if((statusMeeting.compareTo("Pendiente") == 0) || (statusMeeting.compareTo("Cancelada") == 0)){
             MEETING_DAO.updateMeeting(meeting, meeting);

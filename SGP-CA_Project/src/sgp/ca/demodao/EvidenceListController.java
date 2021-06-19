@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 package sgp.ca.demodao;
 
@@ -24,12 +24,7 @@ import sgp.ca.businesslogic.ReceptionWorkDAO;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
-public class EvidenceListController implements Initializable {
+public class EvidenceListController implements Initializable{
 
     @FXML
     private Label lbUserName;
@@ -61,7 +56,7 @@ public class EvidenceListController implements Initializable {
     List<Evidence> listEvidences;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         preprareSchoolingTable();
     }
     
@@ -89,14 +84,14 @@ public class EvidenceListController implements Initializable {
     }
 
     @FXML
-    private void addEvidence(ActionEvent event) {
+    private void addEvidence(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceSelection.fxml", btnClose);
         EvidenceSelectionController controller = loader.getController();
         controller.receiveToken(this.token);
     }
 
     @FXML
-    private void showEvidence(MouseEvent event) {
+    private void showEvidence(MouseEvent event){
         if(tvEvidences.getSelectionModel().getSelectedItem() != null){
             Evidence evidence = tvEvidences.getSelectionModel().getSelectedItem();
             EvidenceWindowFctory.showSpecificEvidenceWindow(evidence, btnClose, token);
@@ -113,7 +108,7 @@ public class EvidenceListController implements Initializable {
     }
 
     @FXML
-    private void closeWindow(ActionEvent event) {
+    private void closeWindow(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnClose);
         StartController controller = loader.getController();
         controller.receiveIntegrantToken(this.token);

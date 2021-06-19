@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 06-05-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package businesslogic.testmeetingdao;
@@ -14,7 +15,7 @@ import sgp.ca.domain.MeetingAgenda;
 import sgp.ca.domain.Prerequisite;
 import sgp.ca.domain.Topic;
 
-public class MeetingInitializer {
+public class MeetingInitializer{
     private final MeetingDAO MEETING_DAO = new MeetingDAO();
     private Meeting meeting;
     public void createObjectForTest(){

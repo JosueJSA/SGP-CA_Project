@@ -1,6 +1,7 @@
 /**
-* @author Johann 
-* Last modification date format: 06-05-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
 */
 
 package sgp.ca.domain;
@@ -28,7 +29,7 @@ public class Meeting {
 
     public Meeting(int meetingKey, String meetingDate, String meetingTime, String meetingProject, 
     String meetingRegistrationDate, String statusMeeting, String placeMeeting, String issueMeeting, 
-    String meetingNote, String meetingPending, String integrantResponsible) {
+    String meetingNote, String meetingPending, String integrantResponsible){
         this.meetingKey = meetingKey;
         this.meetingDate = meetingDate;
         this.meetingTime = meetingTime;
@@ -46,59 +47,131 @@ public class Meeting {
         this.assistantsRol = new ArrayList<>();
     }
 
-    public Meeting() {
+    public Meeting(){
         this.meetingAgenda = new MeetingAgenda();
         this.agreements = new ArrayList<>();
         this.comments = new ArrayList<>();
         this.assistantsRol = new ArrayList<>();
     }
 
-    public int getMeetingKey() {
+    public int getMeetingKey(){
         return meetingKey;
     }
 
-    public String getMeetingDate() {
+    public void setMeetingKey(int meetingKey){
+        this.meetingKey = meetingKey;
+    }
+
+    public String getMeetingDate(){
         return meetingDate;
     }
 
-    public String getMeetingTime() {
+    public void setMeetingDate(String meetingDate){
+        this.meetingDate = meetingDate;
+    }
+
+    public String getMeetingTime(){
         return meetingTime;
     }
 
-    public String getMeetingProject() {
+    public void setMeetingTime(String meetingTime){
+        this.meetingTime = meetingTime;
+    }
+
+    public String getMeetingProject(){
         return meetingProject;
     }
 
-    public String getMeetingRegistrationDate() {
+    public void setMeetingProject(String meetingProject){
+        this.meetingProject = meetingProject;
+    }
+
+    public String getMeetingRegistrationDate(){
         return meetingRegistrationDate;
     }
 
-    public String getStatusMeeting() {
+    public void setMeetingRegistrationDate(String meetingRegistrationDate){
+        this.meetingRegistrationDate = meetingRegistrationDate;
+    }
+
+    public String getStatusMeeting(){
         return statusMeeting;
     }
 
-    public String getPlaceMeeting() {
+    public void setStatusMeeting(String statusMeeting){
+        this.statusMeeting = statusMeeting;
+    }
+
+    public String getPlaceMeeting(){
         return placeMeeting;
     }
 
-    public String getIssueMeeting() {
+    public void setPlaceMeeting(String placeMeeting){
+        this.placeMeeting = placeMeeting;
+    }
+
+    public String getIssueMeeting(){
         return issueMeeting;
     }
 
-    public String getMeetingNote() {
+    public void setIssueMeeting(String issueMeeting){
+        this.issueMeeting = issueMeeting;
+    }
+
+    public String getMeetingNote(){
         return meetingNote;
     }
 
-    public String getMeetingPending() {
+    public void setMeetingNote(String meetingNote){
+        this.meetingNote = meetingNote;
+    }
+
+    public String getMeetingPending(){
         return meetingPending;
     }
 
-    public String getIntegrantResponsible() {
+    public void setMeetingPending(String meetingPending){
+        this.meetingPending = meetingPending;
+    }
+
+    public String getIntegrantResponsible(){
         return integrantResponsible;
     }
 
-    public MeetingAgenda getMeetingAgenda() {
+    public void setIntegrantResponsible(String integrantResponsible){
+        this.integrantResponsible = integrantResponsible;
+    }
+
+    public MeetingAgenda getMeetingAgenda(){
         return meetingAgenda;
+    }
+
+    public void setMeetingAgenda(MeetingAgenda meetingAgenda){
+        this.meetingAgenda = meetingAgenda;
+    }
+
+    public List<Agreement> getAgreements() {
+        return agreements;
+    }
+
+    public void setAgreements(List<Agreement> agreements){
+        this.agreements = agreements;
+    }
+
+    public List<Comment> getComments(){
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments){
+        this.comments = comments;
+    }
+
+    public List<AssistantRol> getAssistantsRol(){
+        return assistantsRol;
+    }
+
+    public void setAssistantsRol(List<AssistantRol> assistantsRol){
+        this.assistantsRol = assistantsRol;
     }
     
     public Agreement getAgreementByNumber(int agreementNumber){
@@ -110,10 +183,6 @@ public class Meeting {
         }
         return agreementReturn;
     }
-
-    public List<Agreement> getAgreements() {
-        return agreements;
-    }
     
     public Comment getCommentByKey(int commentKey){
         Comment commentReturn = new Comment();
@@ -123,10 +192,6 @@ public class Meeting {
             }
         }
         return commentReturn;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
     }
     
     public AssistantRol getAssistantRolByAssistantRolKey(int assistantRolKey){
@@ -138,62 +203,6 @@ public class Meeting {
         }
         return assistantRolReturn;
     }
-
-    public List<AssistantRol> getAssistantsRol() {
-        return assistantsRol;
-    }
-
-    public void setMeetingKey(int meetingKey) {
-        this.meetingKey = meetingKey;
-    }
-
-    public void setMeetingDate(String meetingDate) {
-        this.meetingDate = meetingDate;
-    }
-
-    public void setMeetingTime(String meetingTime) {
-        this.meetingTime = meetingTime;
-    }
-
-    public void setMeetingProject(String meetingProject) {
-        this.meetingProject = meetingProject;
-    }
-
-    public void setMeetingRegistrationDate(String meetingRegistrationDate) {
-        this.meetingRegistrationDate = meetingRegistrationDate;
-    }
-
-    public void setStatusMeeting(String statusMeeting) {
-        this.statusMeeting = statusMeeting;
-    }
-
-    public void setPlaceMeeting(String placeMeeting) {
-        this.placeMeeting = placeMeeting;
-    }
-
-    public void setIssueMeeting(String issueMeeting) {
-        this.issueMeeting = issueMeeting;
-    }
-
-    public void setMeetingNote(String meetingNote) {
-        this.meetingNote = meetingNote;
-    }
-
-    public void setMeetingPending(String meetingPending) {
-        this.meetingPending = meetingPending;
-    }
-
-    public void setIntegrantResponsible(String integrantResponsible) {
-        this.integrantResponsible = integrantResponsible;
-    }
-
-    public void setMeetingAgenda(MeetingAgenda meetingAgenda) {
-        this.meetingAgenda = meetingAgenda;
-    }
-
-    public void setAgreements(List<Agreement> agreements) {
-        this.agreements = agreements;
-    }
     
     public void addAgreement(Agreement newAgreement){
         agreements.add(newAgreement);
@@ -202,10 +211,6 @@ public class Meeting {
     public void removeAgreement(Agreement agreement){
         agreements.remove(agreement);
     }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
     
     public void addComment(Comment comment){
         comments.add(comment);
@@ -213,10 +218,6 @@ public class Meeting {
     
     public void removeComment(Comment comment){
         comments.remove(comment);
-    }
-    
-    public void setAssistantsRol(List<AssistantRol> assistantsRol) {
-        this.assistantsRol = assistantsRol;
     }
     
     public void addAssistantRol(AssistantRol assistantRol){

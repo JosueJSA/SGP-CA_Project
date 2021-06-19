@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 29-04-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package businesslogic.testmeetingdao;
@@ -15,7 +16,7 @@ import sgp.ca.businesslogic.MeetingAgendaDAO;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.domain.MeetingAgenda;
 
-public class PrerequisiteDeleteTest {
+public class PrerequisiteDeleteTest{
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
     @Test

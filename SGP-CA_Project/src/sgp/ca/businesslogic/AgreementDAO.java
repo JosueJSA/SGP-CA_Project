@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 29-04-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.businesslogic;
@@ -47,7 +48,7 @@ public class AgreementDAO implements IAgreementDAO{
     }
 
     @Override
-    public List<Agreement> getAgreementListByMeeting(int meetingKey) {
+    public List<Agreement> getAgreementListByMeeting(int meetingKey){
         List<Agreement> agreementsList = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(

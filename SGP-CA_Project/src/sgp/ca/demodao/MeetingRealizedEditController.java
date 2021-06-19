@@ -1,7 +1,7 @@
 /**
- * @author estef
+ * @author Estefanía 
  * @versión v1.0
- * Last modification date format: 20-05-2021
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.demodao;
@@ -33,7 +33,7 @@ import sgp.ca.domain.Agreement;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Meeting;
 
-public class MeetingRealizedEditController implements Initializable {
+public class MeetingRealizedEditController implements Initializable{
     
     @FXML
     private Label lbUserName;
@@ -72,7 +72,7 @@ public class MeetingRealizedEditController implements Initializable {
     private Integrant token;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         this.cboBoxResponsibleAgreement.setItems(makeitemsIntegrantForComboBox());
     }
     
@@ -99,7 +99,7 @@ public class MeetingRealizedEditController implements Initializable {
     }
 
     @FXML
-    private void addAgreementFile(ActionEvent event) {
+    private void addAgreementFile(ActionEvent event){
         try{
             validateAgreementCamps();
             meeting.getAgreements().add(getOutCommentInformation());
@@ -126,7 +126,7 @@ public class MeetingRealizedEditController implements Initializable {
     }
 
     @FXML
-    private void closeUpdateMeetingWindow(ActionEvent event) {
+    private void closeUpdateMeetingWindow(ActionEvent event){
         Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
         "¿Seguro que deseas salir del registro de reunión? Los cambios no se guardarán");
         if(action.get() == ButtonType.OK){
@@ -138,14 +138,14 @@ public class MeetingRealizedEditController implements Initializable {
     }
 
     @FXML
-    private void deleteAgreementFile(ActionEvent event) {
+    private void deleteAgreementFile(ActionEvent event){
         Agreement agreementForDelete = this.tvAgreement.getSelectionModel().getSelectedItem();
         meeting.getAgreements().remove(agreementForDelete);
         this.tvAgreement.setItems(makeItemsAgreementTable());
     }
 
     @FXML
-    private void updateAgreementFile(ActionEvent event) {
+    private void updateAgreementFile(ActionEvent event){
         Agreement agreementForUpdate = this.tvAgreement.getSelectionModel().getSelectedItem();
         setAgreementInformationsCamps(agreementForUpdate);
         meeting.getAgreements().remove(agreementForUpdate);
@@ -159,7 +159,7 @@ public class MeetingRealizedEditController implements Initializable {
     }
 
     @FXML
-    private void updateMeeting(ActionEvent event) {
+    private void updateMeeting(ActionEvent event){
         try{
             validateMeetingInformation();
             meeting.setMeetingNote(this.txtAreaNoteMeeting.getText());

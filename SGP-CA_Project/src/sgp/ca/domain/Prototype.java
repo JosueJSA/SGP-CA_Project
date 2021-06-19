@@ -1,6 +1,7 @@
 /**
- * @author Josué
- * Last modification date format: 19-04-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.domain;
@@ -10,7 +11,7 @@ public class Prototype extends Evidence{
 
     public Prototype(String urlFile, String projectName, String evidenceTitle, 
     String country, String publicationDate, boolean impactAB, String registrationDate,
-    String registrationResponsible, String studyDegree, String bodyAcademyKey, String features) {
+    String registrationResponsible, String studyDegree, String bodyAcademyKey, String features){
         super(
             urlFile, projectName, evidenceTitle,country, 
             publicationDate, impactAB, registrationDate,
@@ -21,7 +22,7 @@ public class Prototype extends Evidence{
     
     public Prototype(String urlFile, String projectName, boolean impactAB, String evidenceType, String evidenceTitle, 
             String registrationResponsible, String registrationDate, String studyDegree,  String publicationDate, 
-            String country) {
+            String country){
         super(
             urlFile, projectName, evidenceTitle, country, 
             publicationDate, impactAB, registrationDate, 
@@ -30,7 +31,7 @@ public class Prototype extends Evidence{
     }
 
     public Prototype(String evidenceType, String evidenceTitle, 
-    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile){
         super(evidenceType, evidenceTitle, impactAB, registrationResponsible, registrationDate, urlFile);
     }
 
@@ -38,11 +39,11 @@ public class Prototype extends Evidence{
         
     }
 
-    public String getFeatures() {
+    public String getFeatures(){
         return features;
     }
 
-    public void setFeatures(String features) {
+    public void setFeatures(String features){
         this.features = features;
     }
     
@@ -52,7 +53,7 @@ public class Prototype extends Evidence{
     }
 
     @Override
-    public Evidence getSpecificEvidenceInstance(String evidenceType) {
+    public Evidence getSpecificEvidenceInstance(String evidenceType){
         Evidence evidence = null;
         if(this.toString().equalsIgnoreCase(evidenceType)){
             evidence = new Prototype();
@@ -62,7 +63,7 @@ public class Prototype extends Evidence{
 
     @Override
     public Evidence getSpecificEvidenceInstance(String evidenceType, String evidenceTitle, 
-    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile){
         Evidence evidence = null;
         if(this.toString().equalsIgnoreCase(evidenceType)){
             evidence = new Prototype(

@@ -1,8 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import javafx.scene.Node;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 
-public class EvidenceWindowFctory {
+public class EvidenceWindowFctory{
     
     private static List<EvidenceWindow> listEvidenceView = Arrays.asList(
         new BookController(),

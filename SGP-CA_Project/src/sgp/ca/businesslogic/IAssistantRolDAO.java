@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 06-05-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.businesslogic;
@@ -10,7 +11,7 @@ import java.util.List;
 import sgp.ca.domain.AssistantRol;
 import sgp.ca.domain.Meeting;
 
-public interface IAssistantRolDAO {
+public interface IAssistantRolDAO{
     public void addAssistantRol(Connection connection, Meeting meeting);
     public List<AssistantRol> getAssistantsRolByMeeting(int meetingKey);
 }

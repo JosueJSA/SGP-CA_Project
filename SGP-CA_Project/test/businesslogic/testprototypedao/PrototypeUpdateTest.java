@@ -5,7 +5,6 @@
  */
 package businesslogic.testprototypedao;
 
-import businesslogic.testevidences.EvidenceInitializer;
 import org.junit.Assert;
 import org.junit.Test;
 import sgp.ca.businesslogic.CollaboratorDAO;
@@ -16,14 +15,12 @@ import sgp.ca.domain.Prototype;
 
 public class PrototypeUpdateTest {
 
-    private EvidenceInitializer INITIALIZER = new EvidenceInitializer();
     private EvidenceDAO PROTOTYPE_DAO = new PrototypeDAO();
     private IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
     private CollaboratorDAO COLLABORATOR_DAO = new CollaboratorDAO();
     
     @Test
     public void testCorrectUdatePrototype(){
-        INITIALIZER.prepareEvidencesForTest();
         Prototype oldPrototype = (Prototype) PROTOTYPE_DAO.getEvidenceByUrl("prototipoPrueba.pdf");
         Prototype prototypo = new Prototype(
             "newPrototypeUpdated.pdf", "ProyectoPrueba", 
@@ -33,13 +30,11 @@ public class PrototypeUpdateTest {
         PROTOTYPE_DAO.updateEvidence(prototypo, "prototipoPrueba.pdf");
         Prototype retrievedPrototype = (Prototype) PROTOTYPE_DAO.getEvidenceByUrl("newPrototypeUpdated.pdf");
         PROTOTYPE_DAO.deleteEvidenceByUrl("newPrototypeUpdated.pdf");
-        INITIALIZER.cleanEvidencesForTest();
         Assert.assertNotEquals(retrievedPrototype.getFeatures(), oldPrototype.getFeatures());
     }
     
     @Test
     public void testIncorrectUdatePrototype(){
-        INITIALIZER.prepareEvidencesForTest();
         Prototype oldPrototype = (Prototype) PROTOTYPE_DAO.getEvidenceByUrl("prototipoPrueba.pdf");
         Prototype prototypo = new Prototype(
             "newPrototypeUpdated.pdf", "ProyectoPrueba", 
@@ -48,7 +43,6 @@ public class PrototypeUpdateTest {
         );
         PROTOTYPE_DAO.updateEvidence(prototypo, "prototipoPrueba.pdf");
         Prototype retrievedPrototype = (Prototype) PROTOTYPE_DAO.getEvidenceByUrl("newPrototypeUpdated.pdf");
-        INITIALIZER.cleanEvidencesForTest();
         Assert.assertNull(retrievedPrototype.getFeatures());
     }
     

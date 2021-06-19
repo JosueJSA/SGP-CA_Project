@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 package sgp.ca.demodao;
 
@@ -24,12 +24,7 @@ import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Prototype;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
-public class PrototypeController implements Initializable, EvidenceWindow {
+public class PrototypeController implements Initializable, EvidenceWindow{
 
     @FXML
     private Label lbUsername;
@@ -74,7 +69,7 @@ public class PrototypeController implements Initializable, EvidenceWindow {
     private Prototype prototype;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         hbOptions.getChildren().removeAll(btnRemoveEvidence, btnUpdateEvidence);
     }    
     
@@ -89,14 +84,14 @@ public class PrototypeController implements Initializable, EvidenceWindow {
     }
 
     @FXML
-    private void updateEvidence(ActionEvent event) {
+    private void updateEvidence(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceEdit.fxml", btnCloseWindowEvidenceRequest);
         EvidenceEditController controller = loader.getController();
         controller.receivePrototypeAndToken(this.prototype,token);
     }
 
     @FXML
-    private void removeEvidence(ActionEvent event) {
+    private void removeEvidence(ActionEvent event){
     }
 
     @FXML
@@ -107,7 +102,7 @@ public class PrototypeController implements Initializable, EvidenceWindow {
     }
 
     @FXML
-    private void downloadDocument(ActionEvent event) {
+    private void downloadDocument(ActionEvent event){
     }
     
     private void setPrototypeDataIntoInterface(){

@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 06-05-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.businesslogic;
@@ -21,7 +22,7 @@ public class TopicDAO implements ITopicDAO{
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
 
     @Override
-    public void addTopic(Connection connection, MeetingAgenda meetingAgenda) {
+    public void addTopic(Connection connection, MeetingAgenda meetingAgenda){
         meetingAgenda.getTopics().forEach(topic -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -51,7 +52,7 @@ public class TopicDAO implements ITopicDAO{
     }
 
     @Override
-    public List<Topic> getTopicsByAgendaMeeting(int meetingAgendaKey) {
+    public List<Topic> getTopicsByAgendaMeeting(int meetingAgendaKey){
         List<Topic> topicList = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(

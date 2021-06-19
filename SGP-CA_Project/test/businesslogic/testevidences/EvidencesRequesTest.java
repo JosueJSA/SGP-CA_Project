@@ -13,12 +13,10 @@ import sgp.ca.domain.Evidence;
 
 public class EvidencesRequesTest {
     
-    private final EvidenceInitializer INITIALIZER = new EvidenceInitializer();
     private final EvidenceDAO EVIDENCE_DAO = new PrototypeDAO();
     
     @Test
     public void testCorrectAllEvidencesRequest(){
-        INITIALIZER.prepareEvidencesForTest();
         boolean isCorrect = true;
         if(EVIDENCE_DAO.getAllEvidences("UV-CA-127").size() > 0){
             for(Evidence evidence : EVIDENCE_DAO.getAllEvidences("UV-CA-127")){
@@ -29,7 +27,6 @@ public class EvidencesRequesTest {
         }else{
             isCorrect = false;
         }
-        INITIALIZER.cleanEvidencesForTest();
         Assert.assertEquals(true, isCorrect);
     }
     

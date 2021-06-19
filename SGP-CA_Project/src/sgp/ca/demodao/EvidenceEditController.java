@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 20-05-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.demodao;
@@ -119,8 +120,6 @@ public class EvidenceEditController implements Initializable{
     @FXML
     private TextField txtFieldISNN;
     @FXML
-    private TextField txtFieldIndex;
-    @FXML
     private Tab tabPrototype;
     @FXML
     private TextArea txtAreaFeatures;
@@ -182,6 +181,9 @@ public class EvidenceEditController implements Initializable{
     }
     
     private void setEvidenceInformationModification(){
+        if(evidence.getImpactAB()){
+            this.chBoxImpactAB.setSelected(true);
+        }
         this.txtFieldEvidenceTittle.setText(evidence.getEvidenceTitle());
         LocalDate publicationDate = LocalDate.parse(evidence.getPublicationDate());
         this.dtpPublicationDate.setValue(publicationDate);
@@ -263,7 +265,7 @@ public class EvidenceEditController implements Initializable{
     private void setBookInformationModification(Book book){
         this.txtFieldPublisher.setText(book.getPublisher());
         this.txtFieldEditionsNumber.setText(book.getEditionsNumber() + "");
-        this.txtFieldISBN.setText(book.getIsbn() + "");
+        this.txtFieldISBN.setText(book.getIsbn());
     }
     
     private void setPrototypeInformationModification(Prototype prototype){
@@ -273,8 +275,7 @@ public class EvidenceEditController implements Initializable{
     private void setArticleInformationModification(Article article){
         this.txtFieldMagazineName.setText(article.getMagazineName());
         this.txtFieldMagazineEditorial.setText(article.getMagazineEditorial());
-        this.txtFieldISNN.setText(article.getIsnn() + "");
-        this.txtFieldIndex.setText(article.getIndex() + "");
+        this.txtFieldISNN.setText(article.getIsnn());
     }
     
     private void setWindowInformationCamps(){
@@ -286,7 +287,7 @@ public class EvidenceEditController implements Initializable{
     
     private void modifyWindowForModification(){
         this.lbWindowTitle.setText("MODIFICAR PRODUCCIÓN");
-        this.lbDocumentName.setText(evidence.getEvidenceTitle());
+        this.lbDocumentName.setText(evidence.getUrlFile());
         this.lbDocumentName.setVisible(true);
         this.imgViewPDFEvidence.setVisible(true);
         this.btnReplaceDocument.setVisible(true);
@@ -316,14 +317,15 @@ public class EvidenceEditController implements Initializable{
     public void validateBookInformation() throws InvalidFormException{
         ValidatorForm.chechkAlphabeticalField(this.txtFieldPublisher, 2, 30);
         ValidatorForm.isIntegerNumberData(this.txtFieldEditionsNumber, 3);
-        ValidatorForm.isNumberData(this.txtFieldISBN, 15);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldISBN, 13, 13);
+        ValidatorForm.isNumberData(this.txtFieldISBN, 13);
     }
     
     public void validateArticleInformation() throws InvalidFormException{
         ValidatorForm.chechkAlphabeticalField(this.txtFieldMagazineName, 1, 100);
         ValidatorForm.chechkAlphabeticalField(this.txtFieldMagazineEditorial, 1, 100);
-        ValidatorForm.isNumberData(this.txtFieldISNN, 15);
-        ValidatorForm.isIntegerNumberData(this.txtFieldIndex, 11);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldISNN, 13, 13);
+        ValidatorForm.isNumberData(this.txtFieldISNN, 13);
     }
     
     private void getOutEvidenceInformation(){
@@ -349,25 +351,19 @@ public class EvidenceEditController implements Initializable{
         int editionNumber= Integer.parseInt(this.txtFieldEditionsNumber.getText());
         ((Book)this.evidence).setEditionsNumber(editionNumber);
         
-        double isbn = Double.parseDouble(this.txtFieldISBN.getText());
-        ((Book)this.evidence).setIsbn(isbn);
+        ((Book)this.evidence).setIsbn(this.txtFieldISBN.getText());
     }
     
     private void getOurArticleInformation(){
         ((Article)this.evidence).setMagazineName(this.txtFieldMagazineName.getText());
         ((Article)this.evidence).setMagazineEditorial(this.txtFieldMagazineEditorial.getText());
-        
-        double isnn = Double.parseDouble(this.txtFieldISNN.getText());
-        ((Article)this.evidence).setIsnn(isnn);
-        
-        int index = Integer.parseInt(this.txtFieldISNN.getText());
-        ((Article)this.evidence).setIndex(index);
+        ((Article)this.evidence).setIsnn(this.txtFieldISNN.getText());
     }
     
     
 
     @FXML
-    private void addEvidence(ActionEvent event) {
+    private void addEvidence(ActionEvent event){
         try{
             this.validateEvidenceInformation();
             this.getOutEvidenceInformation();
@@ -400,7 +396,7 @@ public class EvidenceEditController implements Initializable{
     }
 
     @FXML
-    private void addRowCollaboratorTable(ActionEvent event) {
+    private void addRowCollaboratorTable(ActionEvent event){
         try{
             ValidatorForm.isComboBoxSelected(cboBoxCollaboratorsName);
             Member collaborator = this.cboBoxCollaboratorsName.getValue();
@@ -413,7 +409,7 @@ public class EvidenceEditController implements Initializable{
     }
 
     @FXML
-    private void addRowIntegrantTable(ActionEvent event) {
+    private void addRowIntegrantTable(ActionEvent event){
         try{
             ValidatorForm.isComboBoxSelected(cboBoxIntegrantsName);
             Member integrant = this.cboBoxIntegrantsName.getValue();
@@ -427,7 +423,7 @@ public class EvidenceEditController implements Initializable{
     }
 
     @FXML
-    private void addRowStudentsTable(ActionEvent event) {
+    private void addRowStudentsTable(ActionEvent event){
         try{
             ValidatorForm.chechkAlphabeticalField(this.txtFieldStudentName, 3, 50);
             String studentName = this.txtFieldStudentName.getText();
@@ -440,7 +436,7 @@ public class EvidenceEditController implements Initializable{
     }
 
     @FXML
-    private void closeWindow(ActionEvent event) {
+    private void closeWindow(ActionEvent event){
         Optional<ButtonType> action = GenericWindowDriver.getGenericWindowDriver().showConfirmacionAlert(event,
             "¿Seguro que desea salir? No se guardará la información");
         if(action.get() == ButtonType.OK){
@@ -451,34 +447,34 @@ public class EvidenceEditController implements Initializable{
     }
 
     @FXML
-    private void removeRowCollaboratorTable(ActionEvent event) {
+    private void removeRowCollaboratorTable(ActionEvent event){
         Collaborator collaboratorRemove = this.tvCollaborador.getSelectionModel().getSelectedItem();
         this.evidence.getCollaborators().remove(collaboratorRemove);
         this.tvCollaborador.setItems(makeitemsCollaboratorsListForTable());
     }
 
     @FXML
-    private void removeRowIntegrantTable(ActionEvent event) {
+    private void removeRowIntegrantTable(ActionEvent event){
         Integrant integrantRemove = this.tvIntegrant.getSelectionModel().getSelectedItem();
         this.evidence.getIntegrants().remove(integrantRemove);
         this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
     }
 
     @FXML
-    private void removeRowStudentsTable(ActionEvent event) {
+    private void removeRowStudentsTable(ActionEvent event){
         String studentRemove = this.lvStudent.getSelectionModel().getSelectedItem();
         this.evidence.getStudents().remove(studentRemove);
         this.lvStudent.setItems(makeitemsStudentsListForTable());
     }
 
     @FXML
-    private void replaceDocument(ActionEvent event) {
+    private void replaceDocument(ActionEvent event){
         DialogBox dialogBox = new DialogBox();
         String newURLFile = dialogBox.openDialogFileSelector();
     }
 
     @FXML
-    private void updateEvidence(ActionEvent event) {
+    private void updateEvidence(ActionEvent event){
         try{
             this.validateEvidenceInformation();
             this.getOutEvidenceInformation();

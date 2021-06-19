@@ -1,20 +1,14 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 package sgp.ca.domain;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import sgp.ca.domain.Article;
-import sgp.ca.domain.Book;
-import sgp.ca.domain.Evidence;
-import sgp.ca.domain.Prototype;
-import sgp.ca.domain.ReceptionWork;
 
-public class EvidenceFactory {
+public class EvidenceFactory{
     
     private final static List<Evidence> listEvidences = Arrays.asList(
         new Article(), 

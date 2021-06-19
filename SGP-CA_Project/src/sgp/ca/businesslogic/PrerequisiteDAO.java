@@ -1,6 +1,7 @@
 /**
- * @author estef
- * Last modification date format: 06-05-2021
+ * @author Estefanía 
+ * @versión v1.0
+ * Last modification date: 17-06-2021
  */
 
 package sgp.ca.businesslogic;
@@ -21,7 +22,7 @@ public class PrerequisiteDAO implements IPrerequisiteDAO{
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
 
     @Override
-    public void addPrerequisite(Connection connection, MeetingAgenda meetingAgenda) {
+    public void addPrerequisite(Connection connection, MeetingAgenda meetingAgenda){
         meetingAgenda.getPrerequisites().forEach( prerequisite -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
@@ -45,7 +46,7 @@ public class PrerequisiteDAO implements IPrerequisiteDAO{
     }
 
     @Override
-    public List<Prerequisite> getPrerequisiteByAgendaMeeting(int meetingAgendaKey) {
+    public List<Prerequisite> getPrerequisiteByAgendaMeeting(int meetingAgendaKey){
         List<Prerequisite> prerequisiteList = new ArrayList();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
