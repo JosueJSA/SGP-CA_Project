@@ -105,7 +105,7 @@ public class ReceptionWorkFormController implements Initializable {
     @FXML
     private Button btnExit;
     @FXML
-    private HBox hboxReceptionOptions;
+    private HBox hbReceptionOptions;
     
     private final ReceptionWorkDAO RECEPTIONWORK_DAO = new ReceptionWorkDAO();
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
@@ -115,31 +115,31 @@ public class ReceptionWorkFormController implements Initializable {
     private DialogBox TESTBOX;
     private String FILE = null;
     private Integrant token;
-    private ObservableList<String> MODALITYLIST = FXCollections.observableArrayList("Tesis", "Tesina");
+    private String UrlReception = null;
+    private ObservableList<String> MODALITYLIST = FXCollections.observableArrayList("Tesis", "Tesina", "Memoria", "Proyecto de Inversion", "Reporte");
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb){
         colIntegrantName.setCellValueFactory(new PropertyValueFactory<IntegrantTable, String>("integrantName"));
         colIntegrantParticipation.setCellValueFactory(new PropertyValueFactory<IntegrantTable, RadioButton>("participation"));
-        //tvIntegrant.setItems(makeitemsIntegrant());
         colCollaboratorName.setCellValueFactory(new PropertyValueFactory<CollaboratorTable, String>("collaboratorName"));
         colCollaboratorParticipation.setCellValueFactory(new PropertyValueFactory<CollaboratorTable, RadioButton>("participation"));
-        //tvCollaborator.setItems(makeitemsCollaborator());
         cboxProject.setItems(makeitemsProject());
         cboBoxModality.setItems(MODALITYLIST);
         optionButtons = Arrays.asList(
             btnUpdate, btnSave, 
             btnExit
         );
-        hboxReceptionOptions.getChildren().removeAll(optionButtons);        
+        hbReceptionOptions.getChildren().removeAll(optionButtons);        
     }    
 
     public void showReceptionWorkSaveForm(){
-        hboxReceptionOptions.getChildren().addAll(btnSave, btnExit);
+        hbReceptionOptions.getChildren().addAll(btnSave, btnExit);
     }
     
      public void showReceptionWorkUpdateForm(String receptionWorkUrl){
-        hboxReceptionOptions.getChildren().addAll(btnUpdate, btnExit);
+        hbReceptionOptions.getChildren().addAll(btnUpdate, btnExit);
         ReceptionWork receptionWork = RECEPTIONWORK_DAO.getEvidenceByUrl(receptionWorkUrl);
         this.chBoxImpactBA.setSelected(receptionWork.getImpactAB());
         this.txtFieldReceptionWorkName.setText(receptionWork.getEvidenceTitle());
@@ -148,8 +148,6 @@ public class ReceptionWorkFormController implements Initializable {
         this.cboxProject.setValue(receptionWork.getProjectName());
         tvIntegrant.setItems(makeitemsIntegrant());
         tvCollaborator.setItems(makeitemsCollaborator());
-//        this.tvIntegrant.setItems(makeItemsIntegrantName(receptionWork.getIntegrants()));
-//        this.tvCollaborator.setItems(makeItemsCollaboratorName(receptionWork.getCollaborators()));
         this.lvStudent.setItems(makeItemsStudent(receptionWork.getStudents()));
         this.txtFieldEstimatedDurationMonth.setText(Integer.toString(receptionWork.getEstimatedDurationInMonths()));
         this.txtFieldStatus.setText(receptionWork.getStatus());
@@ -160,6 +158,7 @@ public class ReceptionWorkFormController implements Initializable {
     
     public void receiveReceptionWorkUpdateToken(ReceptionWork receptionWork, Integrant integrantToken){
         this.token = integrantToken;
+        this.UrlReception = receptionWork.getUrlFile();
         showReceptionWorkUpdateForm(receptionWork.getUrlFile());
     }
     
@@ -173,34 +172,38 @@ public class ReceptionWorkFormController implements Initializable {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
         List<String> listRequirements = new ArrayList<>();
-        try{
-            this.isValidForm();
-            ReceptionWork receptionWork = new ReceptionWork(
-                "PRUEBA3",
-                cboxProject.getValue(),
-                chBoxImpactBA.isSelected(),
-                "Trabajo Recepcional",
-                txtFieldReceptionWorkName.getText(),
-                token.getFullName(),
-                dateFormat.format(date),
-                "Estudios",
-                ValidatorForm.convertJavaDateToSQlDate(dtpPublicationDate),
-                txtFieldCountry.getText(),
-                txtAreaDescription.getText(),
-                txtFieldStatus.getText(),
-                0,
-                Integer.parseInt(txtFieldEstimatedDurationMonth.getText()),
-                cboBoxModality.getValue()
-            );
-            receptionWork.setRequirements(lvRequirements.getItems());
-            receptionWork.setStudents(lvStudent.getItems());
-            receptionWork.setIntegrants(IntegrantList());
-            receptionWork.setCollaborators(CollaboratorList());
-            RECEPTIONWORK_DAO.addNewEvidence(receptionWork);
-            GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Trabajo recepcional registrado correctamente");
-        }catch(InvalidFormException ie){
-            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), ie.getMessage());
-        }
+        if (UrlReception != null){
+            try{
+                this.isValidForm();
+                ReceptionWork receptionWork = new ReceptionWork(
+                    UrlReception,
+                    cboxProject.getValue(),
+                    chBoxImpactBA.isSelected(),
+                    "Trabajo Recepcional",
+                    txtFieldReceptionWorkName.getText(),
+                    token.getFullName(),
+                    dateFormat.format(date),
+                    token.getSchooling().toString(),
+                    ValidatorForm.convertJavaDateToSQlDate(dtpPublicationDate),
+                    txtFieldCountry.getText(),
+                    txtAreaDescription.getText(),
+                    txtFieldStatus.getText(),
+                    0,
+                    Integer.parseInt(txtFieldEstimatedDurationMonth.getText()),
+                    cboBoxModality.getValue()
+                );
+                receptionWork.setRequirements(lvRequirements.getItems());
+                receptionWork.setStudents(lvStudent.getItems());
+                receptionWork.setIntegrants(IntegrantList());
+                receptionWork.setCollaborators(CollaboratorList());
+                RECEPTIONWORK_DAO.addNewEvidence(receptionWork);
+                GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Trabajo recepcional registrado correctamente");
+            }catch(InvalidFormException ie){
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), ie.getMessage());
+            }
+        }else{
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "No se a subido el archivo de la evidencia");
+        } 
     }
     
     
@@ -212,14 +215,14 @@ public class ReceptionWorkFormController implements Initializable {
          try{
             this.isValidForm();
             ReceptionWork receptionWork = new ReceptionWork(
-                "PRUEBA3",
+                UrlReception,
                 cboxProject.getValue(),
                 chBoxImpactBA.isSelected(),
                 "Trabajo Recepcional",
                 txtFieldReceptionWorkName.getText(),
                 token.getFullName(),
                 dateFormat.format(date),
-                "Estudios",
+                token.getSchooling().toString(),
                 ValidatorForm.convertJavaDateToSQlDate(dtpPublicationDate),
                 txtFieldCountry.getText(),
                 txtAreaDescription.getText(),
@@ -232,7 +235,7 @@ public class ReceptionWorkFormController implements Initializable {
             receptionWork.setStudents(lvStudent.getItems());
             receptionWork.setIntegrants(IntegrantList());
             receptionWork.setCollaborators(CollaboratorList());
-            RECEPTIONWORK_DAO.addNewEvidence(receptionWork);
+            RECEPTIONWORK_DAO.updateEvidence(receptionWork, UrlReception);
             GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Trabajo recepcional actualizado correctamente");
         }catch(InvalidFormException ie){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), ie.getMessage());
@@ -247,7 +250,6 @@ public class ReceptionWorkFormController implements Initializable {
     }
     
     public void isValidForm() throws InvalidFormException{
-        //ValidatorForm.chechkAlphabeticalString(FILE, 100);
         ValidatorForm.chechkAlphabeticalField(txtFieldReceptionWorkName, 5,80);
         ValidatorForm.checkNotEmptyDateField(dtpPublicationDate);
         ValidatorForm.chechkAlphabeticalField(txtFieldCountry, 3,40);
@@ -322,10 +324,10 @@ public class ReceptionWorkFormController implements Initializable {
 
     @FXML
     private void uploadFIle(ActionEvent event){
-        TESTBOX = new DialogBox( ((Stage)((Node)event.getSource()).getScene().getWindow()) );
+        TESTBOX = new DialogBox( ((Stage)((Node)event.getSource()).getScene().getWindow()));
         FtpClient connection = new FtpClient();
         FILE = connection.saveFileIntoFilesSystem(TESTBOX.getFileSelectedPath(), TESTBOX.getFileNameSelected());
-        System.out.println("Terminé de guardar");
+        UrlReception = TESTBOX.getFileNameSelected();
     }
    
     private List<Integrant> IntegrantList(){

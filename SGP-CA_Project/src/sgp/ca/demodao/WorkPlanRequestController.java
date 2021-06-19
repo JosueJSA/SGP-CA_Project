@@ -175,7 +175,7 @@ public class WorkPlanRequestController implements Initializable{
     private void setWorkPlanSelectedDataIntoInterface(){
         this.lbDuration.setText(String.valueOf(this.workplan.getDurationInYears()) + " Años");
         this.txtAreaGeneralTarget.setText(this.workplan.getGeneralTarget());
-        this.cboBoxGoals.setValue(null);
+        this.cboBoxGoals.getItems().clear();
         this.workplan.getGoals().forEach(goal -> {
             cboBoxGoals.getItems().add(goal.getDescription());
         });

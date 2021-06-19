@@ -6,14 +6,14 @@ package sgp.ca.demodao;
 
 import javafx.scene.control.RadioButton;
 
-public class AssistantTable {
+public class AssistantTable{
     private String integrantName;
     private RadioButton assistant;
     private RadioButton discussionLeader;
     private RadioButton secretary;
     private RadioButton takerTime;
 
-    public AssistantTable(String integrantName) {
+    public AssistantTable(String integrantName){
         this.integrantName = integrantName;
         this.assistant = new RadioButton();
         this.discussionLeader = new RadioButton();
