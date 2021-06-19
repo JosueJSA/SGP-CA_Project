@@ -250,14 +250,9 @@ public class IntegrantEditableController implements Initializable{
     
     private void checkExistEmailUser() throws InvalidFormException{
         boolean isRegistred = false;
-        List<Member> integrants = INTEGRANT_DAO.getMembers(this.token.getBodyAcademyKey());
-        if(integrants != null){
-            for(Member integrant : integrants){
-                if(integrant.getEmailUV().equalsIgnoreCase(txtFieldMemberEmailUv.getText())){
-                    isRegistred = true;
-                    break;
-                }
-            }
+        Member integrant = INTEGRANT_DAO.getMemberByUVmail(this.txtFieldMemberEmailUv.getText());
+        if(integrant.getFullName() != null){
+            isRegistred = true;
         }
         if(isRegistred){
             throw new InvalidFormException("Usuario repetido en el sistema");

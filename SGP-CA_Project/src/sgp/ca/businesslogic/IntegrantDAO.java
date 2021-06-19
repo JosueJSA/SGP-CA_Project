@@ -319,6 +319,32 @@ import sgp.ca.domain.Schooling;
         }
     }
     
+    public Member searchMemberByEmailUv(String emailUv){
+        Member integrant = new Integrant();
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "SELECT rfc, fullName, participationType, emailUV, cellPhone, participationStatus FROM `Integrant` WHERE emailUV = ?;"
+            );
+            sentenceQuery.setString(1, emailUv);
+            ResultSet result = sentenceQuery.executeQuery();
+            if(result.next()){
+                integrant = new Integrant();
+                integrant.setRfc(result.getString("rfc"));
+                integrant.setFullName(result.getString("fullName"));
+                integrant.setParticipationType(result.getString("participationType"));
+                integrant.setEmailUV(result.getString("emailUV"));
+                integrant.setCellphone(result.getString("cellPhone"));
+                integrant.setParticipationStatus(result.getString("participationStatus"));
+            }
+        }catch(SQLException sqlException){
+            integrant = null;
+            Logger.getLogger(Collaborator.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            CONNECTION.closeConnection();
+            return integrant;
+        }
+    }
+    
     private void addIntegrantStudies(Connection connection, Integrant integrant){
         integrant.getSchooling().forEach( schooling -> {
             try{

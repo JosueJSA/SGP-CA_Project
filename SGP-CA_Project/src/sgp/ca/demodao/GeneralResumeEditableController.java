@@ -101,6 +101,7 @@ public class GeneralResumeEditableController implements Initializable{
         this.token = responsible;
         this.lbUserName.setText(this.token.getFullName());
         this.generalResume = new GeneralResume();
+        this.txtFieldBodyAcademyKey.setDisable(false);
     }
     
     public void showGeneralResumeUpdateForm(Integrant responsible){
