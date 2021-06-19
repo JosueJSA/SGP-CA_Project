@@ -236,7 +236,7 @@
                </HBox.margin>
             </HBox>
             <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="47.0" prefWidth="429.0" HBox.hgrow="ALWAYS" />
-            <HBox fx:id="hboxReceptionOptions" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="11.0" prefWidth="499.0" spacing="5.0">
+            <HBox fx:id="hbReceptionOptions" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="11.0" prefWidth="499.0" spacing="5.0">
                <children>
                   <Button fx:id="btnUpdate" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateReceptioWork" prefHeight="32.0" prefWidth="126.0" text="MODIFICAR" HBox.hgrow="ALWAYS">
                      <HBox.margin>

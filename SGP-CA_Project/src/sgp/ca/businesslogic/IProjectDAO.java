@@ -1,6 +1,7 @@
-/**
-* @author Johann 
-* Last modification date format: 23-03-2021
+/*
+* @author Johann
+* @versión v1.0
+* Last modification date: 17-06-2021
 */
 
 package sgp.ca.businesslogic;

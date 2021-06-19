@@ -191,7 +191,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextArea fx:id="txtAreaNoteMeeting" editable="false" prefHeight="171.0" prefWidth="895.0" wrapText="true" />
+                                    <TextArea fx:id="txtAreaNoteMeeting" prefHeight="171.0" prefWidth="895.0" wrapText="true" />
                                  </children>
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
@@ -204,7 +204,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextArea fx:id="txtAreaPendingMeeting" editable="false" prefHeight="171.0" prefWidth="895.0" wrapText="true" />
+                                    <TextArea fx:id="txtAreaPendingMeeting" prefHeight="171.0" prefWidth="895.0" wrapText="true" />
                                  </children>
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />

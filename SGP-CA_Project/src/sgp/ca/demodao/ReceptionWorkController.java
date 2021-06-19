@@ -64,11 +64,9 @@ public class ReceptionWorkController implements Initializable, EvidenceWindow {
     private final ReceptionWorkDAO RECEPTIONWORK_DAO = new ReceptionWorkDAO();
     private Integrant token;
     private ReceptionWork receptionWork;
-    
-    
+        
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
     }    
 
     public void receiveReceptionWork(String url, Integrant token){  

@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* @author Johann
+* @versión v1.0
+* Last modification date: 17-06-2021
+*/
 package sgp.ca.demodao;
 
 import java.net.URL;
@@ -25,14 +25,9 @@ import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Project;
 
-/**
- * FXML Controller class
- *
- * @author johan
- */
 public class ProjectController implements Initializable {
 
-     @FXML
+    @FXML
     private Button btnModify;
     @FXML
     private Button btnExit;
@@ -63,14 +58,13 @@ public class ProjectController implements Initializable {
     @FXML
     private Label lbUserName;
     @FXML
-    private ComboBox<String> cboBoxLgac;
+    private TextField txtFieldLgac;
     
     private final ProjectDAO PROJECT_DAO = new ProjectDAO();
     private final ReceptionWorkDAO RECEPTIONWORK_DAO = new ReceptionWorkDAO();
     private Project PROJECT = new Project();
     private Integrant token;
     
-     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.prepareTableFormat();
@@ -86,6 +80,7 @@ public class ProjectController implements Initializable {
     private void setProjectInformation(String projectName){
         PROJECT = PROJECT_DAO.getProjectbyName(projectName);
         this.txtFieldProjectName.setText(PROJECT.getProjectName());
+        this.txtFieldLgac.setText(PROJECT.getLgacs().get(0).toString());
         this.txtFieldDuration.setText(Integer.toString(PROJECT.getDurationProjectInMonths()));
         this.txtFieldStartDate.setText(PROJECT.getStartDate());
         this.txtFieldEstimatedEndDate.setText(PROJECT.getEstimatedEndDate());
@@ -98,7 +93,7 @@ public class ProjectController implements Initializable {
     private void modiftyProject(ActionEvent event) {
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ProjectForm.fxml", btnExit);
         ProjectFormController controller = loader.getController();
-        controller.receiveProjectUpdate(PROJECT);
+        controller.receiveProjectUpdateToken(PROJECT, token);
     }
 
      @FXML

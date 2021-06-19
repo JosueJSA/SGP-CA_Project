@@ -5,23 +5,18 @@
 */
 package sgp.ca.demodao;
 
-import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -36,10 +31,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import sgp.ca.dataaccess.FtpClient;
 import javafx.stage.Stage;
 import sgp.ca.businesslogic.CollaboratorDAO;
@@ -115,9 +108,8 @@ public class ReceptionWorkFormController implements Initializable {
     private DialogBox TESTBOX;
     private String FILE = null;
     private Integrant token;
-    private String UrlReception = null;
-    private ObservableList<String> MODALITYLIST = FXCollections.observableArrayList("Tesis", "Tesina", "Memoria", "Proyecto de Inversion", "Reporte");
-    
+    private String UrlReception;
+    private final ObservableList<String> MODALITYLIST = FXCollections.observableArrayList("Tesis", "Tesina", "Memoria", "Proyecto de Inversion", "Reporte");
     
     @Override
     public void initialize(URL url, ResourceBundle rb){
@@ -138,7 +130,7 @@ public class ReceptionWorkFormController implements Initializable {
         hbReceptionOptions.getChildren().addAll(btnSave, btnExit);
     }
     
-     public void showReceptionWorkUpdateForm(String receptionWorkUrl){
+    public void showReceptionWorkUpdateForm(String receptionWorkUrl){
         hbReceptionOptions.getChildren().addAll(btnUpdate, btnExit);
         ReceptionWork receptionWork = RECEPTIONWORK_DAO.getEvidenceByUrl(receptionWorkUrl);
         this.chBoxImpactBA.setSelected(receptionWork.getImpactAB());
@@ -162,7 +154,7 @@ public class ReceptionWorkFormController implements Initializable {
         showReceptionWorkUpdateForm(receptionWork.getUrlFile());
     }
     
-     public void receiveReceptionWorkSaveToken(Integrant integrantToken){
+    public void receiveReceptionWorkSaveToken(Integrant integrantToken){
         this.token = integrantToken;
         showReceptionWorkSaveForm();
     }
@@ -205,7 +197,6 @@ public class ReceptionWorkFormController implements Initializable {
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "No se a subido el archivo de la evidencia");
         } 
     }
-    
     
     @FXML
     private void updateReceptioWork(ActionEvent event){

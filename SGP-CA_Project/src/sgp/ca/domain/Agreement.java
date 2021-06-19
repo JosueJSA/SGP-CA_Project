@@ -18,6 +18,13 @@ public class Agreement {
         this.responsibleAgreement = responsibleAgreement;
         this.deliveryDate = deliveryDate;
     }
+    
+    public Agreement(String descriptionAgreement, 
+    String responsibleAgreement, String deliveryDate) {
+        this.descriptionAgreement = descriptionAgreement;
+        this.responsibleAgreement = responsibleAgreement;
+        this.deliveryDate = deliveryDate;
+    }
 
     public Agreement() {
         

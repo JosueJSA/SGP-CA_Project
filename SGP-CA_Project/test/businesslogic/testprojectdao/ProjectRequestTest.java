@@ -1,7 +1,8 @@
-/**
- *
- * @author johan
- */
+/*
+* @author Johann
+* @versión v1.0
+* Last modification date: 17-06-2021
+*/
 package businesslogic.testprojectdao;
 
 import org.junit.Assert;
@@ -12,20 +13,22 @@ import sgp.ca.domain.Project;
 
 public class ProjectRequestTest {
     
-   private final ProjectInitializer PROJECT_INITIALIZER = new ProjectInitializer();
+   private final ProjectInitializer INITIALIZER = new ProjectInitializer();
    public final ProjectDAO PROJECT_DAO = new ProjectDAO();
     
     @Test
     public void testGetExistProjectByUrlFile(){
-        PROJECT_INITIALIZER.prepareProjectInsertionForTest();
-        Project projectRetrieved = PROJECT_DAO.getProjectbyName("Crecimiento de lenguajes de programación");
-        String supposedProject = "Crecimiento de lenguajes de programación";
-        Assert.assertEquals(supposedProject, projectRetrieved.getProjectName());
+        INITIALIZER.prepareProjectInsertionForTest();
+        Project projectRetrieved = PROJECT_DAO.getProjectbyName("PRUEBA PROYECTO");
+        String supposedProject = "PRUEBA PROYECTO";
+        INITIALIZER.cleanProjectTest("PRUEBA PROYECTO");
+        Assert.assertEquals(projectRetrieved.getProjectName(), supposedProject);
     }
     
     @Test
     public void testGetNotExistReceptionWorKByUrlFile(){
-        Project projectRetrieved = PROJECT_DAO.getProjectbyName("Crecimiento de lenguajes de programación");
+        INITIALIZER.cleanProjectTest("PRUEBA PROYECTO");
+        Project projectRetrieved = PROJECT_DAO.getProjectbyName("PRUEBA PROYECTO");
         Assert.assertNull(projectRetrieved.getProjectName());
     }
 }

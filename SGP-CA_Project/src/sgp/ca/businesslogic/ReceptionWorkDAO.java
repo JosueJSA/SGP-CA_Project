@@ -1,6 +1,7 @@
-/**
-* @author Johann 
-* Last modification date format: 25-03-2021
+/*
+* @author Johann
+* @versión v1.0
+* Last modification date: 17-06-2021
 */
 
 package sgp.ca.businesslogic;
@@ -65,9 +66,7 @@ public class ReceptionWorkDAO extends EvidenceDAO{
             QUERY.closeConnection();
         }
     }
-    
-    
-    
+     
     public List<ReceptionWork> getReceptionWorkList(){
         List<ReceptionWork> listReceptionWork = new ArrayList<>();
         try{
@@ -155,13 +154,12 @@ public class ReceptionWorkDAO extends EvidenceDAO{
         }
     }
     
-
     public void updateReceptionWork(ReceptionWork receptionWork, String oldUrlFile){
 
         Connection connection = QUERY.getConnectionDatabaseNotAutoCommit();
         try{
             PreparedStatement sentenceQuery = QUERY.getConnectionDatabase().prepareStatement(
-                "UPDATE ReceptionWork SET urlFile = ?, projectName = ?, impactBA = ?, , evidenceType = ?, "
+                "UPDATE ReceptionWork SET urlFile = ?, projectName = ?, impactBA = ?, evidenceType = ?, "
                     + "evidenceTitle = ?, registrationResponsible = ?, registrationDate = ?, studyDegree = ?, publicationDate = ?, country = ?,"
                     + "description = ?, status = ?, actualDurationInMonths = ?, estimatedDurationInMonths = ?, modality = ? WHERE urlFile = ?;"
             );
@@ -435,7 +433,7 @@ public class ReceptionWorkDAO extends EvidenceDAO{
         this.deleteStudensFromURLFileReceptionWork(connection, oldUrlFile);
         try{
             PreparedStatement sentenceQuery = QUERY.getConnectionDatabase().prepareStatement(
-                "UPDATE ReceptionWork SET urlFile = ?, projectName = ?, impactBA = ?, , evidenceType = ?, "
+                "UPDATE ReceptionWork SET urlFile = ?, projectName = ?, impactBA = ?, evidenceType = ?, "
                     + "evidenceTitle = ?, registrationResponsible = ?, registrationDate = ?, studyDegree = ?, publicationDate = ?, country = ?,"
                     + "description = ?, status = ?, actualDurationInMonths = ?, estimatedDurationInMonths = ?, modality = ? WHERE urlFile = ?;"
             );

@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* @author Johann
+* @versión v1.0
+* Last modification date: 17-06-2021
+*/
 package sgp.ca.demodao;
 
 import java.io.IOException;
@@ -21,21 +21,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import sgp.ca.businesslogic.GeneralResumeDAO;
 import sgp.ca.businesslogic.ProjectDAO;
+import sgp.ca.domain.Integrant;
+import sgp.ca.domain.Lgac;
 import sgp.ca.domain.Project;
 
-/**
- * FXML Controller class
- *
- * @author johan
- */
 public class ProjectFormController implements Initializable {
 
     @FXML
@@ -44,17 +42,14 @@ public class ProjectFormController implements Initializable {
     private Button btnExit;
     @FXML
     private Button btnUpdate;
-    
     @FXML
     private TextField txtFieldTitleProject;
     @FXML
-    private TextField txtFieldLgacAssociate;
+    private ComboBox<String> cboBoxLgacAssociate;
     @FXML
     private DatePicker dtpStartDate;
     @FXML
     private DatePicker dtpEstimatedEndDate;
-    @FXML
-    private CheckBox chBoxEndDate;
     @FXML
     private DatePicker dtpEndDate;
     @FXML
@@ -64,11 +59,13 @@ public class ProjectFormController implements Initializable {
     @FXML
     private TextArea txtAreaDescription;
     @FXML
-    private HBox hboxProjectOptions;
+    private HBox hbProjectOptions;
     
     private final ProjectDAO PROJECT_DAO = new ProjectDAO();
+    private final GeneralResumeDAO GENERALRESUME_DAO = new GeneralResumeDAO();
     private List<Button> optionButtons;
     private Project oldProject  = new Project();
+    private Integrant token;
     
     
     @Override
@@ -77,66 +74,75 @@ public class ProjectFormController implements Initializable {
             btnUpdate, btnSave, 
             btnExit
         );
-        hboxProjectOptions.getChildren().removeAll(optionButtons);
+        hbProjectOptions.getChildren().removeAll(optionButtons);
     }    
 
     public void showProjectSaveForm(){
-        hboxProjectOptions.getChildren().addAll(btnSave, btnExit);
+        hbProjectOptions.getChildren().addAll(btnSave, btnExit);
+        makeitemsLgac();
+        
+        
     }
     
      public void showProjectUpdateForm(Project project){
         oldProject = project;
+        makeitemsLgac();
         this.txtFieldTitleProject.setText(project.getProjectName());
-        this.txtFieldLgacAssociate.setText(project.getBodyAcademyKey());
+        this.cboBoxLgacAssociate.setValue(project.getLgacs().toString());
         this.txtFieldDuration.setText(Integer.toString(project.getDurationProjectInMonths()));
         this.dtpStartDate.setValue(LocalDate.parse(project.getStartDate()));
         this.dtpEstimatedEndDate.setValue(LocalDate.parse(project.getEstimatedEndDate()));
         this.txtFieldStatus.setText(project.getStatus());
         this.txtAreaDescription.setText(project.getDescription());
-        //this.dtpEndDate.setValue(LocalDate.parse(project.getEndDate()));
-        hboxProjectOptions.getChildren().addAll(btnUpdate,  btnExit);
+        this.dtpEndDate.setValue(LocalDate.parse(project.getEndDate()));
+        hbProjectOptions.getChildren().addAll(btnUpdate,  btnExit);
     }
      
     @FXML
     private void saveProject(ActionEvent event){
-//        try{
-//            this.isValidForm();
+        try{
+            this.isValidForm();
             Project project = new Project(
                 txtFieldTitleProject.getText(), 
-                "UV-CA-127",
+                cboBoxLgacAssociate.getValue(),
                 Integer.parseInt(txtFieldDuration.getText()),
                 txtFieldStatus.getText(),
                 ValidatorForm.convertJavaDateToSQlDate(dtpStartDate),
-                null, 
+                optionEndDate(),
                 ValidatorForm.convertJavaDateToSQlDate(dtpEstimatedEndDate),
                 txtAreaDescription.getText()
             );
             PROJECT_DAO.addProject(project);
             GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Proyecto registrado correctamente");
-//        }catch(InvalidFormException ie){
-//            AlertGenerator.showErrorAlert(event, ie.getMessage());
-//        }
+        }catch(InvalidFormException ex){
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), ex.getMessage());
+        }
     }
     
-//    public void isValidForm() throws InvalidFormException{
-//        ValidatorForm.chechkAlphabeticalField(txtFieldTitleProject, 80);
-//        ValidatorForm.isNumberData(txtFieldDuration);
-//        ValidatorForm.checkNotEmptyDateField(dtpStartDate);
-//        ValidatorForm.checkNotEmptyDateField(dtpEstimatedEndDate);
-//        ValidatorForm.chechkAlphabeticalArea(txtAreaDescription, 500);
-//    }
+    public void isValidForm() throws InvalidFormException{
+        ValidatorForm.chechkAlphabeticalField(txtFieldTitleProject, 5 ,80);
+        ValidatorForm.isComboBoxSelected(cboBoxLgacAssociate);
+        ValidatorForm.isNumberData(txtFieldDuration, 2);
+        ValidatorForm.checkNotEmptyDateField(dtpStartDate);
+        ValidatorForm.checkNotEmptyDateField(dtpEstimatedEndDate);
+        ValidatorForm.chechkAlphabeticalArea(txtAreaDescription, 1 ,450);
+    }
     
-    public void receiveProjectUpdate(Project project){
+    public void receiveProjectUpdateToken(Project project, Integrant integrantToken){
+        this.token = integrantToken;
         showProjectUpdateForm(project);
     }
     
-     public void receiveProjectSave(){
+     public void receiveProjectSaveToken(Integrant integrantToken){
+        this.token = integrantToken;
         showProjectSaveForm();
     }
 
     @FXML
     private void exit(ActionEvent event){
-        FXMLLoader loader = changeWindow("ProjectList.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ProjectList.fxml", txtFieldTitleProject);
+        ProjectListController controller = loader.getController();
+        controller.receiveToken(token);
     }
     
     private FXMLLoader changeWindow(String window, Event event){
@@ -157,22 +163,36 @@ public class ProjectFormController implements Initializable {
 
     @FXML
     private void updateProyect(ActionEvent event){
-//        try{
-//            this.isValidForm();
+        try{
+            this.isValidForm();
             Project project = new Project(
                 txtFieldTitleProject.getText(), 
-                "UV-CA-127",
+                cboBoxLgacAssociate.getValue(),
                 Integer.parseInt(txtFieldDuration.getText()),
                 txtFieldStatus.getText(),
                 ValidatorForm.convertJavaDateToSQlDate(dtpStartDate),
-                null, 
+                optionEndDate(),
                 ValidatorForm.convertJavaDateToSQlDate(dtpEstimatedEndDate),
                 txtAreaDescription.getText()
             );
             PROJECT_DAO.updateProject(project, oldProject.getProjectName());
             GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Proyecto actualizado correctamente");
-//        }catch(InvalidFormException ie){
-//            AlertGenerator.showErrorAlert(event, ie.getMessage());
-//        }
+        }catch(InvalidFormException ie){
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), ie.getMessage());
+        }
+    }
+    
+    public String optionEndDate(){
+        String endDate = null;
+        if((dtpEndDate.getValue())!=null){
+            endDate = ValidatorForm.convertJavaDateToSQlDate(dtpEndDate);
+        }
+        return endDate;
+    }
+    
+     private void makeitemsLgac(){
+        for (Lgac lgac : GENERALRESUME_DAO.getGeneralResumeByKey(token.getBodyAcademyKey()).getLgacList()){
+            cboBoxLgacAssociate.getItems().add(lgac.getTitle());
+        }
     }
 }
