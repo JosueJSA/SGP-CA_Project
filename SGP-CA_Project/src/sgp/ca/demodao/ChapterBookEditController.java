@@ -1,4 +1,4 @@
-/**
+/*
  * @author Estefanía 
  * @versión v1.0
  * Last modification date: 17-06-2021
@@ -40,6 +40,7 @@ import sgp.ca.businesslogic.BookDAO;
 import sgp.ca.businesslogic.ChapterBookDAO;
 import sgp.ca.businesslogic.CollaboratorDAO;
 import sgp.ca.businesslogic.IntegrantDAO;
+import sgp.ca.dataaccess.FtpClient;
 import sgp.ca.domain.Book;
 import sgp.ca.domain.ChapterBook;
 import sgp.ca.domain.Collaborator;
@@ -179,15 +180,36 @@ public class ChapterBookEditController implements Initializable{
     
     @FXML
     private void addDocument(ActionEvent event){
-        DialogBox dialogBox = new DialogBox();
-        this.lbDocumentName.setText(dialogBox.openDialogFileSelector());
-        this.chapterBook.setUrlFile(this.lbDocumentName.getText());
-        this.lbDocumentName.setVisible(true);
-        this.imgViewPDFEvidence.setVisible(true);
-        this.btnAddDocument.setVisible(false);
-        this.btnReplaceDocument.setVisible(true);
-        this.btnReplaceDocument.setDisable(false);
+        DialogBox dialogBox = new DialogBox((Stage)((Node)event.getSource()).getScene().getWindow());
+        String documentPath = dialogBox.openDialogFileSelector();
+        if(documentPath != null){
+            String documentName = dialogBox.getFileNameSelected();
+            try{
+                checkExistFile(documentName);
+                uploadFile(documentPath, documentName);
+            }catch(InvalidFormException ex){
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
+            }
+        }
         
+    }
+    
+    private void uploadFile(String path, String fileName) throws InvalidFormException{
+        String link = new FtpClient().saveFileIntoFilesSystem(path, fileName);
+        if(link != null){
+            this.lbDocumentName.setText(link);
+            this.chapterBook.setUrlFile(link);
+            this.btnAddDocument.setDisable(true);
+            this.btnReplaceDocument.setDisable(false);
+        }else{
+            throw new InvalidFormException("Error, parece que el sistema no ha respondido correctamente");
+        }
+    }
+    
+    private void checkExistFile(String fileName) throws InvalidFormException{
+        if(new FtpClient().checkExistFile(fileName)){
+            throw new InvalidFormException("El archivo ya existe en el sistema");
+        }
     }
 
     @FXML
@@ -294,7 +316,18 @@ public class ChapterBookEditController implements Initializable{
 
     @FXML
     private void replaceDocument(ActionEvent event){
-
+        DialogBox dialogBox = new DialogBox((Stage)((Node)event.getSource()).getScene().getWindow());
+        String documentPath = dialogBox.openDialogFileSelector();
+        if(documentPath != null){
+            String documentName = dialogBox.getFileNameSelected();
+            try{
+                new FtpClient().deleteFileFromFilesSystemByName(this.chapterBook.getUrlFile());
+                checkExistFile(documentName);
+                uploadFile(documentPath, documentName);
+            }catch(InvalidFormException ex){
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
+            }
+        }
     }
 
     @FXML

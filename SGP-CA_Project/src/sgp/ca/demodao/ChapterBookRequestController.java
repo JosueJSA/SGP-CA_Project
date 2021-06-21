@@ -1,4 +1,4 @@
-/**
+/*
  * @author Estefanía 
  * @versión v1.0
  * Last modification date: 17-06-2021
@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -23,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import sgp.ca.businesslogic.ChapterBookDAO;
 import sgp.ca.domain.Book;
 import sgp.ca.domain.ChapterBook;
@@ -125,7 +127,12 @@ public class ChapterBookRequestController implements Initializable{
 
     @FXML
     private void downloadDocument(ActionEvent event){
-        
+        DialogBox dialogBox = new DialogBox((Stage)((Node)event.getSource()).getScene().getWindow());
+        if(dialogBox.openDialogDirectorySelector(this.chapterBook.getUrlFile())){
+            GenericWindowDriver.getGenericWindowDriver().showConfirmationAlert(event, "Archivo descargado correctamente");
+        }else{
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "El capítulo de libro no fue descargado");
+        }
     }
 
     @FXML

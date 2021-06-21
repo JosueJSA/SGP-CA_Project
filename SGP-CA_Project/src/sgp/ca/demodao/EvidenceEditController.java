@@ -225,6 +225,9 @@ public class EvidenceEditController implements Initializable{
     private void determineTypeOperationBook(Book book){
         if(book.getUrlFile() == null){
             this.btnAddEvidence.setVisible(true);
+            prepareIntegrantTable();
+            prepareCollaboratorTable();
+            prepareStudentTable();
         }else{
             this.evidence = book;
             this.btnUpdateEvidence.setVisible(true);
@@ -258,6 +261,9 @@ public class EvidenceEditController implements Initializable{
     private void determineTypeOperationPrototype(Prototype prototype){
         if(prototype.getUrlFile() == null){
             this.btnAddEvidence.setVisible(true);
+            prepareIntegrantTable();
+            prepareCollaboratorTable();
+            prepareStudentTable();
         }else{
             this.evidence = prototype;
             this.btnUpdateEvidence.setVisible(true);
@@ -446,8 +452,9 @@ public class EvidenceEditController implements Initializable{
         try{
             ValidatorForm.isComboBoxSelected(cboBoxCollaboratorsName);
             Member collaborator = this.cboBoxCollaboratorsName.getValue();
-            if(validateNotRepeatCollaborator(collaborator, event)){
+            if(validateNotRepeatCollaborator(collaborator)){
                 GenericWindowDriver.getGenericWindowDriver().showWarningAlert(event, "Este colaborador ya ha sido ingresado");
+                this.cboBoxCollaboratorsName.setValue(null);
             }else{
                 this.evidence.getCollaborators().add((Collaborator) collaborator);
                 this.tvCollaborador.setItems(makeitemsCollaboratorsListForTable());
@@ -458,20 +465,20 @@ public class EvidenceEditController implements Initializable{
         }
     }
     
-    private boolean validateNotRepeatCollaborator(Member collaborator, ActionEvent event){
+    private boolean validateNotRepeatCollaborator(Member collaborator){
         boolean repeated = false;
-        for(int i = 0; i > this.tvCollaborador.getItems().size(); i++){
-            if(collaborator.equals(this.tvCollaborador.getItems().get(i))){
+        for(int i = 0; i < this.evidence.getCollaborators().size(); i++){
+            if(collaborator.getRfc().equals(this.evidence.getCollaborators().get(i).getRfc())){
                 repeated = true;
             }
         }
         return repeated;
     }
     
-    private boolean validateNotRepeatIntegrant(Member integrant,ActionEvent event){
+    private boolean validateNotRepeatIntegrant(Member integrant){
         boolean repeated = false;
-        for(int i = 0; i > this.tvIntegrant.getItems().size(); i++){
-            if(integrant.equals(this.tvIntegrant.getItems().get(i))){
+        for(int i = 0; i < this.evidence.getIntegrants().size(); i++){
+            if(integrant.getRfc().equals(this.evidence.getIntegrants().get(i).getRfc())){
                 repeated = true;
             }
         }
@@ -483,8 +490,9 @@ public class EvidenceEditController implements Initializable{
         try{
             ValidatorForm.isComboBoxSelected(cboBoxIntegrantsName);
             Member integrant = this.cboBoxIntegrantsName.getValue();
-            if(validateNotRepeatIntegrant(integrant, event)){
-                GenericWindowDriver.getGenericWindowDriver().showWarningAlert(event, "Este colaborador ya ha sido ingresado");
+            if(validateNotRepeatIntegrant(integrant)){
+                GenericWindowDriver.getGenericWindowDriver().showWarningAlert(event, "Este integrante ya ha sido ingresado");
+                this.cboBoxIntegrantsName.setValue(null);
             }else{
                 this.evidence.getIntegrants().add((Integrant) integrant);
                 this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
