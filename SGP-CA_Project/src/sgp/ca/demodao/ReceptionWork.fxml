@@ -190,7 +190,7 @@
                            </HBox.margin>
                            <children>
                               <Label prefHeight="21.0" prefWidth="206.0" text="Archivo del trabajo recepcinal" />
-                              <Button fx:id="btnFile" mnemonicParsing="false" prefHeight="80.0" prefWidth="375.0" text=" PDF" VBox.vgrow="ALWAYS" />
+                              <Button fx:id="btnFile" mnemonicParsing="false" onAction="#downloadFile" prefHeight="80.0" prefWidth="375.0" text=" PDF" VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
                      </children>

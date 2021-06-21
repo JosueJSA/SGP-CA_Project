@@ -3,6 +3,7 @@
 * @versión v1.0
 * Last modification date: 17-06-2021
 */
+
 package sgp.ca.demodao;
 
 import java.net.URL;
@@ -60,7 +61,6 @@ public class ProjectListController implements Initializable{
    
     @Override
     public void initialize(URL url, ResourceBundle rb){
-        Project initializeProject = new Project();
     }    
     
     public void receiveToken(Integrant integrantToken){
@@ -95,12 +95,12 @@ public class ProjectListController implements Initializable{
     @FXML
     private void searchProject(ActionEvent event){
         if((txtFieldSearch.getText()).equals(null)){
-            if((dtpSearchDate.getValue())!=null){
+            if((dtpSearchDate.getValue())!= null){
                 tvProjects.getItems().clear();
                 setProjectListByDate();
             }    
-        }else {
-            if((dtpSearchDate.getValue())!=null){
+        }else{
+            if((dtpSearchDate.getValue())!= null){
                 tvProjects.getItems().clear();
                 setProjectListInformationByDateAndIssueIntoTable();
             }else{
@@ -152,7 +152,7 @@ public class ProjectListController implements Initializable{
          tvProjects.setItems(makeitemsProjects(listProjectAux)); 
     }
     
-     private void setProjectListInformationByDateAndIssueIntoTable(){
+    private void setProjectListInformationByDateAndIssueIntoTable(){
         String projectDate = dtpSearchDate.getValue().toString();
         String projectIssue = (txtFieldSearch.getText());
         List<Project> listProjectAux = new ArrayList<>();        

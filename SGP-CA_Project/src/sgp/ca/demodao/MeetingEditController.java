@@ -147,13 +147,13 @@ public class MeetingEditController implements Initializable{
     
     private void setMeetingAssistants(){
         for(AssistantRol assistant : this.meeting.getAssistantsRol()){
-            if(assistant.getRoleAssistant() == "Líder de discusión"){
+            if(assistant.getRoleAssistant().equals("Líder de discusión")){
                 this.cboBoxDiscussionLeader.setValue(assistant.getAssistantName());
             }
-            if(assistant.getRoleAssistant() == "Tomador de tiempo"){
+            if(assistant.getRoleAssistant().equals("Tomador de tiempo")){
                 this.cboBoxTimeTaker.setValue(assistant.getAssistantName());
             }
-            if(assistant.getRoleAssistant() == "Secretario"){
+            if(assistant.getRoleAssistant().equals("Secretario")){
                 this.cboBoxSecretary.setValue(assistant.getAssistantName());
             }
         }
@@ -235,7 +235,7 @@ public class MeetingEditController implements Initializable{
     }
     
     private void validateTime() throws InvalidFormException{
-        try {
+        try{
             SimpleDateFormat dateFormat = new SimpleDateFormat ("HH:mm");
             Date meetingDate = dateFormat.parse(this.cboBoxMeetingHour.getValue() +  ":" + this.cboBoxMeetingMinute.getValue());
             Date actualDate = dateFormat.parse(date.get(Calendar.HOUR_OF_DAY) + ":" + (date.get(Calendar.MINUTE) + 4));
@@ -243,7 +243,7 @@ public class MeetingEditController implements Initializable{
                 this.dtpMeetingDate.setStyle("-fx-border-color: red;");
                 throw new InvalidFormException("La hora de reunión no puede ser anterior a la hora actual");
             } 
-        } catch (ParseException ex) {
+        }catch(ParseException ex){
             Logger.getLogger(MeetingEditController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -494,7 +494,7 @@ public class MeetingEditController implements Initializable{
     }
     
     private void comproveMeetingDifferentNull(Meeting meeting){
-        if (meeting == null){
+        if(meeting == null){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(null, "Lo sentimos,no se pudo encontrar la información de la reunión");
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingHistory.fxml", null);
             MeetingHistoryController controller = loader.getController();

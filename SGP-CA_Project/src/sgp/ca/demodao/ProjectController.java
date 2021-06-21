@@ -3,6 +3,7 @@
 * @versión v1.0
 * Last modification date: 17-06-2021
 */
+
 package sgp.ca.demodao;
 
 import java.net.URL;
@@ -56,8 +57,6 @@ public class ProjectController implements Initializable {
     private TableColumn<Evidence, Boolean> colImpactBA;
     @FXML
     private Label lbUserName;
-    @FXML
-    private TextField txtFieldLgac;
     
     private final ProjectDAO PROJECT_DAO = new ProjectDAO();
     private final ReceptionWorkDAO RECEPTIONWORK_DAO = new ReceptionWorkDAO();
@@ -65,7 +64,7 @@ public class ProjectController implements Initializable {
     private Integrant token;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         this.prepareTableFormat();
     }    
     
@@ -79,7 +78,6 @@ public class ProjectController implements Initializable {
     private void setProjectInformation(String projectName){
         PROJECT = PROJECT_DAO.getProjectbyName(projectName);
         this.txtFieldProjectName.setText(PROJECT.getProjectName());
-        this.txtFieldLgac.setText(PROJECT.getLgacs().get(0).getTitle());
         this.txtFieldDuration.setText(Integer.toString(PROJECT.getDurationProjectInMonths()));
         this.txtFieldStartDate.setText(PROJECT.getStartDate());
         this.txtFieldEstimatedEndDate.setText(PROJECT.getEstimatedEndDate());
@@ -89,14 +87,14 @@ public class ProjectController implements Initializable {
     }
 
     @FXML
-    private void modiftyProject(ActionEvent event) {
+    private void modiftyProject(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ProjectForm.fxml", btnExit);
         ProjectFormController controller = loader.getController();
         controller.receiveProjectUpdateToken(PROJECT, token);
     }
 
      @FXML
-    private void exit(ActionEvent event) {
+    private void exit(ActionEvent event){
         FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ProjectList.fxml", btnExit);
         ProjectListController controller = loader.getController();
         controller.receiveToken(this.token);

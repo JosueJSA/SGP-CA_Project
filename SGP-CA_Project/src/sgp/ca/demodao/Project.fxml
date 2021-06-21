@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="641.0" prefWidth="1157.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.ProjectController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="1157.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.ProjectController">
    <top>
       <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="45.0" prefWidth="1300.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -71,7 +71,6 @@
                           <rowConstraints>
                             <RowConstraints minHeight="20.0" prefHeight="30.0" />
                             <RowConstraints minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -79,19 +78,17 @@
                           </rowConstraints>
                            <children>
                               <Label text="Nombre del proyecto de investigación" />
-                              <Label text="LGAC asociadas" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-                              <Label text="Duracion en meses" GridPane.rowIndex="2" />
-                              <Label text="Fecha de inicio" GridPane.rowIndex="3" />
-                              <Label text="Fecha estimada de fin" GridPane.rowIndex="4" />
-                              <Label text="Fecha de fin" GridPane.rowIndex="5" />
-                              <Label text="Estado" GridPane.rowIndex="6" />
+                              <Label text="Duracion en meses" GridPane.rowIndex="1" />
+                              <Label text="Fecha de inicio" GridPane.rowIndex="2" />
+                              <Label text="Fecha estimada de fin" GridPane.rowIndex="3" />
+                              <Label text="Fecha de fin" GridPane.rowIndex="4" />
+                              <Label text="Estado" GridPane.rowIndex="5" />
                               <TextField fx:id="txtFieldProjectName" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-                              <TextField fx:id="txtFieldDuration" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-                              <TextField fx:id="txtFieldStartDate" editable="false" maxWidth="1.7976931348623157E308" prefWidth="393.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-                              <TextField fx:id="txtFieldEstimatedEndDate" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
-                              <TextField fx:id="txtFieldEndDate" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <TextField fx:id="txtFieldStatus" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <TextField fx:id="txtFieldLgac" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtFieldDuration" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtFieldStartDate" editable="false" maxWidth="1.7976931348623157E308" prefWidth="393.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                              <TextField fx:id="txtFieldEstimatedEndDate" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                              <TextField fx:id="txtFieldEndDate" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <TextField fx:id="txtFieldStatus" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                            </children>
                            <VBox.margin>
                               <Insets />

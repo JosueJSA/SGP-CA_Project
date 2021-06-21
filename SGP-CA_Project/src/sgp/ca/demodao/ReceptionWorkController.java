@@ -3,6 +3,7 @@
 * @versión v1.0
 * Last modification date: 17-06-2021
 */
+
 package sgp.ca.demodao;
 
 import java.net.URL;
@@ -21,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import sgp.ca.businesslogic.ReceptionWorkDAO;
 import sgp.ca.domain.Collaborator;
 import sgp.ca.domain.Evidence;
@@ -67,15 +69,16 @@ public class ReceptionWorkController implements Initializable, EvidenceWindow {
     private final ReceptionWorkDAO RECEPTIONWORK_DAO = new ReceptionWorkDAO();
     private Integrant token;
     private ReceptionWork receptionWork;
-    
+    private String urlFile = "";
         
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        this.lbUserName.setText(token.getFullName());
+    public void initialize(URL url, ResourceBundle rb){
     }    
 
     public void receiveReceptionWork(String url, Integrant token){  
         this.token = token;
+        this.urlFile = url;
+        this.lbUserName.setText(token.getFullName());
         setReceptionWorkInformation(url);
     }
     
@@ -154,6 +157,16 @@ public class ReceptionWorkController implements Initializable, EvidenceWindow {
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ReceptionWork.fxml", graphicElement);
             ReceptionWorkController controller = loader.getController();
             controller.receiveReceptionWork(evidence.getUrlFile(), token);
+        }
+    }
+
+    @FXML
+    private void downloadFile(ActionEvent event){
+        DialogBox dialogBox = new DialogBox((Stage)((Node)event.getSource()).getScene().getWindow());
+        if(dialogBox.openDialogDirectorySelector(this.urlFile)){
+            GenericWindowDriver.getGenericWindowDriver().showConfirmationAlert(event, "Archivo descargado correctamente");
+        }else{
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "El documento no fue descargado");
         }
     }
 }

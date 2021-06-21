@@ -3,6 +3,7 @@
 * @versión v1.0
 * Last modification date: 17-06-2021
 */
+
 package sgp.ca.demodao;
 
 import java.net.URL;
@@ -11,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;

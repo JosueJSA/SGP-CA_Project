@@ -3,6 +3,7 @@
 * @versión v1.0
 * Last modification date: 17-06-2021
 */
+
 package sgp.ca.demodao;
 
 import java.net.URL;
@@ -91,8 +92,6 @@ public class ReceptionWorkFormController implements Initializable {
     @FXML
     private ListView<String> lvRequirements;
     @FXML
-    private Button btnUploadFile;
-    @FXML
     private Button btnSave;
     @FXML
     private Button btnUpdate;
@@ -106,6 +105,12 @@ public class ReceptionWorkFormController implements Initializable {
     private HBox hbReceptionOptions;
     @FXML
     private Label lbUserName;
+    @FXML
+    private Button btnAddDocument;
+    @FXML
+    private Button btnReplaceDocument;
+    @FXML
+    private Label lbDocumentName;
     
     private final ReceptionWorkDAO RECEPTIONWORK_DAO = new ReceptionWorkDAO();
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
@@ -115,14 +120,12 @@ public class ReceptionWorkFormController implements Initializable {
     private DialogBox TESTBOX;
     private String FILE = null;
     private Integrant token;
-    private String UrlReception;
+    private String UrlReception = "";
     private final ObservableList<String> MODALITYLIST = FXCollections.observableArrayList("Tesis", "Tesina", "Memoria", "Proyecto de Inversion", "Reporte");
     private final ObservableList<String> STATUSLIST = FXCollections.observableArrayList("Propuesto", "Asignado", "Cancelado", "Terminado");
    
-   
     @Override
     public void initialize(URL url, ResourceBundle rb){
-        this.lbUserName.setText(token.getFullName());
         colIntegrantName.setCellValueFactory(new PropertyValueFactory<IntegrantTable, String>("integrantName"));
         colIntegrantParticipation.setCellValueFactory(new PropertyValueFactory<IntegrantTable, RadioButton>("participation"));
         colCollaboratorName.setCellValueFactory(new PropertyValueFactory<CollaboratorTable, String>("collaboratorName"));
@@ -137,13 +140,14 @@ public class ReceptionWorkFormController implements Initializable {
         cboBoxStatus.setItems(STATUSLIST);
     }    
 
-    public void showReceptionWorkSaveForm(){
+    private void showReceptionWorkSaveForm(){
         hbReceptionOptions.getChildren().addAll(btnSave, btnExit);
         tvIntegrant.setItems(makeitemsIntegrant());
         tvCollaborator.setItems(makeitemsCollaborator());
+        
     }
     
-    public void showReceptionWorkUpdateForm(String receptionWorkUrl){
+    private void showReceptionWorkUpdateForm(String receptionWorkUrl){
         hbReceptionOptions.getChildren().addAll(btnUpdate, btnExit);
         ReceptionWork receptionWork = RECEPTIONWORK_DAO.getEvidenceByUrl(receptionWorkUrl);
         this.chBoxImpactBA.setSelected(receptionWork.getImpactAB());
@@ -163,12 +167,14 @@ public class ReceptionWorkFormController implements Initializable {
     
     public void receiveReceptionWorkUpdateToken(ReceptionWork receptionWork, Integrant integrantToken){
         this.token = integrantToken;
+        this.lbUserName.setText(token.getFullName());
         this.UrlReception = receptionWork.getUrlFile();
         showReceptionWorkUpdateForm(receptionWork.getUrlFile());
     }
     
     public void receiveReceptionWorkSaveToken(Integrant integrantToken){
         this.token = integrantToken;
+        this.lbUserName.setText(token.getFullName());
         showReceptionWorkSaveForm();
     }
     
@@ -203,6 +209,9 @@ public class ReceptionWorkFormController implements Initializable {
                 receptionWork.setCollaborators(CollaboratorList());
                 RECEPTIONWORK_DAO.addNewEvidence(receptionWork);
                 GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Trabajo recepcional registrado correctamente");
+                FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", txtFieldReceptionWorkName);          
+                EvidenceListController controller = loader.getController();
+                controller.showGeneralResumeEvidences(token);
             }catch(InvalidFormException ie){
                 GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), ie.getMessage());
             }
@@ -241,6 +250,9 @@ public class ReceptionWorkFormController implements Initializable {
             receptionWork.setCollaborators(CollaboratorList());
             RECEPTIONWORK_DAO.updateEvidence(receptionWork, UrlReception);
             GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Trabajo recepcional actualizado correctamente");
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("EvidenceList.fxml", txtFieldReceptionWorkName);          
+            EvidenceListController controller = loader.getController();
+            controller.showGeneralResumeEvidences(token);
         }catch(InvalidFormException ie){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), ie.getMessage());
         }
@@ -254,9 +266,9 @@ public class ReceptionWorkFormController implements Initializable {
     }
     
     public void isValidForm() throws InvalidFormException{
-        ValidatorForm.chechkAlphabeticalField(txtFieldReceptionWorkName, 5,80);
+        ValidatorForm.chechkAlphabeticalField(txtFieldReceptionWorkName, 5,200);
         ValidatorForm.checkNotEmptyDateField(dtpPublicationDate);
-        ValidatorForm.chechkAlphabeticalField(txtFieldCountry, 3,40);
+        ValidatorForm.chechkAlphabeticalField(txtFieldCountry, 3,90);
         ValidatorForm.isComboBoxSelected(cboxProject);
         ValidatorForm.isNumberData(txtFieldEstimatedDurationMonth, 2);
         ValidatorForm.isComboBoxSelected(cboBoxStatus);
@@ -333,14 +345,6 @@ public class ReceptionWorkFormController implements Initializable {
             txtFieldRequirements.setText("");
         }
     }
-
-    @FXML
-    private void uploadFIle(ActionEvent event){
-        TESTBOX = new DialogBox(((Stage)((Node)event.getSource()).getScene().getWindow()));
-        FtpClient connection = new FtpClient();
-        FILE = connection.saveFileIntoFilesSystem(TESTBOX.getFileSelectedPath(), TESTBOX.getFileNameSelected());
-        UrlReception = TESTBOX.getFileNameSelected();
-    }
    
     private List<Integrant> IntegrantList(){
         List<Integrant> itemsIntegrantSelected = new ArrayList<>();
@@ -379,6 +383,55 @@ public class ReceptionWorkFormController implements Initializable {
             lvRequirements.getItems().remove(indexSelection);
         }else{
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), "No a seleccionado un acuerdo");
+        }
+    }
+
+    @FXML
+    private void addDocument(ActionEvent event){
+        DialogBox dialogBox = new DialogBox((Stage)((Node)event.getSource()).getScene().getWindow());
+        String documentPath = dialogBox.openDialogFileSelector();
+        if(documentPath != null){
+            String documentName = dialogBox.getFileNameSelected();
+            try{
+                checkExistFile(documentName);
+                uploadFile(documentPath, documentName);
+            }catch(InvalidFormException ex){
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
+            }
+        }
+    }
+
+    @FXML
+    private void replaceDocument(ActionEvent event){
+        DialogBox dialogBox = new DialogBox((Stage)((Node)event.getSource()).getScene().getWindow());
+        String documentPath = dialogBox.openDialogFileSelector();
+        if(documentPath != null){
+            String documentName = dialogBox.getFileNameSelected();
+            try{
+                new FtpClient().deleteFileFromFilesSystemByName(this.UrlReception);
+                checkExistFile(documentName);
+                uploadFile(documentPath, documentName);
+            }catch(InvalidFormException ex){
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
+            }
+        }
+    }
+    
+    private void uploadFile(String path, String fileName) throws InvalidFormException{
+        String link = new FtpClient().saveFileIntoFilesSystem(path, fileName);
+        if(link != null){
+            this.lbDocumentName.setText(link);
+            UrlReception = link;
+            this.btnAddDocument.setDisable(true);
+            this.btnReplaceDocument.setDisable(false);
+        }else{
+            throw new InvalidFormException("Error, parece que el sistema no ha respondido correctamente");
+        }
+    }
+    
+    private void checkExistFile(String fileName) throws InvalidFormException{
+        if(new FtpClient().checkExistFile(fileName)){
+            throw new InvalidFormException("El archivo ya existe en el sistema");
         }
     }
 }

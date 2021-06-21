@@ -6,7 +6,6 @@
 
 package sgp.ca.businesslogic;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -101,7 +100,7 @@ public class ReceptionWorkDAO extends EvidenceDAO{
     }
 
     @Override
-    public ReceptionWork getEvidenceByUrl(String urlEvidenceFile) {
+    public ReceptionWork getEvidenceByUrl(String urlEvidenceFile){
         ReceptionWork ReceptionWork = new ReceptionWork();
         Connection connection = QUERY.getConnectionDatabaseNotAutoCommit();
         try{
@@ -380,7 +379,7 @@ public class ReceptionWorkDAO extends EvidenceDAO{
     }
 
     @Override
-    public boolean addNewEvidence(Evidence evidence) {
+    public boolean addNewEvidence(Evidence evidence){
         boolean correctInsert = false;
        Connection connection = QUERY.getConnectionDatabaseNotAutoCommit();
         try{
@@ -609,7 +608,7 @@ public class ReceptionWorkDAO extends EvidenceDAO{
     }
 
     @Override
-    public String toString() {
+    public String toString(){
         return "Trabajo Recepcional";
     }
 

@@ -1,7 +1,9 @@
-/**
-* @author Johann 
-* Last modification date format: 26-03-2021
+/*
+* @author Johann
+* @versión v1.0
+* Last modification date: 17-06-2021
 */
+
 package sgp.ca.domain;
 
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ public class ReceptionWork extends Evidence{
     public ReceptionWork(String urlFile, String projectName, boolean impactAB, String evidenceType, String evidenceTitle, 
             String registrationResponsible, String registrationDate, String studyDegree,  String publicationDate, 
             String country, String description, String status, int actualDurationInMonths, 
-            int estimatedDurationInMonths, String modality) {
+            int estimatedDurationInMonths, String modality){
         super(
             urlFile, projectName, evidenceTitle, country, 
             publicationDate, impactAB, registrationDate, 
@@ -30,18 +32,17 @@ public class ReceptionWork extends Evidence{
         this.actualDurationInMonths = actualDurationInMonths;
         this.estimatedDurationInMonths = estimatedDurationInMonths;
         this.modality = modality;
-        this.requirements = new ArrayList();
-        
+        this.requirements = new ArrayList();        
     }
 
     public ReceptionWork(String evidenceType, String evidenceTitle, 
-    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile){
         super(evidenceType, evidenceTitle, impactAB, registrationResponsible, registrationDate, urlFile);
     }
     
     public ReceptionWork(String urlFile, String projectName, boolean impactAB, String evidenceType, String evidenceTitle, 
             String registrationResponsible, String registrationDate, String studyDegree,  String publicationDate, 
-            String country) {
+            String country){
         super(
             urlFile, projectName, evidenceTitle, country, 
             publicationDate, impactAB, registrationDate, 
@@ -54,51 +55,51 @@ public class ReceptionWork extends Evidence{
         this.requirements = new ArrayList();
     }
 
-    public String getDescription() {
+    public String getDescription(){
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String description){
         this.description = description;
     }
 
-    public String getStatus() {
+    public String getStatus(){
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status){
         this.status = status;
     }
 
-    public String getModality() {
+    public String getModality(){
         return modality;
     }
 
-    public void setModality(String modality) {
+    public void setModality(String modality){
         this.modality = modality;
     }
 
-    public int getActualDurationInMonths() {
+    public int getActualDurationInMonths(){
         return actualDurationInMonths;
     }
 
-    public void setActualDurationInMonths(int actualDurationInMonths) {
+    public void setActualDurationInMonths(int actualDurationInMonths){
         this.actualDurationInMonths = actualDurationInMonths;
     }
 
-    public int getEstimatedDurationInMonths() {
+    public int getEstimatedDurationInMonths(){
         return estimatedDurationInMonths;
     }
 
-    public void setEstimatedDurationInMonths(int estimatedDurationInMonths) {
+    public void setEstimatedDurationInMonths(int estimatedDurationInMonths){
         this.estimatedDurationInMonths = estimatedDurationInMonths;
     }
     
-    public List<String> getRequirements() {
+    public List<String> getRequirements(){
         return requirements;
     }
 
-    public void setRequirements(List<String> requirements) {
+    public void setRequirements(List<String> requirements){
         this.requirements = requirements;
     }
     
@@ -108,7 +109,7 @@ public class ReceptionWork extends Evidence{
     }
 
     @Override
-    public Evidence getSpecificEvidenceInstance(String evidenceType) {
+    public Evidence getSpecificEvidenceInstance(String evidenceType){
         Evidence evidence = null;
         if(this.toString().equalsIgnoreCase(evidenceType)){
             evidence = new ReceptionWork();
@@ -118,7 +119,7 @@ public class ReceptionWork extends Evidence{
 
     @Override
     public Evidence getSpecificEvidenceInstance(String evidenceType, String evidenceTitle, 
-    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile) {
+    boolean impactAB, String registrationResponsible, String registrationDate, String urlFile){
         Evidence evidence = null;
         if(this.toString().equalsIgnoreCase(evidenceType)){
             evidence = new ReceptionWork(

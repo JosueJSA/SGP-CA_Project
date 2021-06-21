@@ -1,3 +1,8 @@
+/*
+* @author Johann
+* @versión v1.0
+* Last modification date: 17-06-2021
+*/
 
 package sgp.ca.demodao;
 
@@ -14,27 +19,27 @@ public class IntegrantTable {
         this.participation = new RadioButton();
     }
 
-    public String getIntegrantName() {
+    public String getIntegrantName(){
         return integrantName;
     }
 
-    public void setIntegrantName(String integrantName) {
+    public void setIntegrantName(String integrantName){
         this.integrantName = integrantName;
     }
 
-    public RadioButton getParticipation() {
+    public RadioButton getParticipation(){
         return participation;
     }
 
-    public void setParticipation(RadioButton assistant) {
+    public void setParticipation(RadioButton assistant){
         this.participation = participation;
     }
 
-    public String getIntegrantRfc() {
+    public String getIntegrantRfc(){
         return integrantRfc;
     }
 
-    public void setIntegrantRfc(String integrantRfc) {
+    public void setIntegrantRfc(String integrantRfc){
         this.integrantRfc = integrantRfc;
     }
 }

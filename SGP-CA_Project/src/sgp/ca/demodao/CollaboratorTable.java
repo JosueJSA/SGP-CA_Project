@@ -1,8 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* @author Johann
+* @versión v1.0
+* Last modification date: 17-06-2021
+*/
+
 package sgp.ca.demodao;
 
 import javafx.scene.control.RadioButton;
@@ -18,27 +19,27 @@ public class CollaboratorTable {
         this.participation = new RadioButton();
     }
 
-    public String getCollaboratorName() {
+    public String getCollaboratorName(){
         return collaboratorName;
     }
 
-    public void setCollaboratorName(String collaboratorName) {
+    public void setCollaboratorName(String collaboratorName){
         this.collaboratorName = collaboratorName;
     }
 
-    public RadioButton getParticipation() {
+    public RadioButton getParticipation(){
         return participation;
     }
 
-    public void setParticipation(RadioButton assistant) {
+    public void setParticipation(RadioButton assistant){
         this.participation = participation;
     }
 
-    public String getCollaboratorRfc() {
+    public String getCollaboratorRfc(){
         return collaboratorRfc;
     }
 
-    public void setCollaboratorRfc(String collaboratorRfc) {
+    public void setCollaboratorRfc(String collaboratorRfc){
         this.collaboratorRfc = collaboratorRfc;
     }
     

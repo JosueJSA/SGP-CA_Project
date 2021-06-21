@@ -6,7 +6,6 @@
 
 package sgp.ca.businesslogic;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,9 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.demodao.ValidatorForm;
-import sgp.ca.domain.Lgac;
 import sgp.ca.domain.Project;
-
 
 public class ProjectDAO implements IProjectDAO{
     
@@ -65,7 +62,6 @@ public class ProjectDAO implements IProjectDAO{
         }
     }
     
-
     @Override
     public void addProject(Project newProject){
         Connection connection = QUERY.getConnectionDatabaseNotAutoCommit();
@@ -82,9 +78,6 @@ public class ProjectDAO implements IProjectDAO{
             sentenceQuery.setString(7, newProject.getEstimatedEndDate());
             sentenceQuery.setString(8, newProject.getDescription());
             sentenceQuery.executeUpdate();
-            this.insertIntoLgacProject(connection, newProject);
-            connection.commit();
-            connection.setAutoCommit(true);
         }catch(SQLException sqlEsception){
             try{
                 connection.rollback();
@@ -119,7 +112,6 @@ public class ProjectDAO implements IProjectDAO{
                     queryResult.getString("description")
                 );
             }
-            project.setLgac(this.getListLgacProject(connection, project));
         }catch(SQLException sqlException){
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
@@ -134,8 +126,8 @@ public class ProjectDAO implements IProjectDAO{
         Connection connection = QUERY.getConnectionDatabaseNotAutoCommit();
         try{
             PreparedStatement sentenceQuery = QUERY.getConnectionDatabase().prepareStatement(
-                "UPDATE Project SET projectaName = ?, bodyAcademyKey = ?, durationProjectInMonths = ?, status = ?,"
-                + " startDate = ?, endDate = ?, estimatedEndDate = ?, description= ? WHERE projectaName = ?;"
+                "UPDATE Project SET projectName = ?, bodyAcademyKey = ?, durationProjectInMonths = ?, status = ?,"
+                + " startDate = ?, endDate = ?, estimatedEndDate = ?, description= ? WHERE projectName = ?;"
             );
             sentenceQuery.setString(1, project.getProjectName());
             sentenceQuery.setString(2, project.getBodyAcademyKey());
@@ -147,9 +139,6 @@ public class ProjectDAO implements IProjectDAO{
             sentenceQuery.setString(8, project.getDescription());
             sentenceQuery.setString(9, oldProjectName);
             sentenceQuery.executeUpdate();
-            this.insertIntoLgacProject(connection, project);
-            connection.commit();
-            connection.setAutoCommit(true);
             check = true;
         }catch(SQLException sqlException){
             try{
@@ -161,49 +150,6 @@ public class ProjectDAO implements IProjectDAO{
         }finally{
             QUERY.closeConnection();
             return check;
-        }
-    }
-    
-    private void insertIntoLgacProject(Connection connection, Project project){
-        project.getLgacs().forEach(lgac -> {
-            try{
-                PreparedStatement sentenceQuery = connection.prepareStatement(
-                    "INSERT INTO `LgakProject` (title, projectName) VALUES (?, ?);"
-                );
-                sentenceQuery.setString(1, lgac.getTitle());
-                sentenceQuery.setString(2, project.getProjectName());
-                sentenceQuery.executeUpdate();
-            }catch(SQLException sqlException){
-                try{
-                    connection.rollback();
-                    Logger.getLogger(Project.class.getName()).log(Level.SEVERE, null, sqlException);
-                }catch(SQLException ex){
-                    Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-    }
-    
-    private List<Lgac> getListLgacProject(Connection connection, Project project){
-        List<Lgac> listLgac = new ArrayList<>();
-        try{
-            PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT * FROM `LgakProject` WHERE projectName = ?;"
-            );
-            sentenceQuery.setString(1, project.getProjectName());
-            ResultSet result = sentenceQuery.executeQuery();
-            connection.commit();
-            while(result.next()){
-                listLgac.add(new Lgac(
-                    result.getString("title")
-                ));
-            }
-        }catch(SQLException ex){
-            listLgac = null;
-            connection.rollback();
-            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            return listLgac;
         }
     }
     
