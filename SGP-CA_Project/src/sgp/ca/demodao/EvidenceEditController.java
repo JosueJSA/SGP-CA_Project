@@ -1,4 +1,4 @@
-/**
+/*
  * @author Estefanía 
  * @versión v1.0
  * Last modification date: 17-06-2021
@@ -7,9 +7,12 @@
 package sgp.ca.demodao;
 
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
@@ -336,11 +339,26 @@ public class EvidenceEditController implements Initializable{
     public void validateEvidenceInformation() throws InvalidFormException{
         ValidatorForm.chechkAlphabeticalField(this.txtFieldEvidenceTittle, 5, 80);
         ValidatorForm.checkNotEmptyDateField(dtpPublicationDate);
+        validateDate();
         ValidatorForm.chechkAlphabeticalField(this.txtFieldPublicationCountry, 3, 90);
         ValidatorForm.isComboBoxSelected(this.cboBoxInvestigationProject);
         ValidatorForm.isComboBoxSelected(this.cboBoxStudyDegree);
         if(this.evidence.getUrlFile() == null){
             throw new InvalidFormException("No has subido ningún archivo");
+        }
+    }
+    
+    private void validateDate() throws InvalidFormException{
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd");
+            Date meetingDate = dateFormat.parse(this.dtpPublicationDate.getValue().toString());
+            Date actualDate = dateFormat.parse(date.get(Calendar.YEAR) + "-" + (date.get(Calendar.MONTH) + 1) + "-" + date.get(Calendar.DAY_OF_MONTH));
+            if(meetingDate.after(actualDate)){
+                this.dtpPublicationDate.setStyle("-fx-border-color: red;");
+                throw new InvalidFormException("La fecha de publicación no puede ser mayor a la fecha actual");
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(MeetingEditController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -377,10 +395,8 @@ public class EvidenceEditController implements Initializable{
     
     private void getOutBookInformation(){
         ((Book)this.evidence).setPublisher(this.txtFieldPublisher.getText());
-        
-        int editionNumber= Integer.parseInt(this.txtFieldEditionsNumber.getText());
+        int editionNumber = Integer.parseInt(this.txtFieldEditionsNumber.getText());
         ((Book)this.evidence).setEditionsNumber(editionNumber);
-        
         ((Book)this.evidence).setIsbn(this.txtFieldISBN.getText());
     }
     
@@ -430,12 +446,36 @@ public class EvidenceEditController implements Initializable{
         try{
             ValidatorForm.isComboBoxSelected(cboBoxCollaboratorsName);
             Member collaborator = this.cboBoxCollaboratorsName.getValue();
-            this.evidence.getCollaborators().add((Collaborator) collaborator);
-            this.tvCollaborador.setItems(makeitemsCollaboratorsListForTable());
-            this.cboBoxCollaboratorsName.setValue(null);
+            if(validateNotRepeatCollaborator(collaborator, event)){
+                GenericWindowDriver.getGenericWindowDriver().showWarningAlert(event, "Este colaborador ya ha sido ingresado");
+            }else{
+                this.evidence.getCollaborators().add((Collaborator) collaborator);
+                this.tvCollaborador.setItems(makeitemsCollaboratorsListForTable());
+                this.cboBoxCollaboratorsName.setValue(null);
+            }
         }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
+    }
+    
+    private boolean validateNotRepeatCollaborator(Member collaborator, ActionEvent event){
+        boolean repeated = false;
+        for(int i = 0; i > this.tvCollaborador.getItems().size(); i++){
+            if(collaborator.equals(this.tvCollaborador.getItems().get(i))){
+                repeated = true;
+            }
+        }
+        return repeated;
+    }
+    
+    private boolean validateNotRepeatIntegrant(Member integrant,ActionEvent event){
+        boolean repeated = false;
+        for(int i = 0; i > this.tvIntegrant.getItems().size(); i++){
+            if(integrant.equals(this.tvIntegrant.getItems().get(i))){
+                repeated = true;
+            }
+        }
+        return repeated;
     }
 
     @FXML
@@ -443,10 +483,13 @@ public class EvidenceEditController implements Initializable{
         try{
             ValidatorForm.isComboBoxSelected(cboBoxIntegrantsName);
             Member integrant = this.cboBoxIntegrantsName.getValue();
-            this.evidence.getIntegrants().add((Integrant) integrant);
-            System.out.print(evidence.getIntegrants().size());
-            this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
-            this.cboBoxIntegrantsName.setValue(null);
+            if(validateNotRepeatIntegrant(integrant, event)){
+                GenericWindowDriver.getGenericWindowDriver().showWarningAlert(event, "Este colaborador ya ha sido ingresado");
+            }else{
+                this.evidence.getIntegrants().add((Integrant) integrant);
+                this.tvIntegrant.setItems(makeitemsIntegrantsListForTable());
+                this.cboBoxIntegrantsName.setValue(null);
+            }
         }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }

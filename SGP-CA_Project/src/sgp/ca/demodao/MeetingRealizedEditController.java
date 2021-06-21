@@ -73,7 +73,6 @@ public class MeetingRealizedEditController implements Initializable{
     
     @Override
     public void initialize(URL url, ResourceBundle rb){
-        this.cboBoxResponsibleAgreement.setItems(makeitemsIntegrantForComboBox());
     }
     
     public void reciveMeeting (Meeting meeting){
@@ -85,6 +84,7 @@ public class MeetingRealizedEditController implements Initializable{
     public void receiveToken(Integrant integrantToken){
         this.token = integrantToken;
         this.lbUserName.setText(token.getFullName());
+        this.cboBoxResponsibleAgreement.setItems(makeitemsIntegrantForComboBox());
     }
     
     private void setMeetingInformation(){
@@ -136,6 +136,8 @@ public class MeetingRealizedEditController implements Initializable{
             controller.receiveToken(token);
         }
     }
+    
+    
 
     @FXML
     private void deleteAgreementFile(ActionEvent event){
@@ -199,11 +201,8 @@ public class MeetingRealizedEditController implements Initializable{
     
     private ObservableList<String> makeitemsIntegrantForComboBox(){
         ObservableList<String> itemsIntegrant = FXCollections.observableArrayList();
-        List<String> integrantsName = INTEGRANT_DAO.getAllIntegrantsName();
+        List<String> integrantsName = INTEGRANT_DAO.getAllIntegrantsName(token.getBodyAcademyKey());
         itemsIntegrant.addAll(integrantsName);
         return itemsIntegrant;
-    }
-    
-    
-    
+    }    
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * @author Estefanía 
  * @versión v1.0
  * Last modification date: 17-06-2021
@@ -85,8 +85,6 @@ public class MeetingRequestController implements Initializable{
     private TableColumn<AssistantRol, String> colAssistantName;
     @FXML
     private TableColumn<AssistantRol, String> colRolAssistant;
-    @FXML
-    private TableColumn<AssistantRol, String> colInitialsAssistants;
     @FXML
     private TableView<Prerequisite> tvPrerequisite;
     @FXML
@@ -279,9 +277,8 @@ public class MeetingRequestController implements Initializable{
     }
     
     private void preparedAssistantTable(){
-        colAssistantName.setCellValueFactory(new PropertyValueFactory<AssistantRol, String>("assistantRfc"));
+        colAssistantName.setCellValueFactory(new PropertyValueFactory<AssistantRol, String>("nameAssistant"));
         colRolAssistant.setCellValueFactory(new PropertyValueFactory<AssistantRol, String>("roleAssistant"));
-        colInitialsAssistants.setCellValueFactory(new PropertyValueFactory<AssistantRol, String>("initialsAssistant"));
         tvAssistantRol.setItems(makeItemsForAssistantRolTableView());
     }
     

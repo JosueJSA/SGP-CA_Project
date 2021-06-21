@@ -37,7 +37,7 @@ public class MeetingInsertTest{
         meeting.getAssistantsRol().add(new AssistantRol(0, "Josue Sangabriel Alarcon", "Secretario", 1, "AJSG"));
         meeting.getAssistantsRol().add(new AssistantRol(0, "Estefanía Berenice Martínez Ramírez", "Tomador de tiempo",2, "EBMR"));
         boolean agregada = MEETING_DAO.addMeeting(meeting);
-        //MEETING_DAO.deleteMeeting(meeting);
+        MEETING_DAO.deleteMeeting(meeting);
         Assert.assertEquals(agregada, true);
     }
     

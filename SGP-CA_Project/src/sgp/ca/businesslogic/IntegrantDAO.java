@@ -24,12 +24,13 @@ import sgp.ca.domain.Schooling;
 
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
     
-    public List<String> getAllIntegrantsName(){
+    public List<String> getAllIntegrantsName(String bodyAcademyKey){
         List<String> integrantsNameList = new ArrayList();
         try{
             PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
-                "SELECT * FROM Integrant;"
+                "SELECT * FROM Integrant WHERE participationStatus = 'Activo' AND bodyAcademyKey = ?;"
             );
+            sentenceQuery.setString(1, bodyAcademyKey);
             ResultSet queryResult = sentenceQuery.executeQuery();
             while(queryResult.next()){
                 String integrantName = queryResult.getString("fullName");

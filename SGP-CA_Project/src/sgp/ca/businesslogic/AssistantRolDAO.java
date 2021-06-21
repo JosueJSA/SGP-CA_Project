@@ -33,7 +33,7 @@ public class AssistantRolDAO implements IAssistantRolDAO{
                 sentenceQuery.setInt(2, meeting.getMeetingKey());
                 sentenceQuery.setString(3, assistantRol.getRoleAssistant());
                 sentenceQuery.setInt(4, assistantRol.getAssistantNumber());
-                sentenceQuery.setString(5, assistantRol.getInitialsAssistant());
+                sentenceQuery.setString(5, assistantRol.getNameAssistant());
                 sentenceQuery.executeUpdate();
             }catch(SQLException sqlException){
                 try{

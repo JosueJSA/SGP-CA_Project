@@ -1,4 +1,4 @@
-/**
+/*
  * @author Estefanía 
  * @versión v1.0
  * Last modification date: 17-06-2021
@@ -11,15 +11,15 @@ public class AssistantRol{
     private String assistantRfc;
     private String roleAssistant;
     private int assistantNumber;
-    private String initialsAssistant;
+    private String nameAssistant;
 
     public AssistantRol(int assistantRolKey, String assistantRfc, 
-    String roleAssistant, int assistantNumber, String initialsAssistant){
+    String roleAssistant, int assistantNumber, String nameAssistant){
         this.assistantRolKey = assistantRolKey;
         this.assistantRfc = assistantRfc;
         this.roleAssistant = roleAssistant;
         this.assistantNumber = assistantNumber;
-        this.initialsAssistant = initialsAssistant;
+        this.nameAssistant = nameAssistant;
     }
 
     public AssistantRol(){
@@ -58,12 +58,12 @@ public class AssistantRol{
         this.assistantNumber = assistantNumber;
     }
 
-    public String getInitialsAssistant(){
-        return initialsAssistant;
+    public String getNameAssistant(){
+        return nameAssistant;
     }
 
-    public void setInitialsAssistant(String initialsAssistant){
-        this.initialsAssistant = initialsAssistant;
+    public void setNameAssistant(String nameAssistant){
+        this.nameAssistant = nameAssistant;
     }
 
     

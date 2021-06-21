@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1246.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MeetingRequestController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1246.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MeetingRequestController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: WHITE;" BorderPane.alignment="CENTER">
          <children>
@@ -42,7 +42,7 @@
             <Button fx:id="btnCloseMeetingWindow" mnemonicParsing="false" onAction="#closeMeetingWindow" prefHeight="31.0" prefWidth="91.0" text="SALIR" />
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Button fx:id="btnDownloadMinute" disable="true" mnemonicParsing="false" onAction="#downloadMinute" text="DESCARGAR MINUTA" />
+                  <Button fx:id="btnDownloadMinute" disable="true" mnemonicParsing="false" onAction="#downloadMinute" text="DESCARGAR MINUTA" visible="false" />
                   <Button fx:id="btnCancelMeeting" mnemonicParsing="false" onAction="#cancelMeeting" text="CANCELAR REUNIÓN" />
                </children>
                <padding>
@@ -268,9 +268,8 @@
                                     </Label>
                                     <TableView fx:id="tvAssistantRol" prefHeight="200.0" prefWidth="200.0">
                                       <columns>
-                                        <TableColumn fx:id="colAssistantName" editable="false" prefWidth="371.0" resizable="false" sortable="false" text="Integrante" />
-                                        <TableColumn fx:id="colRolAssistant" editable="false" prefWidth="343.0" resizable="false" sortable="false" text="Rol" />
-                                          <TableColumn fx:id="colInitialsAssistants" editable="false" prefWidth="180.0" resizable="false" sortable="false" text="Iniciales" />
+                                        <TableColumn fx:id="colAssistantName" editable="false" prefWidth="589.0" resizable="false" sortable="false" text="Integrante" />
+                                        <TableColumn fx:id="colRolAssistant" editable="false" prefWidth="305.0" resizable="false" sortable="false" text="Rol" />
                                       </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
