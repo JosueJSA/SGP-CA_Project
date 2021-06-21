@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.demodao.ValidatorForm;
+import sgp.ca.domain.Lgac;
 import sgp.ca.domain.Project;
 
 
@@ -95,66 +96,17 @@ public class ProjectDAO implements IProjectDAO{
             QUERY.closeConnection();
         }
     }
-
-    @Override
-    public List<Project> getProjectListbyName(String projectName) {
-        List<Project> listProjects = new ArrayList<>();
-        try{
-            PreparedStatement instructionQuery = QUERY.getConnectionDatabase().prepareStatement("SELECT projectName, "
-                    + "durationProjectInMonths, status, startDate, endDate FROM Project WHERE projectName = ? ;");
-            instructionQuery.setString(1, projectName);
-            ResultSet queryResult = instructionQuery.executeQuery();
-            while(queryResult.next()){
-                listProjects.add(new Project(
-                    queryResult.getString("projectName"),
-                    queryResult.getInt("durationProjectInMonths"),
-                    queryResult.getString("status"),
-                    queryResult.getString("startDate"),
-                    queryResult.getString("endDate")));
-            }
-        }catch(SQLException sqlException){
-            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, sqlException);
-        }finally{
-            QUERY.closeConnection();
-            return listProjects;
-        }
-    }
-    
-    
-
-    @Override
-    public List<Project> getProjectListbyDate(String dateFilter, String currentDate) {
-        List<Project> listProjects = new ArrayList<>();
-        try{
-            PreparedStatement instructionQuery = QUERY.getConnectionDatabase().prepareStatement("SELECT projectName, "
-                    + "durationProjectInMonths, status, startDate, endDate FROM Project WHERE startDate BETWEEN ? and ? ;");  
-            instructionQuery.setString(1, dateFilter);
-            instructionQuery.setString(2, currentDate);
-            ResultSet queryResult = instructionQuery.executeQuery();
-            while(queryResult.next()){
-                listProjects.add(new Project(
-                    queryResult.getString("projectName"),
-                    queryResult.getInt("durationProjectInMonths"),
-                    queryResult.getString("status"),
-                    queryResult.getString("startDate"),
-                    queryResult.getString("endDate")));
-            }
-        }catch(SQLException sqlException){
-            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, sqlException);
-        }finally{
-            QUERY.closeConnection();
-            return listProjects;
-        }
-    }
     
     @Override
     public Project getProjectbyName(String projectName) {
         Project project = new Project();
+        Connection connection = QUERY.getConnectionDatabaseNotAutoCommit();
         try{
-            PreparedStatement instructionQuery = QUERY.getConnectionDatabase().prepareStatement("SELECT *"
+            PreparedStatement instructionQuery = connection.prepareStatement("SELECT *"
                     + " FROM Project WHERE projectName = ? ;");
             instructionQuery.setString(1, projectName);
             ResultSet queryResult = instructionQuery.executeQuery();
+            connection.commit();
             if(queryResult.next()){
                 project = new Project(
                     queryResult.getString("projectName"),
@@ -167,6 +119,7 @@ public class ProjectDAO implements IProjectDAO{
                     queryResult.getString("description")
                 );
             }
+            project.setLgac(this.getListLgacProject(connection, project));
         }catch(SQLException sqlException){
             Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, sqlException);
         }finally{
@@ -197,6 +150,7 @@ public class ProjectDAO implements IProjectDAO{
             this.insertIntoLgacProject(connection, project);
             connection.commit();
             connection.setAutoCommit(true);
+            check = true;
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
@@ -206,18 +160,17 @@ public class ProjectDAO implements IProjectDAO{
             }
         }finally{
             QUERY.closeConnection();
-            check = true;
             return check;
         }
     }
     
-    public void insertIntoLgacProject(Connection connection, Project project){
-        project.getLgacs().forEach( lgac -> {
+    private void insertIntoLgacProject(Connection connection, Project project){
+        project.getLgacs().forEach(lgac -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
-                    "INSERT INTO IntegratnReceptionWork (rfc, urlFile) VALUES (?, ?);"
+                    "INSERT INTO `LgakProject` (title, projectName) VALUES (?, ?);"
                 );
-                sentenceQuery.setString(1, lgac.getIdentifierLgac() );
+                sentenceQuery.setString(1, lgac.getTitle());
                 sentenceQuery.setString(2, project.getProjectName());
                 sentenceQuery.executeUpdate();
             }catch(SQLException sqlException){
@@ -229,5 +182,48 @@ public class ProjectDAO implements IProjectDAO{
                 }
             }
         });
+    }
+    
+    private List<Lgac> getListLgacProject(Connection connection, Project project){
+        List<Lgac> listLgac = new ArrayList<>();
+        try{
+            PreparedStatement sentenceQuery = connection.prepareStatement(
+                "SELECT * FROM `LgakProject` WHERE projectName = ?;"
+            );
+            sentenceQuery.setString(1, project.getProjectName());
+            ResultSet result = sentenceQuery.executeQuery();
+            connection.commit();
+            while(result.next()){
+                listLgac.add(new Lgac(
+                    result.getString("title")
+                ));
+            }
+        }catch(SQLException ex){
+            listLgac = null;
+            connection.rollback();
+            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            return listLgac;
+        }
+    }
+    
+    @Override
+    public boolean projectRegistered(String projectName){
+        boolean isRegistered = false;
+        try{
+            PreparedStatement sentenceQuery = QUERY.getConnectionDatabase().prepareStatement(
+                "SELECT projectName FROM Project WHERE projectName = ?;"
+            );
+            sentenceQuery.setString(1, projectName);
+            ResultSet queryResult = sentenceQuery.executeQuery();
+            if(queryResult.next()){
+                isRegistered = true;                
+            }
+        }catch(SQLException sqlException){
+            Logger.getLogger(ProjectDAO.class.getName()).log(Level.SEVERE, null, sqlException);
+        }finally{
+            QUERY.closeConnection();
+            return isRegistered;
+        }
     }
 }

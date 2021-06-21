@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -21,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -30,6 +32,7 @@ import sgp.ca.businesslogic.MeetingDAO;
 import sgp.ca.domain.Agreement;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Meeting;
+import sgp.ca.domain.MeetingAgenda;
 import sgp.ca.domain.Topic;
 
 public class StartMeetingController implements Initializable{
@@ -70,14 +73,16 @@ public class StartMeetingController implements Initializable{
     private Button btnEndMeeting;
     @FXML
     private Button btnExitMeeting;
+    @FXML
+    private Label lbUserName;
 
     private Meeting meeting;
     private final MeetingDAO MEETING_DAO = new MeetingDAO();
     private Integrant token;
     
-   
     @Override
     public void initialize(URL url, ResourceBundle rb){
+        lbUserName.setText(token.getFullName());
         coldescriptionAgreement.setCellValueFactory(new PropertyValueFactory<>("descriptionAgreement"));
         colResponsibleAgreement.setCellValueFactory(new PropertyValueFactory<>("responsibleAgreement"));
         coldeliveryDate.setCellValueFactory(new PropertyValueFactory<>("deliveryDate"));
@@ -124,12 +129,15 @@ public class StartMeetingController implements Initializable{
 
     @FXML
     private void endMeeting(ActionEvent event){
+        MeetingAgenda meetingAgenda = new MeetingAgenda();
           try{
             this.isValidForm();
             meeting.setAgreements(tvAgreement.getItems());
             meeting.setMeetingNote(txtAreaNoteMeeting.getText());
             meeting.setMeetingPending(txtAreaPendingMeeting.getText());
             meeting.setStatusMeeting("Finalizada");
+            meetingAgenda.setTopics(listTopic());
+            meeting.setMeetingAgenda(meetingAgenda);
             if(MEETING_DAO.updateMeeting(meeting, meeting)){
                 GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Se actualizó correctamente");
             }else{
@@ -194,5 +202,13 @@ public class StartMeetingController implements Initializable{
     private void isValidForm() throws InvalidFormException{
         ValidatorForm.chechkAlphabeticalArea(txtAreaNoteMeeting, 5 ,2000);
         ValidatorForm.chechkAlphabeticalArea(txtAreaPendingMeeting, 3 ,80);
-    }   
+    }
+    
+    private List<Topic> listTopic(){
+        List<Topic> listTopics = new ArrayList<>();
+        for(Topic topic : tvAgenda.getItems()){
+            listTopics.add(topic);
+        }
+        return listTopics;
+    }
 }

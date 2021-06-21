@@ -21,7 +21,7 @@ public class ProjectInitializer{
     private Project project;
     
     public void prepareProjectInsertionForTest(){
-        if(PROJECT_DAO.getProjectListbyName("PRUEBA PROYECTO") != null){
+        if(PROJECT_DAO.getProjectbyName("PRUEBA PROYECTO") != null){
              project = new Project(
                 "PRUEBA PROYECTO","UV-CA-127", 6, "Activo", 
                 "2021-04-07", null, "2021-10-09", "Enfocado en predecir lo que sucedera en los años siguientes"

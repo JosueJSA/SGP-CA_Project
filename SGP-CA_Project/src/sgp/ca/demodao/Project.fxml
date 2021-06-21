@@ -91,7 +91,7 @@
                               <TextField fx:id="txtFieldEstimatedEndDate" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
                               <TextField fx:id="txtFieldEndDate" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                               <TextField fx:id="txtFieldStatus" editable="false" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <TextField fx:id="txtFieldLgac" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtFieldLgac" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            </children>
                            <VBox.margin>
                               <Insets />

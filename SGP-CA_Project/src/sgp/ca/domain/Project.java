@@ -133,6 +133,10 @@ public class Project {
         }
         return lgacReturn;
     }
+
+    public void setLgac(List<Lgac> lgac) {
+        this.lgac = lgac;
+    }
     
     public List<Lgac> getLgacs() {
         return lgac;

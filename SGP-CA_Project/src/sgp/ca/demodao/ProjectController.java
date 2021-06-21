@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -80,7 +79,7 @@ public class ProjectController implements Initializable {
     private void setProjectInformation(String projectName){
         PROJECT = PROJECT_DAO.getProjectbyName(projectName);
         this.txtFieldProjectName.setText(PROJECT.getProjectName());
-        this.txtFieldLgac.setText(PROJECT.getLgacs().get(0).toString());
+        this.txtFieldLgac.setText(PROJECT.getLgacs().get(0).getTitle());
         this.txtFieldDuration.setText(Integer.toString(PROJECT.getDurationProjectInMonths()));
         this.txtFieldStartDate.setText(PROJECT.getStartDate());
         this.txtFieldEstimatedEndDate.setText(PROJECT.getEstimatedEndDate());

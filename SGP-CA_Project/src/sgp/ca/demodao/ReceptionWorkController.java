@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -60,13 +61,17 @@ public class ReceptionWorkController implements Initializable, EvidenceWindow {
     private ListView<String> lvStudent;
     @FXML
     private ListView<String> lvRequirements;
+    @FXML
+    private Label lbUserName;
     
     private final ReceptionWorkDAO RECEPTIONWORK_DAO = new ReceptionWorkDAO();
     private Integrant token;
     private ReceptionWork receptionWork;
+    
         
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.lbUserName.setText(token.getFullName());
     }    
 
     public void receiveReceptionWork(String url, Integrant token){  

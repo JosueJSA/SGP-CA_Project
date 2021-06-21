@@ -227,7 +227,7 @@ public class ReceptionWorkDAO extends EvidenceDAO{
     }
     
     public void insertIntoIntegrantReceptionWork(Connection connection, ReceptionWork receptionWork){
-        receptionWork.getIntegrants().forEach( integrant -> {
+        receptionWork.getIntegrants().forEach(integrant -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
                     "INSERT INTO IntegrantReceptionWork (rfc, urlFile) VALUES (?, ?);"
@@ -247,7 +247,7 @@ public class ReceptionWorkDAO extends EvidenceDAO{
     }
     
     public void insertIntoCollaboratorReceptionWork(Connection connection, ReceptionWork receptionWork){
-        receptionWork.getCollaborators().forEach( collaborator -> {
+        receptionWork.getCollaborators().forEach(collaborator -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
                     "INSERT INTO CollaborateReceptionWork (rfc, urlFile) VALUES (?, ?);"
@@ -267,7 +267,7 @@ public class ReceptionWorkDAO extends EvidenceDAO{
     }
     
     public void insertIntoStudentReceptionWork(Connection connection, ReceptionWork receptionWork){
-        receptionWork.getStudents().forEach( student -> {
+        receptionWork.getStudents().forEach(student -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
                     "INSERT INTO ReceptionWorkStudent (urlFile, student) VALUES (?, ?);"
@@ -288,7 +288,7 @@ public class ReceptionWorkDAO extends EvidenceDAO{
     }
     
     public void insertIntoRequirementReceptionWork(Connection connection, ReceptionWork receptionWork){
-        receptionWork.getRequirements().forEach( requirement -> {
+        receptionWork.getRequirements().forEach(requirement -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
                     "INSERT INTO ReceptionWorkRequirement (urlFile, requirement) VALUES (?, ?);"

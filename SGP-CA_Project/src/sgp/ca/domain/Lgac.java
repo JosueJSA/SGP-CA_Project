@@ -25,6 +25,10 @@ public class Lgac{
         this.description = description;
         this.bodyAcademyRelated = bodyAcademyRelated;
     }
+
+    public Lgac(String title) {
+        this.title = title;
+    }
     
     public Lgac(){
     }

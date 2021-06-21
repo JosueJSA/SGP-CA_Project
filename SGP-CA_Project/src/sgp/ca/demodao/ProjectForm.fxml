@@ -53,13 +53,10 @@
    <center>
       <VBox maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Label maxWidth="1.7976931348623157E308" text="NUEVO PROYECTO" underline="true">
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="NUEVO PROYECTO" textAlignment="CENTER">
                <font>
-                  <Font name="System Bold Italic" size="23.0" />
+                  <Font name="System Bold" size="23.0" />
                </font>
-               <padding>
-                  <Insets left="150.0" />
-               </padding>
             </Label>
             <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="667.0" prefWidth="521.0" VBox.vgrow="ALWAYS">
                <children>
@@ -79,14 +76,14 @@
                                                 <Insets top="20.0" />
                                              </VBox.margin>
                                           </Label>
-                                          <TextField fx:id="txtFieldTitleProject" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="311.0" VBox.vgrow="ALWAYS">
+                                          <TextField fx:id="txtFieldProjectName" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="311.0" VBox.vgrow="ALWAYS">
                                              <VBox.margin>
                                                 <Insets />
                                              </VBox.margin>
                                           </TextField>
                                           <VBox maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                                              <children>
-                                                <Label maxWidth="1.7976931348623157E308" text=" LGAC Asociadas" VBox.vgrow="ALWAYS">
+                                                <Label maxWidth="1.7976931348623157E308" text=" LGAC Asociada" VBox.vgrow="ALWAYS">
                                                    <font>
                                                       <Font size="16.0" />
                                                    </font>
@@ -140,7 +137,7 @@
                                                       </VBox>
                                                       <VBox maxWidth="1.7976931348623157E308" prefHeight="89.0" prefWidth="170.0" HBox.hgrow="ALWAYS">
                                                          <children>
-                                                            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="235.0" text="Duración" VBox.vgrow="ALWAYS">
+                                                            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="235.0" text="Duración (Meses)" VBox.vgrow="ALWAYS">
                                                                <font>
                                                                   <Font size="16.0" />
                                                                </font>
@@ -156,7 +153,7 @@
                                                       </VBox>
                                                       <VBox maxWidth="1.7976931348623157E308" prefHeight="89.0" prefWidth="170.0">
                                                          <children>
-                                                            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="255.0" text="Fecha Fin" VBox.vgrow="ALWAYS">
+                                                            <Label alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="235.0" text="Fecha Fin">
                                                                <font>
                                                                   <Font size="16.0" />
                                                                </font>
@@ -175,9 +172,9 @@
                                                 </HBox>
                                              </children>
                                           </VBox>
-                                          <VBox maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+                                          <VBox maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="552.0" VBox.vgrow="ALWAYS">
                                              <children>
-                                                <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Estado" VBox.vgrow="ALWAYS">
+                                                <Label alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="552.0" text="Estado" VBox.vgrow="ALWAYS">
                                                    <font>
                                                       <Font size="16.0" />
                                                    </font>
@@ -185,7 +182,7 @@
                                                       <Insets top="10.0" />
                                                    </VBox.margin>
                                                 </Label>
-                                                <TextField fx:id="txtFieldStatus" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="311.0" VBox.vgrow="ALWAYS" />
+                                                <ComboBox fx:id="cboBoxStatus" prefHeight="31.0" prefWidth="792.0" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -194,7 +191,7 @@
                               </VBox>
                            </children>
                         </VBox>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="275.0" prefWidth="552.0" VBox.vgrow="ALWAYS">
                            <children>
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Descripción" VBox.vgrow="ALWAYS">
                                  <font>
@@ -204,7 +201,7 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </Label>
-                              <TextArea fx:id="txtAreaDescription" prefHeight="200.0" prefWidth="200.0" />
+                              <TextArea fx:id="txtAreaDescription" prefHeight="229.0" prefWidth="552.0" />
                            </children>
                         </VBox>
                      </children>

@@ -5,29 +5,27 @@
 */
 package sgp.ca.demodao;
 
-import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sgp.ca.businesslogic.GeneralResumeDAO;
 import sgp.ca.businesslogic.ProjectDAO;
 import sgp.ca.domain.Integrant;
@@ -43,7 +41,7 @@ public class ProjectFormController implements Initializable {
     @FXML
     private Button btnUpdate;
     @FXML
-    private TextField txtFieldTitleProject;
+    private TextField txtFieldProjectName;
     @FXML
     private ComboBox<String> cboBoxLgacAssociate;
     @FXML
@@ -55,7 +53,7 @@ public class ProjectFormController implements Initializable {
     @FXML
     private TextField txtFieldDuration;
     @FXML
-    private TextField txtFieldStatus;
+    private ComboBox<String> cboBoxStatus;
     @FXML
     private TextArea txtAreaDescription;
     @FXML
@@ -66,7 +64,7 @@ public class ProjectFormController implements Initializable {
     private List<Button> optionButtons;
     private Project oldProject  = new Project();
     private Integrant token;
-    
+    private final ObservableList<String> STATUSLIST = FXCollections.observableArrayList("Propuesto", "Asignado", "Cancelado", "Terminado");
     
     @Override
     public void initialize(URL url, ResourceBundle rb){
@@ -75,24 +73,23 @@ public class ProjectFormController implements Initializable {
             btnExit
         );
         hbProjectOptions.getChildren().removeAll(optionButtons);
+        cboBoxStatus.setItems(STATUSLIST);
     }    
 
     public void showProjectSaveForm(){
         hbProjectOptions.getChildren().addAll(btnSave, btnExit);
         makeitemsLgac();
-        
-        
     }
     
-     public void showProjectUpdateForm(Project project){
+    public void showProjectUpdateForm(Project project){
         oldProject = project;
         makeitemsLgac();
-        this.txtFieldTitleProject.setText(project.getProjectName());
-        this.cboBoxLgacAssociate.setValue(project.getLgacs().toString());
+        this.txtFieldProjectName.setText(project.getProjectName());
+        this.cboBoxLgacAssociate.setValue(project.getLgacs().get(0).getTitle());
         this.txtFieldDuration.setText(Integer.toString(project.getDurationProjectInMonths()));
         this.dtpStartDate.setValue(LocalDate.parse(project.getStartDate()));
         this.dtpEstimatedEndDate.setValue(LocalDate.parse(project.getEstimatedEndDate()));
-        this.txtFieldStatus.setText(project.getStatus());
+        this.cboBoxStatus.setValue(project.getStatus());
         this.txtAreaDescription.setText(project.getDescription());
         this.dtpEndDate.setValue(LocalDate.parse(project.getEndDate()));
         hbProjectOptions.getChildren().addAll(btnUpdate,  btnExit);
@@ -102,16 +99,19 @@ public class ProjectFormController implements Initializable {
     private void saveProject(ActionEvent event){
         try{
             this.isValidForm();
+            checkExistProjectName();
+            checkStatusWithDates();
             Project project = new Project(
-                txtFieldTitleProject.getText(), 
-                cboBoxLgacAssociate.getValue(),
+                txtFieldProjectName.getText(), 
+                token.getBodyAcademyKey(),
                 Integer.parseInt(txtFieldDuration.getText()),
-                txtFieldStatus.getText(),
+                cboBoxStatus.getValue(),
                 ValidatorForm.convertJavaDateToSQlDate(dtpStartDate),
                 optionEndDate(),
                 ValidatorForm.convertJavaDateToSQlDate(dtpEstimatedEndDate),
                 txtAreaDescription.getText()
             );
+            project.getLgacs().add(new Lgac(cboBoxLgacAssociate.getValue()));
             PROJECT_DAO.addProject(project);
             GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Proyecto registrado correctamente");
         }catch(InvalidFormException ex){
@@ -120,12 +120,20 @@ public class ProjectFormController implements Initializable {
     }
     
     public void isValidForm() throws InvalidFormException{
-        ValidatorForm.chechkAlphabeticalField(txtFieldTitleProject, 5 ,80);
+        ValidatorForm.chechkAlphabeticalField(txtFieldProjectName, 5 ,80);
         ValidatorForm.isComboBoxSelected(cboBoxLgacAssociate);
         ValidatorForm.isNumberData(txtFieldDuration, 2);
         ValidatorForm.checkNotEmptyDateField(dtpStartDate);
         ValidatorForm.checkNotEmptyDateField(dtpEstimatedEndDate);
+        if(cboBoxStatus.getValue() == "Terminado"){
+            ValidatorForm.checkNotEmptyDateField(dtpEndDate);
+        }
+        ValidatorForm.isComboBoxSelected(cboBoxStatus);
         ValidatorForm.chechkAlphabeticalArea(txtAreaDescription, 1 ,450);
+        if(dtpEstimatedEndDate.getValue().isBefore(dtpStartDate.getValue())){
+            dtpStartDate.setStyle("-fx-border-color: red;");
+            throw new InvalidFormException("La fecha de inicio no puede ser despues de la fecha estimada de fin");
+        }
     }
     
     public void receiveProjectUpdateToken(Project project, Integrant integrantToken){
@@ -140,36 +148,20 @@ public class ProjectFormController implements Initializable {
 
     @FXML
     private void exit(ActionEvent event){
-        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ProjectList.fxml", txtFieldTitleProject);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("ProjectList.fxml", txtFieldProjectName);
         ProjectListController controller = loader.getController();
         controller.receiveToken(token);
     }
     
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show();
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
-    }
-
     @FXML
     private void updateProyect(ActionEvent event){
         try{
             this.isValidForm();
             Project project = new Project(
-                txtFieldTitleProject.getText(), 
+                txtFieldProjectName.getText(), 
                 cboBoxLgacAssociate.getValue(),
                 Integer.parseInt(txtFieldDuration.getText()),
-                txtFieldStatus.getText(),
+                cboBoxStatus.getValue(),
                 ValidatorForm.convertJavaDateToSQlDate(dtpStartDate),
                 optionEndDate(),
                 ValidatorForm.convertJavaDateToSQlDate(dtpEstimatedEndDate),
@@ -193,6 +185,23 @@ public class ProjectFormController implements Initializable {
      private void makeitemsLgac(){
         for (Lgac lgac : GENERALRESUME_DAO.getGeneralResumeByKey(token.getBodyAcademyKey()).getLgacList()){
             cboBoxLgacAssociate.getItems().add(lgac.getTitle());
+        }
+    }
+
+    private void checkExistProjectName() throws InvalidFormException{
+        if(PROJECT_DAO.projectRegistered(this.txtFieldProjectName.getText())){
+            this.txtFieldProjectName.setStyle("-fx-border-color: red;");
+            throw new InvalidFormException("Ya existe un Proyecto con el mismo nombre");
+        }
+    }
+     
+    private void checkStatusWithDates() throws InvalidFormException{
+        java.util.Date date = new Date();
+        if("Terminado".equals(this.cboBoxStatus.getValue())){
+            if(dtpEndDate.getValue().isBefore(LocalDate.parse(date.toString()))){
+                dtpStartDate.setStyle("-fx-border-color: red;");
+                throw new InvalidFormException("La fecha de inicio no puede ser despues de la fecha estimada de fin");
+            }
         }
     }
 }

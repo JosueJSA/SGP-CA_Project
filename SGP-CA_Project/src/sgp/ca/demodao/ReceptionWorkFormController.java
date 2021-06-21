@@ -31,6 +31,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import sgp.ca.dataaccess.FtpClient;
@@ -74,19 +75,19 @@ public class ReceptionWorkFormController implements Initializable {
     @FXML
     private Button btnAddStudent;
     @FXML
+    private Button btnDeleteStudent;
+    @FXML
     private ListView<String> lvStudent;
     @FXML
     private TextField txtFieldEstimatedDurationMonth;
     @FXML
-    private TextField txtFieldStatus;
+    private ComboBox<String> cboBoxStatus;
     @FXML
     private ComboBox<String> cboBoxModality;
     @FXML
     private TextArea txtAreaDescription;
     @FXML
     private TextField txtFieldRequirements;
-    @FXML
-    private Button btnRequirements;
     @FXML
     private ListView<String> lvRequirements;
     @FXML
@@ -98,7 +99,13 @@ public class ReceptionWorkFormController implements Initializable {
     @FXML
     private Button btnExit;
     @FXML
+    private Button btnAddRequirement;
+    @FXML
+    private Button btnDeleteRequirements;
+    @FXML
     private HBox hbReceptionOptions;
+    @FXML
+    private Label lbUserName;
     
     private final ReceptionWorkDAO RECEPTIONWORK_DAO = new ReceptionWorkDAO();
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
@@ -110,9 +117,12 @@ public class ReceptionWorkFormController implements Initializable {
     private Integrant token;
     private String UrlReception;
     private final ObservableList<String> MODALITYLIST = FXCollections.observableArrayList("Tesis", "Tesina", "Memoria", "Proyecto de Inversion", "Reporte");
-    
+    private final ObservableList<String> STATUSLIST = FXCollections.observableArrayList("Propuesto", "Asignado", "Cancelado", "Terminado");
+   
+   
     @Override
     public void initialize(URL url, ResourceBundle rb){
+        this.lbUserName.setText(token.getFullName());
         colIntegrantName.setCellValueFactory(new PropertyValueFactory<IntegrantTable, String>("integrantName"));
         colIntegrantParticipation.setCellValueFactory(new PropertyValueFactory<IntegrantTable, RadioButton>("participation"));
         colCollaboratorName.setCellValueFactory(new PropertyValueFactory<CollaboratorTable, String>("collaboratorName"));
@@ -124,10 +134,13 @@ public class ReceptionWorkFormController implements Initializable {
             btnExit
         );
         hbReceptionOptions.getChildren().removeAll(optionButtons);        
+        cboBoxStatus.setItems(STATUSLIST);
     }    
 
     public void showReceptionWorkSaveForm(){
         hbReceptionOptions.getChildren().addAll(btnSave, btnExit);
+        tvIntegrant.setItems(makeitemsIntegrant());
+        tvCollaborator.setItems(makeitemsCollaborator());
     }
     
     public void showReceptionWorkUpdateForm(String receptionWorkUrl){
@@ -142,7 +155,7 @@ public class ReceptionWorkFormController implements Initializable {
         tvCollaborator.setItems(makeitemsCollaborator());
         this.lvStudent.setItems(makeItemsStudent(receptionWork.getStudents()));
         this.txtFieldEstimatedDurationMonth.setText(Integer.toString(receptionWork.getEstimatedDurationInMonths()));
-        this.txtFieldStatus.setText(receptionWork.getStatus());
+        this.cboBoxStatus.setValue(receptionWork.getStatus());
         this.cboBoxModality.setValue(receptionWork.getModality());
         this.txtAreaDescription.setText(receptionWork.getDescription());
         this.lvRequirements.setItems(makeItemsRequirements(receptionWork.getRequirements()));
@@ -179,7 +192,7 @@ public class ReceptionWorkFormController implements Initializable {
                     ValidatorForm.convertJavaDateToSQlDate(dtpPublicationDate),
                     txtFieldCountry.getText(),
                     txtAreaDescription.getText(),
-                    txtFieldStatus.getText(),
+                    cboBoxStatus.getValue(),
                     0,
                     Integer.parseInt(txtFieldEstimatedDurationMonth.getText()),
                     cboBoxModality.getValue()
@@ -217,7 +230,7 @@ public class ReceptionWorkFormController implements Initializable {
                 ValidatorForm.convertJavaDateToSQlDate(dtpPublicationDate),
                 txtFieldCountry.getText(),
                 txtAreaDescription.getText(),
-                txtFieldStatus.getText(),
+                cboBoxStatus.getValue(),
                 0,
                 Integer.parseInt(txtFieldEstimatedDurationMonth.getText()),
                 cboBoxModality.getValue()
@@ -246,7 +259,7 @@ public class ReceptionWorkFormController implements Initializable {
         ValidatorForm.chechkAlphabeticalField(txtFieldCountry, 3,40);
         ValidatorForm.isComboBoxSelected(cboxProject);
         ValidatorForm.isNumberData(txtFieldEstimatedDurationMonth, 2);
-        ValidatorForm.chechkAlphabeticalField(txtFieldStatus,3 ,10);
+        ValidatorForm.isComboBoxSelected(cboBoxStatus);
         ValidatorForm.isComboBoxSelected(cboBoxModality);
         ValidatorForm.chechkAlphabeticalArea(txtAreaDescription, 1 ,500);
     }
@@ -300,22 +313,30 @@ public class ReceptionWorkFormController implements Initializable {
     @FXML
     private void addStudent(ActionEvent event){
         List<String> itemsStudent = new ArrayList<>();
-        itemsStudent.add(txtFieldStudent.getText());
-        lvStudent.getItems().addAll(itemsStudent);
-        txtFieldStudent.setText("");
+        if(txtFieldStudent.getText() == null){
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), "No se puede agregar un estudiante vacio");
+        }else{
+            itemsStudent.add(txtFieldStudent.getText());
+            lvStudent.getItems().addAll(itemsStudent);
+            txtFieldStudent.setText("");
+        }
     }
     
     @FXML
-    private void addRequirements(ActionEvent event){
+    private void addRequirement(ActionEvent event){
         List<String> itemsRequirements = new ArrayList<>();
-        itemsRequirements.add(txtFieldRequirements.getText());
-        lvRequirements.getItems().addAll(itemsRequirements);
-        txtFieldRequirements.setText("");;
+        if(txtFieldRequirements.getText() == null){
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), "No se puede agregar un estudiante vacio");
+        }else{
+            itemsRequirements.add(txtFieldRequirements.getText());
+            lvRequirements.getItems().addAll(itemsRequirements);
+            txtFieldRequirements.setText("");
+        }
     }
 
     @FXML
     private void uploadFIle(ActionEvent event){
-        TESTBOX = new DialogBox( ((Stage)((Node)event.getSource()).getScene().getWindow()));
+        TESTBOX = new DialogBox(((Stage)((Node)event.getSource()).getScene().getWindow()));
         FtpClient connection = new FtpClient();
         FILE = connection.saveFileIntoFilesSystem(TESTBOX.getFileSelectedPath(), TESTBOX.getFileNameSelected());
         UrlReception = TESTBOX.getFileNameSelected();
@@ -339,5 +360,25 @@ public class ReceptionWorkFormController implements Initializable {
             }
         }
         return itemsCollaboratorSelected;
+    }
+
+    @FXML
+    private void deleteStudent(ActionEvent event) {
+        int indexSelection = lvStudent.getSelectionModel().getSelectedIndex();
+        if(indexSelection >= 0){
+            lvStudent.getItems().remove(indexSelection);
+        }else{
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), "No a seleccionado un acuerdo");
+        }
+    }
+
+    @FXML
+    private void deleteRequirement(ActionEvent event) {
+        int indexSelection = lvRequirements.getSelectionModel().getSelectedIndex();
+        if(indexSelection >= 0){
+            lvRequirements.getItems().remove(indexSelection);
+        }else{
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(new ActionEvent(), "No a seleccionado un acuerdo");
+        }
     }
 }

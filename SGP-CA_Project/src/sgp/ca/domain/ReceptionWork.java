@@ -15,7 +15,6 @@ public class ReceptionWork extends Evidence{
     private int actualDurationInMonths;
     private int estimatedDurationInMonths;
     private List<String> requirements;
-    private List<Lgac> lgac;
     
     public ReceptionWork(String urlFile, String projectName, boolean impactAB, String evidenceType, String evidenceTitle, 
             String registrationResponsible, String registrationDate, String studyDegree,  String publicationDate, 
@@ -32,7 +31,6 @@ public class ReceptionWork extends Evidence{
         this.estimatedDurationInMonths = estimatedDurationInMonths;
         this.modality = modality;
         this.requirements = new ArrayList();
-        this.lgac = new ArrayList();
         
     }
 
@@ -49,14 +47,11 @@ public class ReceptionWork extends Evidence{
             publicationDate, impactAB, registrationDate, 
             registrationResponsible, studyDegree, evidenceType
         );
-        this.requirements = new ArrayList();
-        this.lgac = new ArrayList();
-        
+        this.requirements = new ArrayList();  
     }
     
     public ReceptionWork(){
         this.requirements = new ArrayList();
-        this.lgac = new ArrayList();
     }
 
     public String getDescription() {
@@ -105,14 +100,6 @@ public class ReceptionWork extends Evidence{
 
     public void setRequirements(List<String> requirements) {
         this.requirements = requirements;
-    }
-
-    public List<Lgac> getLgacs() {
-        return lgac;
-    }
-
-    public void setLgac(List<Lgac> lgac) {
-        this.lgac = lgac;
     }
     
     @Override
