@@ -125,9 +125,9 @@ public class MeetingUpdate{
         newMeeting.getMeetingAgenda().setPrerequisites(oldMeeting.getMeetingAgenda().getPrerequisites());
         newMeeting.setAgreements(oldMeeting.getAgreements());
         newMeeting.setComments(oldMeeting.getComments());
-        newMeeting.getAssistantsRol().add(new AssistantRol(0, "Angel Juan Sánchez García", "Secretario", 1, "AJSG"));
-        newMeeting.getAssistantsRol().add(new AssistantRol(0, "Jorge Octavio Ocharán Hernández", "Lider de discusión", 2, "JOOH"));
-        newMeeting.getAssistantsRol().add(new AssistantRol(0, "Juan Carlos Pérez Arriaga", "Tomador de tiempo", 3, "MKCV"));
+        newMeeting.getAssistantsRol().add(new AssistantRol(0, "Angel Juan Sánchez García", "Secretario", 1));
+        newMeeting.getAssistantsRol().add(new AssistantRol(0, "Jorge Octavio Ocharán Hernández", "Lider de discusión", 2));
+        newMeeting.getAssistantsRol().add(new AssistantRol(0, "Juan Carlos Pérez Arriaga", "Tomador de tiempo", 3));
         MEETING_DAO.updateMeeting(newMeeting, oldMeeting);
         Meeting meetingRetrieved = MEETING_DAO.getMeeting(3);
         MEETING_DAO.deleteMeeting(newMeeting);

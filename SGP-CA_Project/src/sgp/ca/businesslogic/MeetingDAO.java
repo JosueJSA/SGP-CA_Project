@@ -161,6 +161,7 @@ public class MeetingDAO implements IMeetingDAO{
             meetingAgendaDAO.addMeetingAgenda(connection, meeting);
             agreementDAO.addAgreements(connection, meeting);
             commentDAO.addComment(connection, meeting);
+            assisntantRolDAO.addAssistantRol(connection, meeting);
             connection.commit();
             connection.setAutoCommit(true);
             uptadedMeeting = true;

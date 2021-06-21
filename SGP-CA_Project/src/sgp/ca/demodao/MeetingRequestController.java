@@ -277,7 +277,7 @@ public class MeetingRequestController implements Initializable{
     }
     
     private void preparedAssistantTable(){
-        colAssistantName.setCellValueFactory(new PropertyValueFactory<AssistantRol, String>("nameAssistant"));
+        colAssistantName.setCellValueFactory(new PropertyValueFactory<AssistantRol, String>("assistantName"));
         colRolAssistant.setCellValueFactory(new PropertyValueFactory<AssistantRol, String>("roleAssistant"));
         tvAssistantRol.setItems(makeItemsForAssistantRolTableView());
     }

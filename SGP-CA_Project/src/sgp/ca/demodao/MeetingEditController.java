@@ -33,13 +33,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.businesslogic.MeetingDAO;
 import sgp.ca.domain.AssistantRol;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Meeting;
-import sgp.ca.domain.Member;
 import sgp.ca.domain.Prerequisite;
 import sgp.ca.domain.Topic;
 
@@ -68,11 +66,11 @@ public class MeetingEditController implements Initializable{
     @FXML
     private TextField txtFieldIssueMeeting;
     @FXML
-    private ComboBox<Member> cboBoxDiscussionLeader;
+    private ComboBox<String> cboBoxDiscussionLeader;
     @FXML
-    private ComboBox<Member> cboBoxTimeTaker;
+    private ComboBox<String> cboBoxTimeTaker;
     @FXML
-    private ComboBox<Member> cboBoxSecretary;
+    private ComboBox<String> cboBoxSecretary;
     @FXML
     private Button btnAddRowPrerequisiteTable;
     @FXML
@@ -152,22 +150,13 @@ public class MeetingEditController implements Initializable{
     private void setMeetingAssistants(){
         for(AssistantRol assistant : this.meeting.getAssistantsRol()){
             if(assistant.getRoleAssistant() == "Líder de discusión"){
-                Member memberLeader = new Integrant();
-                memberLeader.setRfc(assistant.getAssistantRfc());
-                memberLeader.setFullName(assistant.getNameAssistant());
-                this.cboBoxDiscussionLeader.setValue(memberLeader);
+                this.cboBoxDiscussionLeader.setValue(assistant.getAssistantName());
             }
             if(assistant.getRoleAssistant() == "Tomador de tiempo"){
-                Member memberTimeTaker = new Integrant();
-                memberTimeTaker.setRfc(assistant.getAssistantRfc());
-                memberTimeTaker.setFullName(assistant.getNameAssistant());
-                this.cboBoxTimeTaker.setValue(memberTimeTaker);
+                this.cboBoxTimeTaker.setValue(assistant.getAssistantName());
             }
             if(assistant.getRoleAssistant() == "Secretario"){
-                Member memberSecretary = new Integrant();
-                memberSecretary.setRfc(assistant.getAssistantRfc());
-                memberSecretary.setFullName(assistant.getNameAssistant());
-                this.cboBoxSecretary.setValue(memberSecretary);
+                this.cboBoxSecretary.setValue(assistant.getAssistantName());
             }
         }
     }
@@ -184,15 +173,16 @@ public class MeetingEditController implements Initializable{
     }
     
     private void setMeetingFormCampsInformation(){
+        ObservableList<String> itemsIntegrant = makeitemsIntegrantForComboBox();
         this.cboBoxMeetingHour.setItems(makeitemsHoursList());
         this.cboBoxMeetingMinute.setItems(makeitemsMinutesList());
-        this.cboBoxDiscussionLeader.setItems(makeitemsIntegrantsListForComboBox());
-        this.cboBoxTimeTaker.setItems(makeitemsIntegrantsListForComboBox());
-        this.cboBoxSecretary.setItems(makeitemsIntegrantsListForComboBox());
-        this.cboBoxResponsiblePrerequisite.setItems(makeitemsIntegrantForComboBox());
+        this.cboBoxDiscussionLeader.setItems(itemsIntegrant);
+        this.cboBoxTimeTaker.getItems().addAll(itemsIntegrant);
+        this.cboBoxSecretary.setItems(itemsIntegrant);
+        this.cboBoxResponsiblePrerequisite.setItems(itemsIntegrant);
         this.cboBoxHourTopic.setItems(makeitemsHoursListForTopic());
         this.cboBoxMinuteTopic.setItems(makeitemsMinutesListForTopic());
-        this.cboBoxDiscissionLeaderTopic.setItems(makeitemsIntegrantForComboBox());
+        this.cboBoxDiscissionLeaderTopic.setItems(itemsIntegrant);
     }
     
     @FXML
@@ -280,16 +270,16 @@ public class MeetingEditController implements Initializable{
     }
     
     private void getMeetingAssistants(){
-        Member leaderDiscussion = this.cboBoxDiscussionLeader.getSelectionModel().getSelectedItem();
-        AssistantRol assistantLeader = new AssistantRol(0, leaderDiscussion.getRfc(), "Líder de discusión", 1, leaderDiscussion.getFullName());
+        String leaderDiscussion = this.cboBoxDiscussionLeader.getSelectionModel().getSelectedItem();
+        AssistantRol assistantLeader = new AssistantRol(0, leaderDiscussion, "Líder de discusión", 1);
         this.meeting.getAssistantsRol().add(assistantLeader);
         
-        Member timeTaker = this.cboBoxTimeTaker.getSelectionModel().getSelectedItem();
-        AssistantRol assistantTimeTaker = new AssistantRol(0, timeTaker.getRfc(), "Tomador de tiempo", 2, timeTaker.getFullName());
+        String timeTaker = this.cboBoxTimeTaker.getSelectionModel().getSelectedItem();
+        AssistantRol assistantTimeTaker = new AssistantRol(0, timeTaker, "Tomador de tiempo", 2);
         this.meeting.getAssistantsRol().add(assistantTimeTaker);
         
-        Member secretary = this.cboBoxSecretary.getSelectionModel().getSelectedItem();
-        AssistantRol assistantSecretary = new AssistantRol(0, secretary.getRfc(), "Secretario", 3, secretary.getFullName());
+        String secretary = this.cboBoxSecretary.getSelectionModel().getSelectedItem();
+        AssistantRol assistantSecretary = new AssistantRol(0, secretary, "Secretario", 3);
         this.meeting.getAssistantsRol().add(assistantSecretary);
     }
     
@@ -368,33 +358,6 @@ public class MeetingEditController implements Initializable{
     private void clearCampsOfPrerequisite(){
         this.txtFieldDescriptionPrerequisite.clear();
         this.cboBoxResponsiblePrerequisite.setValue(null);
-    }
-    
-    @FXML
-    void chooseDiscussionLeader(MouseEvent event) {
-        Member memberSelected = this.cboBoxDiscussionLeader.getSelectionModel().getSelectedItem();
-        ObservableList<Member> itemsIntegrantNames = makeitemsIntegrantsListForComboBox();
-        itemsIntegrantNames.remove(memberSelected);
-        this.cboBoxTimeTaker.setItems(itemsIntegrantNames);
-        this.cboBoxSecretary.setItems(itemsIntegrantNames);
-    }
-
-    @FXML
-    void chooseSecretary(MouseEvent event) {
-        Member memberSelected = this.cboBoxSecretary.getSelectionModel().getSelectedItem();
-        ObservableList<Member> itemsIntegrantNames = makeitemsIntegrantsListForComboBox();
-        itemsIntegrantNames.remove(memberSelected);
-        this.cboBoxDiscussionLeader.setItems(itemsIntegrantNames);
-        this.cboBoxTimeTaker.setItems(itemsIntegrantNames);
-    }
-
-    @FXML
-    void chooseTimeTaker(MouseEvent event) {
-        Member memberSelected = this.cboBoxTimeTaker.getSelectionModel().getSelectedItem();
-        ObservableList<Member> itemsIntegrantNames = makeitemsIntegrantsListForComboBox();
-        itemsIntegrantNames.remove(memberSelected);
-        this.cboBoxDiscussionLeader.setItems(itemsIntegrantNames);
-        this.cboBoxSecretary.setItems(itemsIntegrantNames);
     }
 
     @FXML
@@ -482,13 +445,6 @@ public class MeetingEditController implements Initializable{
         List<String> integrantsName = INTEGRANT_DAO.getAllIntegrantsName(token.getBodyAcademyKey());
         itemsIntegrant.addAll(integrantsName);
         return itemsIntegrant;
-    }
-    
-    private ObservableList<Member> makeitemsIntegrantsListForComboBox(){
-        ObservableList<Member> itemsIntegrantNames = FXCollections.observableArrayList();
-        List<Member> integrantsList = INTEGRANT_DAO.getMembers("UV-CA-127");
-        itemsIntegrantNames.addAll(integrantsList);
-        return itemsIntegrantNames;
     }
     
     private ObservableList<String> makeitemsHoursList(){

@@ -8,18 +8,16 @@ package sgp.ca.domain;
 
 public class AssistantRol{
     private int assistantRolKey;
-    private String assistantRfc;
+    private String assistantName;
     private String roleAssistant;
     private int assistantNumber;
-    private String nameAssistant;
 
-    public AssistantRol(int assistantRolKey, String assistantRfc, 
-    String roleAssistant, int assistantNumber, String nameAssistant){
+    public AssistantRol(int assistantRolKey, String assistantName, 
+    String roleAssistant, int assistantNumber){
         this.assistantRolKey = assistantRolKey;
-        this.assistantRfc = assistantRfc;
+        this.assistantName = assistantName;
         this.roleAssistant = roleAssistant;
         this.assistantNumber = assistantNumber;
-        this.nameAssistant = nameAssistant;
     }
 
     public AssistantRol(){
@@ -34,12 +32,12 @@ public class AssistantRol{
         this.assistantRolKey = assistantRolKey;
     }
 
-    public String getAssistantRfc(){
-        return assistantRfc;
+    public String getAssistantName(){
+        return assistantName;
     }
 
-    public void setAssistantRfc(String assistantRfc){
-        this.assistantRfc = assistantRfc;
+    public void setAssistantName(String assistantName){
+        this.assistantName = assistantName;
     }
 
     public String getRoleAssistant(){
@@ -57,14 +55,4 @@ public class AssistantRol{
     public void setAssistantNumber(int assistantNumber){
         this.assistantNumber = assistantNumber;
     }
-
-    public String getNameAssistant(){
-        return nameAssistant;
-    }
-
-    public void setNameAssistant(String nameAssistant){
-        this.nameAssistant = nameAssistant;
-    }
-
-    
 }

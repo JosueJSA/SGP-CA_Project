@@ -7,10 +7,17 @@
 package sgp.ca.demodao;
 
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -69,6 +76,7 @@ public class MeetingRealizedEditController implements Initializable{
     private final IntegrantDAO INTEGRANT_DAO = new IntegrantDAO();
     private final MeetingDAO MEETING_DAO = new MeetingDAO();
     private Meeting meeting = new Meeting();
+    Calendar date = new GregorianCalendar();
     private Integrant token;
     
     @Override
@@ -95,8 +103,24 @@ public class MeetingRealizedEditController implements Initializable{
     private void validateAgreementCamps() throws InvalidFormException{
         ValidatorForm.chechkAlphabeticalField(this.txtFieldDescriptionAgreement, 1 , 200);
         ValidatorForm.checkNotEmptyDateField(this.dtpDeliveryDate);
+        validateDate();
         ValidatorForm.isComboBoxSelected(this.cboBoxResponsibleAgreement);
     }
+    
+    private void validateDate() throws InvalidFormException{
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd");
+            Date meetingDate = dateFormat.parse(this.dtpDeliveryDate.getValue().toString());
+            Date actualDate = dateFormat.parse(date.get(Calendar.YEAR) + "-" + (date.get(Calendar.MONTH) + 1) + "-" + date.get(Calendar.DAY_OF_MONTH));
+            if(meetingDate.before(actualDate)){
+                this.dtpDeliveryDate.setStyle("-fx-border-color: red;");
+                throw new InvalidFormException("La fecha de entrega del acuerdo no puede ser menor a la fecha actual");
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(MeetingEditController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 
     @FXML
     private void addAgreementFile(ActionEvent event){
@@ -181,8 +205,8 @@ public class MeetingRealizedEditController implements Initializable{
     }
     
     private void validateMeetingInformation() throws InvalidFormException{
-        ValidatorForm.chechkAlphabeticalArea(this.txtAreaNoteMeeting, 0, 3000);
-        ValidatorForm.chechkAlphabeticalArea(this.txtAreaPendingMeeting, 0, 3000);
+        ValidatorForm.chechkAlphabeticalArea(this.txtAreaNoteMeeting, 0, 500);
+        ValidatorForm.chechkAlphabeticalArea(this.txtAreaPendingMeeting, 0, 500);
     }
     
     private void prepareAgreementTable(){

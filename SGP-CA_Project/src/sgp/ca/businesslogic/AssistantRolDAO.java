@@ -26,14 +26,14 @@ public class AssistantRolDAO implements IAssistantRolDAO{
         meeting.getAssistantsRol().forEach( assistantRol -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
-                    "INSERT INTO IntegrantMeeting (assistantName, meetingKey, "
-                    + "role, assistantNumber, initials) VALUES (?, ?, ? , ? , ?)"
+                    "INSERT INTO IntegrantMeeting (integrantMeetingKey, assistantName, "
+                    + "meetingKey, role, assistantNumber) VALUES (? , ?, ? , ? , ?)"
                 );
-                sentenceQuery.setString(1, assistantRol.getAssistantRfc());
-                sentenceQuery.setInt(2, meeting.getMeetingKey());
-                sentenceQuery.setString(3, assistantRol.getRoleAssistant());
-                sentenceQuery.setInt(4, assistantRol.getAssistantNumber());
-                sentenceQuery.setString(5, assistantRol.getNameAssistant());
+                sentenceQuery.setInt(1, assistantRol.getAssistantRolKey());
+                sentenceQuery.setString(2, assistantRol.getAssistantName());
+                sentenceQuery.setInt(3, meeting.getMeetingKey());
+                sentenceQuery.setString(4, assistantRol.getRoleAssistant());
+                sentenceQuery.setInt(5, assistantRol.getAssistantNumber());
                 sentenceQuery.executeUpdate();
             }catch(SQLException sqlException){
                 try{
@@ -58,11 +58,10 @@ public class AssistantRolDAO implements IAssistantRolDAO{
             ResultSet queryResult = sentenceQuery.executeQuery();
             while(queryResult.next()){
                 AssistantRol newAssistantRol = new AssistantRol(
-                     queryResult.getInt("integrantMeetingKey"),
-                     queryResult.getString("assistantName"),
-                     queryResult.getString("role"),
-                     queryResult.getInt("assistantNumber"),
-                     queryResult.getString("initials")
+                    queryResult.getInt("integrantMeetingKey"),
+                    queryResult.getString("assistantName"),
+                    queryResult.getString("role"),
+                    queryResult.getInt("assistantNumber")
                 );
                 assistantRolList.add(newAssistantRol);
             }

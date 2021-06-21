@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2000.0" prefWidth="1246.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MeetingEditController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1246.0" stylesheets="@templates/standard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.MeetingEditController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="48.0" prefWidth="1207.0" style="-fx-background-color: WHITE;" BorderPane.alignment="CENTER">
          <children>
@@ -122,19 +122,19 @@
                                     <HBox prefHeight="100.0" prefWidth="200.0" spacing="60.0">
                                        <children>
                                           <Label text="Líder de discusión: " />
-                                          <ComboBox fx:id="cboBoxDiscussionLeader" onMouseClicked="#chooseDiscussionLeader" prefHeight="31.0" prefWidth="422.0" promptText="Elegir integrante" />
+                                          <ComboBox fx:id="cboBoxDiscussionLeader" prefHeight="31.0" prefWidth="422.0" promptText="Elegir integrante" />
                                        </children>
                                     </HBox>
                                     <HBox prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                                        <children>
                                           <Label text="Tomador de tiempo: " />
-                                          <ComboBox fx:id="cboBoxTimeTaker" onMouseClicked="#chooseTimeTaker" prefHeight="31.0" prefWidth="422.0" promptText="Elegir integrante" />
+                                          <ComboBox fx:id="cboBoxTimeTaker" prefHeight="30.0" prefWidth="422.0" promptText="Elegir integrante" />
                                        </children>
                                     </HBox>
                                     <HBox prefHeight="100.0" prefWidth="200.0" spacing="120.0">
                                        <children>
                                           <Label text="Secretario:" />
-                                          <ComboBox fx:id="cboBoxSecretary" onMouseClicked="#chooseSecretary" prefHeight="31.0" prefWidth="425.0" promptText="Elegir integrante" />
+                                          <ComboBox fx:id="cboBoxSecretary" prefHeight="31.0" prefWidth="425.0" promptText="Elegir integrante" />
                                        </children>
                                     </HBox>
                                  </children>

@@ -29,7 +29,7 @@ public class MeetingInitializer{
         meeting.getAgreements().add(new Agreement(0, "Reunión con la secretaria académica de la FEI", "Dr. Jorge Octavio Ocharán Hernández", "2021-05-15"));
         meeting.getComments().add(new Comment(0, "Faltaron notas", "Dr. Angel Juan Sanchez Garcia", "20:00:01", "2021-04-30"));
         meeting.getComments().add(new Comment(0, "La fecha de reunion con el director de la FEI es incorrecta", "Dra. Maria Karen Cortes Verdín", "19:32:00", "2021-04-30"));
-        meeting.getAssistantsRol().add(new AssistantRol(0, "Angel Juan Sánchez García", "Secretario", 1, "AJSG"));
+        meeting.getAssistantsRol().add(new AssistantRol(0, "Angel Juan Sánchez García", "Secretario", 1));
     }
     
     public void preparedRequestMeetingTestCase(){
