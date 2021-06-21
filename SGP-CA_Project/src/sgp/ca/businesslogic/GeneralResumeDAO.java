@@ -171,18 +171,16 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
         List<Lgac> listLgac = new ArrayList<>();
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "SELECT * FROM `LGAK` WHERE bodyAcademyKey = ?;"
+                "SELECT * FROM `Lgak` WHERE bodyAcademyKey = ?;"
             );
             sentenceQuery.setString(1, bodyAcadmyKey.getBodyAcademyKey());
             ResultSet result = sentenceQuery.executeQuery();
             connection.commit();
-            while(result.next()){
-                listLgac.add(new Lgac(
-                    result.getString("title"),
-                    result.getString("description"), 
-                    bodyAcadmyKey
-                ));
-            }
+            while(result.next()){listLgac.add(new Lgac(
+                result.getString("title"),
+                result.getString("description"), 
+                bodyAcadmyKey
+            ));}
         }catch(SQLException ex){
             listLgac = null;
             connection.rollback();
@@ -196,7 +194,7 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
         listLgac.forEach(lgac -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
-                    "INSERT INTO `LGAK` (bodyAcademyKey, title, description) VALUES (?,?,?);"
+                    "INSERT INTO `Lgak` (bodyAcademyKey, title, description) VALUES (?,?,?);"
                 );
                 sentenceQuery.setString(1, lgac.getBodyAcademyRelated().getBodyAcademyKey());
                 sentenceQuery.setString(2, lgac.getTitle());
@@ -217,7 +215,7 @@ public class GeneralResumeDAO implements IGeneralResumeDAO{
     private void deleteAllLgacList(Connection connection, String bodyAcademyKey){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "DELETE FROM `LGAK` WHERE bodyAcademyKey = ?;"
+                "DELETE FROM `Lgak` WHERE bodyAcademyKey = ?;"
             );
             sentenceQuery.setString(1, bodyAcademyKey);
             sentenceQuery.executeUpdate();

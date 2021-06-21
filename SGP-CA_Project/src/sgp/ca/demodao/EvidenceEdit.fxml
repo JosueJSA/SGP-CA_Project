@@ -334,7 +334,7 @@
                                  </font>
                               </Label>
                               <Button fx:id="btnAddDocument" mnemonicParsing="false" onAction="#addDocument" style="-fx-background-color: #EFE1F8;" text="Añadir documento" />
-                              <Button fx:id="btnReplaceDocument" mnemonicParsing="false" onAction="#replaceDocument" style="-fx-background-color: #EFE1F8;" text="Remplazar documento" visible="false" />
+                              <Button fx:id="btnReplaceDocument" mnemonicParsing="false" disable="true" onAction="#replaceDocument" style="-fx-background-color: #EFE1F8;" text="Remplazar documento" visible="true" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="94.0" prefWidth="1206.0" spacing="10.0">
@@ -346,7 +346,7 @@
                                  <image>
                                     <Image url="@../../../../img/iconPDF.png" />
                                  </image></ImageView>
-                              <Label fx:id="lbDocumentName" maxWidth="1.7976931348623157E308" prefHeight="22.0" prefWidth="1053.0" text="Nombre del documento" underline="true" visible="false">
+                              <Label fx:id="lbDocumentName" maxWidth="1.7976931348623157E308" prefHeight="22.0" prefWidth="1053.0" text="Nombre del documento" underline="true" visible="true">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>

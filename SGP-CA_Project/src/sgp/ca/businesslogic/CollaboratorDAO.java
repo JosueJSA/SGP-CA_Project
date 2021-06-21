@@ -169,6 +169,25 @@ public class CollaboratorDAO implements IMemberDAO{
         }
     }
     
+    public boolean searchCollaboratorByRfc(String collaboratorRfc){
+        boolean collaboratorRegistered = false;
+        try{
+            PreparedStatement sentenceQuery = CONNECTION.getConnectionDatabase().prepareStatement(
+                "select * from Collaborator where rfc = ?;"
+            );
+            sentenceQuery.setString(1, collaboratorRfc);
+            ResultSet result = sentenceQuery.executeQuery();
+            if(result.next()){
+                collaboratorRegistered = true;
+            }
+        }catch(SQLException ex){
+            Logger.getLogger(CollaboratorDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            CONNECTION.closeConnection();
+            return collaboratorRegistered;
+        }
+    }
+    
     @Override
     public boolean subscribeMemberByEmailUV(String emailUV){
         boolean correctSubscribe = false;

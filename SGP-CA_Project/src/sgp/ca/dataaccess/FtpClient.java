@@ -1,4 +1,4 @@
-/**
+/*
 * @author 
 * Last modification date format: 
 */
@@ -12,26 +12,22 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.net.ftp.FTPClient;
 
-
-
 public class FtpClient{
     
     private FTPClient client = new FTPClient();
-    
-    private final String HOSTNAME = "ftp-josuesa.alwaysdata.net";
-    private final String USERNAME = "josuesa_admin";
-    private final String PASSWORD = "sgp-caEJJ21teamA_full4k1080p";
-    private final String DIRECTORY = "sgpcaFiles";
 
-    public void stablishConnection(){
+    private void stablishConnection(){
+        Scanner input = null;
         try{
-            client.connect(HOSTNAME);
-            client.login(USERNAME,PASSWORD);
-            client.changeWorkingDirectory(DIRECTORY);
+            input = new Scanner(new File("fileAccess.txt"));
+            client.connect(input.nextLine());
+            client.login(input.nextLine(), input.nextLine());
+            client.changeWorkingDirectory(input.nextLine());
             client.setFileType(FTPClient.BINARY_FILE_TYPE);
             client.setFileTransferMode(FTPClient.BINARY_FILE_TYPE);
             client.enterLocalPassiveMode();
@@ -39,6 +35,8 @@ public class FtpClient{
             Logger.getLogger(FtpClient.class.getName()).log(Level.SEVERE, null, ioe);
         }catch(IllegalStateException ex){
             Logger.getLogger(FtpClient.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            input.close();
         }
     }
     
@@ -66,28 +64,50 @@ public class FtpClient{
         }
     }
     
-    public void downloadFileFromFilesSystemByName(String fileName, String directorySelectedPath){
+    public boolean downloadFileFromFilesSystemByName(String fileName, String directorySelectedPath){
         this.stablishConnection();
+        boolean correctRetrieved = false;
         try{
             File localfile = new File(directorySelectedPath + ((char)92) + fileName);
             OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(localfile));
             client.retrieveFile(fileName, outputStream);
             outputStream.close();
+            correctRetrieved = true;
         }catch(IOException ex){
             Logger.getLogger(FtpClient.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             this.closeConnection();
+            return correctRetrieved;
         }
     }
     
-    public void deleteFileFromFilesSystemByName(String fileName){
+    public boolean deleteFileFromFilesSystemByName(String fileName){
+        boolean correctDelete = false;
         this.stablishConnection();
         try{
             client.deleteFile(fileName);
+            correctDelete = true;
         }catch(IOException ex){
             Logger.getLogger(FtpClient.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             this.closeConnection();
+            return correctDelete;
+        }
+    }
+    
+    public boolean checkExistFile(String fileToSearch){
+        boolean existFile = false;
+        try{
+            this.stablishConnection();
+            String fileSize = client.getSize(fileToSearch);
+            if(fileSize != null){
+                existFile = true;
+            }
+        }catch(IOException ex){
+            Logger.getLogger(FtpClient.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            this.closeConnection();
+            return existFile;
         }
     }
 }

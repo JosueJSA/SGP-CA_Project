@@ -26,6 +26,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import sgp.ca.businesslogic.BookDAO;
 import sgp.ca.businesslogic.ChapterBookDAO;
 import sgp.ca.domain.Book;
@@ -145,6 +146,12 @@ public class BookController implements Initializable, EvidenceWindow{
 
     @FXML
     private void downloadDocument(ActionEvent event){
+        DialogBox dialogBox = new DialogBox((Stage)((Node)event.getSource()).getScene().getWindow());
+        if(dialogBox.openDialogDirectorySelector(this.book.getUrlFile())){
+            GenericWindowDriver.getGenericWindowDriver().showConfirmationAlert(event, "Archivo descargado correctamente");
+        }else{
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "El libro no fue descargado");
+        }
     }
 
     @FXML

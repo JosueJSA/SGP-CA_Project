@@ -19,7 +19,7 @@ public class SGPCA_Project extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
         Scene scene = new Scene(root);
-        stage.setScene(scene);
+        stage.setScene(scene);        
         stage.show();
     }
 

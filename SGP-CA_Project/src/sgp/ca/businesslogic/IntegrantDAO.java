@@ -206,15 +206,15 @@ import sgp.ca.domain.Schooling;
     }
 
     @Override
-    public boolean updateMember(Member member, String oldRFC){
+    public boolean updateMember(Member member, String oldEmailUv){
         Connection connection = CONNECTION.getConnectionDatabaseNotAutoCommit();
         boolean correctUpdate = false;
         try{
-            this.deleteIntegrantStudies(connection, oldRFC);
+            this.deleteIntegrantStudies(connection, oldEmailUv);
             PreparedStatement sentenceQuery = connection.prepareStatement(
                 "UPDATE Integrant SET rfc = ?, bodyAcademyKey = ?, fullName = ?, dateOfAdmission = ?, emailUV = ?, password = ?, "
                 + "participationStatus = ?, additionalEmail = ?, curp = ?, nacionality = ?, educationalProgram = ?, cellPhone = ?, satffNumber = ?,"
-                + " homePhone = ?, workPhone = ?, appointment = ?, participationType = ? WHERE rfc = ?;"
+                + " homePhone = ?, workPhone = ?, appointment = ?, participationType = ? WHERE emailUV = ?;"
             );
             sentenceQuery.setString(1, member.getRfc());
             sentenceQuery.setString(2, member.getBodyAcademyKey());
@@ -233,7 +233,7 @@ import sgp.ca.domain.Schooling;
             sentenceQuery.setString(15, ((Integrant)member).getWorkPhone());
             sentenceQuery.setString(16, ((Integrant)member).getAppointmentMember());
             sentenceQuery.setString(17, ((Integrant)member).getParticipationType());
-            sentenceQuery.setString(18, oldRFC);
+            sentenceQuery.setString(18, oldEmailUv);
             sentenceQuery.executeUpdate();
             this.addIntegrantStudies(connection, ((Integrant)member));
             connection.commit();
@@ -319,6 +319,7 @@ import sgp.ca.domain.Schooling;
         }
     }
     
+    @Override
     public Member searchMemberByEmailUv(String emailUv){
         Member integrant = new Integrant();
         try{
@@ -346,7 +347,7 @@ import sgp.ca.domain.Schooling;
     }
     
     private void addIntegrantStudies(Connection connection, Integrant integrant){
-        integrant.getSchooling().forEach( schooling -> {
+        integrant.getSchooling().forEach(schooling -> {
             try{
                 PreparedStatement sentenceQuery = connection.prepareStatement(
                     "INSERT INTO Schooling VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"
@@ -373,16 +374,17 @@ import sgp.ca.domain.Schooling;
         });
     }
     
-    private void deleteIntegrantStudies(Connection connection, String rfc){
+    private void deleteIntegrantStudies(Connection connection, String emailUv){
         try{
             PreparedStatement sentenceQuery = connection.prepareStatement(
-                "DELETE FROM Schooling WHERE rfc = ?;"
+                "DELETE FROM Schooling WHERE rfc = (SELECT rfc FROM Integrant WHERE emailUV = ?);"
             );
-            sentenceQuery.setString(1, rfc);
+            sentenceQuery.setString(1, emailUv);
             sentenceQuery.executeUpdate();
         }catch(SQLException sqlException){
             try{
                 connection.rollback();
+                connection.close();
                 Logger.getLogger(Integrant.class.getName()).log(Level.SEVERE, null, sqlException);
             }catch(SQLException ex){
                 Logger.getLogger(IntegrantDAO.class.getName()).log(Level.SEVERE, null, ex);

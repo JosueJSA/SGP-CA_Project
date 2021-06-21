@@ -13,7 +13,7 @@ public interface IMemberDAO{
     
     public Member getMemberByUVmail(String emailUV);
     public boolean addMember(Member newMember);
-    public boolean updateMember(Member member, String oldRFC);
+    public boolean updateMember(Member member, String oldEmailUv);
     public boolean unsubscribeMemberByEmailUV(String emailUV);
     public boolean subscribeMemberByEmailUV(String emailUV);
     public List<Member> getMembers(String bodyAcademyKey);

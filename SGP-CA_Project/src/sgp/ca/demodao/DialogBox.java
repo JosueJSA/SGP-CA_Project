@@ -43,35 +43,30 @@ public class DialogBox{
     public void setFileSelectedPath(String fileSelectedPath){
         this.fileSelectedPath = fileSelectedPath;
     }
-
-    public String getDirectorySelectedPath(){
-        this.openDialogDirectorySelector();
-        return directorySelectedPath;
-    }
-
-    public void setDirectorySelectedPath(String directorySelectedPath){
-        this.openDialogDirectorySelector();
-        this.directorySelectedPath = directorySelectedPath;
-    }
     
     public String openDialogFileSelector(){
+        String pathForReturn = null;
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("Select the file to save");
-        System.out.println("HolaFile");
+        chooser.setTitle("Selecciona un archivo para guardar");
         File selectedFile = chooser.showOpenDialog(stage);
-        System.out.println("HolaFile");
-        this.fileSelectedPath = selectedFile.getAbsolutePath();
-        this.fileNameSelected = selectedFile.getName();
-        return this.fileNameSelected;
+        if(selectedFile != null){
+            this.fileSelectedPath = selectedFile.getAbsolutePath();
+            this.fileNameSelected = selectedFile.getName();
+            pathForReturn = this.fileSelectedPath;
+        }
+        return pathForReturn;
     }
     
-     public void openDialogDirectorySelector(){
-        System.out.println("HolaDirectory");
+    public boolean openDialogDirectorySelector(String urlFile){
+        boolean correctDownload = false;
         DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle("Select a destiny directory");;
+        chooser.setTitle("Selecciona un deirectorio de destino");
         File selectedDirectory = chooser.showDialog(stage);
-        this.directorySelectedPath = selectedDirectory.getAbsolutePath();
-        FTPCLIENT.downloadFileFromFilesSystemByName(fileNameSelected, directorySelectedPath);
+        if(selectedDirectory != null){
+            this.directorySelectedPath = selectedDirectory.getAbsolutePath();
+            correctDownload = FTPCLIENT.downloadFileFromFilesSystemByName(urlFile, directorySelectedPath);
+        }
+        return correctDownload;
     }
     
 }

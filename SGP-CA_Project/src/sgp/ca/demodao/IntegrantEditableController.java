@@ -75,10 +75,11 @@ public class IntegrantEditableController implements Initializable{
     private final GeneralResumeDAO GENERAL_RESUME = new GeneralResumeDAO();
     private Integrant token = null;
     private Integrant integrant;
-    private String oldRfcForUpdate = null;    
+    private String oldEmailUvForUpdate = "";    
 
     @Override
     public void initialize(URL url, ResourceBundle rb){
+        this.integrant = new Integrant();
         fields = Arrays.asList(
             txtFieldMemberEducationalProgram, txtFieldMemberEmailUv,
             txtFieldMemberFullName, txtFieldMemberNationality
@@ -91,7 +92,6 @@ public class IntegrantEditableController implements Initializable{
     }    
     
     public void showResponsibleInscriptionForm(){
-        this.integrant = new Integrant();
         this.lbParticipationType.setText("Responsable");
         hbIntegrantOptions.getChildren().addAll(btnResponsibleRegistrer, btnCancelResponsibleResgistration);
     }
@@ -100,7 +100,6 @@ public class IntegrantEditableController implements Initializable{
         this.token = responsibleToken;
         this.lbParticipationType.setText("Integrante");
         hbIntegrantOptions.getChildren().addAll(btnIntegrantRegistrer, btnCancelIntegrantChanges);
-        this.integrant = new Integrant();
         txtFieldMemberBodyAcademyKey.setVisible(false);
         chBoxIsIntoBodyAcademy.setVisible(false);
     }
@@ -108,7 +107,7 @@ public class IntegrantEditableController implements Initializable{
     public void showIntegrantUpdateForm(Integrant integrantToken, String emailUV){
         this.token = integrantToken;
         this.integrant = (Integrant) INTEGRANT_DAO.getMemberByUVmail(emailUV);
-        this.oldRfcForUpdate = this.integrant.getRfc();
+        this.oldEmailUvForUpdate = this.integrant.getEmailUV();
         setIntegrantDataIntoInterface();
         hbIntegrantOptions.getChildren().addAll(btnUpdateIntegrant,  btnCancelIntegrantChanges);
         txtFieldMemberBodyAcademyKey.setDisable(true);
@@ -151,7 +150,7 @@ public class IntegrantEditableController implements Initializable{
             checkExistEmailUser();
             this.getOutIntegrantDataFromInterface();
             this.integrant.setBodyAcademyKey(this.token.getBodyAcademyKey());
-            if(INTEGRANT_DAO.updateMember(this.integrant, oldRfcForUpdate)){
+            if(INTEGRANT_DAO.updateMember(this.integrant, oldEmailUvForUpdate)){
                 GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Integrante actualizado con éxito");
             }else{
                 GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contactor con soporte técnico");
@@ -250,9 +249,11 @@ public class IntegrantEditableController implements Initializable{
     
     private void checkExistEmailUser() throws InvalidFormException{
         boolean isRegistred = false;
-        Member integrant = INTEGRANT_DAO.getMemberByUVmail(this.txtFieldMemberEmailUv.getText());
-        if(integrant.getFullName() != null){
-            isRegistred = true;
+        Member integrantRetrieved = INTEGRANT_DAO.getMemberByUVmail(this.txtFieldMemberEmailUv.getText());
+        if(!this.txtFieldMemberEmailUv.getText().equalsIgnoreCase(this.oldEmailUvForUpdate)){
+            if(integrantRetrieved.getFullName() != null){
+                isRegistred = true;
+            }
         }
         if(isRegistred){
             throw new InvalidFormException("Usuario repetido en el sistema");

@@ -14,12 +14,15 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
@@ -34,6 +37,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import sgp.ca.businesslogic.ArticleDAO;
 import sgp.ca.businesslogic.BookDAO;
 import sgp.ca.businesslogic.CollaboratorDAO;
@@ -41,6 +45,7 @@ import sgp.ca.businesslogic.EvidenceDAO;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.businesslogic.ProjectDAO;
 import sgp.ca.businesslogic.PrototypeDAO;
+import sgp.ca.dataaccess.FtpClient;
 import sgp.ca.domain.Article;
 import sgp.ca.domain.Book;
 import sgp.ca.domain.Collaborator;
@@ -297,13 +302,35 @@ public class EvidenceEditController implements Initializable{
     
     @FXML
     private void addDocument(ActionEvent event) {
-        DialogBox dialogBox = new DialogBox();
-        this.lbDocumentName.setText(dialogBox.openDialogFileSelector());
-        this.evidence.setUrlFile(this.lbDocumentName.getText());
-        this.lbDocumentName.setVisible(true);
-        this.imgViewPDFEvidence.setVisible(true);
-        this.btnAddDocument.setVisible(false);
-        this.btnReplaceDocument.setVisible(true);
+        DialogBox dialogBox = new DialogBox((Stage)((Node)event.getSource()).getScene().getWindow());
+        String documentPath = dialogBox.openDialogFileSelector();
+        if(documentPath != null){
+            String documentName = dialogBox.getFileNameSelected();
+            try{
+                checkExistFile(documentName);
+                uploadFile(documentPath, documentName);
+            }catch(InvalidFormException ex){
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
+            }
+        }
+    }
+    
+    private void uploadFile(String path, String fileName) throws InvalidFormException{
+        String link = new FtpClient().saveFileIntoFilesSystem(path, fileName);
+        if(link != null){
+            this.lbDocumentName.setText(link);
+            this.evidence.setUrlFile(link);
+            this.btnAddDocument.setDisable(true);
+            this.btnReplaceDocument.setDisable(false);
+        }else{
+            throw new InvalidFormException("Error, parece que el sistema no ha respondido correctamente");
+        }
+    }
+    
+    private void checkExistFile(String fileName) throws InvalidFormException{
+        if(new FtpClient().checkExistFile(fileName)){
+            throw new InvalidFormException("El archivo ya existe en el sistema");
+        }
     }
     
     public void validateEvidenceInformation() throws InvalidFormException{
@@ -312,6 +339,9 @@ public class EvidenceEditController implements Initializable{
         ValidatorForm.chechkAlphabeticalField(this.txtFieldPublicationCountry, 3, 90);
         ValidatorForm.isComboBoxSelected(this.cboBoxInvestigationProject);
         ValidatorForm.isComboBoxSelected(this.cboBoxStudyDegree);
+        if(this.evidence.getUrlFile() == null){
+            throw new InvalidFormException("No has subido ningún archivo");
+        }
     }
     
     public void validateBookInformation() throws InvalidFormException{
@@ -469,8 +499,18 @@ public class EvidenceEditController implements Initializable{
 
     @FXML
     private void replaceDocument(ActionEvent event){
-        DialogBox dialogBox = new DialogBox();
-        String newURLFile = dialogBox.openDialogFileSelector();
+        DialogBox dialogBox = new DialogBox((Stage)((Node)event.getSource()).getScene().getWindow());
+        String documentPath = dialogBox.openDialogFileSelector();
+        if(documentPath != null){
+            String documentName = dialogBox.getFileNameSelected();
+            try{
+                new FtpClient().deleteFileFromFilesSystemByName(this.evidence.getUrlFile());
+                checkExistFile(documentName);
+                uploadFile(documentPath, documentName);
+            }catch(InvalidFormException ex){
+                GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
+            }
+        }
     }
 
     @FXML

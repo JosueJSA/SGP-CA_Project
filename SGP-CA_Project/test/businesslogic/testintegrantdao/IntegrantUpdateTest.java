@@ -43,7 +43,7 @@ public class IntegrantUpdateTest{
             "Universidad veracruzana", "Veracruz", "02450244", "Ingeniería de software", "Ingeniería"
         ));
         
-        INTEGRANT_DAO.updateMember(newIntegrant, oldIntegrant.getRfc());
+        INTEGRANT_DAO.updateMember(newIntegrant, oldIntegrant.getEmailUV());
         Integrant newIntegrantRetrieved = (Integrant) INTEGRANT_DAO.getMemberByUVmail("angelsanchez@uv.mx");
         INITIALIZER.cleanIntegrantTest(newIntegrantRetrieved.getRfc());
         Assert.assertNotEquals(oldIntegrant, newIntegrantRetrieved);
@@ -66,10 +66,10 @@ public class IntegrantUpdateTest{
             "Computación", "Ingeniería"
         ));
         
-        INTEGRANT_DAO.updateMember(newIntegrant, oldIntegrant.getRfc());
+        INTEGRANT_DAO.updateMember(newIntegrant, oldIntegrant.getEmailUV());
         Integrant newIntegrantRetrieved = (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
-        INITIALIZER.cleanIntegrantTest("INTEGRANTETEST");
-        Assert.assertEquals(oldIntegrant, newIntegrantRetrieved);
+        INITIALIZER.cleanIntegrantTest("SAGA8906245M7");
+        Assert.assertEquals(oldIntegrant.getRfc(), newIntegrantRetrieved.getRfc());
     }
     
     @Test
@@ -83,7 +83,7 @@ public class IntegrantUpdateTest{
             "UV-CA-127", "PTC", "angelsg89@hotmail.com", "2288146210", "141912288421700"
         );     
         
-        INTEGRANT_DAO.updateMember(newIntegrant, oldIntegrant.getRfc());
+        INTEGRANT_DAO.updateMember(newIntegrant, oldIntegrant.getEmailUV());
         Integrant newIntegrantRetrieved = (Integrant) INTEGRANT_DAO.getMemberByUVmail("angelsanchez@uv.mx");
         INITIALIZER.cleanIntegrantTest(newIntegrantRetrieved.getRfc());
         Assert.assertNotEquals(oldIntegrant, newIntegrantRetrieved);

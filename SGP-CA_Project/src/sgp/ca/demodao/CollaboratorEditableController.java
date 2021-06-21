@@ -63,7 +63,7 @@ public class CollaboratorEditableController implements Initializable{
     
     private Integrant token;
     private Collaborator collaborator;
-    private String oldRFC;
+    private String oldRfc = "";
     private List<TextField> fields;
     private final CollaboratorDAO COLLABORATOR_DAO = new CollaboratorDAO();
     
@@ -87,7 +87,7 @@ public class CollaboratorEditableController implements Initializable{
         this.token = integrantToken;
         hbCollaboratorOptions.getChildren().addAll(btnCollaboratorUpdate, btnCancel);
         this.collaborator = (Collaborator) COLLABORATOR_DAO.getMemberByUVmail(emailUV);
-        this.oldRFC = collaborator.getRfc();
+        this.oldRfc = collaborator.getRfc();
         this.setIntegrantDataIntoInterface();
     }
 
@@ -95,6 +95,7 @@ public class CollaboratorEditableController implements Initializable{
     private void addNewCollaborator(ActionEvent event){
         try {
             this.validateForm();
+            this.checkCollaboratorRegistered();
             this.getOutIntegrantDataFromInterface();
             collaborator.setParticipationStatus("Activo");
             if(COLLABORATOR_DAO.addMember(this.collaborator)){
@@ -114,8 +115,9 @@ public class CollaboratorEditableController implements Initializable{
     private void updateCollaborator(ActionEvent event){
         try {
             this.validateForm();
+            this.checkCollaboratorRegistered();
             this.getOutIntegrantDataFromInterface();
-            if(COLLABORATOR_DAO.updateMember(this.collaborator, this.oldRFC)){
+            if(COLLABORATOR_DAO.updateMember(this.collaborator, this.oldRfc)){
                 GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El colaborador ha sido registrado en el sistema");
             }else{
                 GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Ocurrió un error en el sistema, favor de ponerse en contacto con soporte técnico");
@@ -180,5 +182,13 @@ public class CollaboratorEditableController implements Initializable{
         ValidatorForm.isNumberData(this.txtFieldCellNumber, 10);
         ValidatorForm.isIntegerNumberData(this.txtFieldStaffNumber, smallestCharacterSize);
         ValidatorForm.checkNotEmptyDateField(this.dtpAdmissionDate);
-    }  
+    } 
+    
+    private void checkCollaboratorRegistered() throws InvalidFormException{
+        if(!this.txtFieldRfcMember.getText().equalsIgnoreCase(this.oldRfc)){
+            if(COLLABORATOR_DAO.searchCollaboratorByRfc(this.txtFieldRfcMember.getText())){
+                throw new InvalidFormException("Usuario registrado en el sistema");
+            }
+        }
+    }
 }

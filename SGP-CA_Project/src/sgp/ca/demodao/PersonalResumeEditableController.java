@@ -31,6 +31,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.Integrant;
+import sgp.ca.domain.Member;
 import sgp.ca.domain.Schooling;
 
 public class PersonalResumeEditableController implements Initializable {
@@ -148,7 +149,7 @@ public class PersonalResumeEditableController implements Initializable {
         try{
             this.checkPersonalResumeForm();
             this.getOutIntegrantData();
-            if(INTEGRANT_DAO.updateMember(this.integrantUpdated, token.getRfc())){
+            if(INTEGRANT_DAO.updateMember(this.integrantUpdated, token.getEmailUV())){
                 GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "Currículum personal actualizado exitosamente");
             }else{
                 GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "Error en el sistema, favor de ponerse en contacto con soporte técnico");
@@ -294,7 +295,7 @@ public class PersonalResumeEditableController implements Initializable {
     }
     
     private void checkShooling() throws InvalidFormException{
-        int smallestCharacterSize = 5;
+        int smallestCharacterSize = 2;
         int largestCharacterSize = 100;
         ValidatorForm.chechkAlphabeticalField(txtFieldCeduleNumber, smallestCharacterSize, 9);
         ValidatorForm.checkAlaphabeticalFields(listSchoolingFields, smallestCharacterSize, largestCharacterSize);
@@ -303,6 +304,20 @@ public class PersonalResumeEditableController implements Initializable {
             if(schooling.getIdProfessionalStudies().equalsIgnoreCase(txtFieldCeduleNumber.getText())){
                 throw new InvalidFormException("El número de cédula ya existe");
             }
+        }
+        checkExistEmailUser();
+    }
+    
+    private void checkExistEmailUser() throws InvalidFormException{
+        boolean isRegistred = false;
+        Member integrantRetrieved = INTEGRANT_DAO.getMemberByUVmail(this.txtFieldEmailUv.getText());
+        if(!this.txtFieldEmailUv.getText().equalsIgnoreCase(this.token.getEmailUV())){
+            if(integrantRetrieved.getFullName() != null){
+                isRegistred = true;
+            }
+        }
+        if(isRegistred){
+            throw new InvalidFormException("Usuario repetido en el sistema");
         }
     }
     

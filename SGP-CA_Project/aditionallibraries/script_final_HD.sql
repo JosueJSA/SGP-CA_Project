@@ -12,26 +12,25 @@ CREATE TABLE `GeneralResume` (
     PRIMARY KEY (`bodyAcademyKey`)
 );
 
-CREATE TABLE `LGAK` (
-	`identifierLGAC` int(2) auto_increment,
+CREATE TABLE `Lgak` (
+	`identifierLgak` int(2) auto_increment,
     `bodyAcademyKey` varchar(10) DEFAULT NULL,
-    `title` varchar(1000) DEFAULT NULL,
-    `description` varchar(5000) DEFAULT NULL,
-    PRIMARY KEY (`IdentifierLGAC`),
-    KEY `fk_lgac_1` (`bodyAcademyKey`),
+    `title` varchar(500) DEFAULT NULL,
+    `description` varchar(500) DEFAULT NULL,
+    PRIMARY KEY (`IdentifierLgak`, `title`),
     CONSTRAINT `fk_lgac_1` FOREIGN KEY (`bodyAcademyKey`) REFERENCES `GeneralResume` (`bodyAcademyKey`)
     ON UPDATE CASCADE
 );
 
-CREATE TABLE `LGAK-Project` (
-	`identifierLGAC` int(2) NOT NULL,
-    `projectName` varchar(80) NOT NULL
-);
-
-
-CREATE TABLE `LGAK-ReceptionWork` (
-	`identifierLGAC` int(2) NOT NULL,
-    `urlFile` varchar(80) NOT NULL
+CREATE TABLE `LgakProject` (
+	`identifierLgak` int(2) NOT NULL,
+	`title` varchar(500) NOT NULL,
+	`projectName` varchar(500) NOT NULL,
+	PRIMARY KEY (`identifierLgak`, `projectName`),
+	CONSTRAINT `fk_lgakProject_1` FOREIGN KEY (`identifierLgak`, `title`) REFERENCES `Lgak` (`identifierLgak`, `title`)
+	ON UPDATE CASCADE,
+	CONSTRAINT `fk_lgakProject_3` FOREIGN KEY (`projectName`) REFERENCES `Project` (`projectName`)
+	ON UPDATE CASCADE
 );
 
 CREATE TABLE `Collaborator` (
@@ -74,7 +73,7 @@ CREATE TABLE `Integrant` (
     `workPhone` varchar(20) DEFAULT NULL,
 	`appointment` varchar(50) DEFAULT NULL,
     `participationType` varchar(50) DEFAULT NULL,
-    PRIMARY KEY (`rfc`),
+    PRIMARY KEY (`emailUV`),
 	KEY `fk_integrant_1` (`bodyAcademyKey`),
     CONSTRAINT `fk_integrant_1` FOREIGN KEY (`bodyAcademyKey`) REFERENCES `GeneralResume` (`bodyAcademyKey`)
     ON UPDATE CASCADE
@@ -97,7 +96,7 @@ CREATE TABLE `Schooling` (
 );
 
 CREATE TABLE `Project` (
-	`projectName` varchar(80) NOT NULL,
+	`projectName` varchar(500) NOT NULL,
     `bodyAcademyKey` varchar(10) DEFAULT NULL,
     `durationProjectInMonths` int(2) DEFAULT NULL,
     `status` varchar(10) DEFAULT NULL,
@@ -145,7 +144,7 @@ CREATE TABLE `IntegrantBook` (
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     KEY `fk_integrantBook_1` (`rfc`),
-    CONSTRAINT `fk_integrantBook_1` FOREIGN KEY (`rfc`) REFERENCES `Integrant` (`rfc`),
+    CONSTRAINT `fk_integrantBook_1` FOREIGN KEY (`rfc`) REFERENCES `Integrant` (`rfc`) ON UPDATE cascade,
     KEY `fk_integrantBook_2` (`urlFile`),
     CONSTRAINT `fk_integrantBook_2` FOREIGN KEY (`urlFile`) REFERENCES `Book` (`urlFile`)
     ON UPDATE CASCADE
@@ -156,7 +155,7 @@ CREATE TABLE `CollaborateBook` (
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     KEY `fk_collaborateBook_1` (`rfc`),
-    CONSTRAINT `fk_collaborateBook_1` FOREIGN KEY (`rfc`) REFERENCES `Collaborator` (`rfc`),
+    CONSTRAINT `fk_collaborateBook_1` FOREIGN KEY (`rfc`) REFERENCES `Collaborator` (`rfc`) ON UPDATE CASCADE,
     KEY `fk_collaborateBook_2` (`urlFile`),
     CONSTRAINT `fk_collaborateBook_2` FOREIGN KEY (`urlFile`) REFERENCES `Book` (`urlFile`)
     ON UPDATE CASCADE
@@ -189,7 +188,7 @@ CREATE TABLE `IntegrantChapterbook` (
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     KEY `fk_integrantChapterBook_1` (`rfc`),
-    CONSTRAINT `fk_integrantChapterBook_1` FOREIGN KEY (`rfc`) REFERENCES `Integrant` (`rfc`),
+    CONSTRAINT `fk_integrantChapterBook_1` FOREIGN KEY (`rfc`) REFERENCES `Integrant` (`rfc`) ON UPDATE CASCADE,
     KEY `fk_integrantChapterBook_2` (`urlFile`),
     CONSTRAINT `fk_integrantChapterBook_2` FOREIGN KEY (`urlFile`) REFERENCES `ChapterBook` (`urlFile`)
     ON UPDATE CASCADE
@@ -200,7 +199,7 @@ CREATE TABLE `CollaborateChapterbook` (
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     KEY `fk_collaborateChapterBook_1` (`rfc`),
-    CONSTRAINT `fk_collaborateChapterBook_1` FOREIGN KEY (`rfc`) REFERENCES `Collaborator` (`rfc`),
+    CONSTRAINT `fk_collaborateChapterBook_1` FOREIGN KEY (`rfc`) REFERENCES `Collaborator` (`rfc`) ON UPDATE CASCADE,
     KEY `fk_collaborateChapterBook_2` (`urlFile`),
     CONSTRAINT `fk_collaborateChapterBook_2` FOREIGN KEY (`urlFile`) REFERENCES `ChapterBook` (`urlFile`)
     ON UPDATE CASCADE
@@ -356,7 +355,7 @@ CREATE TABLE `CollaborateReceptionWork` (
     `urlFile`  varchar(100) NOT NULL,
     PRIMARY KEY (`urlFile`, `rfc`),
     KEY `fk_collaborateReceptionWork_1` (`rfc`),
-    CONSTRAINT `fk_collaborateReceptionWork_1` FOREIGN KEY (`rfc`) REFERENCES `Collaborator` (`rfc`),
+    CONSTRAINT `fk_collaborateReceptionWork_1` FOREIGN KEY (`rfc`) REFERENCES `Collaborator` (`rfc`) ON UPDATE CASCADE,
     KEY `fk_collaborateReceptionWork_2` (`urlFile`),
     CONSTRAINT `fk_collaborateReceptionWork_2` FOREIGN KEY (`urlFile`) REFERENCES `ReceptionWork` (`urlFile`)
     ON UPDATE CASCADE

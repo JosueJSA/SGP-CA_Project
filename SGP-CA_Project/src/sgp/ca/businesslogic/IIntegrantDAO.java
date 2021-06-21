@@ -7,10 +7,12 @@
 package sgp.ca.businesslogic;
 
 import sgp.ca.domain.Integrant;
+import sgp.ca.domain.Member;
 
 public interface IIntegrantDAO{
     
     public Integrant getIntegrantTocken(Integrant usuario);
     public Integrant getIntegrantToken(String email, String password);
+    public Member searchMemberByEmailUv(String emailUv);
     
 }

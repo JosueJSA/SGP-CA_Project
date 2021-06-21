@@ -125,9 +125,7 @@ public class ChapterBookRequestController implements Initializable{
 
     @FXML
     private void downloadDocument(ActionEvent event){
-        DialogBox dialogBox = new DialogBox();
-        dialogBox.setFileNameSelected(chapterBook.getUrlFile());
-        dialogBox.openDialogDirectorySelector();
+        
     }
 
     @FXML

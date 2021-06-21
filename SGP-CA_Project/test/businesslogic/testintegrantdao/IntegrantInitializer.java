@@ -51,7 +51,7 @@ public class IntegrantInitializer {
         this.prepareRequestTestCase();
         Integrant integrantRetrieved = (Integrant) INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx");
         integrantRetrieved.setRfc("SAGA8906245M7");
-        INTEGRANT_DAO.updateMember(integrantRetrieved, INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx").getRfc());
+        INTEGRANT_DAO.updateMember(integrantRetrieved, INTEGRANT_DAO.getMemberByUVmail("integrantTest@uv.mx").getEmailUV());
     }
     
     public void cleanIntegrantTest(String rfcIntegrant){

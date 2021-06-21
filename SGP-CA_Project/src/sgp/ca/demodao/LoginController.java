@@ -62,6 +62,8 @@ public class LoginController implements Initializable{
             GeneralResumeEditableController controller = loader.getController();
             controller.showGeneralResumeInsertForm(integrantLogger);
         }else{
+            txtFieldEmailUv.setStyle("-fx-border-color: red;");
+            passFieldPasswordUvmail.setStyle("-fx-border-color: red;");
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(
                 event, "El email y contraseña deben estar llenos correctamente y No debes pertenecer a ningún cuerpo académico"
             );

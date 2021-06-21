@@ -19,6 +19,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import sgp.ca.businesslogic.ArticleDAO;
 import sgp.ca.domain.Article;
 import sgp.ca.domain.Evidence;
@@ -108,6 +109,12 @@ public class ArticleController implements Initializable, EvidenceWindow{
 
     @FXML
     private void downloadDocument(ActionEvent event){
+        DialogBox dialogBox = new DialogBox((Stage)((Node)event.getSource()).getScene().getWindow());
+        if(dialogBox.openDialogDirectorySelector(this.article.getUrlFile())){
+            GenericWindowDriver.getGenericWindowDriver().showConfirmationAlert(event, "Archivo descargado correctamente");
+        }else{
+            GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, "El artículo no fue descargado");
+        }
     }
 
     
