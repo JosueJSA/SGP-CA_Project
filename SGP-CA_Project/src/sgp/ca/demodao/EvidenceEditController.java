@@ -305,6 +305,7 @@ public class EvidenceEditController implements Initializable{
         this.lbDocumentName.setVisible(true);
         this.imgViewPDFEvidence.setVisible(true);
         this.btnReplaceDocument.setVisible(true);
+        this.btnReplaceDocument.setDisable(false);
         this.btnAddDocument.setVisible(false);
         this.btnUpdateEvidence.setVisible(true);
     }
@@ -343,7 +344,7 @@ public class EvidenceEditController implements Initializable{
     }
     
     public void validateEvidenceInformation() throws InvalidFormException{
-        ValidatorForm.chechkAlphabeticalField(this.txtFieldEvidenceTittle, 5, 80);
+        ValidatorForm.chechkAlphabeticalField(this.txtFieldEvidenceTittle, 5, 100);
         ValidatorForm.checkNotEmptyDateField(dtpPublicationDate);
         validateDate();
         ValidatorForm.chechkAlphabeticalField(this.txtFieldPublicationCountry, 3, 90);

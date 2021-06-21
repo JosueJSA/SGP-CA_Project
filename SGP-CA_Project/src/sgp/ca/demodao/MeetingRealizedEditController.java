@@ -205,8 +205,8 @@ public class MeetingRealizedEditController implements Initializable{
     }
     
     private void validateMeetingInformation() throws InvalidFormException{
-        ValidatorForm.chechkAlphabeticalArea(this.txtAreaNoteMeeting, 0, 500);
-        ValidatorForm.chechkAlphabeticalArea(this.txtAreaPendingMeeting, 0, 500);
+        ValidatorForm.chechkAlphabeticalArea(this.txtAreaNoteMeeting, 0, 450);
+        ValidatorForm.chechkAlphabeticalArea(this.txtAreaPendingMeeting, 0, 450);
     }
     
     private void prepareAgreementTable(){
