@@ -1,6 +1,7 @@
 /*
-* @author 
-* Last modification date format: 
+* @author Estefanía
+* @version v1.0
+* Last modification date: 18-06-2021
 */
 
 package sgp.ca.dataaccess;

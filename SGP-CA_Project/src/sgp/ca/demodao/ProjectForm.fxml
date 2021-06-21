@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="793.0" prefWidth="612.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.ProjectFormController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="612.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgp.ca.demodao.ProjectFormController">
    <bottom>
       <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="1246.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
          <padding>
@@ -39,7 +39,7 @@
    <top>
       <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="1246.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
          <children>
-            <Label maxWidth="1.7976931348623157E308" text="PROYECTO DE INVESTIGACIÓN" textFill="WHITE" HBox.hgrow="ALWAYS">
+            <Label maxWidth="1.7976931348623157E308" prefHeight="19.0" prefWidth="582.0" text="PROYECTO DE INVESTIGACIÓN" textFill="WHITE" HBox.hgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -53,11 +53,6 @@
    <center>
       <VBox maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="NUEVO PROYECTO" textAlignment="CENTER">
-               <font>
-                  <Font name="System Bold" size="23.0" />
-               </font>
-            </Label>
             <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="667.0" prefWidth="521.0" VBox.vgrow="ALWAYS">
                <children>
                   <VBox maxWidth="1.7976931348623157E308" prefHeight="534.0" prefWidth="443.0" HBox.hgrow="ALWAYS">
@@ -201,7 +196,7 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </Label>
-                              <TextArea fx:id="txtAreaDescription" prefHeight="229.0" prefWidth="552.0" />
+                              <TextArea fx:id="txtAreaDescription" prefHeight="199.0" prefWidth="552.0" />
                            </children>
                         </VBox>
                      </children>

@@ -1,7 +1,7 @@
 /**
 * @author Josué Alarcón
 * @version v1.0
-* Last modification date: 20/06/2021
+* Last modification date: 20-06-2021
 */
 
 package sgp.ca.dataaccess;

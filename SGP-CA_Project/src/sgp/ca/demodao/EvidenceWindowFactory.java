@@ -12,7 +12,7 @@ import javafx.scene.Node;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 
-public class EvidenceWindowFctory{
+public class EvidenceWindowFactory{
     
     private static List<EvidenceWindow> listEvidenceView = Arrays.asList(
         new BookController(),

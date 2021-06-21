@@ -17,20 +17,9 @@ CREATE TABLE `Lgak` (
     `bodyAcademyKey` varchar(10) DEFAULT NULL,
     `title` varchar(500) DEFAULT NULL,
     `description` varchar(500) DEFAULT NULL,
-    PRIMARY KEY (`IdentifierLgak`, `title`),
+    PRIMARY KEY (`IdentifierLgak`),
     CONSTRAINT `fk_lgac_1` FOREIGN KEY (`bodyAcademyKey`) REFERENCES `GeneralResume` (`bodyAcademyKey`)
     ON UPDATE CASCADE
-);
-
-CREATE TABLE `LgakProject` (
-	`identifierLgak` int(2) NOT NULL,
-	`title` varchar(500) NOT NULL,
-	`projectName` varchar(500) NOT NULL,
-	PRIMARY KEY (`identifierLgak`, `projectName`),
-	CONSTRAINT `fk_lgakProject_1` FOREIGN KEY (`identifierLgak`, `title`) REFERENCES `Lgak` (`identifierLgak`, `title`)
-	ON UPDATE CASCADE,
-	CONSTRAINT `fk_lgakProject_3` FOREIGN KEY (`projectName`) REFERENCES `Project` (`projectName`)
-	ON UPDATE CASCADE
 );
 
 CREATE TABLE `Collaborator` (
@@ -73,15 +62,14 @@ CREATE TABLE `Integrant` (
     `workPhone` varchar(20) DEFAULT NULL,
 	`appointment` varchar(50) DEFAULT NULL,
     `participationType` varchar(50) DEFAULT NULL,
-    PRIMARY KEY (`emailUV`),
-	KEY `fk_integrant_1` (`bodyAcademyKey`),
+    PRIMARY KEY (`rfc`),
     CONSTRAINT `fk_integrant_1` FOREIGN KEY (`bodyAcademyKey`) REFERENCES `GeneralResume` (`bodyAcademyKey`)
     ON UPDATE CASCADE
 );
 
 CREATE TABLE `Schooling` (
-	`professionalID` varchar(10) NOT NULL,
-    `rfc` varchar(20) DEFAULT NULL,
+	`professionalId` varchar(10) NOT NULL,
+    `rfc` varchar(20) NOT NULL,
     `studiesInsitution` varchar(500) DEFAULT NULL,
     `levelOfStudy` varchar(50) DEFAULT NULL,
     `dateOfObtainingStudies` date DEFAULT NULL,
@@ -90,8 +78,7 @@ CREATE TABLE `Schooling` (
     `studyArea` varchar(100) DEFAULT NULL,
     `studyName` varchar(100) DEFAULT NULL,
 	PRIMARY KEY (`professionalID`),
-	KEY `fk_schooling_1` (`rfc`),
-    CONSTRAINT `fk_schooling_1` FOREIGN KEY (`rfc`) REFERENCES `Integrant` (`rfc`)
+    FOREIGN KEY (`rfc`) REFERENCES `Integrant` (`rfc`)
     ON UPDATE CASCADE
 );
 
@@ -108,6 +95,17 @@ CREATE TABLE `Project` (
 	KEY `fk_project_1` (`bodyAcademyKey`),
     CONSTRAINT `fk_project_1` FOREIGN KEY (`bodyAcademyKey`) REFERENCES `GeneralResume` (`bodyAcademyKey`)
     ON UPDATE CASCADE
+);
+
+CREATE TABLE `LgakProject` (
+	`identifierLgak` int(2) NOT NULL auto_increment,
+	`title` varchar(500) NOT NULL,
+	`projectName` varchar(500) NOT NULL,
+	PRIMARY KEY (`identifierLgak`),
+	CONSTRAINT `fk_lgakProject_1` FOREIGN KEY (`identifierLgak`) REFERENCES `Lgak` (`identifierLgak`)
+	ON UPDATE CASCADE,
+	CONSTRAINT `fk_lgakProject_3` FOREIGN KEY (`projectName`) REFERENCES `Project` (`projectName`)
+	ON UPDATE CASCADE
 );
 
 CREATE TABLE `Book` (
@@ -230,7 +228,7 @@ CREATE TABLE `PrototypeStudent` (
     ON UPDATE CASCADE
 );
 
-
+/fejfeoifjeofjeo
 CREATE TABLE `IntegrantPrototype` (
 	`rfc` varchar(20) NOT NULL,
     `urlFile`  varchar(100) NOT NULL,
@@ -311,7 +309,7 @@ CREATE TABLE `ReceptionWork` (
     `studyDegree` varchar(50) DEFAULT NULL,
     `publicationDate` date DEFAULT NULL,
     `country` varchar(90) DEFAULT NULL,
-    `description` varchar(90) DEFAULT NULL,
+    `description` varchar(500) DEFAULT NULL,
     `status` varchar(10) DEFAULT NULL,
     `actualDurationInMonths` int(2) DEFAULT NULL,
     `estimatedDurationInMonths` int(2) DEFAULT NULL,

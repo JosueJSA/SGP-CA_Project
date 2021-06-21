@@ -1,7 +1,7 @@
 /*
  * @author Josué 
  * @versión v1.0
- * Last modification date: 17-06-2021
+ * Last modification date: 20-06-2021
  */
 
 package sgp.ca.businesslogic;
@@ -306,7 +306,7 @@ import sgp.ca.domain.Schooling;
                     queryResult.getDate("dateOfObtainingStudies").toString(),
                     queryResult.getString("studiesInsitution"),
                     queryResult.getString("studiesState"),
-                    queryResult.getString("professionalID"),
+                    queryResult.getString("professionalId"),
                     queryResult.getString("studyArea"),
                     queryResult.getString("studyDiscipline")
                 ));

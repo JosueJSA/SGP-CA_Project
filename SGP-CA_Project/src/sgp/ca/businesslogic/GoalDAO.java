@@ -1,7 +1,7 @@
 /*
  * @author Josué 
  * @versión v1.0
- * Last modification date: 17-06-2021
+ * Last modification date: 20-06-2021
  */
 
 package sgp.ca.businesslogic;
@@ -19,10 +19,6 @@ import sgp.ca.domain.Action;
 import sgp.ca.domain.Goal;
 import sgp.ca.domain.WorkPlan;
 
-/**
- *
- * @author Josue Alarcon
- */
 public class GoalDAO implements IGoalDAO{
     
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();

@@ -149,16 +149,13 @@ public class MeetingRequestController implements Initializable{
         if(meeting.getStatusMeeting().compareTo("Cancelada") == 0){
             this.lbCanceledMetting.setVisible(true);
         }
-        
         if(meeting.getStatusMeeting().compareTo("Realizada") == 0){
             this.btnDownloadMinute.setDisable(false);
             this.btnCancelMeeting.setDisable(true);
         }
-        
         if(token.getRfc().compareTo(meeting.getIntegrantResponsible()) != 0){
             this.btnCancelMeeting.setDisable(true);
-            this.btnUpdateMeeting.setDisable(true);
-            
+            this.btnUpdateMeeting.setDisable(true);   
         }
     }
     

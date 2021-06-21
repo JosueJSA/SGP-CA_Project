@@ -3,6 +3,7 @@
  * @versión v1.0
  * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
 import java.net.URL;
@@ -34,11 +35,6 @@ import sgp.ca.domain.ChapterBook;
 import sgp.ca.domain.Evidence;
 import sgp.ca.domain.Integrant;
 
-/**
- * FXML Controller class
- *
- * @author josue
- */
 public class BookController implements Initializable, EvidenceWindow{
     
     @FXML

@@ -1,4 +1,4 @@
-/**
+/*
  * @author Estefanía 
  * @versión v1.0
  * Last modification date: 17-06-2021
@@ -108,7 +108,7 @@ public class MeetingRealizedEditController implements Initializable{
     }
     
     private void validateDate() throws InvalidFormException{
-        try {
+        try{
             SimpleDateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd");
             Date meetingDate = dateFormat.parse(this.dtpDeliveryDate.getValue().toString());
             Date actualDate = dateFormat.parse(date.get(Calendar.YEAR) + "-" + (date.get(Calendar.MONTH) + 1) + "-" + date.get(Calendar.DAY_OF_MONTH));
@@ -116,7 +116,7 @@ public class MeetingRealizedEditController implements Initializable{
                 this.dtpDeliveryDate.setStyle("-fx-border-color: red;");
                 throw new InvalidFormException("La fecha de entrega del acuerdo no puede ser menor a la fecha actual");
             }
-        } catch (ParseException ex) {
+        }catch(ParseException ex){
             Logger.getLogger(MeetingEditController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

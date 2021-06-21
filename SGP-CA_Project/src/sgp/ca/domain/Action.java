@@ -1,6 +1,7 @@
-/**
-* @author Josué Alarcón  
-* Last modification date format: 06-04-2021
+/*
+* @author Josué 
+* @version v1.0
+* Last modification date: 16-06-2021
 */
 
 package sgp.ca.domain;

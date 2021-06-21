@@ -132,7 +132,7 @@ public class GeneralResumeEditableController implements Initializable{
     private void addResponsibleInGeneralResumeRegistered(GeneralResume generalResume, Event event){
         this.token = (Integrant) INTEGRANT_DAO.getMemberByUVmail(token.getEmailUV());
         this.token.setBodyAcademyKey(generalResume.getBodyAcademyKey());
-        if(INTEGRANT_DAO.updateMember(token, token.getRfc())){
+        if(INTEGRANT_DAO.updateMember(token, token.getEmailUV())){
             GenericWindowDriver.getGenericWindowDriver().showInfoAlert(event, "El currículum general ha sido registrado con éxito");
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnCancelRegistration);
             StartController controller = loader.getController();

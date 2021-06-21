@@ -35,7 +35,6 @@ import sgp.ca.domain.GeneralResume;
 import sgp.ca.domain.Integrant;
 import sgp.ca.domain.Member;
 
-
 public class GeneralResumeRequestController implements Initializable{
 
     @FXML

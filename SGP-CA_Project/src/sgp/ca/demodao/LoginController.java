@@ -20,7 +20,6 @@ import javafx.scene.input.MouseEvent;
 import sgp.ca.businesslogic.IntegrantDAO;
 import sgp.ca.domain.Integrant;
 
-
 public class LoginController implements Initializable{
 
     @FXML

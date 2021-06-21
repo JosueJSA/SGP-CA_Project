@@ -3,6 +3,7 @@
  * @versión v1.0
  * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
 import java.net.URL;
@@ -34,43 +35,30 @@ import sgp.ca.domain.Integrant;
 public class ChapterBookRequestController implements Initializable{
     @FXML
     private Label lbUsername;
-
     @FXML
     private Button btnUpdateChapterBook;
-
     @FXML
     private Button btnRemoveChapterBook;
-
     @FXML
     private Button btnCloseWindow;
-
     @FXML
     private TextField txtFieldChapterBookTittle;
-
     @FXML
     private TextField txtFieldNumerPagesRange;
-
     @FXML
     private TextField txtFieldBook;
-
     @FXML
     private TableView<Integrant> tvIntegrant;
-
     @FXML
     private TableColumn<Integrant, String> colIntegrantName;
-
     @FXML
     private TableView<Collaborator> tvCollaborators;
-
     @FXML
     private TableColumn<Collaborator, String> colCollaboratorName;
-    
     @FXML
     private ListView<String> lvStudent;
-
     @FXML
     private Button btnDownloadDocument;
-
     @FXML
     private Label lbDocumentName;
     
@@ -81,7 +69,7 @@ public class ChapterBookRequestController implements Initializable{
     
     @Override
     public void initialize(URL url, ResourceBundle rb){
-        // TODO
+        
     }
 
     public void receiveToken(Integrant token){

@@ -143,8 +143,6 @@ public class MeetingEditController implements Initializable{
         this.txtFieldPlaceMeeting.setText(meeting.getPlaceMeeting());
         this.txtFieldIssueMeeting.setText(meeting.getIssueMeeting());
         setMeetingAssistants();
-        
-        
     }
     
     private void setMeetingAssistants(){
@@ -266,18 +264,15 @@ public class MeetingEditController implements Initializable{
         this.meeting.setMeetingNote("");
         this.meeting.setMeetingPending("");
         getMeetingAssistants();
-       
     }
     
     private void getMeetingAssistants(){
         String leaderDiscussion = this.cboBoxDiscussionLeader.getSelectionModel().getSelectedItem();
         AssistantRol assistantLeader = new AssistantRol(0, leaderDiscussion, "Líder de discusión", 1);
         this.meeting.getAssistantsRol().add(assistantLeader);
-        
         String timeTaker = this.cboBoxTimeTaker.getSelectionModel().getSelectedItem();
         AssistantRol assistantTimeTaker = new AssistantRol(0, timeTaker, "Tomador de tiempo", 2);
         this.meeting.getAssistantsRol().add(assistantTimeTaker);
-        
         String secretary = this.cboBoxSecretary.getSelectionModel().getSelectedItem();
         AssistantRol assistantSecretary = new AssistantRol(0, secretary, "Secretario", 3);
         this.meeting.getAssistantsRol().add(assistantSecretary);
@@ -410,7 +405,6 @@ public class MeetingEditController implements Initializable{
         }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
-
     } 
     
     private void preparePrerequisiteTable(){

@@ -63,7 +63,6 @@ public class MeetingHistoryController implements Initializable{
     @FXML
     private Button btnRefreshTable;
     
-    
     private final MeetingDAO MEETING_DAO = new MeetingDAO();
     private List<Meeting> meetingsList = new ArrayList<>();
     private Integrant token;
@@ -80,16 +79,15 @@ public class MeetingHistoryController implements Initializable{
     
     @FXML
     private void addMeeting(ActionEvent event){
-        FXMLLoader loader = this.changeWindow("MeetingEdit.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingEdit.fxml", btnClose);
         MeetingEditController controller = loader.getController();
         controller.receiveToken(token);
         controller.addNewMeeting(true);
-        
     }
 
     @FXML
     private void closeMeetingHistoryWindow(ActionEvent event){
-        FXMLLoader loader = changeWindow("Start.fxml", event);
+        FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("Start.fxml", btnClose);
         StartController controller = loader.getController();
         controller.receiveIntegrantToken(token);
     }
@@ -98,13 +96,12 @@ public class MeetingHistoryController implements Initializable{
     private void refreshMeetingHistoryMeeting(ActionEvent event){
         tvMeetingHistory.getItems().clear();
         setAllMeetingInformationIntoTable();
-        
     }
     
     @FXML
     private void observeMeetingInformation(MouseEvent event){
         if(tvMeetingHistory.getSelectionModel().getSelectedItem() != null){
-            FXMLLoader loader = changeWindow("MeetingRequest.fxml", event);
+            FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("MeetingRequest.fxml", btnClose);
             MeetingRequestController controller = loader.getController();
             controller.receiveToken(token);
             controller.reciveMeeting(
@@ -164,7 +161,6 @@ public class MeetingHistoryController implements Initializable{
         String dateMeeting = this.dtpMeetingDate.getValue().toString();
         String meetingIssue = (this.txtFieldMeetingIssue.getText());
         List meetingslist = new ArrayList<>();
-        
         for(int i=0; i< this.meetingsList.size(); i++){
             if((this.meetingsList.get(i).getMeetingDate().equals(dateMeeting)) && 
             (this.meetingsList.get(i).getIssueMeeting().contains(meetingIssue))){
@@ -194,24 +190,7 @@ public class MeetingHistoryController implements Initializable{
                 meetingslist.add(this.meetingsList.get(i));
             }
         }
-        tvMeetingHistory.setItems(makeitemsMeetings(meetingslist));
-        
-    }
-    
-    private FXMLLoader changeWindow(String window, Event event){
-        Stage stage = new Stage();
-        FXMLLoader loader = null;
-        try{
-            loader = new FXMLLoader(getClass().getResource(window));
-            stage.setScene(new Scene((Pane)loader.load()));
-            stage.show();
-            Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch(IOException io){
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, io);
-        } finally {
-            return loader;
-        }
+        tvMeetingHistory.setItems(makeitemsMeetings(meetingslist));   
     }
     
 }

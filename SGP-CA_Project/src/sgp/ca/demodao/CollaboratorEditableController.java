@@ -93,7 +93,7 @@ public class CollaboratorEditableController implements Initializable{
 
     @FXML
     private void addNewCollaborator(ActionEvent event){
-        try {
+        try{
             this.validateForm();
             this.checkCollaboratorRegistered();
             this.getOutIntegrantDataFromInterface();
@@ -106,14 +106,14 @@ public class CollaboratorEditableController implements Initializable{
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancel);
             GeneralResumeRequestController controller = loader.getController();
             controller.showGeneralResume(token);
-        } catch (InvalidFormException ex) {
+        }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }
 
     @FXML
     private void updateCollaborator(ActionEvent event){
-        try {
+        try{
             this.validateForm();
             this.checkCollaboratorRegistered();
             this.getOutIntegrantDataFromInterface();
@@ -125,7 +125,7 @@ public class CollaboratorEditableController implements Initializable{
             FXMLLoader loader = GenericWindowDriver.getGenericWindowDriver().changeWindow("GeneralResumeRequest.fxml", btnCancel);
             GeneralResumeRequestController controller = loader.getController();
             controller.showGeneralResume(token);
-        } catch (InvalidFormException ex) {
+        }catch(InvalidFormException ex){
             GenericWindowDriver.getGenericWindowDriver().showErrorAlert(event, ex.getMessage());
         }
     }

@@ -3,6 +3,7 @@
  * @versión v1.0
  * Last modification date: 17-06-2021
  */
+
 package sgp.ca.demodao;
 
 import java.net.URL;
@@ -94,7 +95,7 @@ public class EvidenceListController implements Initializable{
     private void showEvidence(MouseEvent event){
         if(tvEvidences.getSelectionModel().getSelectedItem() != null){
             Evidence evidence = tvEvidences.getSelectionModel().getSelectedItem();
-            EvidenceWindowFctory.showSpecificEvidenceWindow(evidence, btnClose, token);
+            EvidenceWindowFactory.showSpecificEvidenceWindow(evidence, btnClose, token);
         }
     }
     

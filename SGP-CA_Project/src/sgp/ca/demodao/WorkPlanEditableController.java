@@ -187,12 +187,12 @@ public class WorkPlanEditableController implements Initializable{
         try{
             this.checkActionForm();
             action = new Action(
-                    this.txtAreaActionDescriptionDetail.getText(),
-                    this.dtpStimatedEndDate.getValue().toString(),
-                    this.txtFieldActionResponsible.getText(),
-                    this.dtpStartDate.getValue().toString(),
-                    this.txtAreaActionResources.getText(),
-                    this.chBoxActionStatus.isSelected()
+                this.txtAreaActionDescriptionDetail.getText(),
+                this.dtpStimatedEndDate.getValue().toString(),
+                this.txtFieldActionResponsible.getText(),
+                this.dtpStartDate.getValue().toString(),
+                this.txtAreaActionResources.getText(),
+                this.chBoxActionStatus.isSelected()
             );
             action.updateEndDate();
         }catch(InvalidFormException ex){

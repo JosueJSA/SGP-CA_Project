@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 import sgp.ca.dataaccess.ConnectionDatabase;
 import sgp.ca.domain.WorkPlan;
 
-
 public class WorkPlanDAO implements IWorkPlanDAO{
 
     private final ConnectionDatabase CONNECTION = new ConnectionDatabase();
